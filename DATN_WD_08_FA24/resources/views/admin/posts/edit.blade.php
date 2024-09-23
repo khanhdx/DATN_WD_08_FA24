@@ -14,7 +14,7 @@
 
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <a href="{{ route('posts.index') }}">Quay lại danh sách</a>
+                                            <a class="au-breadcrumb-span" href="{{ route('posts.index') }}">Quay lại danh sách</a>
                                         </button>
                                     </div>
                                     <form action="{{ route('posts.update', $post->id) }}" method="POST"
@@ -39,8 +39,7 @@
 
                                         <div class="form-group">
                                             <label for="content">Nội dung:</label>
-                                            <input class="au-input au-input--full" type="text" name="content"
-                                             {{ $post->content }} required>
+                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung" required>{{ $post->content }}</textarea>
                                         </div>
 
                                         <div class="form-group">

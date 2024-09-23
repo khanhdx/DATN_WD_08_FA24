@@ -31,7 +31,8 @@
                                 
                                         <div class="form-group">
                                             <label for="content">Nội dung:</label>
-                                            <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" required>
+                                            {{-- <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" required> --}}
+                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung" required></textarea>
                                         </div>
                             
                                         <div class="form-group">

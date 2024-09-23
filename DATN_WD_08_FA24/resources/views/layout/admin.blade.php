@@ -43,7 +43,7 @@
         <!-- PAGE CONTENT-->
         <div class="page-content--bgf7">
             <!-- BREADCRUMB-->
-            @include('admin.blocks.breadcrumb')
+            {{-- @include('admin.blocks.breadcrumb') --}}
             <!-- END BREADCRUMB-->
 
             <!-- WELCOME-->

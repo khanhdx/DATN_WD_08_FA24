@@ -4,14 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $query = Post::query(); // Khởi tạo query builder cho Post
+
+        // Lọc theo tiêu đề
+        if ($request->has('title') && !empty($request->input('title'))) {
+            $title = $request->input('title');
+            $query->where('title', 'like', "%{$title}%");
+        }
+
+        // Lọc theo ngày xuất bản
+        if ($request->has('publish_date') && !empty($request->input('publish_date'))) {
+            $publishDate = $request->input('publish_date');
+            $query->whereDate('publish_date', $publishDate); // Thêm điều kiện lọc theo ngày
+        }
+
+        // Lấy danh sách bài viết sau khi áp dụng lọc
+        $posts = $query->get();
+
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -22,11 +39,13 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        // Ghi log toàn bộ dữ liệu request
+        Log::info('Request data: ', $request->all());
         $request->validate([
+            'image' => 'image|nullable|max:1999',
             'title' => 'required',
             'content' => 'required',
             'author' => 'required',
-            'image' => 'image|nullable|max:1999',
             'publish_date' => 'nullable|date',
         ]);
 
@@ -38,20 +57,26 @@ class PostController extends Controller
         }
 
         // Tạo bài viết
-        Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'author' => $request->author,
-            'image' => $imagePath,
-            'publish_date' => $request->publish_date,
-        ]);
+
+        try {
+            Post::create([
+                'image' => $imagePath,
+                'title' => $request->title,
+                'content' => $request->content,
+                'author' => $request->author,
+                'publish_date' => $request->publish_date,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error creating post: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Có lỗi xảy ra khi tạo bài viết.']);
+        }
 
         return redirect()->route('posts.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
     public function show(Post $post)
     {
-        return view('posts.show', compact('post'));
+        //
     }
 
     public function edit(Post $post)
@@ -61,11 +86,12 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
+        // Xác thực dữ liệu từ request
         $request->validate([
+            'image' => 'image|nullable|max:1999',
             'title' => 'required',
             'content' => 'required',
             'author' => 'required',
-            'image' => 'image|nullable|max:1999',
             'publish_date' => 'nullable|date',
         ]);
 
@@ -76,15 +102,15 @@ class PostController extends Controller
             }
             $imagePath = $request->file('image')->store('images', 'public');
         } else {
-            $imagePath = $post->image;
+            $imagePath = $post->image; // Giữ nguyên ảnh cũ nếu không có ảnh mới
         }
 
         // Cập nhật bài viết
-        $post->update([
+        $post->update([ // Sử dụng $post->update() để cập nhật
+            'image' => $imagePath,
             'title' => $request->title,
             'content' => $request->content,
             'author' => $request->author,
-            'image' => $imagePath,
             'publish_date' => $request->publish_date,
         ]);
 
@@ -99,4 +125,24 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Bài viết đã bị xóa.');
     }
+
+
+    public function clientIndex()
+    {
+        // Lấy tất cả bài viết từ cơ sở dữ liệu và phân trang (5 bài viết mỗi trang)
+        $posts = Post::paginate(5); // Hiển thị 5 bài viết trên mỗi trang
+
+        // Trả về view cho giao diện client, truyền danh sách bài viết vào
+        return view('client.posts.index', compact('posts'));
+    }
+
+    public function clientShow($id)
+    {
+        // Lấy bài viết theo id
+        $post = Post::findOrFail($id);
+
+        // Trả về view cho chi tiết bài viết
+        return view('client.posts.show', compact('post'));
+    }
+    
 }

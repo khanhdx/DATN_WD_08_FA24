@@ -7,32 +7,40 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Bài đăng</h3>
-                    <div class="table-data__tool">
-                        <div class="table-data__tool-left">
-                            <div class="rs-select2--light rs-select2--md">
-                                <select class="js-select2" name="property">
-                                    <option selected="selected">Lọc theo tiêu đề</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
+                    <div class="au-breadcrumb-content">
+                        <form action="{{ route('posts.index') }}" class="au-form-icon--sm" action="" method="GET">
+                            
+                                <input class="au-input--w300 au-input--style2" type="date" name="publish_date"
+                                    placeholder="Chọn ngày" value="{{ request()->input('publish_date') }}">
+                            
+                            
+                                <input class="au-input--w300 au-input--style2" type="text" name="title"
+                                    placeholder="Nhập tiêu đề để tìm kiếm." value="{{ request()->input('title') }}">
+                            
+                            <div class="table-data__tool-right">
+                                <button class="au-btn--submit2" type="submit">
+                                    <i class="zmdi zmdi-search"></i>
+                                </button>
                             </div>
-                            <div class="rs-select2--light rs-select2--sm">
-                                <select class="js-select2" name="time">
-                                    <option selected="selected">Lọc theo ngày</option>
-                                    <option value="">3 Days</option>
-                                    <option value="">1 Week</option>
-                                </select>
-                                <div class="dropDownSelect2"></div>
-                            </div>
-                            <button class="au-btn-filter">
-                                <i class="zmdi zmdi-filter-list"></i>Bộ lọc</button>
+                        </form>
+                        <div class="table-data__tool-right">
+                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <a class="au-breadcrumb-span" href="{{ route('posts.index') }}">Xóa tất cả các bộ lọc</a>
+                            </button>
                         </div>
                         <div class="table-data__tool-right">
                             <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <a href="{{ route('posts.create') }}" >Thêm bài</a>
+                                <a class="au-breadcrumb-span" href="{{ route('posts.create') }}">Thêm bài</a>
                             </button>
                         </div>
+                    </div>
+                    <div class="table-data__tool">
+                        <div class="table-data__tool-left">
+                            <div class="rs-select2--light rs-select2--sm">
+                            </div>
+                        </div>
+
+
                     </div>
                     @if (session('success'))
                         <div>{{ session('success') }}</div>
@@ -60,22 +68,22 @@
                                         @endif
                                     </td>
                                     <td class="desc">{{ $post->title }}</td>
-                                    <td >{{ $post->content }}</td>
+                                    <td>{{ $post->content }}</td>
                                     <td>{{ $post->author }}</td>
                                     <td>{{ $post->publish_date }}</td>
                                     <td>
                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Sửa">
                                             <a href="{{ route('posts.edit', $post->id) }}" class="zmdi zmdi-edit"></a>
                                         </button>
-                                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="item" data-toggle="tooltip"
-                                                    data-placement="top" title="Delete">
-                                                    <i class="zmdi zmdi-delete"></i>
-                                                </button>
-                                            </form>
+                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="item" data-toggle="tooltip" data-placement="top"
+                                                title="Delete">
+                                                <i class="zmdi zmdi-delete"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                                 </tr>
