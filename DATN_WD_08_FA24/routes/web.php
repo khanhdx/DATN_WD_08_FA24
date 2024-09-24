@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admins\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
@@ -15,8 +16,13 @@ use App\Http\Controllers\PostController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.admins');
 });
+
+
+
+
+Route::resource('user', UserController::class);
 Route::resource('posts', PostController::class);
 
 
