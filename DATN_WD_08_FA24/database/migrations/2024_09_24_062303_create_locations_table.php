@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('location_name');
+            $table->string('user_name');
+            $table->string('location_detail');
+            $table->enum('status',['Mặc định', 'Phụ']);
             $table->timestamps();
         });
     }

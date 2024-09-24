@@ -73,7 +73,7 @@
                                             {{$user->name}}
                                         </td>
                                         <td>
-                                            <img src="{{ Storage::url($user->user_image) }}" alt="Ảnh" width="150px" style="border-radius: 50%">
+                                            <img src="{{ Storage::url($user->user_image) }}" alt="Ảnh" width="35px" height="35px" style="border-radius: 50%">
                                         </td>
                                         <td>
                                             <span class="block-email">{{$user->email}}  </span>
@@ -88,10 +88,13 @@
                                                     title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                                <button class="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Delete">
-                                                    <i class="zmdi zmdi-delete"></i>
-                                                </button>
+                                                <form action="{{ route('user.destroy',$user->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <i class="zmdi zmdi-delete"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

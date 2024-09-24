@@ -20,4 +20,7 @@ class UserRepository extends User {
     public function getAllUser() {
         return User::query()->paginate(10);
     }
+    public function addData($data) {
+        User::query()->create($data);
+    }
 }

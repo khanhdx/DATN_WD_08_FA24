@@ -53,12 +53,13 @@
                                     <div class="col">
                                         <label for="phone_number">Số điện thoại</label>
                                         <input class="form-control" type="text" name="user[phone_number]" placeholder="Điện thoại" id="phone_number">
+                                        <input type="hidden" name="user[role]" value="Khách hàng">
                                     </div>
                                     <div class="col">
                                         <div class="row w-100">
                                             <div class="col">
                                                 <label for="user_image">Ảnh</label>
-                                                <input class="form-control p-1" type="file" name="user.user_image" id="user_image">
+                                                <input class="form-control p-1" type="file" name="user_image" id="user_image">
                                             </div>
                                             <div id="file_I" class="col-3">
                                                 <img class="p-0" id="view_IMG" src="" alt="Ảnh">

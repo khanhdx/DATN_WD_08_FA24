@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
+use Nette\Utils\Random;
+use Str;
 
 class UserController extends Controller
 {
@@ -25,7 +27,7 @@ class UserController extends Controller
         foreach ($us as $key => $value) {
             $role = $key;
         }
-        if($role === "KaHNcsHAfg1") {
+        if($role === "KaHNcsHAfg1" || $role == 1) {
             try {
                 $result['data'] = (new UserService())->getAll();
             } catch (Exception $e) {
@@ -36,7 +38,7 @@ class UserController extends Controller
             }
             return view('admins.accounts.users.index',$result);
         }        
-        else if($role == "NvNhaEAeiN2") {
+        else if($role == "NvNhaEAeiN2" || $role = 2) {
             return view('admins.accounts.personnels.index');
         }
         else {
@@ -70,11 +72,29 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //Lấy dữ liệu người dùng
-        $user = $request->input('user');
-        $locations = $request->input('location');
-        $status_location = $request->input('status');
-        dd($locations,$user,$status_location);
+        //Lấy dữ liệu từ form
+        if($request->isMethod('POST')) {
+            $user = $request->input('user');
+            $user['password'] = Str::random(8);
+            if($request->hasFile('user_image')) {
+                $user['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
+            }else {
+                $user['user_image'] = null;
+            }
+            $locations = $request->input('location');
+            $status_location = $request->input('status');
+            $result = ['status' => 200];
+            try {
+                $result['user'] = (new UserService)->saveUserData($user);
+            } catch (Exception $e) {
+                $result = [
+                    'status'=>500,
+                    'error'=>$e->getMessage(),
+                ];
+            }
+            return redirect(route('user.index','KaHNcsHAfg1'));
+        }
+        
     }
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Validated;
 use InvalidArgumentException;
+use Validator;
 
 class UserService extends UserRepository
 {
@@ -31,5 +32,9 @@ class UserService extends UserRepository
      */
     public function getAll() {
         return $this->getAllUser();
+    }
+    public function saveUserData($data) {
+        $result = $this->addData($data);
+        return $result;
     }
 }
