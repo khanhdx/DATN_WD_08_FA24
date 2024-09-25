@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
+
         for ($i=0; $i < 10; $i++) { 
             Post::create([
                 'image'         => fake()->imageUrl,                    // Đường dẫn ảnh

@@ -69,7 +69,6 @@
                     <div class="col-md-12 animation">
                         <div class="item product">
                             <div class="product-thumb-info">
-                                
                                 <div class="product-thumb-info-image">
                                     <span class="product-thumb-info-act">
                                         <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product">
@@ -79,7 +78,9 @@
                                             <span><i class="fa fa-shopping-cart"></i></span>
                                         </a>
                                     </span>
-                                    <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-1.jpg">
+                                    <a href="/abc">
+                                        <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-1.jpg">
+                                    </a>
                                 </div>
                                 
                                 <div class="product-thumb-info-content">
@@ -90,116 +91,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 animation">
-                        <div class="item product">
-                            <div class="product-thumb-info">
-                                <div class="product-thumb-info-image">
-                                    <span class="product-thumb-info-act">
-                                        <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product">
-                                            <span><i class="fa fa-external-link"></i></span>
-                                        </a>
-                                        <a href="shop-cart-full.html" class="add-to-cart-product">
-                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                        </a>
-                                    </span>
-                                    <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-2.jpg">
-                                </div>
-                                <div class="product-thumb-info-content">
-                                    <span class="price pull-right">25.99 USD</span>
-                                    <h4><a href="shop-product-detail2.html">Poplin shirt with fine pleated bands</a></h4>
-                                    <span class="item-cat"><small><a href="#">Shirts</a></small></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 animation">
-                        <div class="item product">
-                            <a href="shop-product-detail1.html">
-                                <span class="bag bag-hot">Hot</span>
-                            </a>
-                            <div class="product-thumb-info">
-                                <div class="product-thumb-info-image">
-                                    <span class="product-thumb-info-act">
-                                        <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product">
-                                            <span><i class="fa fa-external-link"></i></span>
-                                        </a>
-                                        <a href="shop-cart-full.html" class="add-to-cart-product">
-                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                        </a>
-                                    </span>
-                                    <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-3.jpg">
-                                </div>
-                                <div class="product-thumb-info-content">
-                                    <span class="price pull-right">25.99 USD</span>
-                                    <h4><a href="shop-product-detail2.html">Contrasting shirt</a></h4>
-                                    <span class="item-cat"><small><a href="#">Stock clearance</a></small></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 animation">
-                        <div class="item product">
-                            <div class="product-thumb-info">
-                                <div class="product-thumb-info-image">
-                                    <span class="product-thumb-info-act">
-                                        <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product">
-                                            <span><i class="fa fa-external-link"></i></span>
-                                        </a>
-                                        <a href="shop-cart-full.html" class="add-to-cart-product">
-                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                        </a>
-                                    </span>
-                                    <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-4.jpg">
-                                </div>
-                                <div class="product-thumb-info-content">
-                                    <span class="price pull-right">59.99 USD</span>
-                                    <h4><a href="shop-product-detail2.html">Waistcoat with top stitching</a></h4>
-                                    <span class="item-cat"><small><a href="#">Blazers</a></small></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 animation">
-                        <div class="item product">
-                            <a href="shop-product-detail1.html">
-                                <span class="bag bag-cool">Cool</span>
-                            </a>
-                            <div class="product-thumb-info">
-                                <div class="product-thumb-info-image">
-                                    <span class="product-thumb-info-act">
-                                        <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product">
-                                            <span><i class="fa fa-external-link"></i></span>
-                                        </a>
-                                        <a href="shop-cart-full.html" class="add-to-cart-product">
-                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                        </a>
-                                    </span>
-                                    <img alt="" class="img-responsive" src="/assets/client/images/content/products/product-5.jpg">
-                                </div>
-                                <div class="product-thumb-info-content">
-                                    <span class="price pull-right">39.99 USD</span>
-                                    <h4><a href="shop-product-detail2.html">Loose fit ripped jeans</a></h4>
-                                    <span class="item-cat"><small><a href="#">Jeans</a></small></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- End Top Selling -->
-    
-    <!-- Begin Lookbook Women -->
-    <section id="lookbook">
-        <div class="container">
-            <div class="lookbook">
-                <h2><a href="#">Lookbook Women</a></h2>
-                <p>Etiam aliquam risus ante, quis ultrices enim porta a. Integer et dolor sit amet enim feugiat faucibus. Donec sit amet egestas orci. Proin facilisis mi ornare turpis sollicitudin; vel rutrum est viverra. Vestibulum hendrerit egestas semper.</p>
-            </div>
-        </div>
-    </section>
-    <!-- End Lookbook Women -->
     
     <!-- Begin New Products -->
     <section class="product-tab">
@@ -209,7 +105,7 @@
             <ul class="nav nav-tabs pro-tabs text-center animation" role="tablist">
                 <li class="active"><a href="#man" role="tab" data-toggle="tab">Man</a></li>
                 <li><a href="#woman" role="tab" data-toggle="tab">Woman</a></li>
-                <li><a href="#accesories" role="tab" data-toggle="tab">Accesories</a></li>
+                {{-- <li><a href="#accesories" role="tab" data-toggle="tab">Accesories</a></li> --}}
             </ul>
 
             <!-- Tab panes -->
