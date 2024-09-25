@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-use App\Models\Color;
 use App\Repositories\ColorRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ColorController extends Controller
 {
-
     protected $color;
 
     public function __construct(ColorRepository $color)
