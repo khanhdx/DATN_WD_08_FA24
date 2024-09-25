@@ -1,13 +1,21 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
 use App\Models\Color;
+use Illuminate\Support\Facades\DB;
 
-class ColorRepository {
+class ColorRepository
+{
     public function getAll()
     {
         return Color::all();
+    }
+
+    public function getOne($id_color)
+    {
+
+        return Color::where('id_color', $id_color)->get();
     }
 
     public function insert($data)
@@ -17,17 +25,24 @@ class ColorRepository {
         return $data;
     }
 
-    public function update($id, $data)
+    public function update($id_color, $data)
     {
-        $color = Color::findOrFail($id);
-        $color->update($data);
+        
+
+        $updated = Color::query()->where('id_color', $id_color)->update($data);
+
+        if (!$updated) {
+            throw new \Exception("Failed to update color.");
+        }
+
+        $color = $this->getOne($id_color);
+        
         return $color;
     }
 
-    public function delete($id)
+    public function delete($id_color)
     {
-        $color = Color::findOrFail($id);
-        $color->delete();
+        Color::query()->where('id_color', $id_color)->delete();
         return true;
     }
 }

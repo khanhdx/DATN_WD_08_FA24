@@ -18,4 +18,6 @@ class Color extends Model
     {
      
     }
+
+    
 }
