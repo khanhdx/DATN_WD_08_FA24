@@ -18,36 +18,36 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
+    // Hiển thị form đăng ký
     public function showRegistrationForm()
     {
-        return view('clients.auth.register'); // Trỏ đến view đăng ký
+        return view('clients.auth.register');
     }
 
+    // Xử lý đăng ký
     public function register(RegisterRequest $request)
     {
-        // Kiểm tra nếu email đã tồn tại
         if ($this->authService->userExists($request->email)) {
             return redirect()->back()->withErrors(['email' => 'Email đã tồn tại.'])->withInput();
         }
 
-        // Tạo người dùng mới
         $this->authService->register($request->validated());
         return redirect()->route('login')->with('success', 'Đăng ký thành công.');
     }
 
+    // Hiển thị form đăng nhập
     public function showLoginForm()
     {
-        return view('clients.auth.login'); // Trỏ đến view đăng nhập
+        return view('clients.auth.login');
     }
 
+    // Xử lý đăng nhập
     public function login(LoginRequest $request)
     {
-        // Kiểm tra xem người dùng có tồn tại không
         if (!$this->authService->userExists($request->email)) {
             return redirect()->back()->withErrors(['email' => 'Email không tồn tại.']);
         }
 
-        // Kiểm tra đăng nhập
         if ($this->authService->login($request->validated())) {
             return redirect()->route('check')->with('success', 'Đăng nhập thành công.');
         }
@@ -55,25 +55,24 @@ class AuthController extends Controller
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
     }
 
+    // Xử lý đăng xuất
     public function logout()
     {
         $this->authService->logout();
         return redirect()->route('login')->with('success', 'Đăng xuất thành công.');
     }
 
+    // Hiển thị form đặt lại mật khẩu
     public function showResetPasswordForm()
     {
         return view('clients.auth.passwords');
     }
 
+    // Gửi link đặt lại mật khẩu
     public function sendResetLink(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-
-        // Gửi email đặt lại mật khẩu
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = Password::sendResetLink($request->only('email'));
 
         if ($status == Password::RESET_LINK_SENT) {
             return back()->with('status', __($status));
@@ -82,11 +81,13 @@ class AuthController extends Controller
         return back()->withErrors(['email' => __($status)]);
     }
 
+    // Hiển thị form reset mật khẩu với token
     public function showResetForm($token)
     {
         return view('clients.auth.passwordsReset', ['token' => $token]);
     }
 
+    // Xử lý reset mật khẩu
     public function resetPassword(Request $request)
     {
         $request->validate([
