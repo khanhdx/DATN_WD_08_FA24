@@ -43,7 +43,7 @@ class UserController extends Controller
         //Lấy dữ liệu từ form
         if($request->isMethod('POST')) {
             $user = $request->input('user');
-            $user['password'] = "aaaaa";
+            $user['password'] = "NULL";
             if($request->hasFile('user_image')) {
                 $user['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
             }else {
@@ -51,8 +51,9 @@ class UserController extends Controller
             }
             $locations = $request->input('location');
             $status_location = $request->input('status');
-            
-            return redirect(route('user.index','KaHNcsHAfg1'));
+            // dd($locations, $status_location);
+            $user_new = User::query()->create($user);
+            return redirect()->route('user.index')->with('success', 'Thàn công');
         }
         
     }

@@ -41,19 +41,28 @@
                                 @method('POST')
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="name">Tên người dùng</label>
+                                        <label class="form-label" for="name">Tên người dùng</label>
                                         <input class="form-control" type="text" placeholder="Họ & tên" name="user[name]" id="name">
                                     </div>
                                     <div class="col">
-                                        <label for="email">Email</label>
+                                        <label class="form-label" for="email">Email</label>
                                         <input class="form-control" type="email" placeholder="Địa chỉ mail" name="user[email]" id="email">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label for="phone_number">Số điện thoại</label>
-                                        <input class="form-control" type="text" name="user[phone_number]" placeholder="Điện thoại" id="phone_number">
-                                        <input type="hidden" name="user[role]" value="Khách hàng">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="phone_number">Số điện thoại</label>
+                                            <input class="form-control" type="text" name="user[phone_number]" placeholder="Điện thoại" id="phone_number">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="">Loại tài khoản</label>
+                                            <select name="user[role]" class="form-control" id="">
+                                                <option value="Khách hàng">Khách hàng</option>
+                                                <option value="Nhân viên">Nhân viên</option>
+                                                <option value="Quản lý">Quản lý</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <div class="row w-100">
@@ -145,7 +154,7 @@
                             </div>
                             <div class="col-6 mb-3">
                                 <label for="name">Địa chỉ người nhận</label>
-                                <textarea class="form-control" name="" id="" cols="20" rows="5"></textarea>
+                                <textarea class="form-control" name="location[${i}][location_detail]" id="" cols="20" rows="5"></textarea>
                             </div>
                             <div class="col-6 mb-3">
                                 <label for="name">Đặt làm mặc định</label>
