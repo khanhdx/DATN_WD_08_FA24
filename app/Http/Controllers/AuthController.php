@@ -21,7 +21,7 @@ class AuthController extends Controller
     // Hiển thị form đăng ký
     public function showRegistrationForm()
     {
-        return view('clients.auth.register');
+        return view('auth.auth.register');
     }
 
     // Xử lý đăng ký
@@ -38,7 +38,7 @@ class AuthController extends Controller
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {
-        return view('clients.auth.login');
+        return view('auth.auth.login');
     }
 
     // Xử lý đăng nhập
@@ -59,13 +59,15 @@ class AuthController extends Controller
     public function logout()
     {
         $this->authService->logout();
+        session()->invalidate();
+        session()->regenerateToken();
         return redirect()->route('login')->with('success', 'Đăng xuất thành công.');
     }
 
     // Hiển thị form đặt lại mật khẩu
     public function showResetPasswordForm()
     {
-        return view('clients.auth.passwords');
+        return view('auth.auth.passwords');
     }
 
     // Gửi link đặt lại mật khẩu
@@ -84,7 +86,7 @@ class AuthController extends Controller
     // Hiển thị form reset mật khẩu với token
     public function showResetForm($token)
     {
-        return view('clients.auth.passwordsReset', ['token' => $token]);
+        return view('auth.auth.passwordsReset', ['token' => $token]);
     }
 
     // Xử lý reset mật khẩu
