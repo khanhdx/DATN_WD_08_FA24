@@ -22,28 +22,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         //
-        $result = ['status' => 200];
-        $us = $request->input();
-        foreach ($us as $key => $value) {
-            $role = $key;
-        }
-        if($role === "KaHNcsHAfg1" || $role == 1) {
-            try {
-                $result['data'] = (new UserService())->getAll();
-            } catch (Exception $e) {
-                $result = [
-                    'status'=>500,
-                    'error'=>$e->getMessage(),
-                ];
-            }
-            return view('admins.accounts.users.index',$result);
-        }        
-        else if($role == "NvNhaEAeiN2" || $role = 2) {
-            return view('admins.accounts.personnels.index');
-        }
-        else {
-            echo "error not fount";
-        }
+        $data['accounts'] = User::query()->paginate(10);
+        return view('admin.accounts.index',$data);
     }
 
     /**
@@ -52,19 +32,7 @@ class UserController extends Controller
     public function create(Request $request)
     {
         //
-        $r = $request->query();
-        foreach ($r as $key => $value) {
-            $role = $key;
-        }
-        if($role === "KaHNcsHAfg1") {
-            return view('admins.accounts.users.create');
-        }        
-        else if($role == "NvNhaEAeiN2") {
-            return view('admins.accounts.personnels.create');
-        }
-        else {
-            echo "error not fount";
-        }
+        return view('admin.accounts.create');
     }
 
     /**
@@ -75,7 +43,7 @@ class UserController extends Controller
         //Lấy dữ liệu từ form
         if($request->isMethod('POST')) {
             $user = $request->input('user');
-            $user['password'] = Str::random(8);
+            $user['password'] = "aaaaa";
             if($request->hasFile('user_image')) {
                 $user['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
             }else {
@@ -83,15 +51,7 @@ class UserController extends Controller
             }
             $locations = $request->input('location');
             $status_location = $request->input('status');
-            $result = ['status' => 200];
-            try {
-                $result['user'] = (new UserService)->saveUserData($user);
-            } catch (Exception $e) {
-                $result = [
-                    'status'=>500,
-                    'error'=>$e->getMessage(),
-                ];
-            }
+            
             return redirect(route('user.index','KaHNcsHAfg1'));
         }
         
