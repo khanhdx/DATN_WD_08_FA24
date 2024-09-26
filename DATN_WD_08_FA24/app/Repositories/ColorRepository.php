@@ -12,10 +12,10 @@ class ColorRepository
         return Color::all();
     }
 
-    public function getOne($id_color)
+    public function getOne($id)
     {
 
-        return Color::where('id_color', $id_color)->get();
+        return Color::find($id);
     }
 
     public function insert($data)
@@ -25,24 +25,22 @@ class ColorRepository
         return $data;
     }
 
-    public function update($id_color, $data)
+    public function update($id, $data)
     {
-        
+        $color = $this->getOne($id);
 
-        $updated = Color::query()->where('id_color', $id_color)->update($data);
+        $updated = $color->update($data);
 
         if (!$updated) {
             throw new \Exception("Failed to update color.");
         }
 
-        $color = $this->getOne($id_color);
-        
         return $color;
     }
 
-    public function delete($id_color)
+    public function delete($id)
     {
-        Color::query()->where('id_color', $id_color)->delete();
+        Color::query()->where('id', $id)->delete();
         return true;
     }
 }

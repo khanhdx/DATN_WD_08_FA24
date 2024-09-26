@@ -11,10 +11,9 @@ class SizeRepository
         return Size::all();
     }
 
-    public function getOne($id_size)
+    public function getOne($id)
     {
-
-        return Size::where('id_size', $id_size)->get();
+        return Size::findOrFail($id);
     }
 
     public function insert($data)
@@ -24,20 +23,21 @@ class SizeRepository
         return $data;
     }
 
-    public function update($id_size, $data)
+    public function update($id, $data)
     {
-        $updated = Size::query()->where('id_size', $id_size)->update($data);
+        $size = $this->getOne($id);
+
+        $updated = $size->update($data);
         if (!$updated) {
             throw new \Exception("Failed to update size.");
         }
 
-        $size = $this->getOne($id_size);
         return $size;
     }
 
-    public function delete($id_size)
+    public function delete($id)
     {
-        Size::query()->where('id_size', $id_size)->delete();
+        Size::query()->where('id', $id)->delete();
         return true;
     }
 }

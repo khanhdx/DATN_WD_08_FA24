@@ -12,7 +12,7 @@ class ProductRepository {
 
     public function getOneById($id)
     {
-        return Product::where('id_color', $id)->get();
+        return Product::findOrFail($id);
     }
 
     public function insert($data)
@@ -22,23 +22,22 @@ class ProductRepository {
         return $data;
     }
 
-    public function updateById($id_product, $data)
+    public function updateById($id, $data)
     {
-       
-        $updated = Product::query()->where('id_color', $id_product)->update($data);
+        $product = $this->getOneById($id);
+
+        $updated = $product->update($data);
 
         if (!$updated) {
             throw new \Exception("Failed to update color.");
         }
-
-        $product = $this->getOneById($id_product);
 
         return $product;
     }
 
     public function deleteById($id)
     {
-        Product::query()->where('id_color', $id)->delete();
+        Product::findOrFail($id)->delete();
         return true;
     }
 
