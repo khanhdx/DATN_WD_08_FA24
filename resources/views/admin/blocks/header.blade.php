@@ -18,31 +18,21 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{ route('posts.index') }}">
-                            {{-- <i class="fas fa-shopping-basket"></i> --}}
+                        <a href="">
+                            <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
-                    {{-- <li>
+                    <li>
                         <a href="table.html">
                             <i class="fas fa-trophy"></i>
                             <span class="bot-line"></span>table</a>
-                    </li> --}}
-                    {{-- <li class="has-sub">
-                        <a href="#">
-                            <i class="fas fa-copy"></i>
-                            <span class="bot-line"></span>Pages</a>
-                        <ul class="header3-sub-list list-unstyled">
-                            <li>
-                                <a href="login.html">Login</a>
-                            </li>
-                            <li>
-                                <a href="register.html">Register</a>
-                            </li>
-                            <li>
-                                <a href="forget-pass.html">Forget Password</a>
-                            </li>
-                        </ul>
-                    </li> --}}
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{ route('user.index') }}">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="bot-line"></span>Quản lý tài khoản</a>
+                        
+                    </li>
                 </ul>
             </div>
             <div class="header__tool">

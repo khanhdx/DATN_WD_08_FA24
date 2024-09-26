@@ -31,7 +31,7 @@
 
     <!-- Main CSS-->
     <link href="{{ asset('assets/admin/css/theme.css') }}" rel="stylesheet" media="all">
-
+    @yield('css')
 </head>
 
 <body class="animsition">
@@ -51,7 +51,7 @@
             <!-- END WELCOME-->
 
             <!-- DATA TABLE-->
-            @yield('table')
+            @yield('content')
             <!-- END DATA TABLE-->
 
             <!-- COPYRIGHT-->
@@ -84,7 +84,7 @@
 
     <!-- Main JS-->
     <script src="{{ asset('assets/admin/js/main.js') }}"></script>
-
+    @yield('js')
 </body>
 
 </html>

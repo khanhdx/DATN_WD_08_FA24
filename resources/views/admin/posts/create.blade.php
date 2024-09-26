@@ -1,5 +1,5 @@
-@extends('layout.admin');
-@section('table')
+@extends('admin.admin');
+@section('content')
     <!-- DATA TABLE-->
 
     <section class="p-t-20">

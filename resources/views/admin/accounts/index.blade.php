@@ -1,4 +1,4 @@
-@extends('layouts.admins')
+@extends('admin.admin')
 @section('title')
     Danh sách người dùng
 @endsection
@@ -10,14 +10,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="title-5 m-b-35">Quản lý người dùng</h3>
+                    <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
                             <div class="rs-select2--light rs-select2--md">
                                 <select class="js-select2" name="property">
-                                    <option selected="selected">All Properties</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
+                                    <option selected="selected">Tât cả</option>
+                                    <option value="Khách hàng">Khách hàng</option>
+                                    <option value="Nhân viên">Nhân viên</option>
+                                    <option value="Quản lý">Quản lý</option>
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
@@ -26,15 +27,14 @@
                         </div>
                         {{-- LT --}}
                         <div class="table-data__tool-right">
-                            <a href="{{ route('user.create','KaHNcsHAfg1') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                            <a href="{{ route('user.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
                                 <i class="zmdi zmdi-plus"></i>Thêm người dùng</button></a>
-                            <a href="{{ route('user.create') }}"><button id="delete" class="au-btn au-btn-icon au-btn--red au-btn--small">
+                            <a href="#"><button id="delete" class="au-btn au-btn-icon au-btn--red au-btn--small">
                                 <i class="fa-regular fa-trash-can"></i>Xóa</button></a>
                             <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
                                 <select class="js-select2" name="type">
                                     <option selected="selected">Export</option>
-                                    <option value="">Option 1</option>
-                                    <option value="">Option 2</option>
+                                    <option value="">Excel</option>
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
@@ -60,7 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $key => $user)
+                                @foreach ($accounts as $key => $acounts)
                                     <tr class="tr-shadow">
                                         <td>
                                             <label class="au-checkbox">
@@ -70,25 +70,25 @@
                                         </td>
                                         <td>{{$key+1}}</td>
                                         <td>
-                                            {{$user->name}}
+                                            {{$acounts->name}}
                                         </td>
                                         <td>
-                                            <img src="{{ Storage::url($user->user_image) }}" alt="Ảnh" width="35px" height="35px" style="border-radius: 50%">
+                                            <img src="{{ Storage::url($acounts->user_image) }}" alt="Ảnh" width="35px" height="35px" style="border-radius: 50%">
                                         </td>
                                         <td>
-                                            <span class="block-email">{{$user->email}}  </span>
+                                            <span class="block-email">{{$acounts->email}}  </span>
                                         </td>
                                         <td class="desc">
-                                            <span class="">{{$user->phone_number}}</span>
+                                            <span class="">{{$acounts->phone_number}}</span>
                                         </td>
-                                        <td><span class="role user">{{$user->role}}</span></td>
+                                        <td><span class="role user">{{$acounts->role}}</span></td>
                                         <td>
                                             <div class="table-data-feature">
                                                 <button class="item" data-toggle="tooltip" data-placement="top"
                                                     title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button>
-                                                <form action="{{ route('user.destroy',$user->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
+                                                <form action="{{ route('user.destroy',$acounts->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -102,7 +102,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $data->links('pagination::bootstrap-5')}}
+                        {{ $accounts->links('pagination::bootstrap-5')}}
                     </div>
                 </div>
             </div>

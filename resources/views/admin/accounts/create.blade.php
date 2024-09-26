@@ -1,4 +1,4 @@
-@extends('layouts.admins')
+@extends('admin.admin')
 @section('title')
     Tạo người dùng mới
 @endsection
@@ -73,7 +73,7 @@
                                             class="text-light au-btn au-btn-icon au-btn--blue au-btn--small mb-3">Thêm địa
                                             chỉ +</a>
                                         <a id="delete_location" style="display: none;"
-                                            class="text-light au-btn au-btn-icon au-btn--red au-btn--small mb-3">Xóa -</a>
+                                            class="text-light au-btn au-btn-icon btn-danger au-btn--small mb-3">Xóa -</a>
                                     </div>
                                     <div class="" id="form_location">
 
@@ -81,7 +81,7 @@
                                 </div>
                                 <div>
                                     <button type="reset"
-                                        class="au-btn au-btn-icon au-btn--red au-btn--small mr-3">Xóa</button>
+                                        class="au-btn au-btn-icon btn-danger au-btn--small mr-3">Xóa</button>
                                     <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small mr-3">Thêm
                                         tài khoản</button>
                                 </div>

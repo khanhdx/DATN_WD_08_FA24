@@ -1,4 +1,4 @@
-@extends('layouts.admins')
+@extends('admin.admin')
 @section('title')
     Danh sách người dùng
 @endsection
