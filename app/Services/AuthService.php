@@ -21,7 +21,7 @@ class AuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role' => $data['role'] ?? 2, // Mặc định là khách hàng
+            'role' => $data['role'] ?? 'Khách hàng', // Mặc định là Khách hàng
         ]);
     }
 
