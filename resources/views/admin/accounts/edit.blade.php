@@ -6,7 +6,7 @@
     {{-- CSS --}}
 @endsection
 @section('content')
-  
+    
 @endsection
 @section('js')
     {{-- JAVA SCRIPT --}}

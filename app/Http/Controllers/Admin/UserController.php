@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
+use App\Mail\UserMailConfirm;
+use App\Models\Locations;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Nette\Utils\Random;
 use Str;
+use Vtiful\Kernel\Excel;
 
 class UserController extends Controller
 {
@@ -43,16 +48,25 @@ class UserController extends Controller
         //Lấy dữ liệu từ form
         if($request->isMethod('POST')) {
             $user = $request->input('user');
-            $user['password'] = "NULL";
+            $user['password'] = Str::random(8);
             if($request->hasFile('user_image')) {
                 $user['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
             }else {
                 $user['user_image'] = null;
             }
+            $user_new = User::query()->create($user);
             $locations = $request->input('location');
             $status_location = $request->input('status');
-            // dd($locations, $status_location);
-            $user_new = User::query()->create($user);
+            foreach ($locations as $key => $location) {
+                $location['user_id'] = $user_new->id;
+                if($status_location == $key) {
+                    $location['status'] = "Mặc định";
+                }else {
+                    $location['status'] = "Phụ";
+                }
+                Locations::query()->create($location);
+            }
+            Mail::to($user['email'])->send(new UserMailConfirm($user_new));
             return redirect()->route('user.index')->with('success', 'Thàn công');
         }
         
