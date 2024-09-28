@@ -23,9 +23,9 @@
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
-                        <a href="table.html">
+                        <a href="{{route('category.index')}}">
                             <i class="fas fa-trophy"></i>
-                            <span class="bot-line"></span>table</a>
+                            <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('user.index') }}">
