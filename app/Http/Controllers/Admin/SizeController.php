@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Admins;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Size\ISizeService;
