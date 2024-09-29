@@ -22,7 +22,7 @@ class ProductRepository {
         return $data;
     }
 
-    public function updateById($id, $data)
+    public function updateById($data, $id)
     {
         $product = $this->getOneById($id);
 

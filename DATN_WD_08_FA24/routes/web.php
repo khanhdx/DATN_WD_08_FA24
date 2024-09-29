@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admins\ColorController;
 use App\Http\Controllers\Admins\ProductController;
+use App\Http\Controllers\Admins\ProductVariantController;
 use App\Http\Controllers\Admins\SizeController;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +36,7 @@ Route::prefix('admins')
                 Route::post('/store', [ColorController::class, 'store'])->name('store');
                 // Route::get('/show/{id}', [ColorController::class, 'show'])->name('show');
                 // Route::get('{id}/edit', [ColorController::class, 'edit'])->name('edit');
-                Route::put('{id_color}/update', [ColorController::class, 'update'])->name('update');
+                Route::put('{id}/update', [ColorController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ColorController::class, 'delete'])->name('delete');
             });
 
@@ -46,7 +48,7 @@ Route::prefix('admins')
                 Route::post('/store', [SizeController::class, 'store'])->name('store');
                 // Route::get('/show/{id}', [SizeController::class, 'show'])->name('show');
                 // Route::get('{id}/edit', [SizeController::class, 'edit'])->name('edit');
-                Route::put('{id_color}/update', [SizeController::class, 'update'])->name('update');
+                Route::put('{id}/update', [SizeController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');
             });
 
@@ -58,9 +60,20 @@ Route::prefix('admins')
                 Route::post('/store', [ProductController::class, 'store'])->name('store');
                 // Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
                 // Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
-                Route::put('{id_color}/update', [ProductController::class, 'update'])->name('update');
+                Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
+
+                Route::prefix('variants')
+                ->as('variants.')
+                ->group(function () {
+                    Route::get('/', [ProductVariantController::class, 'index'])->name('index');
+                    // Route::get('/create', [ProductVariantController::class, 'create'])->name('create');
+                    Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
+                    // Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('show');
+                    // Route::get('{id}/edit', [ProductVariantController::class, 'edit'])->name('edit');
+                    Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
+                    Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
+                });
             });
 
-            
     });

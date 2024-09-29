@@ -2,14 +2,14 @@
 
 namespace App\Services\Product;
 
-interface IProductService{
+interface IVariantService{
     public function getAll();
 
     public function getOneById($id);
 
     public function insert($data);
 
-    public function update($id, $data);
+    public function update($data, $id);
 
     public function delete($data);
 

@@ -26,4 +26,8 @@ class ProductController extends Controller
     {
         return $this->productService->insert($request->all());
     }   
+
+    public function update($id, Request $request){
+        return $this->productService->update($request->all(), $id);
+    }
 }

@@ -24,7 +24,7 @@ class ProductService implements IProductService
         return response()->json(['data' => $products], 200);
     }
 
-    public function getOneBy($id)
+    public function getOneById($id)
     {
         $product = $this->productRepository->getOneById($id);
 
@@ -39,11 +39,11 @@ class ProductService implements IProductService
             'category_id' => 'required|exists:categories,id', // Kiểm tra tồn tại trong bảng categories
             'name' => 'required|unique:products,name',
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'price_regular' => 'required|numeric|min:0',
-            'price_sale' => 'required|numeric|min:0|lt:price_regular',
+            // 'price_regular' => 'required|numeric|min:0',
+            // 'price_sale' => 'required|numeric|min:0|lt:price_regular',
             'material' => 'required|string',
             'short_desc' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
         ];
 
         // Định nghĩa lỗi
@@ -51,17 +51,19 @@ class ProductService implements IProductService
         $messages = [
             'category_id.required' => 'Danh mục không được để trống.',
             'category_id.exists' => 'Danh mục không tồn tại.',
+            'name.required' => 'Tên không để trống',
+            'name.unique' => 'Tên đã tồn tại',
             'avatar.required' => 'avatar không được để trống.',
             'avatar.image' => 'avatar không đúng định dạng ảnh',
             'avatar.mimes' => 'avatar phải là kiểu file jpeg,png,jpg,gif',
             'avatar.max' => 'avatar không vượt quá 5MB',
-            'price_regular.required' => 'price_regular không được để trống.',
-            'price_regular.numeric' => 'price_regular phải là số.',
-            'price_regular.min' => 'price_regular không được âm.',
-            'price_sale.required' => 'price_sale không được để trống.',
-            'price_sale.numeric' => 'price_sale phải là số.',
-            'price_sale.min' => 'price_sale không được âm.',
-            'price_sale.lt' => 'price_sale phải nhỏ hơn price_regular.',
+            // 'price_regular.required' => 'price_regular không được để trống.',
+            // 'price_regular.numeric' => 'price_regular phải là số.',
+            // 'price_regular.min' => 'price_regular không được âm.',
+            // 'price_sale.required' => 'price_sale không được để trống.',
+            // 'price_sale.numeric' => 'price_sale phải là số.',
+            // 'price_sale.min' => 'price_sale không được âm.',
+            // 'price_sale.lt' => 'price_sale phải nhỏ hơn price_regular.',
             'material.required' => 'material không được để trống.',
             'short_desc.required' => 'short_desc không được để trống.',
             'short_desc.max' => 'short_desc không được vượt quá 255 ký tự.',
@@ -104,7 +106,74 @@ class ProductService implements IProductService
         }
     }
 
-    public function update($id, $data) {}
+    public function update($data, $id)
+    {
+        // Kiểm tra product có tồn tạo không ?
+        $product = $this->productRepository->getOneById($id);
 
-    public function delete($data) {}
+        if(!$product){
+            return response([
+                'error' => 'Sản phẩm không tồn tại',
+            ], 404);
+        }
+
+        // Quy định lỗi
+        $rules = [
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255|unique:products,name,' . $id,
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'material' => 'required|string|max:255',
+            'short_desc' => 'required|string|max:255',
+            'content' => 'nullable|string',
+        ];
+
+        // Định nghĩa lỗi
+
+        $messages = [
+            'category_id.required' => 'Danh mục không được để trống.',
+            'category_id.exists' => 'Danh mục không tồn tại.',
+            'avatar.image' => 'avatar không đúng định dạng ảnh',
+            'avatar.mimes' => 'avatar phải là kiểu file jpeg,png,jpg,gif',
+            'avatar.max' => 'avatar không vượt quá 5MB',
+            'material.required' => 'material không được để trống.',
+            'short_desc.required' => 'short_desc không được để trống.',
+            'short_desc.max' => 'short_desc không được vượt quá 255 ký tự.',
+        ];
+
+        $validator = Validator::make($data, $rules, $messages);
+
+
+        // Kiểm tra xem có lỗi không
+        if ($validator->fails()) {
+            // Trả về thông báo lỗi dưới dạng JSON
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422); // HTTP status 422 Unprocessable Entity
+        }
+
+        try {
+            
+            //update lên DB
+            $productInput = $validator->validated();
+            // dd($productInput);
+
+            $product = $this->productRepository->updateById($productInput, $id);
+
+            // Update Upload Avatar 
+            // if (!empty($productInput['avatar'])) {
+            //     $productInput['avatar'] = Storage::put('products', $productInput['avatar']);
+            // }
+
+            return response([
+                'message' => 'Thành công',
+                'data' => $product,
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => $th->getMessage()], 500);
+        }
+    }
+
+    public function delete($data) {
+        
+    }
 }

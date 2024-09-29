@@ -14,11 +14,8 @@ class Color extends Model
         'name',
         'code_color',
     ];
-
-    public function Cala()
+    public function variants()
     {
-     
+       return $this->hasMany(ProductVariant::class); 
     }
-
-    
 }

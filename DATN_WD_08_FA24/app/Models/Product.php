@@ -15,8 +15,8 @@ class Product extends Model
         'category_id',
         'name',
         'avatar',
-        'price_regular',
-        'price_sale',
+        // 'price_regular',
+        // 'price_sale',
         'material',
         'short_desc',
         'content',
@@ -27,5 +27,10 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function variants()
+    {
+       return $this->hasMany(ProductVariant::class); 
     }
 }
