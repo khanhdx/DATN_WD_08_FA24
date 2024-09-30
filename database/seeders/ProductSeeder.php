@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
             $price = rand(100,999);
             $sale = $price * 0.6; // Giảm 40%
             Product::create([
-                'category_id'   => rand(1, 10),
+                'category_id'   => rand(1, 20),
                 'name'          => fake()->text(20),
                 'SKU'           => "OB" . rand(10000,99999),
                 'price_regular' => $price,

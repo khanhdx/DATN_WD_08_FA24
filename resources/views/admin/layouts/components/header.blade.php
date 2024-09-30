@@ -18,7 +18,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{route('post.index')}}">
                             <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>

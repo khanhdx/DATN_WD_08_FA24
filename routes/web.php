@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\CategorysController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
+
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\PostController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,21 +23,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/admin', function () {
-    return view('admin.admin');
+    return view('admin.layouts.master');
 });
 Route::resource('category', CategorysController::class);
 
-Route::resource('user', UserController::class);
-Route::resource('posts', PostController::class);
+Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
+Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class,'exportExcel']);
+Route::resource('post', PostController::class);
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Route để hiển thị danh sách bài viết
-Route::get('client/posts', [PostController::class, 'clientIndex'])->name('client.posts.index');
+Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('client.product_detail');
 
-// Route để hiển thị chi tiết từng bài viết
-Route::get('client/posts/{id}', [PostController::class, 'clientShow'])->name('client.posts.show');
+Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
+
+Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
+
 
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);

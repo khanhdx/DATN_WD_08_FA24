@@ -37,7 +37,7 @@
 <body class="animsition">
     <div class="page-wrapper">
         <!-- HEADER DESKTOP-->
-        @include('admin.blocks.header')
+        @include('admin.layouts.components.header')
         <!-- END HEADER DESKTOP-->
 
         <!-- PAGE CONTENT-->
@@ -47,7 +47,7 @@
             <!-- END BREADCRUMB-->
 
             <!-- WELCOME-->
-            @include('admin.blocks.welcome')
+            @include('admin.layouts.components.welcome')
             <!-- END WELCOME-->
 
             <!-- DATA TABLE-->
@@ -55,7 +55,7 @@
             <!-- END DATA TABLE-->
 
             <!-- COPYRIGHT-->
-            @include('admin.blocks.footer')
+            @include('admin.layouts.components.footer')
             <!-- END COPYRIGHT-->
         </div>
 
