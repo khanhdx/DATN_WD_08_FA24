@@ -5,6 +5,7 @@ Thông tin tài khoản: <br>
 Tên tài khoản: {{$user->name}}<br>
 Địa chỉ mail: {{$user->email}}<br>
 Mật khẩu: {{$user->password}}<br>
+Loại tài khoản: {{ $user->role }}<br>
 <br>
 
 <a href="{{ route('client.posts.index') }}">Cập nhật mật khẩu</a>

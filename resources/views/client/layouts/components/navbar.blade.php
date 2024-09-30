@@ -1,15 +1,48 @@
 <nav class="navbar navbar-default navbar-main navbar-main-slide" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-            <a class="logo" href="index.html"><img src="images/logo.png" alt="Flatize"></a> </div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span
+                    class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> </button>
+            <a class="logo" href="index.html"><img src="images/logo.png" alt="Flatize"></a>
+        </div>
         <ul class="nav navbar-nav navbar-act pull-right">
-            <li class="login"><a href="javascript:void(0);"><i class="fa fa-user"></i></a></li>
-            <li class="search"><a href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-search"></i></a></li>
+            <li class="login">
+                @guest
+                    <!-- Hiển thị nếu chưa đăng nhập -->
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                @endguest
+            
+                @auth
+                    <!-- Hiển thị nếu đã đăng nhập với dropdown -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> Tài khoản <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Trang cá nhân</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" 
+                                   onclick="event.preventDefault(); 
+                                   document.getElementById('logout-form').submit();">
+                                   Đăng xuất
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @endauth
+            </li>            
+
+            <li class="search"><a href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-lg"><i
+                        class="fa fa-search"></i></a></li>
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
-                <li class="dropdown active"><a href="index-2.html" class="dropdown-toggle" data-toggle="dropdown">Home</a>
+                <li class="dropdown active"><a href="index-2.html" class="dropdown-toggle"
+                        data-toggle="dropdown">Home</a>
                     <ul class="dropdown-menu">
                         <li class="active"><a href="index-2.html">Home</a></li>
                         <!-- <li><a href="index-3.html">Home Version 3</a></li>
@@ -18,7 +51,8 @@
                         <li><a href="shop-sidebar.html">Shop - Sidebar</a></li>
                     </ul>
                 </li>
-                <li class="dropdown megamenu"><a href="shop-list-sidebar.html" class="dropdown-toggle" data-toggle="dropdown">Shop</a>
+                <li class="dropdown megamenu"><a href="shop-list-sidebar.html" class="dropdown-toggle"
+                        data-toggle="dropdown">Shop</a>
                     <div class="dropdown-menu">
                         <div class="mega-menu-content">
                             <div class="row">
@@ -28,12 +62,15 @@
                                         <li class="product">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt="" width="60" src="images/content/products/product-1.jpg"></a>
+                                                    <a href="shop-product-detail1.html"><img alt=""
+                                                            width="60"
+                                                            src="images/content/products/product-1.jpg"></a>
                                                 </div>
-                                                
+
                                                 <div class="product-thumb-info-content">
                                                     <h4><a href="shop-product-detail2.html">Denim shirt</a></h4>
-                                                    <span class="item-cat"><small><a href="#">Jackets</a></small></span>
+                                                    <span class="item-cat"><small><a
+                                                                href="#">Jackets</a></small></span>
                                                     <span class="price">29.99 USD</span>
                                                 </div>
                                             </div>
@@ -41,12 +78,16 @@
                                         <li class="product">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt="" width="60" src="images/content/products/product-2.jpg"></a>
+                                                    <a href="shop-product-detail1.html"><img alt=""
+                                                            width="60"
+                                                            src="images/content/products/product-2.jpg"></a>
                                                 </div>
-                                                
+
                                                 <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Poplin shirt with fine pleated bands</a></h4>
-                                                    <span class="item-cat"><small><a href="#">Jackets</a></small></span>
+                                                    <h4><a href="shop-product-detail2.html">Poplin shirt with fine
+                                                            pleated bands</a></h4>
+                                                    <span class="item-cat"><small><a
+                                                                href="#">Jackets</a></small></span>
                                                     <span class="price">29.99 USD</span>
                                                 </div>
                                             </div>
@@ -54,12 +95,15 @@
                                         <li class="product">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt="" width="60" src="images/content/products/product-3.jpg"></a>
+                                                    <a href="shop-product-detail1.html"><img alt=""
+                                                            width="60"
+                                                            src="images/content/products/product-3.jpg"></a>
                                                 </div>
-                                                
+
                                                 <div class="product-thumb-info-content">
                                                     <h4><a href="shop-product-detail2.html">Contrasting shirt</a></h4>
-                                                    <span class="item-cat"><small><a href="#">Jackets</a></small></span>
+                                                    <span class="item-cat"><small><a
+                                                                href="#">Jackets</a></small></span>
                                                     <span class="price">29.99 USD</span>
                                                 </div>
                                             </div>
@@ -80,7 +124,7 @@
                                         <li><a href="#">Accessories</a></li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="col-md-2 menu-column">
                                     <h3>Woman</h3>
                                     <ul class="list-unstyled sub-menu">
@@ -103,12 +147,17 @@
                                         <li class="product">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img class="img-responsive" width="330" alt="" src="images/content/products/ad-1.png"></a>
+                                                    <a href="shop-product-detail1.html"><img class="img-responsive"
+                                                            width="330" alt=""
+                                                            src="images/content/products/ad-1.png"></a>
                                                 </div>
-                                                
+
                                                 <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Men’s Fashion and Style</a></h4>
-                                                    <p>Whatever you’re looking for, be it the latest fashion trends, cool outfit ideas or new ways to wear your favourite pieces, we’ve got all the style inspiration you need.</p>
+                                                    <h4><a href="shop-product-detail2.html">Men’s Fashion and Style</a>
+                                                    </h4>
+                                                    <p>Whatever you’re looking for, be it the latest fashion trends,
+                                                        cool outfit ideas or new ways to wear your favourite pieces,
+                                                        we’ve got all the style inspiration you need.</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -134,7 +183,7 @@
                             </ul>
                         </li>
                         <li><a href="index-white.html">Mega Menu White</a></li>
-                        <li><a href="page-404.html">404 Error Page</a></li>									
+                        <li><a href="page-404.html">404 Error Page</a></li>
                     </ul>
                 </li>
                 <li><a href="shortcodes.html">Shortcodes</a></li>
@@ -155,6 +204,6 @@
                     </ul>
                 </li> -->
             </ul>
-        </div><!--/.nav-collapse --> 
-    </div><!--/.container-fluid --> 
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
 </nav>

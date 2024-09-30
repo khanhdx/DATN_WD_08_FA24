@@ -25,6 +25,8 @@ class User extends Authenticatable
         'user_image',
         'password',
         'role',
+        'email_verified_at',
+
     ];
 
     /**
@@ -50,3 +52,4 @@ class User extends Authenticatable
         return $this->hasMany(Locations::class);
     }
 }
+

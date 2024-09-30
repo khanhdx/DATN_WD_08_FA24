@@ -36,11 +36,11 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -60,16 +60,11 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
     ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -91,13 +86,13 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
+    'users' => [
+        'provider' => 'users',
+        'table' => 'password_reset_tokens', // Đảm bảo bảng này tồn tại
+        'expire' => 60,
+        'throttle' => 60,
     ],
+],
 
     /*
     |--------------------------------------------------------------------------

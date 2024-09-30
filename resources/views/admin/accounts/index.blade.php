@@ -13,17 +13,18 @@
                     <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <form action="" method="post">
+                            <form action="{{ route('user.index') }}" method="get">
+                                @csrf
                                 <div class="rs-select2--light rs-select2--md">
-                                    <select class="js-select2" name="property">
-                                        <option selected="selected">Tât cả</option>
+                                    <select class="js-select2" name="fillter">
+                                        <option value="" selected="selected">Tât cả</option>
                                         <option value="Khách hàng">Khách hàng</option>
                                         <option value="Nhân viên">Nhân viên</option>
                                         <option value="Quản lý">Quản lý</option>
                                     </select>
                                     <div class="dropDownSelect2"></div>
                                 </div>
-                                <button class="au-btn-filter"> <i class="zmdi zmdi-filter-list"></i> Lọc</button>
+                                <button class="au-btn-filter" type="submit"><i class="zmdi zmdi-filter-list"></i> Lọc</button>
                             </form>
                         </div>
                         {{-- LT --}}
@@ -96,10 +97,12 @@
                                         </td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <button class="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Edit">
-                                                    <i class="zmdi zmdi-edit"></i>
-                                                </button>
+                                                <a href="{{ route('user.edit',$acounts->id) }}" class="mr-1">
+                                                    <button class="item" data-toggle="tooltip" data-placement="top"
+                                                        title="Edit">
+                                                        <i class="zmdi zmdi-edit"></i>
+                                                    </button>
+                                                </a>
                                                 <form action="{{ route('user.destroy',$acounts->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
                                                     @csrf
                                                     @method('DELETE')
