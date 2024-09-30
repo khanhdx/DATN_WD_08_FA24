@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -125,24 +125,4 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Bài viết đã bị xóa.');
     }
-
-
-    public function clientIndex()
-    {
-        // Lấy tất cả bài viết từ cơ sở dữ liệu và phân trang (5 bài viết mỗi trang)
-        $posts = Post::paginate(5); // Hiển thị 5 bài viết trên mỗi trang
-
-        // Trả về view cho giao diện client, truyền danh sách bài viết vào
-        return view('client.posts.posts', compact('posts'));
-    }
-
-    public function clientShow($id)
-    {
-        // Lấy bài viết theo id
-        $post = Post::findOrFail($id);
-
-        // Trả về view cho chi tiết bài viết
-        return view('client.posts.posts_show', compact('post'));
-    }
-    
 }
