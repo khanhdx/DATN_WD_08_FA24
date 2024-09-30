@@ -58,8 +58,6 @@
 			@include('client.layouts.components.navbar')
 		</header>
 		
-		@include('client.layouts.components.beginlogin')
-		
 		<!-- Begin Main -->
 		@yield('content')
 		<!-- End Main -->

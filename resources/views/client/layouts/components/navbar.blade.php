@@ -4,10 +4,38 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span
                     class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                 <span class="icon-bar"></span> </button>
-            <a class="logo" href="/"><img src="/assets/client/images/logo.png" alt="Flatize"></a>
+            <a class="logo" href="index.html"><img src="images/logo.png" alt="Flatize"></a>
         </div>
         <ul class="nav navbar-nav navbar-act pull-right">
-            <li class="login"><a href="javascript:void(0);"><i class="fa fa-user"></i></a></li>
+            <li class="login">
+                @guest
+                    <!-- Hiển thị nếu chưa đăng nhập -->
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                @endguest
+            
+                @auth
+                    <!-- Hiển thị nếu đã đăng nhập với dropdown -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> Tài khoản <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Trang cá nhân</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" 
+                                   onclick="event.preventDefault(); 
+                                   document.getElementById('logout-form').submit();">
+                                   Đăng xuất
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @endauth
+            </li>            
+
             <li class="search"><a href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-lg"><i
                         class="fa fa-search"></i></a></li>
         </ul>
