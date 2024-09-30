@@ -34,10 +34,10 @@ Route::resource('posts', PostController::class);
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route để hiển thị danh sách bài viết
-Route::get('/posts', [PostController::class, 'clientIndex'])->name('client.posts.index');
+Route::get('client/posts', [PostController::class, 'clientIndex'])->name('client.posts.index');
 
 // Route để hiển thị chi tiết từng bài viết
-Route::get('/posts/{id}', [PostController::class, 'clientShow'])->name('client.posts.show');
+Route::get('client/posts/{id}', [PostController::class, 'clientShow'])->name('client.posts.show');
 
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
