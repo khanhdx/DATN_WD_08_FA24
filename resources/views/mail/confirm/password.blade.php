@@ -8,7 +8,7 @@ Mật khẩu: {{$user->password}}<br>
 Loại tài khoản: {{ $user->role }}<br>
 <br>
 
-<a href="{{ route('client.posts.index') }}">Cập nhật mật khẩu</a>
+<a href="">Cập nhật mật khẩu</a>
 <x-mail::button :url="''">
 Cập nhật mật khẩu
 </x-mail::button>
