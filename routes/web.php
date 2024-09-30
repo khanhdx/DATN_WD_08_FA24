@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\CategorysController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
+
 use App\Http\Controllers\Client\HomeController;
 <<<<<<< HEAD
 use App\Http\Controllers\Admin\PostController;
@@ -31,7 +31,9 @@ Route::get('/admin', function () {
 });
 Route::resource('category', CategorysController::class);
 
-Route::resource('user', UserController::class);
+Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
+Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class,'exportExcel']);
 Route::resource('posts', PostController::class);
 
 
