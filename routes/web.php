@@ -86,10 +86,10 @@ Route::prefix('admins')
             ->as('products.')
             ->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
-                // Route::get('/create', [ProductController::class, 'create'])->name('create');
+                Route::get('/create', [ProductController::class, 'create'])->name('create');
                 Route::post('/store', [ProductController::class, 'store'])->name('store');
                 // Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
-                // Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
+                Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
 
@@ -97,7 +97,7 @@ Route::prefix('admins')
                 ->as('variants.')
                 ->group(function () {
                     Route::get('/', [ProductVariantController::class, 'index'])->name('index');
-                    // Route::get('/create', [ProductVariantController::class, 'create'])->name('create');
+                    Route::get('{product_id}/create', [ProductVariantController::class, 'create'])->name('create');
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
                     // Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('show');
                     // Route::get('{id}/edit', [ProductVariantController::class, 'edit'])->name('edit');

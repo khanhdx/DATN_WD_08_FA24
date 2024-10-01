@@ -33,6 +33,25 @@
                             <span class="bot-line"></span>Quản lý tài khoản</a>
                         
                     </li>
+                    <  <li class="has-sub">
+                        <a href="#">
+                            <i class="fas fa-list-ul"></i>
+                            <span class="bot-line"></span>Quản lý sản phẩm</a>
+                        <ul class="header3-sub-list list-unstyled">
+                            <li>
+                                <a href="{{ route('admin.products.index')}}">Sản phẩm</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.colors.index')}}">Thuộc tính màu sắc</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.sizes.index')}}">Thuộc tính kích thước</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="header__tool">
