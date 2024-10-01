@@ -13,13 +13,45 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $type = ['Man', 'Woman'];
-        
-        for ($i=0; $i < 10; $i++) { 
+        $woman = [
+            'Coats',
+            'Outerwear',
+            'Dresses',
+            'Tops',
+            'Trousers',
+            'Shirts',
+            'Jeans',
+            'T-shirts',
+            'Shoes',
+            'Handbags',
+            'Stock clearance',
+        ];
+
+        $man = [
+            'Jackets',
+            'Blazers',
+            'Suits',
+            'Trousers',
+            'Jeans',
+            'Shirts',
+            'Sweatshirts & Hoodies',
+            'Swimwear',
+            'Accessories',
+        ];
+
+        foreach ($man as $item) {
             Category::create([
-                'name' => fake()->text(rand(10, 30)),
-                'type' => $type[array_rand($type)],
+                'name' => $item,
+                'type' => 'Man',
             ]);
         }
+        
+        foreach ($woman as $item) {
+            Category::create([
+                'name' => $item,
+                'type' => 'Woman',
+            ]);
+        }
+
     }
 }

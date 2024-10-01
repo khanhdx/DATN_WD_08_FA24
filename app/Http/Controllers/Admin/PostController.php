@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -29,12 +29,12 @@ class PostController extends Controller
         // Lấy danh sách bài viết sau khi áp dụng lọc
         $posts = $query->get();
 
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.post.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('admin.posts.create');
+        return view('admin.post.create');
     }
 
     public function store(Request $request)
@@ -71,7 +71,7 @@ class PostController extends Controller
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi tạo bài viết.']);
         }
 
-        return redirect()->route('posts.index')->with('success', 'Bài viết được tạo thành công.');
+        return redirect()->route('post.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
     public function show(Post $post)
@@ -81,7 +81,7 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        return view('admin.post.edit', compact('post'));
     }
 
     public function update(Request $request, Post $post)
@@ -114,7 +114,7 @@ class PostController extends Controller
             'publish_date' => $request->publish_date,
         ]);
 
-        return redirect()->route('posts.index')->with('success', 'Bài viết được cập nhật thành công.');
+        return redirect()->route('post.index')->with('success', 'Bài viết được cập nhật thành công.');
     }
 
     public function destroy(Post $post)
@@ -123,26 +123,6 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
         $post->delete();
-        return redirect()->route('posts.index')->with('success', 'Bài viết đã bị xóa.');
+        return redirect()->route('post.index')->with('success', 'Bài viết đã bị xóa.');
     }
-
-
-    public function clientIndex()
-    {
-        // Lấy tất cả bài viết từ cơ sở dữ liệu và phân trang (5 bài viết mỗi trang)
-        $posts = Post::paginate(5); // Hiển thị 5 bài viết trên mỗi trang
-
-        // Trả về view cho giao diện client, truyền danh sách bài viết vào
-        return view('client.posts.posts', compact('posts'));
-    }
-
-    public function clientShow($id)
-    {
-        // Lấy bài viết theo id
-        $post = Post::findOrFail($id);
-
-        // Trả về view cho chi tiết bài viết
-        return view('client.posts.posts_show', compact('post'));
-    }
-    
 }
