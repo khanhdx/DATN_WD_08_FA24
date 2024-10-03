@@ -26,7 +26,7 @@
                         <button class="au-btn-filter">
                             <i class="zmdi zmdi-filter-list"></i>filters</button>
                     </div>
-                    <form class="au-form-icon" action="{{route('category.index')}}" method="GET">
+                    <form class="au-form-icon" action="{{route('admin.category.index')}}" method="GET">
                         <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search')}}" type="text"
                             placeholder="Search for datas &amp; reports..." />
                         <button class="au-btn--submit2" type="submit">
@@ -34,7 +34,7 @@
                         </button>
                     </form>
                     <div class="table-data__tool-right">
-                       <a href="{{route('category.create')}}">
+                       <a href="{{route('admin.category.create')}}">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
                             <i class="zmdi zmdi-plus"></i>Create</button>
                        </a>
@@ -62,10 +62,10 @@
                                 <td>
                                     <div class="table-data-feature">
                                        
-                                       <a href="{{route('category.edit', $item->id)}}"> <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                       <a href="{{route('cadmin.ategory.edit', $item->id)}}"> <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                         <i class="zmdi zmdi-edit"></i>
                                     </button></a>
-                                       <form action="{{route('category.destroy', $item->id)}}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                       <form action="{{route('admin.category.destroy', $item->id)}}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">

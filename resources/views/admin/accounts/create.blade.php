@@ -36,7 +36,7 @@
                     <div class="col-md-12">
                         <h3 class="title-5 m-b-35">Tạo tài khoản người dùng</h3>
                         <div class="m-3 table-responsive table-responsive-data2">
-                            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.user.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('POST')
                                 <div class="row mb-3">

@@ -20,7 +20,7 @@
             <h3 class="title-5 m-b-35">Quản lý Slide</h3>
             <div class="table-data__tool">
                 <div class="table-data__tool-left">
-                    <form action="{{ route('slider.index') }}" method="get">
+                    <form action="{{ route('admin.slider.index') }}" method="get">
                         @csrf
                         <div class="rs-select2--light rs-select2--md">
                             <select class="js-select2" name="filter">
@@ -34,7 +34,7 @@
                     </form>
                 </div>
                 <div class="table-data__tool-right">
-                    <a href="{{ route('slider.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <a href="{{ route('admin.slider.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
                         <i class="zmdi zmdi-plus"></i>Thêm Slider</button></a>
                     <a href="#"><button id="delete" class="au-btn au-btn-icon btn-danger au-btn--small">
                         <i class="fa-regular fa-trash-can"></i>Xóa</button></a>
@@ -80,12 +80,12 @@
                                 </span></td>
                                 <td>
                                     <div class="table-data-feature d-flex align-items-center">
-                                        <a href="{{ route('slider.edit', $item->id) }}" class="mr-1">
+                                        <a href="{{ route('admin.slider.edit', $item->id) }}" class="mr-1">
                                             <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                                 <i class="zmdi zmdi-edit"></i>
                                             </button>
                                         </a>
-                                        <form action="{{ route('slider.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn xóa không')" class="d-inline">
+                                        <form action="{{ route('admin.slider.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn xóa không')" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">

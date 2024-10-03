@@ -20,7 +20,7 @@
                             <i class="fa fa-user"></i> Tài khoản <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Trang cá nhân</a></li>
+                            <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
                             <li>
                                 <a href="{{ route('logout') }}" 
                                    onclick="event.preventDefault(); 
