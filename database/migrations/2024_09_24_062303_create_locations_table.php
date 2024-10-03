@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('location_name');
             $table->string('user_name');
+            $table->string('phone_number');
             $table->string('location_detail');
             $table->enum('status',['Mặc định', 'Phụ']);
             $table->timestamps();

@@ -1,66 +1,57 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Services\Product\IProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $productService;
+
+    public function __construct(IProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
+
     public function index()
     {
-        //
+        $products = $this->productService->getAll();
+        return view('admin.products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // Lấy danh sách bảng categoreis
+        $Category = new Category();
+        $categories = $Category->all();
+
+        return view('admin.products.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProductRequest $request)
+
+
+    public function edit($id)
     {
-        //
+        // Lấy danh sách bảng categoreis
+        $Category = new Category();
+        $categories = $Category->all();
+
+        $product = $this->productService->getOneById($id);
+        return view('admin.products.edit', compact('categories', 'product'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
+    public function store(Request $request)
     {
-        //
+
+        return $this->productService->insert($request->all());
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
+    public function update($id, Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductRequest $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return $this->productService->update($request->all(), $id);
     }
 }

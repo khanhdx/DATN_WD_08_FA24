@@ -18,19 +18,44 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{route('admin.post.index')}}">
                             <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
-                        <a href="table.html">
+                        <a href="{{route('admin.category.index')}}">
                             <i class="fas fa-trophy"></i>
-                            <span class="bot-line"></span>table</a>
+                            <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
-                        <a href="{{ route('user.index') }}">
+                        <a href="{{ route('admin.user.index') }}">
                             <i class="fa-solid fa-users"></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
+                        
+                    </li>
+                    <  <li class="has-sub">
+                        <a href="#">
+                            <i class="fas fa-list-ul"></i>
+                            <span class="bot-line"></span>Quản lý sản phẩm</a>
+                        <ul class="header3-sub-list list-unstyled">
+                            <li>
+                                <a href="{{ route('admin.products.index')}}">Sản phẩm</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.colors.index')}}">Thuộc tính màu sắc</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.sizes.index')}}">Thuộc tính kích thước</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{ route('admin.slider.index') }}">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="bot-line"></span>Quản lý slider</a>
                         
                     </li>
                 </ul>

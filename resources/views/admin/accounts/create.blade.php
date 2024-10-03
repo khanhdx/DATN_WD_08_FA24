@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layouts.master')
 @section('title')
     Tạo người dùng mới
 @endsection
@@ -36,28 +36,37 @@
                     <div class="col-md-12">
                         <h3 class="title-5 m-b-35">Tạo tài khoản người dùng</h3>
                         <div class="m-3 table-responsive table-responsive-data2">
-                            <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.user.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('POST')
                                 <div class="row mb-3">
                                     <div class="col">
                                         <label class="form-label" for="name">Tên người dùng</label>
-                                        <input class="form-control" type="text" placeholder="Họ & tên" name="user[name]" id="name">
+                                        <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Họ & tên" name="name" id="name">
+                                        @error('name')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <div class="col">
                                         <label class="form-label" for="email">Email</label>
-                                        <input class="form-control" type="email" placeholder="Địa chỉ mail" name="user[email]" id="email">
+                                        <input class="form-control @error('email') is-invalid @enderror" type="email" placeholder="Địa chỉ mail" name="email" id="email">
+                                        @error('email')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label" for="phone_number">Số điện thoại</label>
-                                            <input class="form-control" type="text" name="user[phone_number]" placeholder="Điện thoại" id="phone_number">
+                                            <input class="form-control @error('phone_number') is-invalid @enderror" type="text" max="20" name="phone_number" placeholder="Điện thoại" id="phone_number">
+                                            @error('phone_number')
+                                                <p class="text-danger">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label" for="">Loại tài khoản</label>
-                                            <select name="user[role]" class="form-control" id="">
+                                            <select name="role" class="form-control" id="">
                                                 <option value="Khách hàng">Khách hàng</option>
                                                 <option value="Nhân viên">Nhân viên</option>
                                                 <option value="Quản lý">Quản lý</option>
@@ -68,7 +77,7 @@
                                         <div class="row w-100">
                                             <div class="col">
                                                 <label for="user_image">Ảnh</label>
-                                                <input class="form-control p-1" type="file" name="user_image" id="user_image">
+                                                <input class="form-control p-1 " type="file" name="user_image" id="user_image">
                                             </div>
                                             <div id="file_I" class="col-3">
                                                 <img class="p-0" id="view_IMG" src="" alt="Ảnh">
@@ -141,6 +150,7 @@
                             <div class="col-6 mb-3">
                                 <label for="name">Tên địa chỉ</label>
                                 <input class="form-control" type="text" name="location[${i}][location_name]" value="Địa chỉ ${i+1}" id="location_name">
+                                
                             </div>
                         </div>
                            <div class="row">

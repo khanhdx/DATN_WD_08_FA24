@@ -28,7 +28,7 @@
                                             </span>
                                             <a href="blog-single.html">
                                                 @if ($post->image)
-                                                    <img src="{{ asset('storage/' . $post->image) }}"
+                                                    <img src="{{ $post->image }}"
                                                         alt="Image for {{ $post->title }}"
                                                         style="width: 200px; height: auto;">
                                                 @else
@@ -49,11 +49,11 @@
                                                 <span class="pull-left"><i
                                                         class="fa fa-clock-o"></i>{{ $post->publish_date }}</span>
                                                 <span class="pull-right"><i class="fa fa-comment-o"></i> <a
-                                                        href="#">212 Comments</a></span>
+                                                        href="#">12 Comments</a></span>
                                             </div>
-                                            
+
                                             <p class="btn-loadmore text-center">
-                                                <a href="{{ route('client.posts.show', $post->id) }}" class="btn">
+                                                <a href="{{ route('client.post_show', $post->id) }}" class="btn">
                                                     Xem chi tiết
                                                 </a>
                                             </p>

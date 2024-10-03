@@ -20,7 +20,7 @@
                             <i class="fa fa-user"></i> Tài khoản <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Trang cá nhân</a></li>
+                            <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
                             <li>
                                 <a href="{{ route('logout') }}" 
                                    onclick="event.preventDefault(); 
@@ -64,7 +64,7 @@
                                                 <div class="product-thumb-info-image">
                                                     <a href="shop-product-detail1.html"><img alt=""
                                                             width="60"
-                                                            src="images/content/products/product-1.jpg"></a>
+                                                            src="/assets/client/images/content/products/product-1.jpg"></a>
                                                 </div>
 
                                                 <div class="product-thumb-info-content">
@@ -80,7 +80,7 @@
                                                 <div class="product-thumb-info-image">
                                                     <a href="shop-product-detail1.html"><img alt=""
                                                             width="60"
-                                                            src="images/content/products/product-2.jpg"></a>
+                                                            src="/assets/client/images/content/products/product-2.jpg"></a>
                                                 </div>
 
                                                 <div class="product-thumb-info-content">
@@ -97,7 +97,7 @@
                                                 <div class="product-thumb-info-image">
                                                     <a href="shop-product-detail1.html"><img alt=""
                                                             width="60"
-                                                            src="images/content/products/product-3.jpg"></a>
+                                                            src="/assets/client/images/content/products/product-3.jpg"></a>
                                                 </div>
 
                                                 <div class="product-thumb-info-content">
@@ -149,7 +149,7 @@
                                                 <div class="product-thumb-info-image">
                                                     <a href="shop-product-detail1.html"><img class="img-responsive"
                                                             width="330" alt=""
-                                                            src="images/content/products/ad-1.png"></a>
+                                                            src="/assets/client/images/content/products/ad-1.png"></a>
                                                 </div>
 
                                                 <div class="product-thumb-info-content">
@@ -187,7 +187,7 @@
                     </ul>
                 </li>
                 <li><a href="shortcodes.html">Shortcodes</a></li>
-                <li><a href="{{ route('client.posts.index') }}">Blog</a></li>
+                <li><a href="{{ route('client.posts') }}">Blog</a></li>
                 <!-- <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
                     <ul class="dropdown-menu">
                         <li><a href="blog-sidebar.html">Blog Sidebar</a></li>

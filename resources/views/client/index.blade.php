@@ -72,7 +72,7 @@
                 <h2 class="title"><span>Top Selling</span></h2>
                 <div class="row">
                     <div id="owl-product-slide" class="owl-carousel product-slide">
-                        @foreach ($data as $product)
+                        @foreach ($topSeller as $product)
                             <div class="col-md-12 animation">
                                 <div class="item product">
                                     <div class="product-thumb-info">
@@ -86,16 +86,17 @@
                                                     <span><i class="fa fa-shopping-cart"></i></span>
                                                 </a>
                                             </span>
-                                            <a href="/abc">
+                                            <a href="{{ route('client.product_detail', $product->id) }}">
                                                 <img alt="" class="img-responsive"
-                                                    src="/assets/client/images/content/products/product-{{ rand(1,17) }}.jpg">
+                                                    src="/assets/client/images/content/products/product-{{ $product->category->type == 'Man' ? rand(1, 8) : rand(9, 17) }}.jpg">
                                             </a>
                                         </div>
 
                                         <div class="product-thumb-info-content">
                                             <span class="price pull-right">{{ $product->price_regular }} USD</span>
                                             <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
-                                            <span class="item-cat"><small><a href="#">{{ $product->category->name }}</a></small></span>
+                                            <span class="item-cat"><small><a
+                                                        href="#">{{ $product->category->name }}</a></small></span>
                                         </div>
                                     </div>
                                 </div>
@@ -121,215 +122,78 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="man">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-5.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">39.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Loose fit ripped jeans</a></h4>
-                                            <span class="item-cat"><small><a href="#">Jeans</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-6.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">29.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Linen shirt with ribbon at the
-                                                    front</a></h4>
-                                            <span class="item-cat"><small><a href="#">Shirts</a></small></span>
+                            @foreach ($newProduct as $product)
+                                @if ($product->category->type == 'Man')
+                                    <div class="col-xs-6 col-sm-3 animation">
+                                        <div class="product">
+                                            <div class="product-thumb-info">
+                                                <div class="product-thumb-info-image">
+                                                    <span class="product-thumb-info-act">
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                            data-target=".quickview-wrapper" class="view-product">
+                                                            <span><i class="fa fa-external-link"></i></span>
+                                                        </a>
+                                                        <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                            <span><i class="fa fa-shopping-cart"></i></span>
+                                                        </a>
+                                                    </span>
+                                                    <a href="{{ route('client.product_detail', $product->id) }}">
+                                                        <img alt="" class="img-responsive"
+                                                            src="/assets/client/images/content/products/product-{{ rand(1, 8) }}.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="product-thumb-info-content">
+                                                    <span class="price pull-right">{{ $product->price_regular }} USD</span>
+                                                    <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
+                                                    <span class="item-cat"><small><a
+                                                                href="#">{{ $product->category->name }}</a></small></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <a href="shop-product-detail1.html">
-                                        <span class="bag bag-new">New</span>
-                                    </a>
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-7.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">29.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Striped sweater</a></h4>
-                                            <span class="item-cat"><small><a href="#">Stock
-                                                        clearance</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-8.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">29.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Checked shirt with pocket</a></h4>
-                                            <span class="item-cat"><small><a href="#">Shirts</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
+
                     <div class="tab-pane" id="woman">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-9.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">69.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Classic blazer</a></h4>
-                                            <span class="item-cat"><small><a href="#">Outerwear</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-10.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">39.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Striped full skirt</a></h4>
-                                            <span class="item-cat"><small><a href="#">Skirts</a></small></span>
+                            @foreach ($newProduct as $product)
+                                @if ($product->category->type == 'Woman')
+                                    <div class="col-xs-6 col-sm-3 animation">
+                                        <div class="product">
+                                            <div class="product-thumb-info">
+                                                <div class="product-thumb-info-image">
+                                                    <span class="product-thumb-info-act">
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                            data-target=".quickview-wrapper" class="view-product">
+                                                            <span><i class="fa fa-external-link"></i></span>
+                                                        </a>
+                                                        <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                            <span><i class="fa fa-shopping-cart"></i></span>
+                                                        </a>
+                                                    </span>
+                                                    <a href="{{ route('client.product_detail', $product->id) }}">
+                                                        <img alt="" class="img-responsive"
+                                                            src="/assets/client/images/content/products/product-{{ rand(9, 17) }}.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="product-thumb-info-content">
+                                                    <span class="price pull-right">{{ $product->price_regular }}
+                                                        USD</span>
+                                                    <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
+                                                    <span class="item-cat"><small><a
+                                                                href="#">{{ $product->category->name }}</a></small></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <a href="shop-product-detail1.html">
-                                        <span class="bag bag-onsale">Sale</span>
-                                    </a>
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-11.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">79.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Structured double-breasted blazer</a>
-                                            </h4>
-                                            <span class="item-cat"><small><a href="#">Outerwear</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 animation">
-                                <div class="product">
-                                    <div class="product-thumb-info">
-                                        <div class="product-thumb-info-image">
-                                            <span class="product-thumb-info-act">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target=".quickview-wrapper" class="view-product">
-                                                    <span><i class="fa fa-external-link"></i></span>
-                                                </a>
-                                                <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                    <span><i class="fa fa-shopping-cart"></i></span>
-                                                </a>
-                                            </span>
-                                            <img alt="" class="img-responsive"
-                                                src="/assets/client/images/content/products/product-12.jpg">
-                                        </div>
-                                        <div class="product-thumb-info-content">
-                                            <span class="price pull-right">29.99 USD</span>
-                                            <h4><a href="shop-product-detail2.html">Sheer overlay dress</a></h4>
-                                            <span class="item-cat"><small><a href="#">Dresses</a></small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </section>
         <!-- End New Products -->
@@ -361,33 +225,21 @@
             <div class="container">
                 <h2 class="title"><span>Latest from the blog</span></h2>
                 <div class="row">
-                    <div class="col-xs-6 animation">
-                        <article class="post">
-                            <div class="post-image">
-                                <span class="post-info-act">
-                                    <a href="blog-single.html"><i class="fa fa-caret-right"></i></a>
-                                </span>
-                                <img class="img-responsive" src="/assets/client/images/content/blog/demo-1.jpg"
-                                    alt="Blog">
-                            </div>
-                            <h3><a href="blog-single.html">Paris Fashion Week S/S 2014: womenswear collections</a></h3>
-                            <p class="post-meta">15th December 2014</p>
-                        </article>
-                    </div>
-                    <div class="col-xs-6 animation">
-                        <article class="post">
-                            <div class="post-image">
-                                <span class="post-info-act">
-                                    <a href="blog-single.html"><i class="fa fa-camera"></i></a>
-                                </span>
-                                <img class="img-responsive" src="/assets/client/images/content/blog/demo-2.jpg"
-                                    alt="Blog">
-                            </div>
-                            <h3><a href="blog-single.html">Show tunes: London Fashion Week S/S 2014's runway playlist</a>
-                            </h3>
-                            <p class="post-meta">15th December 2014</p>
-                        </article>
-                    </div>
+                    @foreach ($latest_posts as $post)
+                        <div class="col-xs-6 animation">
+                            <article class="post">
+                                <div class="post-image">
+                                    <span class="post-info-act">
+                                        <a href="blog-single.html"><i class="fa fa-caret-right"></i></a>
+                                    </span>
+                                    <img class="img-responsive" src="{{ $post->image }}"
+                                        alt="Blog">
+                                </div>
+                                <h3><a href="blog-single.html">{{ $post->title }}</a></h3>
+                                <p class="post-meta">{{ $post->publish_date }}</p>
+                            </article>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>

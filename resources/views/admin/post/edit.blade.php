@@ -1,4 +1,4 @@
-@extends('admin.admin');
+@extends('admin.layouts.master');
 @section('content')
     <!-- DATA TABLE-->
 
@@ -14,10 +14,10 @@
 
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <a class="au-breadcrumb-span" href="{{ route('posts.index') }}">Quay lại danh sách</a>
+                                            <a class="au-breadcrumb-span" href="{{ route('admin.post.index') }}">Quay lại danh sách</a>
                                         </button>
                                     </div>
-                                    <form action="{{ route('posts.update', $post->id) }}" method="POST"
+                                    <form action="{{ route('admin.post.update', $post->id) }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
