@@ -1,4 +1,4 @@
-@extends('admin.admin');
+@extends('admin.layouts.master');
 @section('content')
     <!-- DATA TABLE-->
 
@@ -6,48 +6,57 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="title-5 m-b-35">Thêm bài đăng</h3>
+                    <h3 class="title-5 m-b-35">Chỉnh sửa bài đăng</h3>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">
                             <tbody>
                                 <tr class="tr-shadow">
-                                    
+
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <a href="{{ route('posts.index') }}">Quay lại danh sách</a>
+                                            <a class="au-breadcrumb-span" href="{{ route('post.index') }}">Quay lại danh sách</a>
                                         </button>
                                     </div>
-                                    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('post.update', $post->id) }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
+                                        @method('PUT')
                                         <div class="form-group">
                                             <label for="image">Ảnh:</label>
-                                            <input class="au-input au-input--full" type="file" name="image" accept="image/*" placeholder="Ảnh" required>
+                                            @if ($post->image)
+                                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                                    width="100"><br>
+                                            @endif
+                                            <input class="au-input au-input--full" type="file" name="image"
+                                                accept="image/*" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="title">Tiêu đề:</label>
-                                            <input class="au-input au-input--full" type="text" name="title" placeholder="Tiêu đề" required>
+                                            <input class="au-input au-input--full" type="text" name="title"
+                                                value="{{ $post->title }}" required>
                                         </div>
-                                
+
                                         <div class="form-group">
                                             <label for="content">Nội dung:</label>
-                                            {{-- <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" required> --}}
-                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung" required></textarea>
+                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung" required>{{ $post->content }}</textarea>
                                         </div>
-                            
+
                                         <div class="form-group">
                                             <label for="author">Tác giả:</label>
-                                            <input class="au-input au-input--full" type="text" name="author" placeholder="Tác giả" required>
+                                            <input class="au-input au-input--full" type="text" name="author"
+                                            value="{{ $post->author }}" required>
                                         </div>
-                                
+
                                         <div class="form-group">
                                             <label for="publish_date">Ngày đăng:</label>
-                                            <input class="au-input au-input--full" type="date" name="publish_date" placeholder="Ngày đăng" required>
+                                            <input class="au-input au-input--full" type="date" name="publish_date"
+                                            value="{{ $post->publish_date }}" required>
                                         </div>
-                                
+
                                         <div class="table-data__tool-right">
                                             <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                                Tạo bài viết
+                                                Cập nhật bài viết
                                             </button>
                                         </div>
                                     </form>
