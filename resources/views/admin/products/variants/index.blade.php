@@ -50,8 +50,9 @@
                                 {{-- <th>Ảnh</th> --}}
                                 <th>Sản phẩm</th>
                                 <th>Các thuộc tính</th>
-                                <th>Giá biến thể</th>
                                 <th>Số lượng</th>
+                                <th>Giá biến thể</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -70,7 +71,7 @@
                                         </ul>
                                     </td>
                                     <td>{{ $item->stock }}</td>
-                                    <td>{{ $item->product->name }}</td>
+                                    
                                     <td class="desc">{{ $item->price }}</td>
 
                                     <td> 
@@ -90,7 +91,7 @@
                                                 </button></a>
 
                                             {{-- Xóa sản phẩm  --}}
-                                            <form action="{{ route('category.destroy', $item->id) }}" method="POST"
+                                            <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST"
                                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 @csrf
                                                 @method('DELETE')

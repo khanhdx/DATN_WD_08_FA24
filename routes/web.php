@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', function () {
         return view('admin.layouts.master');
-    });
+    })->name('admin.dashboard');
 
     Route::prefix('admins')
         ->as('admin.')
