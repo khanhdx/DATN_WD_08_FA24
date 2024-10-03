@@ -52,6 +52,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="has-sub">
+                        <a href="{{ route('slider.index') }}">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="bot-line"></span>Quản lý slider</a>
+                        
+                    </li>
                 </ul>
             </div>
             <div class="header__tool">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -26,6 +27,7 @@ Route::get('/admin', function () {
     return view('admin.layouts.master');
 });
 Route::resource('category', CategorysController::class);
+Route::resource('slider', BannerController::class);
 
 Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
