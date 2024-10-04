@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layouts.master')
 
 @section('css')
 @endsection
@@ -35,7 +35,7 @@
                                                         <div class="form-group ">
                                                             <label for="category">Danh mục:</label>
                                                             <input class="au-input au-input--full" type="text"
-                                                                name="SKU" value="{{ $product['SKU'] }}"
+                                                                name="SKU" value="{{ $product->category->name }}"
                                                                 placeholder="Tên sản phẩm" disabled>
                                                         </div>
                                                         <div class="form-group">
@@ -54,9 +54,9 @@
                                                                 placeholder="Nhập giá góc" disabled>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="title">Giá gốc:</label>
+                                                            <label for="title">Giá khuyến mãi:</label>
                                                             <input class="au-input au-input--full" type="text"
-                                                                name="price_regular" value="{{ $product['price_regular'] }}"
+                                                                name="price_regular" value="{{ $product['price_sale'] }}"
                                                                 placeholder="Nhập giá góc" disabled>
                                                         </div>
                                                     </div>
@@ -91,8 +91,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="title">Giá biến thể:</label>
-                                                    <input class="au-input au-input--full" type="text"
-                                                        name="price" placeholder="Nhập giá góc">
+                                                    <input class="au-input au-input--full" type="text" name="price"
+                                                        placeholder="Nhập giá góc">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -121,13 +121,6 @@
                                                         placeholder="Nhập giá góc">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="title">Ảnh sản phẩm:</label>
-                                            <input class="au-input au-input--full" type="file" name="image"
-                                                placeholder="Tên sản phẩm">
-                                        </div>
-
                                         <div class="table-data__tool-right">
                                             <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                                 Thêm biến thể
@@ -148,46 +141,5 @@
 @endsection
 
 @section('js')
-    {{-- <script>
-        // Mở popup
-        function openPopup() {
-            document.getElementById('popupOverlay').style.display = 'flex';
-        }
 
-        // Đóng popup khi nhấn vào bên ngoài popup hoặc nút đóng
-        function closePopup(event) {
-            const popupContent = document.querySelector('.popup-content');
-            if (!event || event.target !== popupContent) {
-                document.getElementById('popupOverlay').style.display = 'none';
-            }
-        }
-
-        let variantIndex = 1;
-
-        function addVariant() {
-            const variantsDiv = document.getElementById('variants');
-            const newVariant = document.createElement('div');
-            newVariant.classList.add('variant-group');
-
-            newVariant.innerHTML = `
-                <label for="color">Màu sắc:</label>
-                <input type="text" name="variants[${variantIndex}][color]" placeholder="Nhập màu sắc" >
-
-                <label for="size">Kích thước:</label>
-                <input type="text" name="variants[${variantIndex}][size]" placeholder="Nhập kích thước" >
-
-                <label for="stock">Số lượng:</label>
-                <input type="number" name="variants[${variantIndex}][stock]" placeholder="Nhập số lượng" >
-
-                <button type="button" class="remove-button" onclick="removeVariant(this)">Xóa biến thể</button>
-            `;
-
-            variantsDiv.appendChild(newVariant);
-            variantIndex++;
-        }
-
-        function removeVariant(button) {
-            button.parentElement.remove();
-        }
-    </script> --}}
 @endsection

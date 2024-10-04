@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layouts.master')
 
 @section('content')
     <div class="container">
@@ -8,27 +8,29 @@
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
                         <div class="rs-select2--light rs-select2--md">
-                            <select class="js-select2" name="property">
-                                <option selected="selected">All Properties</option>
-                                <option value="">Option 1</option>
-                                <option value="">Option 2</option>
+                            <select class="js-select2" name="color">
+                                <option selected="selected">Màu sắc</option>
+                                @foreach ($colors as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
                             </select>
                             <div class="dropDownSelect2"></div>
                         </div>
                         <div class="rs-select2--light rs-select2--sm">
-                            <select class="js-select2" name="time">
-                                <option selected="selected">Today</option>
-                                <option value="">3 Days</option>
-                                <option value="">1 Week</option>
+                            <select class="js-select2" name="size">
+                                <option selected="selected">Size</option>
+                                @foreach ($sizes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
                             </select>
                             <div class="dropDownSelect2"></div>
                         </div>
                         <button class="au-btn-filter">
-                            <i class="zmdi zmdi-filter-list"></i>filters</button>
+                            <i class="zmdi zmdi-filter-list"></i>Lọc</button>
                     </div>
                     <form class="au-form-icon" action="" method="GET">
                         <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Search for datas &amp; reports..." />
+                            type="text" placeholder="Tìm kiếm..." />
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>
                         </button>
@@ -46,8 +48,6 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                {{-- <th>Avatar</th> --}}
-                                {{-- <th>Ảnh</th> --}}
                                 <th>Sản phẩm</th>
                                 <th>Các thuộc tính</th>
                                 <th>Giá biến thể</th>
@@ -69,10 +69,8 @@
                                             <li><span class="fw-bold">Size: </span>{{ $item->size->name }}</li>
                                         </ul>
                                     </td>
-                                    <td>{{ $item->stock }}</td>
-                                    <td>{{ $item->product->name }}</td>
                                     <td class="desc">{{ $item->price }}</td>
-
+                                    <td>{{ $item->stock }}</td>
                                     <td> 
                                         <div class="table-data-feature">
 
@@ -80,7 +78,7 @@
                                             {{-- Xem chi tiết  --}}
                                             <a href="{{ route('admin.products.edit', $item->id) }}"> <button class="item mr-2"
                                                     data-toggle="tooltip" data-placement="top" title="Xem chi tiết sản phẩm">
-                                                    <i class="zmdi zmdi-edit"></i>
+                                                    <i class="fas fa-eye"></i>
                                                 </button></a>
 
                                             {{-- Sửa sản phẩm --}}

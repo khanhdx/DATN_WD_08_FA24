@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+
 use App\Models\ProductVariant;
 use App\Repositories\VariantRepositopy;
 use Illuminate\Support\Facades\Validator;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class VariantService implements IVariantService {
     protected $variant;
 
-    public function __construct(VariantRepositopy $variantRepositopy)
+    public function __construct(VariantRepositopy $variantRepositopy, )
     {
         $this->variant = $variantRepositopy;
     }
@@ -33,11 +34,13 @@ class VariantService implements IVariantService {
     public function insert($data)
     {
 
+
         // Quy định lỗi
         $rules = [
             'product_id' => 'required|exists:products,id', // Kiểm tra tồn tại trong bảng products
             'color_id' => 'required|exists:colors,id', // Kiểm tra tồn tại trong bảng colors
             'size_id' => 'required|exists:sizes,id', // Kiểm tra tồn tại trong bảng szies
+            
             'stock' => 'required|numeric|integer|min:0',
             'price' => 'required|numeric|min:0',
         ];
@@ -54,6 +57,7 @@ class VariantService implements IVariantService {
             'size_id.required' => 'Kích thước không được bỏ trống.',
             'size_id.exists' => 'Kích thước không tồn tại.',
 
+            
             'stock.required' => 'Số lượng tồn kho không được bỏ trống.',
             'stock.numeric' => 'Số lượng tồn kho phải là một số.',
             'stock.integer' => 'Số lượng tồn kho phải là số nguyên.',
@@ -77,20 +81,19 @@ class VariantService implements IVariantService {
 
         try {
 
-
+            
             $variantInput = $validator->validated();
-            // dd($productInput);
-
+            $images[] = $variantInput['images'];
             //Kiểm tra sp biến nào có trùng không ?
 
             //Insert lên DB
             $variant = $this->variant->insert($variantInput);
 
-            // Upload Avatar 
-            // if (!empty($productInput['avatar'])) {
-            //     $productInput['avatar'] = Storage::put('products', $productInput['avatar']);
-            // }
-
+            foreach($images as $index => $image){
+               dd($image);
+            }
+            
+          
             return response([
                 'message' => 'Thành công',
                 'data' => $variant,

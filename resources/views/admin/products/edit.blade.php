@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layouts.master')
 
 @section('css')
 @endsection
@@ -101,46 +101,5 @@
 @endsection
 
 @section('js')
-    <script>
-        // Mở popup
-        function openPopup() {
-            document.getElementById('popupOverlay').style.display = 'flex';
-        }
-
-        // Đóng popup khi nhấn vào bên ngoài popup hoặc nút đóng
-        function closePopup(event) {
-            const popupContent = document.querySelector('.popup-content');
-            if (!event || event.target !== popupContent) {
-                document.getElementById('popupOverlay').style.display = 'none';
-            }
-        }
-
-        let variantIndex = 1;
-
-        function addVariant() {
-            const variantsDiv = document.getElementById('variants');
-            const newVariant = document.createElement('div');
-            newVariant.classList.add('variant-group');
-
-            newVariant.innerHTML = `
-                <label for="color">Màu sắc:</label>
-                <input type="text" name="variants[${variantIndex}][color]" placeholder="Nhập màu sắc" >
-
-                <label for="size">Kích thước:</label>
-                <input type="text" name="variants[${variantIndex}][size]" placeholder="Nhập kích thước" >
-
-                <label for="stock">Số lượng:</label>
-                <input type="number" name="variants[${variantIndex}][stock]" placeholder="Nhập số lượng" >
-
-                <button type="button" class="remove-button" onclick="removeVariant(this)">Xóa biến thể</button>
-            `;
-
-            variantsDiv.appendChild(newVariant);
-            variantIndex++;
-        }
-
-        function removeVariant(button) {
-            button.parentElement.remove();
-        }
-    </script>
+    
 @endsection

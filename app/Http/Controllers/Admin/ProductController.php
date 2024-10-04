@@ -13,14 +13,18 @@ class ProductController extends Controller
 
     public function __construct(IProductService $productService)
     {
+        
         $this->productService = $productService;
     }
 
 
     public function index()
     {
+        $Category = new Category();
+        $categories = $Category->all();
+
         $products = $this->productService->getAll();
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('products', ['categories']));
     }
 
     public function create()
@@ -46,7 +50,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         return $this->productService->insert($request->all());
     }
 

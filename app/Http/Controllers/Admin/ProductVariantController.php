@@ -28,9 +28,12 @@ class ProductVariantController extends Controller
 
     public function index()
     {
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
         $variants =  $this->variantService->getAll();
 
-        return view('admin.products.variants.index', compact('variants'));
+        return view('admin.products.variants.index', compact('variants', ['colors', 'sizes']));
     }
 
     public function create($id)
