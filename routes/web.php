@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,92 +24,79 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/admin', function () {
-    return view('admin.layouts.master');
-});
-Route::resource('category', CategorysController::class);
-Route::resource('slider', BannerController::class);
+// Route cho quản lý (admin)
+Route::group(['middleware' => ['role:Quản lý']], function () {
+    Route::get('/admin', function () {
+        return view('admin.layouts.master');
+    })->name('admin.dashboard');
 
-Route::resource('user', App\Http\Controllers\Admin\UserController::class);
-Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
-Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class,'exportExcel']);
-Route::resource('post', PostController::class);
+    Route::prefix('admins')
+        ->as('admin.')
+        ->group(function () {
+            Route::resource('category', CategorysController::class);
+            Route::resource('slider', BannerController::class);
+            Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+            Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
+            Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
+            Route::resource('post', PostController::class);
 
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('client.product_detail');
-
-Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
-
-Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
-
-
-Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [AuthController::class, 'register']);
-
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
-Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
-Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
-
-
-Route::prefix('admins')
-    // middlware check auth and admin
-    ->as('admin.')
-    ->group(function () {
-
-        Route::prefix('colors')
-            ->as('colors.')
-            ->group(function () {
+            // Route cho colors
+            Route::prefix('colors')->as('colors.')->group(function () {
                 Route::get('/', [ColorController::class, 'index'])->name('index');
-                // Route::get('/create', [ColorController::class, 'create'])->name('create');
                 Route::post('/store', [ColorController::class, 'store'])->name('store');
-                // Route::get('/show/{id}', [ColorController::class, 'show'])->name('show');
-                // Route::get('{id}/edit', [ColorController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ColorController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ColorController::class, 'delete'])->name('delete');
             });
 
-        Route::prefix('sizes')
-            ->as('sizes.')
-            ->group(function () {
+            // Route cho sizes
+            Route::prefix('sizes')->as('sizes.')->group(function () {
                 Route::get('/', [SizeController::class, 'index'])->name('index');
-                // Route::get('/create', [SizeController::class, 'create'])->name('create');
                 Route::post('/store', [SizeController::class, 'store'])->name('store');
-                // Route::get('/show/{id}', [SizeController::class, 'show'])->name('show');
-                // Route::get('{id}/edit', [SizeController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [SizeController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');
             });
 
-            Route::prefix('products')
-            ->as('products.')
-            ->group(function () {
+            // Route cho products
+            Route::prefix('products')->as('products.')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
                 Route::get('/create', [ProductController::class, 'create'])->name('create');
                 Route::post('/store', [ProductController::class, 'store'])->name('store');
-                // Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
 
-                Route::prefix('variants')
-                ->as('variants.')
-                ->group(function () {
+                // Route cho variants
+                Route::prefix('variants')->as('variants.')->group(function () {
                     Route::get('/', [ProductVariantController::class, 'index'])->name('index');
                     Route::get('{product_id}/create', [ProductVariantController::class, 'create'])->name('create');
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
-                    // Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('show');
-                    // Route::get('{id}/edit', [ProductVariantController::class, 'edit'])->name('edit');
                     Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
                 });
             });
+        });
+});
 
-    });
+// Route cho khách hàng (client)
+Route::group(['middleware' => ['role:Khách hàng']], function () {
+    Route::resource('profile', ProfileController::class)->only([
+        'index', 'edit', 'update', 'destroy'
+    ]);
+});
+
+//Route không cần đăng nhập
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('client.product_detail');
+Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
+Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
+
+// Route cho xác thực
+Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
+Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');

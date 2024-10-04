@@ -14,10 +14,10 @@
                                     
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <a href="{{ route('post.index') }}">Quay lại danh sách</a>
+                                            <a href="{{ route('admin.post.index') }}">Quay lại danh sách</a>
                                         </button>
                                     </div>
-                                    <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.post.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
                                             <label for="image">Ảnh:</label>
