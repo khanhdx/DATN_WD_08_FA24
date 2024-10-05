@@ -18,17 +18,17 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{route('post.index')}}">
+                        <a href="{{route('admin.post.index')}}">
                             <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
-                        <a href="{{route('category.index')}}">
+                        <a href="{{route('admin.category.index')}}">
                             <i class="fas fa-trophy"></i>
                             <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
-                        <a href="{{ route('user.index') }}">
+                        <a href="{{ route('admin.user.index') }}">
                             <i class="fa-solid fa-users"></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
                         
@@ -56,6 +56,11 @@
                         <a href="{{ route('voucher.index') }}">
                             <span class="bot-line"></span>Quản lý mã giảm giá
                         </a>
+                    <li class="has-sub">
+                        <a href="{{ route('admin.slider.index') }}">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="bot-line"></span>Quản lý slider</a>
+                        
                     </li>
                 </ul>
             </div>

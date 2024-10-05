@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layouts.master')
 
 @section('content')
     <div class="container">
@@ -92,7 +92,7 @@
                                                 </button></a>
 
                                             {{-- Xóa sản phẩm  --}}
-                                            <form action="{{ route('category.destroy', $item->id) }}" method="POST"
+                                            <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST"
                                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 @csrf
                                                 @method('DELETE')

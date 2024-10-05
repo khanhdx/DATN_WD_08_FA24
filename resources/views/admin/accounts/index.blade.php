@@ -13,7 +13,7 @@
                     <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
-                            <form action="{{ route('user.index') }}" method="get">
+                            <form action="{{ route('admin.user.index') }}" method="get">
                                 @csrf
                                 <div class="rs-select2--light rs-select2--md">
                                     <select class="js-select2" name="fillter">
@@ -79,13 +79,13 @@
                                         </td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <a href="{{ route('user.edit',$acounts->id) }}" class="mr-1">
+                                                <a href="{{ route('admin.user.edit',$acounts->id) }}" class="mr-1">
                                                     <button class="item" data-toggle="tooltip" data-placement="top"
                                                         title="Edit">
                                                         <i class="zmdi zmdi-edit"></i>
                                                     </button>
                                                 </a>
-                                                <form action="{{ route('user.destroy',$acounts->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
+                                                <form action="{{ route('admin.user.destroy',$acounts->id) }}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa người này!')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
