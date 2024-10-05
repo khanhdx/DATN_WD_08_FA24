@@ -52,6 +52,11 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="{{ route('voucher.index') }}">
+                            <span class="bot-line"></span>Quản lý mã giảm giá
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="header__tool">

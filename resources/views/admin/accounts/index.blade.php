@@ -30,25 +30,13 @@
                         {{-- LT --}}
                         <div class="table-data__tool-right">
                             <a href="{{ route('user.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>Thêm người dùng</button></a>
-                            <a href="#"><button id="delete" class="au-btn au-btn-icon btn-danger au-btn--small">
-                                <i class="fa-regular fa-trash-can"></i>Xóa</button></a>
-                            <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                <a class="au-btn btn-secondary au-btn--small" href="#">Export</a>
-                                <div class="dropDownSelect2"></div>
-                            </div>
+                                Thêm người dùng <i class="zmdi zmdi-plus"></i></button></a>
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2 text-center">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <label class="au-checkbox">
-                                            <input type="checkbox">
-                                            <span class="au-checkmark"></span>
-                                        </label>
-                                    </th>
                                     <th>STT</th>
                                     <th>Tên</th>
                                     <th>Ảnh</th>
@@ -61,12 +49,6 @@
                             <tbody>
                                 @foreach ($accounts as $key => $acounts)
                                     <tr class="tr-shadow">
-                                        <td>
-                                            <label class="au-checkbox">
-                                                <input  type="checkbox">
-                                                <span class="au-checkmark"></span>
-                                            </label>
-                                        </td>
                                         <td>{{$key+1}}</td>
                                         <td>
                                             {{$acounts->name}}

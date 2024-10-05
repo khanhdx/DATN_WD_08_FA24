@@ -29,7 +29,7 @@ Route::resource('category', CategorysController::class);
 
 Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
-Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class,'exportExcel']);
+Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
 Route::resource('post', PostController::class);
 
 
