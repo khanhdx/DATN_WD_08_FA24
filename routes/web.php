@@ -30,6 +30,10 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         return view('admin.layouts.master');
     })->name('admin.dashboard');
 
+Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
+Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+Route::resource('post', PostController::class);
     Route::prefix('admins')
         ->as('admin.')
         ->group(function () {

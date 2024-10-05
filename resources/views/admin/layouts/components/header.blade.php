@@ -52,6 +52,10 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="{{ route('voucher.index') }}">
+                            <span class="bot-line"></span>Quản lý mã giảm giá
+                        </a>
                     <li class="has-sub">
                         <a href="{{ route('admin.slider.index') }}">
                             <i class="fa-solid fa-users"></i>
