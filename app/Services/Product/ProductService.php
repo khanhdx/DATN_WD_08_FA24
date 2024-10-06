@@ -169,7 +169,22 @@ class ProductService implements IProductService
         }
     }
 
-    public function delete($data) {
+    public function softDeleteById($id) {
+        $product = $this->productRepository->getOneById($id);
+
+        if(!$product){
+            return response([
+                'error' => 'Sản phẩm không tồn tại',
+            ], 404);
+        }
+
+        try {
+            $this->productRepository->softDeleteById($id);
+
+            return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errors', $th->getMessage());
+        }
         
     }
 }

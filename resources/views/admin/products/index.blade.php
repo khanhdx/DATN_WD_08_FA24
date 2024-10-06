@@ -95,7 +95,7 @@
                                                 </button></a>
 
                                             {{-- Xóa sản phẩm  --}}
-                                            <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST"
+                                            <form action="{{ route('admin.products.delete', $item->id) }}" method="POST"
                                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 @csrf
                                                 @method('DELETE')

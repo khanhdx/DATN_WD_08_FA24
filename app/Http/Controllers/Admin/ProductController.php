@@ -36,7 +36,12 @@ class ProductController extends Controller
         return view('admin.products.create', compact('categories'));
     }
 
+    public function getDetail($id)
+    {
+        $product = $this->productService->getOneById($id);
 
+        return view('admin.products.detail', compact('product'));
+    }
 
     public function edit($id)
     {
@@ -56,5 +61,10 @@ class ProductController extends Controller
     public function update($id, Request $request)
     {
         return $this->productService->update($request->all(), $id);
+    }
+
+    public function delete($id)
+    {
+        return $this->productService->softDeleteById($id);    
     }
 }

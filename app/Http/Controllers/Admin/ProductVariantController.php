@@ -59,4 +59,13 @@ class ProductVariantController extends Controller
 
         return $this->variantService->update($request->all(), $id);
     }
+
+
+    public function getAllAttribute()
+    {
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        return view('admin.products.attributes.index', compact('colors', 'sizes'));
+    }
 }

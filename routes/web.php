@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\ColorController;
@@ -40,22 +41,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
 
-            // Route cho colors
-            Route::prefix('colors')->as('colors.')->group(function () {
-                Route::get('/', [ColorController::class, 'index'])->name('index');
-                Route::post('/store', [ColorController::class, 'store'])->name('store');
-                Route::put('{id}/update', [ColorController::class, 'update'])->name('update');
-                Route::delete('{id}/delete', [ColorController::class, 'delete'])->name('delete');
-            });
-
-            // Route cho sizes
-            Route::prefix('sizes')->as('sizes.')->group(function () {
-                Route::get('/', [SizeController::class, 'index'])->name('index');
-                Route::post('/store', [SizeController::class, 'store'])->name('store');
-                Route::put('{id}/update', [SizeController::class, 'update'])->name('update');
-                Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');
-            });
-
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
@@ -65,6 +50,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
 
+              
+
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
                     Route::get('/', [ProductVariantController::class, 'index'])->name('index');
@@ -72,6 +59,23 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
                     Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
+
+                    Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
+                    // Route cho colors
+                    Route::prefix('colors')->as('colors.')->group(function () {
+                        Route::get('/', [ColorController::class, 'index'])->name('index');
+                        Route::post('/store', [ColorController::class, 'store'])->name('store');
+                        Route::put('{id}/update', [ColorController::class, 'update'])->name('update');
+                        Route::delete('{id}/delete', [ColorController::class, 'delete'])->name('delete');
+                    });
+
+                    // Route cho sizes
+                    Route::prefix('sizes')->as('sizes.')->group(function () {
+                        Route::get('/', [SizeController::class, 'index'])->name('index');
+                        Route::post('/store', [SizeController::class, 'store'])->name('store');
+                        Route::put('{id}/update', [SizeController::class, 'update'])->name('update');
+                        Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');
+                    });
                 });
             });
         });
@@ -80,7 +84,10 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::resource('profile', ProfileController::class)->only([
-        'index', 'edit', 'update', 'destroy'
+        'index',
+        'edit',
+        'update',
+        'destroy'
     ]);
 });
 
