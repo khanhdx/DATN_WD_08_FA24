@@ -14,7 +14,8 @@ class Post extends Model
         'title',      // Tiêu đề bài viết
         'content',    // Nội dung bài viết
         'author',     // Tác giả bài viết
-        'publish_date'// Ngày đăng
+        'publish_date',// Ngày đăng
+        'views',// Lượt xem
     ];
 
     // Nếu cần có các phương thức khác (ví dụ: để xử lý các mối quan hệ), có thể thêm vào đây.

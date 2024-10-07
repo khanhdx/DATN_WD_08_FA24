@@ -24,9 +24,9 @@
                                     <article class="post post-medium">
                                         <div class="post-image single">
                                             <span class="post-info-act">
-                                                <a href="#"><i class="fa fa-caret-right"></i></a>
+                                                <a href="{{ route('client.post_show', $post->id) }}"><i class="fa fa-caret-right"></i></a>
                                             </span>
-                                            <a href="blog-single.html">
+                                            <a href="{{ route('client.post_show', $post->id) }}">
                                                 @if ($post->image)
                                                     <img src="{{ $post->image }}"
                                                         alt="Image for {{ $post->title }}"
@@ -37,10 +37,10 @@
                                             </a>
                                         </div>
                                         <div class="post-content">
-                                            <h3><a href="blog-single.html">{{ $post->title }}</a></h3>
+                                            <h3><a href="{{ route('client.post_show', $post->id) }}">{{ $post->title }}</a></h3>
                                             <div class="post-meta">
                                                 <span>By <a href="#">{{ $post->author }}</a> in <a
-                                                        href="#">Blog</a></span>
+                                                        href="{{ route('client.post_show', $post->id) }}">Blog</a></span>
                                             </div>
 
                                             <p>{{ $post->content }}</p>

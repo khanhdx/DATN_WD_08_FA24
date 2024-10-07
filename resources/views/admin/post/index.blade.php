@@ -54,6 +54,7 @@
                                     <th>Nội dung</th>
                                     <th>Tác giả</th>
                                     <th>Ngày đăng</th>
+                                    <th>Lượt xem</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -71,6 +72,7 @@
                                     <td>{{ $post->content }}</td>
                                     <td>{{ $post->author }}</td>
                                     <td>{{ $post->publish_date }}</td>
+                                    <td>{{ $post->views }}</td>
                                     <td>
                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Sửa">
                                             <a href="{{ route('post.edit', $post->id) }}" class="zmdi zmdi-edit"></a>
@@ -80,7 +82,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="item" data-toggle="tooltip" data-placement="top"
-                                                title="Delete">
+                                                title="Delete" onclick="return confirm('Bạn có muốn xóa bài viết không ?')">
                                                 <i class="zmdi zmdi-delete"></i>
                                             </button>
                                         </form>
