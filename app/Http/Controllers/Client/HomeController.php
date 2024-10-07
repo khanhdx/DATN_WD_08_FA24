@@ -38,8 +38,25 @@ class HomeController extends Controller
 
     public function post_show($id)
     {
-        $post_show = Post::query()->findOrFail($id);
+        $post_show = Post::findOrFail($id);;
 
-        return view('client.posts.' . __FUNCTION__, compact('post_show'));
+        // Lấy 5 bài viết gần đây nhất
+        $recentPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
+
+        // Lấy 5 bài viết được xem nhiều nhất
+        $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
+
+        return view('client.posts.post_show', compact('post_show', 'recentPosts', 'mostViewedPosts'));
     }
+    // public function post_make_show(Post $post)
+    // {
+    //     // Lấy 5 bài viết gần đây nhất
+    //     $recentPosts = Post::orderBy('created_at', 'desc')->take(5)->get();
+
+    //     // Lấy 5 bài viết được xem nhiều nhất
+    //     $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
+
+    //     return view('client.posts.post_show', compact('post', 'recentPosts', 'mostViewedPosts'));
+    // }
+   
 }
