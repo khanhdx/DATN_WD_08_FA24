@@ -21,7 +21,7 @@ class ProductService implements IProductService
     {
         $products = $this->productRepository->getAll();
 
-        return response()->json(['data' => $products], 200);
+        return $products;
     }
 
     public function getOneById($id)
@@ -38,11 +38,10 @@ class ProductService implements IProductService
         $rules = [
             'category_id' => 'required|exists:categories,id', // Kiểm tra tồn tại trong bảng categories
             'name' => 'required|unique:products,name',
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            // 'price_regular' => 'required|numeric|min:0',
-            // 'price_sale' => 'required|numeric|min:0|lt:price_regular',
-            'material' => 'required|string',
-            'short_desc' => 'required|string|max:255',
+            'SKU' => 'required|unique:products,SKU',
+            'price_regular' => 'required|numeric|min:0',
+            'price_sale' => 'numeric|min:0|lt:price_regular',
+            'description' => 'max:255',
             'content' => 'nullable|string',
         ];
 
@@ -53,21 +52,15 @@ class ProductService implements IProductService
             'category_id.exists' => 'Danh mục không tồn tại.',
             'name.required' => 'Tên không để trống',
             'name.unique' => 'Tên đã tồn tại',
-            'avatar.required' => 'avatar không được để trống.',
-            'avatar.image' => 'avatar không đúng định dạng ảnh',
-            'avatar.mimes' => 'avatar phải là kiểu file jpeg,png,jpg,gif',
-            'avatar.max' => 'avatar không vượt quá 5MB',
-            // 'price_regular.required' => 'price_regular không được để trống.',
-            // 'price_regular.numeric' => 'price_regular phải là số.',
-            // 'price_regular.min' => 'price_regular không được âm.',
-            // 'price_sale.required' => 'price_sale không được để trống.',
-            // 'price_sale.numeric' => 'price_sale phải là số.',
-            // 'price_sale.min' => 'price_sale không được âm.',
-            // 'price_sale.lt' => 'price_sale phải nhỏ hơn price_regular.',
-            'material.required' => 'material không được để trống.',
-            'short_desc.required' => 'short_desc không được để trống.',
-            'short_desc.max' => 'short_desc không được vượt quá 255 ký tự.',
-            'content.required' => 'content không được để trống.',
+            'SKU.required' => 'Mã sản phẩm không để trống',
+            'SKU.unique' => 'Mã sản phẩm đã tồn tại',
+            'price_regular.required' => 'price_regular không được để trống.',
+            'price_regular.numeric' => 'price_regular phải là số.',
+            'price_regular.min' => 'price_regular không được âm.',
+            'price_sale.numeric' => 'price_sale phải là số.',
+            'price_sale.min' => 'price_sale không được âm.',
+            'price_sale.lt' => 'price_sale phải nhỏ hơn price_regular.',
+            'description.max' => 'short_desc không được vượt quá 255 ký tự.',
         ];
 
         $validator = Validator::make($data, $rules, $messages);
@@ -75,6 +68,7 @@ class ProductService implements IProductService
         // Kiểm tra xem có lỗi không
         if ($validator->fails()) {
             // Trả về thông báo lỗi dưới dạng JSON
+            // Trả thông báo cho view
             return response()->json([
                 'errors' => $validator->errors(),
             ], 422); // HTTP status 422 Unprocessable Entity
@@ -82,27 +76,15 @@ class ProductService implements IProductService
 
 
         try {
-
-            $import_date = Carbon::createFromFormat('d-m-Y H:i:s', now()->format('d-m-Y H:i:s'));;
-
             $productInput = $validator->validated();
-            $productInput['import_date'] = $import_date;
             // dd($productInput);
 
             //Insert lên DB
             $product = $this->productRepository->insert($productInput);
 
-            // Upload Avatar 
-            // if (!empty($productInput['avatar'])) {
-            //     $productInput['avatar'] = Storage::put('products', $productInput['avatar']);
-            // }
-
-            return response([
-                'message' => 'Thành công',
-                'data' => $product,
-            ], 201);
+            return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
         } catch (\Throwable $th) {
-            return response()->json(['errors' => $th->getMessage()], 500);
+            return redirect()->back()->with('errors', $th->getMessage());
         }
     }
 
@@ -116,14 +98,13 @@ class ProductService implements IProductService
                 'error' => 'Sản phẩm không tồn tại',
             ], 404);
         }
-
+        
         // Quy định lỗi
         $rules = [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255|unique:products,name,' . $id,
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'material' => 'required|string|max:255',
-            'short_desc' => 'required|string|max:255',
+            'SKU' => 'required|unique:products,SKU',
+            'description' => 'string|max:255',
             'content' => 'nullable|string',
         ];
 
@@ -132,12 +113,15 @@ class ProductService implements IProductService
         $messages = [
             'category_id.required' => 'Danh mục không được để trống.',
             'category_id.exists' => 'Danh mục không tồn tại.',
-            'avatar.image' => 'avatar không đúng định dạng ảnh',
-            'avatar.mimes' => 'avatar phải là kiểu file jpeg,png,jpg,gif',
-            'avatar.max' => 'avatar không vượt quá 5MB',
-            'material.required' => 'material không được để trống.',
-            'short_desc.required' => 'short_desc không được để trống.',
-            'short_desc.max' => 'short_desc không được vượt quá 255 ký tự.',
+            'SKU.required' => 'Mã sản phẩm không để trống',
+            'SKU.unique' => 'Mã sản phẩm đã tồn tại',
+            'price_regular.required' => 'price_regular không được để trống.',
+            'price_regular.numeric' => 'price_regular phải là số.',
+            'price_regular.min' => 'price_regular không được âm.',
+            'price_sale.numeric' => 'price_sale phải là số.',
+            'price_sale.min' => 'price_sale không được âm.',
+            'price_sale.lt' => 'price_sale phải nhỏ hơn price_regular.',
+            'descripton.max' => 'short_desc không được vượt quá 255 ký tự.',
         ];
 
         $validator = Validator::make($data, $rules, $messages);

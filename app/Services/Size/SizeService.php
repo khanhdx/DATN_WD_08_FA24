@@ -21,7 +21,7 @@ class SizeService implements ISizeService
 
         $sizes = $this->sizeRepository->getAll();
 
-        return response()->json(['data' => $sizes], 200);
+        return  $sizes;
     }
 
 
