@@ -71,7 +71,7 @@ class PostController extends Controller
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi tạo bài viết.']);
         }
         
-        return redirect()->route('post.index')->with('success', 'Bài viết được tạo thành công.');
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
     public function show(Post $post)
@@ -117,7 +117,7 @@ class PostController extends Controller
             'publish_date' => $request->publish_date,
         ]);
         $post->save();
-        return redirect()->route('post.index')->with('success', 'Bài viết được cập nhật thành công.');
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết được cập nhật thành công.');
     }
 
     public function destroy(Post $post)
