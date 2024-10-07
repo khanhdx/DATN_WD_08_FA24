@@ -4,7 +4,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="title-5 m-b-35">Sản phẩm biến thể</h3>
+                <h3 class="title-5 m-b-35 mt-3">Sản phẩm biến thể</h3>
+                @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
                         <div class="rs-select2--light rs-select2--md">
@@ -70,22 +75,21 @@
                                             <li><span class="fw-bold">Size: </span>{{ $item->size->name }}</li>
                                         </ul>
                                     </td>
-                                    <td>{{ $item->stock }}</td>
                                     <td>{{ $item->product->name }}</td>
-                                    <td class="desc">{{ $item->price }}</td>
                                     <td>{{ $item->stock }}</td>
+                                    <td class="desc">{{ $item->price }}</td>
                                     <td> 
                                         <div class="table-data-feature">
 
                                             
                                             {{-- Xem chi tiết  --}}
-                                            <a href="{{ route('admin.products.edit', $item->id) }}"> <button class="item mr-2"
+                                            <a href="{{ route('admin.products.variants.detail', $item->id) }}"> <button class="item mr-2"
                                                     data-toggle="tooltip" data-placement="top" title="Xem chi tiết sản phẩm">
                                                     <i class="fas fa-eye"></i>
                                                 </button></a>
 
                                             {{-- Sửa sản phẩm --}}
-                                            <a href="{{ route('admin.products.edit', $item->id) }}"> <button class="item mr-2"
+                                            <a href="{{ route('admin.products.variants.edit', $item->id) }}"> <button class="item mr-2"
                                                     data-toggle="tooltip" data-placement="top" title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button></a>

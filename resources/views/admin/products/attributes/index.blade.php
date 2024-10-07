@@ -46,7 +46,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('admin.products.variants.colors.store')}} " method="POST">
+                                    <form action="{{ route('admin.products.variants.colors.store') }} " method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <label for="color_name">Tên màu:</label>
@@ -84,19 +84,59 @@
                                         </td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->code_color }}</td>
-
-
                                         <td>
                                             <div class="table-data-feature">
                                                 {{-- Sửa --}}
-                                                <a href="{{ route('admin.products.edit', $item->id) }}">
-                                                    <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                        title="Edit">
-                                                        <i class="zmdi zmdi-edit"></i>
-                                                    </button></a>
+                                                <button class="item mr-2" data-toggle="modal"
+                                                    data-target="#editSizeModal{{ $item->id }}">
+                                                    <i class="zmdi zmdi-edit" data-toggle="tooltip" data-placement="top"
+                                                        title="Edit"></i>
+                                                </button>
+
+                                                <!-- Modal chỉnh sửa màu sắc -->
+                                                <div class="modal fade" id="editSizeModal{{ $item->id }}" tabindex="-1"
+                                                    aria-labelledby="editSizeModalLabel{{ $item->id }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="editSizeModalLabel{{ $item->id }}">Chỉnh sửa
+                                                                    màu sắc</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form
+                                                                    action="{{ route('admin.products.variants.colors.update', $item->id) }} "
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="form-group">
+                                                                        <label for="color_name">Tên màu:</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="color_name" name="name"
+                                                                            value="{{ $item->name }}" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="color_code">Mã màu:</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="color_code" name="code_color"
+                                                                            value="{{ $item->code_color }}" required>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">Cập
+                                                                        nhật màu</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                                 {{-- Xóa  --}}
-                                                <form action="{{ route('admin.products.delete', $item->id) }}"
+                                                <form
+                                                    action="{{ route('admin.products.variants.colors.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                     @csrf
@@ -146,7 +186,7 @@
                 </div>
                 <div class="container mt-5">
 
-                    <!-- Modal thêm màu sắc -->
+                    <!-- Modal thêm Size -->
                     <div class="modal fade" id="addSizeModal" tabindex="-1" aria-labelledby="addSizeModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -158,7 +198,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('admin.products.variants.sizes.store')}}" method="POST">
+                                    <form action="{{ route('admin.products.variants.sizes.store') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <label for="name">Size:</label>
@@ -187,11 +227,48 @@
                                         <td>
                                             <div class="table-data-feature">
                                                 {{-- Sửa --}}
-                                                <a href="{{ route('admin.products.edit', $item->id) }}">
-                                                    <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                        title="Edit">
-                                                        <i class="zmdi zmdi-edit"></i>
-                                                    </button></a>
+                                                <button class="item mr-2" data-toggle="modal"
+                                                    data-target="#editSize{{ $item->id }}">
+                                                    <i class="zmdi zmdi-edit" data-toggle="tooltip" data-placement="top"
+                                                        title="Edit"></i>
+                                                </button>
+
+                                                <!-- Modal chỉnh Size -->
+                                                <div class="modal fade" id="editSize{{ $item->id }}"
+                                                    tabindex="-1"
+                                                    aria-labelledby="editSizeModalLabel{{ $item->id }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="editSizeModalLabel{{ $item->id }}">Chỉnh sửa
+                                                                    Size</h5>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form
+                                                                    action="{{ route('admin.products.variants.sizes.update', $item->id) }} "
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="form-group">
+                                                                        <label for="color_name">Size:</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="color_name" name="name"
+                                                                            value="{{ $item->name }}" required>
+                                                                    </div>
+
+                                                                    <button type="submit" class="btn btn-primary">Cập
+                                                                        nhật Size</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                                 {{-- Xóa  --}}
                                                 <form action="{{ route('admin.products.delete', $item->id) }}"

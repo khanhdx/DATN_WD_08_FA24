@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\product\variant\StoreVariantRequest;
+use App\Http\Requests\product\variant\UpdateVariantRequest;
 use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
 use App\Services\Product\IVariantService;
@@ -41,26 +43,52 @@ class ProductVariantController extends Controller
         // Lấy thuộc tính 
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
-        
+
 
         $product = $this->productService->getOneById($id);
 
         return view('admin.products.variants.create', compact('product', ['sizes', 'colors']));
     }
 
-
-    public function store(Request $request)
+    public function detail($id)
     {
-       return $this->variantService->insert($request->all());
+        return $this->variantService->getOneById($id);
     }
 
-    public function update(Request $request, $id)
+    public function store(StoreVariantRequest $request)
     {
-
-        return $this->variantService->update($request->all(), $id);
+        try {
+            return $this->variantService->insert($request->all());
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
+    public function edit($id)
+    {
+        $variant = $this->variantService->getOneById($id);
 
+        // Lấy Info product
+        $productId = $variant->product->id;
+        $product = $this->productService->getOneById($productId);
+
+        // Lấy thuộc tính 
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        return view('admin.products.variants.edit', compact('variant', ['product', 'colors', 'sizes']));
+    }
+
+    public function update(UpdateVariantRequest $request, $id)
+    {
+
+        try {
+            return $this->variantService->update($request->all(), $id);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+    
     public function getAllAttribute()
     {
         $colors = $this->colorService->getAll();

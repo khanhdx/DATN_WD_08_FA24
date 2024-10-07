@@ -4,7 +4,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="title-5 m-b-35">Sản phẩm</h3>
+                <h3 class="title-5 m-b-35 mt-3">Sản phẩm</h3>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
                         <div class="rs-select2--light rs-select2--md">
@@ -47,8 +52,8 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Danh mục</th>
                                 <th>Ảnh</th>
+                                <th>Danh mục</th>
                                 <th>SKU</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Giá gốc</th>
