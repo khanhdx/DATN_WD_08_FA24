@@ -8,7 +8,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.category.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="simpleinput" class="form-label">Name:</label>

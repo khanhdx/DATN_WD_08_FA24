@@ -48,7 +48,7 @@ class CategorysController extends Controller
             }
             
             Category::create($params);  
-            return redirect()->route('category.index'); 
+            return redirect()->route('admin.category.index'); 
         }
     }
     
@@ -88,7 +88,7 @@ class CategorysController extends Controller
             }
 
             $category->update($params);
-            return redirect()->route('category.index');
+            return redirect()->route('admin.category.index');
         }
     }
 
@@ -102,6 +102,6 @@ class CategorysController extends Controller
         if ($category->image) {
             Storage::disk('public')->delete($category->image);
         }
-        return redirect()->route('category.index');
+        return redirect()->route('admin.category.index');
     }
 }

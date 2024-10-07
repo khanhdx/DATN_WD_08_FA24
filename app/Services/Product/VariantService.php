@@ -20,7 +20,7 @@ class VariantService implements IVariantService {
 
         // dd($variants);
 
-        return response()->json(['data' => $variants], 200);
+        return $variants;
     }
 
     public function getOneById($id)

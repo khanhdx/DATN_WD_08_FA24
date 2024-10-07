@@ -70,7 +70,6 @@ class PostController extends Controller
             Log::error('Error creating post: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi tạo bài viết.']);
         }
-        
         return redirect()->route('admin.post.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
@@ -126,6 +125,6 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
         $post->delete();
-        return redirect()->route('post.index')->with('success', 'Bài viết đã bị xóa.');
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết đã bị xóa.');
     }
 }
