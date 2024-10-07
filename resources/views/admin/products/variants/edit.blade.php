@@ -11,12 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="title-5 m-b-35 mt-3">Thêm biến thể sản phẩm</h3>
-                    @if (session('error'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    <h3 class="title-5 m-b-35 ">Sửa biến thể sản phẩm</h3>
                     <div class="table-responsive table-responsive-data2">
                         <table class="table table-data2">
                             <tbody>
@@ -33,7 +28,7 @@
                                                 <div class="form-group">
                                                     <label for="title">Tên sản phẩm:</label>
                                                     <input class="au-input au-input--full" type="text" name="name"
-                                                        value="{{ $product['name'] }}" placeholder="Tên sản phẩm" disabled>
+                                                        value="{{  $product->name }}" placeholder="Tên sản phẩm" disabled>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-6">
@@ -78,9 +73,10 @@
                         <table class="table table-data2">
                             <tbody>
                                 <tr class="tr-shadow">
-                                    <form action="{{ route('admin.products.variants.store') }}" method="POST"
-                                        enctype="multipart/form-data">
+                                    <form action="{{ route('admin.products.variants.update', $variant['id']) }}"
+                                        method="POST" enctype="multipart/form-data">
                                         @csrf
+                                        @method('PUT')
                                         <input type="hidden" name="product_id" value={{ $product->id }}>
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -89,7 +85,8 @@
                                                     <select name="size_id" id="size" class="form-control">
                                                         <option>--- Chọn Size ---</option>
                                                         @foreach ($sizes as $size)
-                                                            <option value="{{ $size->id }}">{{ $size->name }}
+                                                            <option {{ $variant['size_id'] == $size->id ? 'selected' : '' }}
+                                                                value="{{ $size->id }}">{{ $size->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -100,11 +97,11 @@
                                                 <div class="form-group">
                                                     <label for="title">Giá biến thể:</label>
                                                     <input class="au-input au-input--full" type="text" name="price"
-                                                        placeholder="Nhập giá góc">
-                                                    @error('price')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
+                                                        placeholder="Nhập giá góc" value="{{ $variant['price'] }}">
                                                 </div>
+                                                @error('price')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
@@ -112,7 +109,9 @@
                                                     <select name="color_id" id="color" class="form-control">
                                                         <option>--- Chọn màu sắc ---</option>
                                                         @foreach ($colors as $color)
-                                                            <option value="{{ $color->id }}">{{ $color->name }}
+                                                            <option
+                                                                {{ $variant['color_id'] == $color->id ? 'selected' : '' }}
+                                                                value="{{ $color->id }}">{{ $color->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -132,16 +131,16 @@
                                                 <div class="form-group">
                                                     <label for="title">Số lượng sản phẩm biến thể:</label>
                                                     <input class="au-input au-input--full" type="text" name="stock"
-                                                        placeholder="Nhập số lượng">
-                                                    @error('stock')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
+                                                        placeholder="Nhập số lượng" value="{{ $variant['stock'] }}">
                                                 </div>
+                                                @error('stock')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                             <div class="table-data__tool-right">
                                                 <button type="submit"
                                                     class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                                    Thêm biến thể
+                                                    Cập nhật biến thể
                                                 </button>
                                             </div>
 

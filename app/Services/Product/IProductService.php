@@ -11,6 +11,6 @@ interface IProductService{
 
     public function update($id, $data);
 
-    public function delete($data);
+    public function softDeleteById($id);
 
 }

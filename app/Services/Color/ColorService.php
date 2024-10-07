@@ -81,7 +81,7 @@ class ColorService implements IColorService
          // Quy định lỗi
          $rules = [
             'name' => 'required|unique:colors',
-            'code_color' => 'required|unique:colors',
+            'code_color' => 'required',
         ];
 
         // Định nghĩa lỗi

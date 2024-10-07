@@ -35,7 +35,7 @@ class ProductRepository {
         return $product;
     }
 
-    public function deleteById($id)
+    public function softDeleteById($id)
     {
         Product::findOrFail($id)->delete();
         return true;
