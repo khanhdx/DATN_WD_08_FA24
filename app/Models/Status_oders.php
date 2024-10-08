@@ -12,5 +12,6 @@ class Status_oders extends Model
     protected $fillable = [
         'name_status',
     ];
+    
 
 }
