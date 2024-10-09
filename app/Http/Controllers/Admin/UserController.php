@@ -74,8 +74,8 @@ class UserController extends Controller
                     }
                 }
             }
-            Mail::to($user['email'])->send(new UserMailConfirm($user_new));
-            return redirect()->route('user.index')->with('success', 'Thàn công');
+            // Mail::to($user['email'])->send(new UserMailConfirm($user_new));
+            return redirect()->route('admin.user.index')->with('success', 'Thàn công');
         }
     }
     /**
@@ -118,7 +118,7 @@ class UserController extends Controller
                 $data['user_image'] = $user->user_image;
             }
             $user->update($data);
-            return redirect()->route('user.index')->with('success', 'Thêm mới thành công');
+            return redirect()->route('admin.user.index')->with('success', 'Thêm mới thành công');
         }
     }
 
@@ -131,7 +131,7 @@ class UserController extends Controller
         if($request->isMethod('DELETE')) {
             $user = User::query()->findOrFail($id);
             $user->delete();
-            return redirect()->route('user.index')->with('success', 'Xóa thành công');
+            return redirect()->route('admin.user.index')->with('success', 'Xóa thành công');
         }
     }
 }

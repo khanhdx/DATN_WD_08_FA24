@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <button type="button" class="btn btn-primary justify-content-center" onclick="addBannerFields()">Thêm Banner Khác</button>
-                    <form action="{{ route('slider.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.slider.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div id="bannerFieldsContainer">
                             <div class="banner-fields">

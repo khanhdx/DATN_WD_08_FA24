@@ -70,13 +70,15 @@ class PostController extends Controller
             Log::error('Error creating post: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Có lỗi xảy ra khi tạo bài viết.']);
         }
-
-        return redirect()->route('post.index')->with('success', 'Bài viết được tạo thành công.');
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết được tạo thành công.');
     }
 
     public function show(Post $post)
     {
-        //
+        // Tăng lượt xem
+        $post->increment('views');
+
+        return view('client.posts.post_show', compact('post'));
     }
 
     public function edit(Post $post)
@@ -113,8 +115,8 @@ class PostController extends Controller
             'author' => $request->author,
             'publish_date' => $request->publish_date,
         ]);
-
-        return redirect()->route('post.index')->with('success', 'Bài viết được cập nhật thành công.');
+        $post->save();
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết được cập nhật thành công.');
     }
 
     public function destroy(Post $post)
@@ -123,6 +125,6 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
         $post->delete();
-        return redirect()->route('post.index')->with('success', 'Bài viết đã bị xóa.');
+        return redirect()->route('admin.post.index')->with('success', 'Bài viết đã bị xóa.');
     }
 }

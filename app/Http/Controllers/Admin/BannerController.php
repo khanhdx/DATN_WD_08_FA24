@@ -40,15 +40,15 @@ class BannerController extends Controller
                 $imagePath = $images[$index]->store('images', 'public');
                 $banner->image = $imagePath;
             } else {
-                return redirect()->route('slider.index')->with('error', 'File ảnh không hợp lệ cho một hoặc nhiều banner');
+                return redirect()->route('admin.slider.index')->with('error', 'File ảnh không hợp lệ cho một hoặc nhiều banner');
             }
 
             $banner->save();
         }
 
-        return redirect()->route('slider.index')->with('success', 'Thêm mới banner thành công');
+        return redirect()->route('admin.slider.index')->with('success', 'Thêm mới banner thành công');
     } else {
-        return redirect()->route('slider.index')->with('error', 'Dữ liệu banner không hợp lệ');
+        return redirect()->route('admin.slider.index')->with('error', 'Dữ liệu banner không hợp lệ');
     }
 }
     
@@ -78,13 +78,13 @@ public function update(Request $request, $id)
             $imagePath = $request->file('image')->store('images', 'public');
             $banner->image = $imagePath;
         } else {
-            return redirect()->route('slider.edit', $id)->with('error', 'File ảnh không hợp lệ');
+            return redirect()->route('admin.slider.edit', $id)->with('error', 'File ảnh không hợp lệ');
         }
     }
 
     $banner->save();
 
-    return redirect()->route('slider.index')->with('success', 'Cập nhật banner thành công');
+    return redirect()->route('admin.slider.index')->with('success', 'Cập nhật banner thành công');
 }
     
     public function destroy(string $id)
@@ -94,6 +94,6 @@ public function update(Request $request, $id)
         if ($banner->image) {
             Storage::disk('public')->delete($banner->image);
         }
-        return redirect()->route('slider.index')->with('success','Bạn đã xóa thành công');
+        return redirect()->route('admin.slider.index')->with('success','Bạn đã xóa thành công');
     }
 }

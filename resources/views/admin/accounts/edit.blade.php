@@ -36,11 +36,11 @@
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Tạo tài khoản người dùng</h3>
                     <div class="m-3">
-                        <form action="{{ route('user.update',$user->id) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.user.update',$user->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div>
-                                <a href="{{ route('user.index') }}" class="btn btn-danger">Hủy</a>
+                                <a href="{{ route('admin.user.index') }}" class="btn btn-danger">Hủy</a>
                                 <button type="submit" class="btn btn-success">Lưu</button>
                             </div>
                             <div class="row mb-3">
@@ -96,7 +96,7 @@
                         <div class="modal fade" id="staticBackdrop" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action="{{ route('location.store') }}" method="post">
+                                    <form action="{{ route('admin.location.store') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                                         <div class="modal-header">
@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                     <div class="">
-                                        <form action="{{ route('location.destroy',$location->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa!')">
+                                        <form action="{{ route('admin.location.destroy',$location->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa!')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Xóa</button>
@@ -166,7 +166,7 @@
                                         <div class="modal" id="loactionUpdate{{$location->id}}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form action="{{ route('location.update',$location->id) }}" method="post">
+                                                    <form action="{{ route('admin.location.update',$location->id) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                         <input type="hidden" name="user_id" value="{{ $user->id }}">
