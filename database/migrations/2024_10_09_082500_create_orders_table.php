@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Shippers;
-use App\Models\Status_oders;
+use App\Models\Shipper;
+use App\Models\StatusOrder;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,15 +14,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('oders', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Status_oders::class)->constrained();
-            $table->foreignIdFor(Shippers::class)->constrained();
+            $table->foreignIdFor(StatusOrder::class)->constrained();
+            $table->foreignIdFor(Shipper::class)->constrained();
             $table->dateTime('date');
             $table->double('total_price');
-            $table->string('address');
-            $table->string('note')->nullable();
+            $table->string('address', 255);
+            $table->string('note', 255)->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('oders');
+        Schema::dropIfExists('orders');
     }
 };

@@ -5,22 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Oder_detail extends Model
+class OrderDetail extends Model
 {
     use HasFactory;
-    protected $table = 'oder_details';
+    protected $table = 'order_details';
     protected $fillable = [
-        'id_oder',
-        'id_product',
+        'order_id',
+        'product_id',
         'unitprice',
-        'quantity',
+        'quantity'
     ];
-    public function oder() {
-        return $this->belongsTo(Oders::class);
+    public function order(){
+        return $this->belongsTo(Order::class);
     }
-    
-    public function product() {
+    public function product(){
         return $this->belongsTo(Product::class);
     }
-
 }
