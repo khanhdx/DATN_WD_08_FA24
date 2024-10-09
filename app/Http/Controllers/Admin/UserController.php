@@ -74,7 +74,7 @@ class UserController extends Controller
                     }
                 }
             }
-            // Mail::to($user['email'])->send(new UserMailConfirm($user_new));
+            Mail::to($user['email'])->send(new UserMailConfirm($user_new));
             return redirect()->route('admin.user.index')->with('success', 'Thàn công');
         }
     }
