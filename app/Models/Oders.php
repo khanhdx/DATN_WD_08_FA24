@@ -22,13 +22,13 @@ class Oders extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function status() {
-        return $this->belongsTo(Status_oders::class);
-    }
-    public function shipper() {
-        return $this->belongsTo(Shippers::class);
-    }
-    public function orderDetails() {
-        return $this->hasMany(Oder_detail::class);
-    }
+    // public function status() {
+    //     return $this->belongsTo(Status_oders::class);
+    // }
+    // public function shipper() {
+    //     return $this->belongsTo(Shippers::class);
+    // }
+    // public function orderDetails() {
+    //     return $this->hasMany(Oder_detail::class);
+    // }
 }

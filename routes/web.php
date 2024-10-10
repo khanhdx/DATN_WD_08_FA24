@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', function () {
-        return view('admin.layouts.master');
+        return view('admin.dashbroad');
     })->name('admin.dashboard');
 
 Route::resource('user', App\Http\Controllers\Admin\UserController::class);
