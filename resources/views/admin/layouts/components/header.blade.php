@@ -53,7 +53,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{ route('voucher.index') }}">
+                        <a href="{{ route('admin.voucher.index') }}">
                             <span class="bot-line"></span>Quản lý mã giảm giá
                         </a>
                     <li class="has-sub">

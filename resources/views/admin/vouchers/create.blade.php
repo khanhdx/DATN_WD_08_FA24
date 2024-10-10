@@ -44,7 +44,7 @@
             <div>
                 <div class="card-body">
                     <div class="w-75 m-auto">
-                        <form action="{{ route('voucher.store') }}" method="POST">
+                        <form action="{{ route('admin.voucher.store') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label class="form-label" for="">Tên phiếu giảm giá</label>
@@ -104,7 +104,7 @@
                                 <textarea name="description" class="form-control" cols="10" rows="5"></textarea>
                             </div>
                             <div>
-                                <a class="btn btn-danger" href="{{ route('voucher.index') }}">Quay lại</a>
+                                <a class="btn btn-danger" href="{{ route('admin.voucher.index') }}">Quay lại</a>
                                 <button class="btn btn-primary" type="submit">Tạo mã</button>
                             </div>
                         </form>
