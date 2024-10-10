@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
@@ -27,9 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
-    Route::get('/admin', function () {
-        return view('admin.dashbroad');
-    })->name('admin.dashboard');
+    Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
 
 Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
