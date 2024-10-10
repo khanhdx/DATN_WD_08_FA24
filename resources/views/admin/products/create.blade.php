@@ -1,6 +1,20 @@
 @extends('admin.layouts.master')
 
 @section('css')
+    <style>
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+
+        }
+
+        .input-file {
+            width: auto;
+            margin-left: 10px;
+            flex-grow: 1;
+        }
+    </style>
 @endsection
 
 
@@ -18,16 +32,20 @@
                                 <tr class="tr-shadow">
 
                                     <div class="table-data__tool-right mb-3">
-                                        <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <a href="{{ route('admin.products.index')}}">Quay lại danh sách</a>
+                                        <button class="au-btn au-btn-icon au-btn--green au-btn- -small">
+                                            <a href="{{ route('admin.products.index') }}">Quay lại danh sách</a>
                                         </button>
                                     </div>
-                                    <form action="{{ route('admin.products.store')}}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.products.store') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
                                             <label for="title">Tên sản phẩm:</label>
                                             <input class="au-input au-input--full" type="text" name="name"
-                                                placeholder="Tên sản phẩm">
+                                                placeholder="Tên sản phẩm" value="{{ old('name') }}">
+                                            @error('name')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -36,44 +54,81 @@
                                                     <select name="category_id" id="category" class="form-control">
                                                         <option>--- Chọn Danh mục ---</option>
                                                         @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}">{{ $category->name }}
+                                                            <option
+                                                                {{ old('category_id') == $category->id ? 'selected' : '' }}
+                                                                value="{{ $category->id }}">{{ $category->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    @error('category_id')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="title">Mã sản phẩm:</label>
                                                     <input class="au-input au-input--full" type="text" name="SKU"
-                                                        placeholder="Tên sản phẩm">
+                                                        placeholder="Tên sản phẩm" value="{{ old('SKU') }}">
+                                                    @error('SKU')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label for="title">Giá gốc:</label>
-                                                    <input class="au-input au-input--full" type="text" name="price_regular"
-                                                        placeholder="Nhập giá góc">
+                                                    <input class="au-input au-input--full" type="text"
+                                                        name="price_regular" placeholder="Nhập giá góc"
+                                                        value="{{ old('price_regular') }}">
+                                                    @error('price_regular')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="author">Giá khuyến mãi:</label>
                                                     <input class="au-input au-input--full" type="text" name="price_sale"
-                                                        placeholder="Nhập giá khuyến mãi">
+                                                        placeholder="Nhập giá khuyến mãi" value="{{ old('price_sale') }}">
+                                                    @error('price_sale')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="title">Ảnh sản phẩm:</label>
-                                            <input class="au-input au-input--full" type="file" name="image"
-                                                placeholder="Tên sản phẩm">
+                                            <table class="table align-middle table-nowarp mb-0">
+                                                <tbody id="image-table-body">
+                                                    <tr>
+                                                        <td class="d-flex align-item-center">
+                                                            <div>
+                                                                <img id="preview_0"
+                                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrVLGzO55RQXipmjnUPh09YUtP-BW3ZTUeAA&s"
+                                                                    alt="Hình ảnh danh mục" class="preview-image mr-3">
+                                                            </div>
+
+                                                            <input type="file" id="image" name="image"
+                                                                placeholder="Hình ảnh danh mục"
+                                                                class="form-control input-file"
+                                                                onchange="previewImage(this, 0)">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            @error('image')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="content">Mổ tả ngắn:</label>
                                             {{-- <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" > --}}
-                                            <textarea class="au-input au-input--full" name="description" placeholder="Mô tả ngắt"></textarea>
+                                            <textarea class="au-input au-input--full" name="description" placeholder="Mô tả ngắn">{{ old('description')}}</textarea>
+                                            @error('description')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="content">Mô tả chi tiết</label>
                                             {{-- <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" > --}}
-                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung"></textarea>
+                                            <textarea class="au-input au-input--full" name="content" placeholder="Nội dung">{{ old('content')}}</textarea>
                                         </div>
 
                                         <div class="table-data__tool-right">
@@ -82,14 +137,7 @@
                                             </button>
                                         </div>
 
-                                        {{-- 
-                                            // Xử lý thêm biến thể đồng thời thêm sản phẩm mới
-                                            div class="table-data__tool-right">
-                                            <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                                Thêm sản phẩm
-                                            </button>
-                                        </div>
-                                        --}}
+
                                     </form>
                             </tbody>
                         </table>
@@ -104,45 +152,35 @@
 
 @section('js')
     <script>
-        // Mở popup
-        function openPopup() {
-            document.getElementById('popupOverlay').style.display = 'flex';
-        }
+        function showImage(event) {
+            const img = document.getElementById('img');
 
-        // Đóng popup khi nhấn vào bên ngoài popup hoặc nút đóng
-        function closePopup(event) {
-            const popupContent = document.querySelector('.popup-content');
-            if (!event || event.target !== popupContent) {
-                document.getElementById('popupOverlay').style.display = 'none';
+            console.log(img);
+
+            const file = event.target.files[0];
+
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                img.src = reader.result;
+                img.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
             }
         }
 
-        let variantIndex = 1;
+        function previewImage(input, rowIndex) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
 
-        function addVariant() {
-            const variantsDiv = document.getElementById('variants');
-            const newVariant = document.createElement('div');
-            newVariant.classList.add('variant-group');
+                reader.onload = function(e) {
+                    document.getElementById(`preview_${rowIndex}`).setAttribute('src', e.target.result)
+                }
 
-            newVariant.innerHTML = `
-                <label for="color">Màu sắc:</label>
-                <input type="text" name="variants[${variantIndex}][color]" placeholder="Nhập màu sắc" >
-
-                <label for="size">Kích thước:</label>
-                <input type="text" name="variants[${variantIndex}][size]" placeholder="Nhập kích thước" >
-
-                <label for="stock">Số lượng:</label>
-                <input type="number" name="variants[${variantIndex}][stock]" placeholder="Nhập số lượng" >
-
-                <button type="button" class="remove-button" onclick="removeVariant(this)">Xóa biến thể</button>
-            `;
-
-            variantsDiv.appendChild(newVariant);
-            variantIndex++;
-        }
-
-        function removeVariant(button) {
-            button.parentElement.remove();
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 @endsection

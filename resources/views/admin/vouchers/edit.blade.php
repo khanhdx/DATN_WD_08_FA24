@@ -131,11 +131,31 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane container fade" id="menu1">
-                                                {{--  --}}
+                                            <div class="tab-pane container fade p-0" id="menu1">
+                                                <div>
+                                                    <div class="row p-0 alycia mb-3">
+                                                        <label class="p-0 col-3" for="quanlity">Mức giảm:</label>
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->decreased_value}}" name="quanlity" id="quanlity">
+                                                        <input class="form-control form-control-sm col-1 text-center" value="{{$voucher->value == 'Phần trăm'?'%':'VNĐ'}}" type="text" disabled>
+                                                    </div>
+                                                    <div class="row p-0 alycia mb-3">
+                                                        <label class="p-0 col-3" for="quanlity">Giảm tối đa:</label>
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->max_value}}" name="quanlity" id="quanlity">
+                                                        <input class="form-control form-control-sm col-1 text-center" value="VNĐ" type="text" disabled>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane container fade" id="menu2">
-                                                {{--  --}}
+                                                <div>
+                                                    <div class="row p-0 alycia mb-3">
+                                                        <p class="col">Phiếu giảm giá áp dụng cho đơn đơn hàng có giá trị tối thiểu tương đương</p>
+                                                    </div>
+                                                    <div class="row p-0 alycia mb-3">
+                                                        <label class="p-0 col-3" for="quanlity">Đơn hàng tối thiểu:</label>
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->max_value}}" name="quanlity" id="quanlity">
+                                                        <input class="form-control form-control-sm col-1 text-center" value="VNĐ" type="text" disabled>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

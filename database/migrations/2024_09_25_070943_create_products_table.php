@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Category::class)->constrained();
 
             $table->string('name');                         // Tên sản phẩm
+            $table->string('image');                        // Ảnh sản phẩm
             $table->string('SKU')->unique();                // Mã SKU
             $table->decimal('price_regular');               // Giá thường
             $table->decimal('price_sale')->nullable();      // Giá sale

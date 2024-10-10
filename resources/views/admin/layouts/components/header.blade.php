@@ -45,11 +45,9 @@
                                 <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.colors.index')}}">Thuộc tính màu sắc</a>
+                                <a href="{{ route('admin.products.variants.getAllAttribute')}}">Thuộc tính biến thể</a>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.sizes.index')}}">Thuộc tính kích thước</a>
-                            </li>
+                            
                         </ul>
                     </li>
                     <li>
