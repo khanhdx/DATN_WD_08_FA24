@@ -28,10 +28,10 @@ class StatusOrder extends Model
         }
     }
 
-    public $timestamps = false;
-
     public function orders(){
-        return $this->hasMany(Order::class);
-    }
+       return $this->belongsToMany(Order::class, 'status_order_detail', 'status_order_id', 'order_id')
+                    ->withPivot('name', 'updated_at')
+                    ->withTimestamps();
+    }  
 
 }

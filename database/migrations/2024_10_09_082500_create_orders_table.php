@@ -3,6 +3,7 @@
 use App\Models\Shipper;
 use App\Models\StatusOrder;
 use App\Models\User;
+use App\Models\Voucher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(StatusOrder::class)->constrained();
             $table->foreignIdFor(Shipper::class)->constrained();
+            $table->foreignIdFor(Voucher::class)->constrained();
             $table->dateTime('date');
             $table->double('total_price');
             $table->string('address', 255);
