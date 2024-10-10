@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{ route('voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
+                        <a href="{{ route('admin.voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
                     </div>
                     
                     <div class="table-responsive table-responsive-data2">
@@ -82,9 +82,11 @@
                                         <td><div class="type-s">{{$voucher->status}}</div></td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <button class="item" data-toggle="tooltip" data-placement="top">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </button>
+                                                <a href="{{ route('admin.voucher.edit',$voucher->id) }}">
+                                                    <button class="item" data-toggle="tooltip" data-placement="top">
+                                                        <i class="zmdi zmdi-more"></i>
+                                                    </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>                          

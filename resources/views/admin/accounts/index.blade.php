@@ -29,7 +29,7 @@
                         </div>
                         {{-- LT --}}
                         <div class="table-data__tool-right">
-                            <a href="{{ route('user.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                            <a href="{{ route('admin.user.index') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
                                 Thêm người dùng <i class="zmdi zmdi-plus"></i></button></a>
                         </div>
                     </div>
