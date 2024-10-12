@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    const VIEW_CART = 'client.cart';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view(self::VIEW_CART . __FUNCTION__);
     }
 
     /**
