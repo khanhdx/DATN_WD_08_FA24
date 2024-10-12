@@ -31,9 +31,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         return view('admin.layouts.master');
     })->name('admin.dashboard');
 
-Route::resource('user', App\Http\Controllers\Admin\UserController::class);
-Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
-Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+
 Route::resource('post', PostController::class);
     Route::prefix('admins')
         ->as('admin.')
@@ -44,7 +42,7 @@ Route::resource('post', PostController::class);
             Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
-
+            Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
