@@ -35,33 +35,12 @@ class SizeService implements ISizeService
     public function insert($data)
     {
 
-        // Quy định lỗi
-        $rules = [
-            'name' => 'required|unique:sizes',
-        ];
-
-        // Định nghĩa lỗi
-        $messages = [];
-
-        $validator = Validator::make($data, $rules);
-
-        // Kiểm tra xem có lỗi không
-        if ($validator->fails()) {
-            // Trả về thông báo lỗi dưới dạng JSON
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 422); // HTTP status 422 Unprocessable Entity
-        };
-
         try {
-            $size = $this->sizeRepository->insert($validator->validated());
+            $this->sizeRepository->insert($data);
 
-            return response([
-                'message' => 'Thành công',
-                'data' => $size,
-            ], 201);
+            return redirect()->back()->with('success', 'Thêm size thành công');
         } catch (\Throwable $th) {
-            return response()->json(['errors' => $th->getMessage()], 500);
+            return redirect()->back()->with('fail', $th->getMessage());
         }
     }
 
@@ -72,38 +51,15 @@ class SizeService implements ISizeService
 
         // Kiểm tra size có tồn tại không ? 
         if (!$size) {
-            return response()->json([
-                'error' => 'Màu sác không tồn tại',
-            ], 404);
+            return redirect()->back()->with('failed', 'Size không tồn tại');
         }
 
-         // Quy định lỗi
-         $rules = [
-            'name' => 'required|unique:sizes',
-        ];
-
-        // Định nghĩa lỗi
-        $messages = [];
-
-        $validator = Validator::make($data, $rules);
-
-        // Kiểm tra xem có lỗi không
-        if ($validator->fails()) {
-            // Trả về thông báo lỗi dưới dạng JSON
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 422); // HTTP status 422 Unprocessable Entity
-        };
-
         try {
-            $sizeUpdate = $this->sizeRepository->update($id, $validator->validated());
+            $this->sizeRepository->update($id, $data);
 
-            return response([
-                'message' => 'Thành công',
-                'data' => $sizeUpdate,
-            ], 200);
+            return redirect()->back()->with('success', 'Cập nhật size thành công');
         } catch (\Throwable $th) {
-            return response()->json(['errors' => $th->getMessage()], 500);
+            return redirect()->back()->with('failed', $th->getMessage());
         }
     }
 
@@ -113,21 +69,18 @@ class SizeService implements ISizeService
 
         // Kiểm tra size có tồn tại không ? 
         if (!$size) {
-            return response()->json([
-                'error' => 'Màu sác không tồn tại',
-            ], 404);
+            return redirect()->back()->with('failed', 'Size không tồn tại');
         }
 
-        $deleted = $this->sizeRepository->delete($id);
 
-        if ($deleted) {
-            return response([
-                'message' => 'Thành công',
-            ], 200);
+        try {
+            $deleted = $this->sizeRepository->delete($id);
+
+            if ($deleted) {
+                return redirect()->back()->with('success', "Xóa size $size->name thành công");
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('failed', 'Xóa size thát bại. Vul lòng thử lại');
         }
-
-        return response([
-            'message' => 'Thất bại',
-        ], 500);
     }
 }

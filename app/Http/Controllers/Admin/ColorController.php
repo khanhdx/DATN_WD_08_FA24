@@ -17,15 +17,8 @@ class ColorController extends Controller
 
     public function index()
     {
-       return  $this->colorService->getAll(); 
+            $this->colorService->getAll(); 
     }
-
-    // public function show($id)
-    // {
-    //     $color = $this->color->getOne($id);
-
-    //     return response()->json(['data' => $color], 200);
-    // }
 
     public function store(Request $request)
     {

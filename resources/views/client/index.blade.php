@@ -88,7 +88,7 @@
                                             </span>
                                             <a href="{{ route('client.product_detail', $product->id) }}">
                                                 <img alt="" class="img-responsive"
-                                                    src="/assets/client/images/content/products/product-{{ $product->category->type == 'Man' ? rand(1, 8) : rand(9, 17) }}.jpg">
+                                                    src="{{ $product->image }}">
                                             </a>
                                         </div>
 
@@ -139,7 +139,7 @@
                                                     </span>
                                                     <a href="{{ route('client.product_detail', $product->id) }}">
                                                         <img alt="" class="img-responsive"
-                                                            src="/assets/client/images/content/products/product-{{ rand(1, 8) }}.jpg">
+                                                            src="{{ $product->image }}">
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
@@ -175,7 +175,7 @@
                                                     </span>
                                                     <a href="{{ route('client.product_detail', $product->id) }}">
                                                         <img alt="" class="img-responsive"
-                                                            src="/assets/client/images/content/products/product-{{ rand(9, 17) }}.jpg">
+                                                            src="{{ $product->image }}">
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
