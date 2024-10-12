@@ -35,34 +35,12 @@ class ColorService implements IColorService
     public function insert($data)
     {
 
-        // Quy định lỗi
-        $rules = [
-            'name' => 'required|unique:colors',
-            'code_color' => 'required|unique:colors',
-        ];
-
-        // Định nghĩa lỗi
-        $messages = [];
-
-        $validator = Validator::make($data, $rules, $messages);
-
-        // Kiểm tra xem có lỗi không
-        if ($validator->fails()) {
-            // Trả về thông báo lỗi dưới dạng JSON
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 422); // HTTP status 422 Unprocessable Entity
-        };
-
         try {
-            $color = $this->colorRepository->insert($validator->validated());
+            $this->colorRepository->insert($data);
 
-            return response([
-                'message' => 'Thành công',
-                'data' => $color,
-            ], 201);
+            return redirect()->back()->with('success', 'Thêm màu sắc thành công');
         } catch (\Throwable $th) {
-            return response()->json(['errors' => $th->getMessage()], 500);
+            return redirect()->back()->with('failed', $th->getMessage());
         }
     }
 
@@ -73,39 +51,15 @@ class ColorService implements IColorService
 
         // Kiểm tra Color có tồn tại không ? 
         if (!$color) {
-            return response()->json([
-                'error' => 'Màu sác không tồn tại',
-            ], 404);
+                return redirect()->back()->with('failed', 'Màu sắc không tồn tại');
         }
 
-         // Quy định lỗi
-         $rules = [
-            'name' => 'required|unique:colors',
-            'code_color' => 'required',
-        ];
-
-        // Định nghĩa lỗi
-        $messages = [];
-
-        $validator = Validator::make($data, $rules);
-
-        // Kiểm tra xem có lỗi không
-        if ($validator->fails()) {
-            // Trả về thông báo lỗi dưới dạng JSON
-            return response()->json([
-                'errors' => $validator->errors(),
-            ], 422); // HTTP status 422 Unprocessable Entity
-        };
-
         try {
-            $colorUpdate = $this->colorRepository->update($id, $validator->validated());
+            $this->colorRepository->update($id, $data);
 
-            return response([
-                'message' => 'Thành công',
-                'data' => $colorUpdate,
-            ], 200);
+            return redirect()->back()->with('success', 'Cập nhật màu sắc thành công');
         } catch (\Throwable $th) {
-            return response()->json(['errors' => $th->getMessage()], 500);
+            return redirect()->back()->with('failed', $th->getMessage());
         }
     }
 
@@ -113,23 +67,19 @@ class ColorService implements IColorService
     {
         $color = $this->colorRepository->getOne($id);
 
-        // Kiểm tra Color có tồn tại không ? 
+
         if (!$color) {
-            return response()->json([
-                'error' => 'Màu sác không tồn tại',
-            ], 404);
+            return redirect()->back()->with('failed', 'Màu sắc không tồn tạo');
         }
 
-        $deleted = $this->colorRepository->delete($id);
+        try {
+            $deleted = $this->colorRepository->delete($id);
 
-        if ($deleted) {
-            return response([
-                'message' => 'Thành công',
-            ], 200);
+            if ($deleted) {
+                return redirect()->back()->with('success', 'Xóa màu sắc thành công');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('failed', $th->getMessage());
         }
-
-        return response([
-            'message' => 'Thất bại',
-        ], 500);
     }
 }

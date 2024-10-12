@@ -52,11 +52,17 @@
                                             <label for="color_name">Tên màu:</label>
                                             <input type="text" class="form-control" id="color_name" name="name"
                                                 required>
+                                                @error('name')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="color_code">Mã màu:</label>
                                             <input type="text" class="form-control" id="color_code" name="code_color"
                                                 placeholder="#ff0000" required>
+                                                @error('color_code')
+                                                    <p class="text-danger">{{ $message }}</p>
+                                                @enderror
                                         </div>
                                         <button type="submit" class="btn btn-primary">Lưu màu</button>
                                     </form>

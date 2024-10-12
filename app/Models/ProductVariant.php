@@ -35,4 +35,9 @@ class ProductVariant extends Model
     {
        return $this->belongsTo(Size::class); 
     }
+
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }
