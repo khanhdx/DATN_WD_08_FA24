@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Cart::class)->constrained();
             $table->foreignIdFor(ProductVariant::class)->constrained();
-            $table->bigInteger('quantily');
-            $table->decimal('price');
-
+            $table->bigInteger('quantity');
             $table->timestamps();
         });
     }

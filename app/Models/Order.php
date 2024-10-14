@@ -13,6 +13,7 @@ class Order extends Model
         'user_id',
         'shipper_id',
         'total_price',
+        'date',
         'address',
         'note'
     ];

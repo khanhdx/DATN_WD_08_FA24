@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\SizeController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,6 +103,10 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
         'update',
         'destroy'
     ]);
+    Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
+    Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
+    Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
+    Route::post('/voucher/apply', [VoucherController::class, 'applyVoucher'])->name('voucher.apply');
 });
 
 //Route không cần đăng nhập

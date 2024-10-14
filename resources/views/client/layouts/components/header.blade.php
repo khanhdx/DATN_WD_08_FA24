@@ -78,7 +78,7 @@
                     </ul>
                     <div class="cart-buttons text-right">
                         <button class="btn btn-white">View Cart</button>
-                        <button class="btn btn-primary">Checkout</button>
+                        <a href="{{ route('checkout') }}"><button class="btn btn-primary">Checkout</button></a>
                     </div>
                 </div>
             </li>
