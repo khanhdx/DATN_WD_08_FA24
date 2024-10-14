@@ -16,10 +16,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(StatusOrder::class)->constrained();
             $table->foreignIdFor(Shipper::class)->constrained();
-            $table->dateTime('date');
+            $table->string('name', 50);
+            $table->string('phone', 10);
             $table->double('total_price');
             $table->string('address', 255);
             $table->string('note', 255)->nullable();
