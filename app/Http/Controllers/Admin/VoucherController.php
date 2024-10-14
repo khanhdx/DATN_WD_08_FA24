@@ -68,6 +68,8 @@ class VoucherController extends Controller
     public function edit(string $id)
     {
         //
+        $data['voucher'] = Voucher::query()->findOrFail($id);
+        return view('admin.vouchers.edit', $data);
     }
 
     /**
@@ -76,13 +78,20 @@ class VoucherController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $data['voucher'] = Voucher::findOrFail($id);
+        return view('admin.vouchers.edit',$data);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         //
+        if($request->isMethod('DELETE')) {
+            $voucher = Voucher::query()->findOrFail($id);
+            $voucher->delete();
+            return redirect()->route('admin.voucher.index')->with('success', 'Thêm thành công');
+        }
     }
 }

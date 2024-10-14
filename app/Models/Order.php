@@ -21,17 +21,33 @@ class Order extends Model
         'note'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function status_order(){
-        return $this->belongsTo(StatusOrder::class);
+    public function statusesOrder()
+    {
+        return $this->belongsToMany(StatusOrder::class, 'status_order_detail', 'order_id', 'status_order_id')
+            ->withPivot('name', 'updated_at')
+            ->withTimestamps();
     }
-    public function shipper(){
+    public function shipper()
+    {
         return $this->belongsTo(Shipper::class);
     }
 
-    public function order_details(){
+    public function order_details()
+    {
         return $this->hasMany(OrderDetail::class);
+    }
+
+    public function payments()
+    {
+        $this->hasMany(Payment::class);
+    }
+
+    public function refunds()
+    {
+        $this->hasMany(Refund::class);
     }
 }

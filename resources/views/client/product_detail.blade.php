@@ -28,8 +28,8 @@
                         <div class="flexslider">
                             <ul class="slides">
                                 <li
-                                    data-thumb="/assets/client/images/content/products/product-{{ $product->category->type == 'Man' ? rand(1, 8) : rand(9, 17) }}.jpg">
-                                    <img src="/assets/client/images/content/products/product-{{ $product->category->type == 'Man' ? rand(1, 8) : rand(9, 17) }}.jpg"
+                                    data-thumb="{{ $product->image }}">
+                                    <img src="{{ $product->image }}"
                                         alt="">
                                 </li>
                                 <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
@@ -217,7 +217,7 @@
                                                 </span>
                                                 <a href="{{ route('client.product_detail', $item->id) }}">
                                                     <img alt="" class="img-responsive"
-                                                        src="/assets/client/images/content/products/product-{{ $product->category->type == 'Man' ? rand(1, 8) : rand(9, 17) }}.jpg">
+                                                        src="{{ $item->image }}">
                                                 </a>
                                             </div>
 
