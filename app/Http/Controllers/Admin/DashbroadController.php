@@ -19,7 +19,6 @@ class DashbroadController extends Controller
     public function index()
     {
         $revenue = $this->statisical->getRevenueByDay();
-        dd($revenue);
 
         return view('admin.dashbroad');
     }
