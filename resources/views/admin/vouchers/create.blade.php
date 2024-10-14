@@ -49,10 +49,16 @@
                             <div class="form-group">
                                 <label class="form-label" for="">Tên phiếu giảm giá</label>
                                 <input class="form-control" type="text" name="name" id="" placeholder="Nhập tên">
+                                @error('name')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="">Mã phiếu giảm giá</label>
                                 <input class="form-control" type="text" name="voucher_code" id="" placeholder="Nhập mã">
+                                @error('voucher_code')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="row">
                                 <div class="col form-group">
@@ -60,33 +66,51 @@
                                     <div id="radioV" class="input-group form-control">
                                         <input class="" id="Value" type="text" name="decreased_value" id="" placeholder="Nhập giá trị">
                                         <input class="giaTri" type="radio" checked name="value" id="coDinh" value="Cố định">
-                                        <label id="labelCoDinh" class="lableValue" for="coDinh"><i class="fa-solid fa-dollar-sign"></i></label>
+                                        <label id="labelCoDinh" style="color: rgb(255, 140, 0);" class="lableValue" for="coDinh"><i class="fa-solid fa-dollar-sign"></i></label>
                                         <input class="giaTri" type="radio" name="value" id="phanTram" value="Phần trăm">
                                         <label id="labelPhanTram" class="lableValue" for="phanTram"><i class="fa-solid fa-percent"></i></label>
                                     </div>
+                                    @error('decreased_value')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col form-group">
                                     <label class="form-label" for="">Giá trị tối đa</label>
                                     <input class="form-control" type="text" name="max_value" id="" placeholder="Nhập giá trị tối đa">
+                                    @error('max_value')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col form-group">
                                     <label class="form-label" for="">Số lượng</label>
                                     <input class="form-control" type="text" name="quanlity" id="" placeholder="Nhập số lượng">
+                                    @error('quanlity')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="col form-group">
                                     <label class="form-label" for="">Điều kiện</label>
                                     <input class="form-control" type="text" name="condition" id="" placeholder="Nhập điều kiện">
+                                    @error('condition')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="">Từ ngày</label>
                                 <input class="form-control" type="date" name="date_start" id="">
+                                @error('date_start')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="">Đến ngày</label>
                                 <input class="form-control" type="date" name="date_end" id="">
+                                @error('date_end')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="checkRadio mb-3">
                                 <p class="form-label mr-3">Kiểu</p>
@@ -98,10 +122,16 @@
                                     <input class="form-check-input" id="canhan" value="Cá nhân" type="radio" name="type_code">
                                     <label class="form-check-label" for="canhan">Cá nhân</label>
                                 </div>
+                                @error('type_code')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="">Mô tả</label>
                                 <textarea name="description" class="form-control" cols="10" rows="5"></textarea>
+                                @error('description')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <a class="btn btn-danger" href="{{ route('admin.voucher.index') }}">Quay lại</a>
