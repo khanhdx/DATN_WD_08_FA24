@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
@@ -34,7 +35,7 @@ Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
 Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
 Route::resource('post', PostController::class);
-    Route::prefix('admins')
+Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
@@ -82,6 +83,14 @@ Route::resource('post', PostController::class);
                         Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');
                     });
                 });
+            });
+
+            // Route quản lý orders
+            Route::prefix('orders')->as('orders.')->group(function (){
+                Route::get('/', [OrderController::class, 'index'])->name('index');
+
+                Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+
             });
         });
 });

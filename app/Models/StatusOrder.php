@@ -29,7 +29,7 @@ class StatusOrder extends Model
     }
 
     public function orders(){
-       return $this->belongsToMany(Order::class, 'status_order_detail', 'status_order_id', 'order_id')
+       return $this->belongsToMany(Order::class, 'status_order_details', 'status_order_id', 'order_id')
                     ->withPivot('name', 'updated_at')
                     ->withTimestamps();
     }  
