@@ -89,25 +89,23 @@
                                     <td>{{ $order->created_at }}</td>
                                     <td>
 
-                                        @foreach ($order->statuses as $key => $value)
+                                        @foreach ($order->statuses as $c_status)
                                             <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('PUT')
                                                 <select name="status_order" class="form-select w-75"
-                                                    onchange="confirmSubmit(this)"
-                                                    data-default-value='{{ $key + 1 }}'>
+                                                    onchange="confirmSubmit(this)" data-default-value='{{ $c_status['id_status'] }}'>
                                                     @foreach ($statuses as $status)
                                                         <option value="{{ $status->id }}"
-                                                            {{ $key == $status->id ? 'selected' : '' }}
-                                                            >
+                                                            {{ $c_status['id_status'] == $status->id ? 'selected' : '' }}>
                                                             {{ $status->name_status }}
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                            </form>
                                         @endforeach
 
-                                        </form>
                                     </td>
                                     <td>
                                         <div class="table-data-feature">

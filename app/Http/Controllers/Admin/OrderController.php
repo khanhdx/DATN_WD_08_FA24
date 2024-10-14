@@ -25,11 +25,14 @@ class OrderController extends Controller
         $orders = $this->orderService->getAll();
         $statuses = $this->statusService->getAll();
 
+    
         return view('admin.orders.index', compact('orders', ['statuses']));
     }
 
     public function updateStatus(Request $request, $id)
     {
         $this->orderService->updateStatus($request->input('status_order'), $id);
+
+        return redirect()->route('admin.orders.index');
     }
 }

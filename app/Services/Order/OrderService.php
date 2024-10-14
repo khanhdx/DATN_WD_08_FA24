@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Repositories\OrderRepository;
+use Illuminate\Support\Facades\DB;
 
 class OrderService implements IOrderService {
 
@@ -40,14 +41,21 @@ class OrderService implements IOrderService {
     public function updateStatus($data, $id)
     {
         $newStatus = $data;
-        
-        $order = $this->getOneById($id);
 
-        // Cập nhật trạng thái ở bảng trung gian status_order_detail
+        // Kiểm tra order_id có tồn tại trong bảng trung gian ko 
+       $orderExists = DB::table('status_order_details')->where('order_id', $id)->exists();
 
-          
+       if($orderExists){
+            DB::table('status_order_details')
+                ->where('order_id', $id)
+                ->update(['status_order_id' => $data]);
 
-            return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
+            return redirect()->route('admin.orders.index')->with('success', 'Cập nhật trạng thái thành công');
+       } else {
+        return redirect()->route('admins.orders.index')->with('failed', 'Cập nhật thất bại');
+       } 
     
+      
+      
     }
 }
