@@ -38,8 +38,8 @@
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Quản lý mã giảm giá</h3>
                     <div class="d-flex justify-content-between mb-3">
-                        <div class="" style="width: 50%;">
-                            <input class="form-control mb-3" type="text" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
+                        <form class="" style="width: 50%;">
+                            <input class="form-control mb-3" type="text" name="search" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
                             <div class="row m-0" style="gap: 10px;">
                                 <div class="col p-0">
                                     <label class="m-0 form-label" for="date_start">Từ ngày</label>
@@ -50,8 +50,8 @@
                                     <input name="date_end" id="date_end" type="date" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <a href="{{ route('voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
+                        </form>
+                        <a href="{{ route('admin.voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
                     </div>
                     
                     <div class="table-responsive table-responsive-data2">
@@ -82,9 +82,11 @@
                                         <td><div class="type-s">{{$voucher->status}}</div></td>
                                         <td>
                                             <div class="table-data-feature">
-                                                <button class="item" data-toggle="tooltip" data-placement="top">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </button>
+                                                <a href="{{ route('admin.voucher.edit',$voucher->id) }}">
+                                                    <button class="item" data-toggle="tooltip" data-placement="top">
+                                                        <i class="zmdi zmdi-more"></i>
+                                                    </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>                          
