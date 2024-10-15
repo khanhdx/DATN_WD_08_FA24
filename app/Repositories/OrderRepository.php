@@ -15,7 +15,19 @@ class OrderRepository
         return $orders;
     }
 
-    public function getOneById($id) {
+    public function getByStatus($status)
+    {
+        $orders = Order::with(['statuses' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])->whereHas('statuses', function ($query) use ($status) {
+                $query->where('name_status', $status);
+            })->select('id', 'user_id', 'total_price', 'created_at')->get();
+
+        return $orders;
+    }
+
+    public function getOneById($id)
+    {
         $order = Order::findOrFail($id);
 
         return $order;

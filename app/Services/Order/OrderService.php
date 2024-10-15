@@ -28,6 +28,15 @@ class OrderService implements IOrderService
         return [$orders, $countOrderByStatus, $totalOrder];
     }
 
+    public function getByStatus($status)
+    {
+        $orders = $this->orderRepository->getByStatus($status);
+        $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
+        $totalOrder = $this->statistical->totalOrder();
+
+        return [$orders, $countOrderByStatus, $totalOrder];
+    }
+
     public function getOneById($id)
     {
         return $this->orderRepository->getOneById($id);

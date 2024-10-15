@@ -2,9 +2,12 @@
 
 namespace App\Services\Order;
 
-interface IOrderService {
+interface IOrderService
+{
 
     public function getAll();
+
+    public function getByStatus($status);
 
     public function getOneById($id);
 
@@ -17,8 +20,4 @@ interface IOrderService {
     public function search($keyword);
 
     public function updateStatus($data, $id);
-
-    
 }
-
- 
