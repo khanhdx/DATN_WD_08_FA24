@@ -53,15 +53,15 @@
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
                         <button class="mr-3">Tất cả <span
-                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">(15)</span></button>
-                        <button class="mr-3">Tất cả <span
-                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">(15)</span></button>
-                        <button class="mr-3">Tất cả <span
-                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">(15)</span></button>
-                        <button class="mr-3">Tất cả <span
-                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">(15)</span></button>
-                        <button class="mr-3">Tất cả <span
-                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">(15)</span></button>
+                                class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $totalOrder }})</span></button>
+                        @foreach ($countOrderByStatus as $item)
+                            @if ($item->status_order_id == 5 || $item->status_order_id == 7)
+                                @continue
+                            @else
+                                <button class="mr-3 text-capitalize">{{ $item->name_status }}<span
+                                        class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></button>
+                            @endif
+                        @endforeach
                     </div>
                     <br />
                 </div>
@@ -95,11 +95,14 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <select name="status_order" class="form-select w-75"
-                                                    onchange="confirmSubmit(this)" data-default-value='{{ $c_status['id_status'] }}'>
+                                                    onchange="confirmSubmit(this)"
+                                                    data-default-value='{{ $c_status['id_status'] }}'>
                                                     @foreach ($statuses as $status)
                                                         <option value="{{ $status->id }}"
-                                                            {{ $c_status['id_status'] == $status->id ? 'selected' : '' }}>
-                                                            {{ $status->name_status }}
+                                                            {{ $c_status['id_status'] == $status->id ? 'selected' : '' }}
+                                                            {{ $c_status['id_status'] == 6 ? 'disabled' : '' }}
+                                                            {{ $c_status['id_status'] == 8 ? 'disabled' : '' }}>
+                                                            {{ $status->status_label }}
                                                         </option>
                                                     @endforeach
                                                 </select>

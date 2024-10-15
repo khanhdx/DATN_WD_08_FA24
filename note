@@ -4,3 +4,4 @@ Chưa validate edit products, validate edit + insert + delete colors , sizes,
 
 9/10 Validate color và size = js
 
+15/10 Bug không hiển thị trạng thái peding -> chờ xử lý ở trang quản lý đơn hàng 

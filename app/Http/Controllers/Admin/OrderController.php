@@ -22,17 +22,35 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->orderService->getAll();
+        $data = $this->orderService->getAll();
+
+        $orders = $data[0];
+        $countOrderByStatus = $data[1];
+        $totalOrder = $data[2];
+
+        // dd($countOrderByStatus);
+
         $statuses = $this->statusService->getAll();
 
     
-        return view('admin.orders.index', compact('orders', ['statuses']));
+        return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
 
     public function updateStatus(Request $request, $id)
     {
-        $this->orderService->updateStatus($request->input('status_order'), $id);
 
-        return redirect()->route('admin.orders.index');
+        try {
+             $this->orderService->updateStatus($request->input('status_order'), $id);
+
+             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+
+      
+
+
+
+        
     }
 }
