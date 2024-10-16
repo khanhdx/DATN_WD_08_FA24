@@ -6,27 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $newProduct = Product::with(['category'])->latest('id')->get();
+        $newProduct = Product::with(['category', 'variants.size', 'variants.color'])
+            ->latest('id')
+            ->get();
 
-        $topSeller = Product::with(['category'])->paginate(8);
+        $topSeller = Product::with(['category', 'variants.size', 'variants.color'])
+            ->paginate(8);
 
-        $latest_posts = Post::query()->latest('id')->paginate(2);
+        $latest_posts = Post::query()
+            ->latest('id')
+            ->paginate(2);
 
-        return view('client.' . __FUNCTION__, compact('newProduct','topSeller','latest_posts'));
+        return view('client.' . __FUNCTION__, compact(
+            'newProduct',
+            'topSeller',
+            'latest_posts'
+        ));
     }
+
     public function product_detail(Product $product)
     {
         $product->load(['category']);
 
         $related_products = Product::with(['category'])->latest('id')->get();
 
-        return view('client.' . __FUNCTION__, compact('product','related_products'));
+        return view('client.' . __FUNCTION__, compact('product', 'related_products'));
     }
 
     public function posts()
@@ -58,5 +69,5 @@ class HomeController extends Controller
 
     //     return view('client.posts.post_show', compact('post', 'recentPosts', 'mostViewedPosts'));
     // }
-   
+
 }

@@ -25,7 +25,7 @@
                 </ul>
             </li>
             <li class="dropdown menu-shop">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-shopping-cart"></i> <span class="shopping-bag">9</span></a>
+                <a href="{{ route('client.cart.index') }}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-shopping-cart"></i> <span class="shopping-bag">9</span></a>
                 <div class="dropdown-menu">
                     <h3>Recently added item(s)</h3>
                     <ul class="list-unstyled list-thumbs-pro">
@@ -77,7 +77,7 @@
                         <li class="price"><span class="amount"><strong>$431</strong></span></li>
                     </ul>
                     <div class="cart-buttons text-right">
-                        <button class="btn btn-white">View Cart</button>
+                        <a href="{{ route('client.cart.index') }}"><button class="btn btn-white">View Cart</button></a>
                         <button class="btn btn-primary">Checkout</button>
                     </div>
                 </div>

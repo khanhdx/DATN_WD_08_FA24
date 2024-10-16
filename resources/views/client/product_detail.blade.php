@@ -27,10 +27,8 @@
                     <div class="product-preview">
                         <div class="flexslider">
                             <ul class="slides">
-                                <li
-                                    data-thumb="{{ $product->image }}">
-                                    <img src="{{ $product->image }}"
-                                        alt="">
+                                <li data-thumb="{{ $product->image }}">
+                                    <img src="{{ $product->image }}" alt="">
                                 </li>
                                 <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
                                     <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
@@ -62,41 +60,47 @@
                         </div>
 
                         <p class="price">
-                            <span class="amount">{{ $product->price_regular }}</span>
+                            <span class="amount">${{ $product->price_regular }}</span>
                         </p>
 
-                        <ul class="list-inline list-select clearfix">
-                            <li>
-                                <div class="list-sort">
+                        <form method="post" class="cart" action="{{ route('client.cart.store') }}">
+                            @csrf
+                            @method('PUT')
+                            <ul class="list-inline list-select clearfix">
+                                <li>
                                     <select class="formDropdown">
                                         <option>Select Size</option>
-                                        <option>XS</option>
-                                        <option>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
-                                        <option>XXL</option>
+                                        @foreach ($product->variants->unique('size') as $item)
+                                            <option value="{{ $item->size->id }}">{{ $item->size->name }}</option>
+                                        @endforeach
                                     </select>
-                                </div>
-                            </li>
-                            <li class="color"><a href="#" class="color1"></a></li>
-                            <li class="color"><a href="#" class="color2"></a></li>
-                            <li class="color"><a href="#" class="color3"></a></li>
-                            <li class="color"><a href="#" class="color4"></a></li>
-                        </ul>
+                                </li>
+                                <li>
+                                    <select class="formDropdown">
+                                        <option>Select Color</option>
+                                        @foreach ($product->variants->unique('color') as $item)
+                                            <option value="{{ $item->color->id }}"
+                                                style="background-color:{{ $item->color->code_color }}">
+                                                {{ $item->color->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </li>
+                            </ul>
 
-                        <form method="post" class="cart">
                             <div class="quantity pull-left">
-                                <input type="button" class="minus" value="-">
+                                <input type="button" class="minus" value="-" id="decrease">
                                 <input type="text" class="input-text qty" title="Qty" value="1" name="quantity"
-                                    min="1" step="1">
-                                <input type="button" class="plus" value="+">
+                                    id="quantity" min="1" step="1">
+                                <input type="button" class="plus" value="+" id="increase">
                             </div>
                             <a href="#" class="btn btn-grey">
                                 <span><i class="fa fa-heart"></i></span>
                             </a>
-                            <button href="#" class="btn btn-primary btn-icon"><i class="fa fa-shopping-cart"></i> Add
-                                to cart</button>
+                            <button type="submit" class="btn btn-primary btn-icon">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                            </button>
+
                         </form>
 
                         <ul class="list-unstyled product-meta">
@@ -222,8 +226,10 @@
                                             </div>
 
                                             <div class="product-thumb-info-content">
-                                                <span class="price pull-right">{{ $item->price_regular }} USD</span>
-                                                <h4><a href="shop-product-detail2.html">{{ $item->name }}</a></h4>
+                                                <span class="price pull-right">{{ $item->price_regular }}
+                                                    USD</span>
+                                                <h4><a href="shop-product-detail2.html">{{ $item->name }}</a>
+                                                </h4>
                                                 <span class="item-cat"><small><a
                                                             href="#">{{ $item->category->name }}</a></small></span>
                                             </div>
@@ -240,4 +246,31 @@
         <!-- End Top Selling -->
 
     </div>
+    <script>
+        const quantityInput = document.getElementById('quantity');
+        const increaseButton = document.getElementById('increase');
+        const decreaseButton = document.getElementById('decrease');
+
+        // Xử lý khi nhấn nút Tăng
+        increaseButton.addEventListener('click', () => {
+            let currentValue = parseInt(quantityInput.value) || 0;
+            quantityInput.value = currentValue + 1;
+        });
+
+        // Xử lý khi nhấn nút Giảm
+        decreaseButton.addEventListener('click', () => {
+            let currentValue = parseInt(quantityInput.value) || 0;
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        // Đảm bảo giá trị nhập vào là số hợp lệ
+        quantityInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (!/^\d*$/.test(value)) {
+                e.target.value = value.replace(/\D/g, ''); // Xóa ký tự không phải số
+            }
+        });
+    </script>
 @endsection
