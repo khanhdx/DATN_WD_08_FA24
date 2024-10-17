@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +32,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
 
-
-Route::resource('post', PostController::class);
 Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
@@ -43,6 +42,7 @@ Route::prefix('admins')
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
             Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+            
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
@@ -51,8 +51,6 @@ Route::prefix('admins')
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
-
-              
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
@@ -65,6 +63,7 @@ Route::prefix('admins')
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
 
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
+                    
                     // Route cho colors
                     Route::prefix('colors')->as('colors.')->group(function () {
                         Route::get('/', [ColorController::class, 'index'])->name('index');
@@ -93,6 +92,26 @@ Route::prefix('admins')
         });
 });
 
+//Route cho máy khách (client)
+Route::name('client.')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('product_detail');
+    Route::get('/posts', [HomeController::class, 'posts'])->name('posts');
+    Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('post_show');
+
+    // Route cho giỏ hàng (cart)
+    Route::prefix('cart')
+        ->middleware(['convert.cart'])
+        ->controller(CartController::class)
+        ->name('cart.')
+        ->group(function () {
+            Route::get('/',     'index')->name('index');
+            Route::post('/add', 'addToCart')->name('add');
+            Route::put('/{id}', 'updateCart')->name('update');
+            Route::delete('/{id}', 'destroy')->name('delete');
+        });
+});
+
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::resource('profile', ProfileController::class)->only([
@@ -102,12 +121,6 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
         'destroy'
     ]);
 });
-
-//Route không cần đăng nhập
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('client.product_detail');
-Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
-Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
 
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
