@@ -23,6 +23,11 @@
 
         <div class="container">
             <div class="row">
+                @if (session()->has('success') && session()->get('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+                @endif
                 <div class="col-sm-6">
                     <div class="product-preview">
                         <div class="flexslider">
@@ -63,12 +68,13 @@
                             <span class="amount">${{ $product->price_regular }}</span>
                         </p>
 
-                        <form method="post" class="cart" action="{{ route('client.cart.store') }}">
+                        <form method="post" class="cart" action="{{ route('client.cart.add') }}">
                             @csrf
-                            @method('PUT')
+
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <ul class="list-inline list-select clearfix">
                                 <li>
-                                    <select class="formDropdown">
+                                    <select class="formDropdown" name="size_id">
                                         <option>Select Size</option>
                                         @foreach ($product->variants->unique('size') as $item)
                                             <option value="{{ $item->size->id }}">{{ $item->size->name }}</option>
@@ -76,7 +82,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <select class="formDropdown">
+                                    <select class="formDropdown" name="color_id">
                                         <option>Select Color</option>
                                         @foreach ($product->variants->unique('color') as $item)
                                             <option value="{{ $item->color->id }}"
@@ -246,31 +252,4 @@
         <!-- End Top Selling -->
 
     </div>
-    <script>
-        const quantityInput = document.getElementById('quantity');
-        const increaseButton = document.getElementById('increase');
-        const decreaseButton = document.getElementById('decrease');
-
-        // Xử lý khi nhấn nút Tăng
-        increaseButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value) || 0;
-            quantityInput.value = currentValue + 1;
-        });
-
-        // Xử lý khi nhấn nút Giảm
-        decreaseButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value) || 0;
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-
-        // Đảm bảo giá trị nhập vào là số hợp lệ
-        quantityInput.addEventListener('input', (e) => {
-            const value = e.target.value;
-            if (!/^\d*$/.test(value)) {
-                e.target.value = value.replace(/\D/g, ''); // Xóa ký tự không phải số
-            }
-        });
-    </script>
 @endsection

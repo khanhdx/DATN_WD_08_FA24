@@ -11,9 +11,7 @@ class Order extends Model
     protected $table = 'orders';
     protected $fillable = [
         'user_id',
-        'status_order_id',
         'shipper_id',
-        'date',
         'total_price',
         'address',
         'note'
@@ -23,9 +21,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function statusesOrder()
+    public function statuses()
     {
-        return $this->belongsToMany(StatusOrder::class, 'status_order_detail', 'order_id', 'status_order_id')
+        return $this->belongsToMany(StatusOrder::class, 'status_order_details', 'order_id', 'status_order_id')
             ->withPivot('name', 'updated_at')
             ->withTimestamps();
     }

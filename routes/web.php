@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
@@ -31,8 +32,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
 
-    // Route::resource('post', PostController::class);
-    Route::prefix('admins')
+Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
@@ -81,6 +81,14 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                     });
                 });
             });
+
+            // Route quản lý orders
+            Route::prefix('orders')->as('orders.')->group(function (){
+                Route::get('/', [OrderController::class, 'index'])->name('index');
+
+                Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+
+            });
         });
 });
 
@@ -93,10 +101,14 @@ Route::name('client.')->group(function () {
 
     // Route cho giỏ hàng (cart)
     Route::prefix('cart')
-        ->as('cart.')
+        ->middleware(['convert.cart'])
+        ->controller(CartController::class)
+        ->name('cart.')
         ->group(function () {
-            Route::get('/',         [CartController::class, 'index'])->name('index');
-            Route::post('/store',   [CartController::class, 'store'])->name('store');
+            Route::get('/',     'index')->name('index');
+            Route::post('/add', 'addToCart')->name('add');
+            Route::put('/{id}', 'updateCart')->name('update');
+            Route::delete('/{id}', 'destroy')->name('delete');
         });
 });
 

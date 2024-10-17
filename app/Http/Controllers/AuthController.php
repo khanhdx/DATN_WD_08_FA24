@@ -49,7 +49,7 @@ class AuthController extends Controller
         }
 
         if ($this->authService->login($request->validated())) {
-            return redirect()->route('home')->with('success', 'Đăng nhập thành công.');
+            return redirect()->route('client.home')->with('success', 'Đăng nhập thành công.');
         }
 
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
@@ -61,7 +61,7 @@ class AuthController extends Controller
         $this->authService->logout();
         session()->invalidate();
         session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Đăng xuất thành công.');
+        return back()->with('success', 'Đăng xuất thành công.');
     }
 
     // Hiển thị form đặt lại mật khẩu

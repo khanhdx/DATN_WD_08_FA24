@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(StatusOrder::class)->constrained();
             $table->foreignIdFor(Shipper::class)->constrained();
             $table->foreignIdFor(Voucher::class)->constrained();
             $table->dateTime('date');

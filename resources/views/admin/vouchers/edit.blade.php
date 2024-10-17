@@ -32,7 +32,7 @@
         }
         .nav-pills .nav-link.active{
             color: #555 !important;
-            background-color: #aaaaaa;
+            background-color: #cccccc;
             border-radius: 0px !important;
         }
         .flex-column {
@@ -64,7 +64,9 @@
             </div>
             <div>
                 <div class="card-body">
-                    <div class="">
+                    <form action="{{ route('admin.voucher.update',$voucher->id) }}" method="post">
+                        @csrf
+                        @method('PUT')
                         <div class="row">
                             <div class="col-9">
                                 <div class="card">
@@ -88,7 +90,7 @@
                                         <label class="m-0 p-0" for="description">Mô tả</label>
                                     </div>
                                     <div class="card-body" style="padding: 10px">
-                                        <textarea class="form-control" name="" id="description" cols="30" rows="5">{{$voucher->description}}</textarea>
+                                        <textarea class="form-control" name="description" id="description" cols="30" rows="5">{{$voucher->description}}</textarea>
                                     </div>
                                 </div>
                                 <div class="card">
@@ -134,13 +136,13 @@
                                             <div class="tab-pane container fade p-0" id="menu1">
                                                 <div>
                                                     <div class="row p-0 alycia mb-3">
-                                                        <label class="p-0 col-3" for="quanlity">Mức giảm:</label>
-                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->decreased_value}}" name="quanlity" id="quanlity">
+                                                        <label class="p-0 col-3" for="decreased_value">Mức giảm:</label>
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->decreased_value}}" name="decreased_value" id="decreased_value">
                                                         <input class="form-control form-control-sm col-1 text-center" value="{{$voucher->value == 'Phần trăm'?'%':'VNĐ'}}" type="text" disabled>
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
-                                                        <label class="p-0 col-3" for="quanlity">Giảm tối đa:</label>
-                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->max_value}}" name="quanlity" id="quanlity">
+                                                        <label class="p-0 col-3" for="max_value">Giảm tối đa:</label>
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->max_value}}" name="max_value" id="max_value">
                                                         <input class="form-control form-control-sm col-1 text-center" value="VNĐ" type="text" disabled>
                                                     </div>
                                                 </div>
@@ -152,7 +154,7 @@
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="quanlity">Đơn hàng tối thiểu:</label>
-                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->max_value}}" name="quanlity" id="quanlity">
+                                                        <input type="number" class="form-control form-control-sm col" value="{{$voucher->condition}}" name="condition" id="quanlity">
                                                         <input class="form-control form-control-sm col-1 text-center" value="VNĐ" type="text" disabled>
                                                     </div>
                                                 </div>
@@ -168,14 +170,15 @@
                                     </div>
                                     <div class="card-body" style="padding: 8px 20px 20px">
                                         <div class="mb-3" style="text-align: end;">
-                                            <button class="btn btn-outline-primary">Thêm mới</button>
+                                            <a href="{{ route('admin.voucher.create') }}" class="btn btn-outline-primary">Thêm mới</a>
                                         </div>
                                         <div class=""><p style="font-size: 14px">
                                             <span class="label">Trạng thái</span>: <span class="text-success"><strong>{{$voucher->status}}</strong></span>
-                                            <a class="link" style="color:#b02a37 !important;text-decoration: underline;" href="#">Chỉnh sửa</a>
+                                            <input type="hidden" name="status" value="{{$voucher->status}}">
                                         </p></div>
                                         <div class=""><p style="font-size: 14px">
                                             <span class="label">Hiển thị</span>: <span class="text-success"><strong>{{$voucher->type_code}}</strong></span>
+                                            <input type="hidden" name="type_code" value="{{$voucher->type_code}}">
                                         </p></div>
                                         <div class=""><p style="font-size: 14px">
                                             <span class="label">Ngày nhập</span>: <span class="text-dark">{{$voucher->created_at}}</span>
@@ -198,7 +201,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
