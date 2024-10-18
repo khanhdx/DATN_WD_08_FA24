@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    const PATH_VIEW = 'client.';
     public function index()
     {
         $newProduct = Product::with(['category', 'variants.size', 'variants.color'])
@@ -24,50 +25,13 @@ class HomeController extends Controller
             ->latest('id')
             ->paginate(2);
 
-        return view('client.' . __FUNCTION__, compact(
+        return view(self::PATH_VIEW . __FUNCTION__, compact(
             'newProduct',
             'topSeller',
-            'latest_posts'
+            'latest_posts',
         ));
     }
-
-    public function product_detail(Product $product)
-    {
-        $product->load(['category']);
-
-        $related_products = Product::with(['category'])->latest('id')->get();
-
-        return view('client.' . __FUNCTION__, compact('product', 'related_products'));
+    public function contact() {
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
-
-    public function posts()
-    {
-        $posts = Post::paginate(6);
-
-        return view('client.posts.' . __FUNCTION__, compact('posts'));
-    }
-
-    public function post_show($id)
-    {
-        $post_show = Post::findOrFail($id);;
-
-        // Lấy 5 bài viết gần đây nhất
-        $recentPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
-
-        // Lấy 5 bài viết được xem nhiều nhất
-        $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
-
-        return view('client.posts.post_show', compact('post_show', 'recentPosts', 'mostViewedPosts'));
-    }
-    // public function post_make_show(Post $post)
-    // {
-    //     // Lấy 5 bài viết gần đây nhất
-    //     $recentPosts = Post::orderBy('created_at', 'desc')->take(5)->get();
-
-    //     // Lấy 5 bài viết được xem nhiều nhất
-    //     $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
-
-    //     return view('client.posts.post_show', compact('post', 'recentPosts', 'mostViewedPosts'));
-    // }
-
 }

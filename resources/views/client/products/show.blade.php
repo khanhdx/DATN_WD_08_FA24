@@ -225,7 +225,7 @@
                                                         <span><i class="fa fa-shopping-cart"></i></span>
                                                     </a>
                                                 </span>
-                                                <a href="{{ route('client.product_detail', $item->id) }}">
+                                                <a href="{{ route('client.product.show', $item->id) }}">
                                                     <img alt="" class="img-responsive"
                                                         src="{{ $item->image }}">
                                                 </a>

@@ -9,12 +9,15 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\PostController;
 
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\ProductController   as ClientProductController;
+use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProfileController;
+
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
 
-Route::prefix('admins')
+    Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
@@ -42,7 +45,7 @@ Route::prefix('admins')
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
             Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
-            
+
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('index');
@@ -63,7 +66,7 @@ Route::prefix('admins')
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
 
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
-                    
+
                     // Route cho colors
                     Route::prefix('colors')->as('colors.')->group(function () {
                         Route::get('/', [ColorController::class, 'index'])->name('index');
@@ -83,32 +86,47 @@ Route::prefix('admins')
             });
 
             // Route quản lý orders
-            Route::prefix('orders')->as('orders.')->group(function (){
+            Route::prefix('orders')->as('orders.')->group(function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
 
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
-
             });
         });
 });
 
 //Route cho máy khách (client)
 Route::name('client.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('product_detail');
-    Route::get('/posts', [HomeController::class, 'posts'])->name('posts');
-    Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('post_show');
+    Route::get('/',         [HomeController::class, 'index'])->name('home');
+    Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
+
+    // Route cho sản phẩm (product)
+    Route::prefix('products')
+        ->controller(ClientProductController::class)
+        ->name('product.')
+        ->group(function () {
+            Route::get('/',          'index')->name('index');
+            Route::get('/{product}', 'show')->name('show');
+        });
+
+    // Route cho bài viết (post)
+    Route::prefix('posts')
+        ->controller(ClientPostController::class)
+        ->name('post.')
+        ->group(function () {
+            Route::get('/',       'index')->name('index');
+            Route::get('/{post}', 'show')->name('show');
+        });
 
     // Route cho giỏ hàng (cart)
-    Route::prefix('cart')
+    Route::prefix('carts')
         ->middleware(['convert.cart'])
         ->controller(CartController::class)
         ->name('cart.')
         ->group(function () {
-            Route::get('/',     'index')->name('index');
-            Route::post('/add', 'addToCart')->name('add');
-            Route::put('/{id}', 'updateCart')->name('update');
-            Route::delete('/{id}', 'destroy')->name('delete');
+            Route::get('/',         'index')->name('index');
+            Route::post('/add',     'addToCart')->name('add');
+            Route::put('/{id}',     'updateCart')->name('update');
+            Route::delete('/{id}',  'destroy')->name('delete');
         });
 });
 

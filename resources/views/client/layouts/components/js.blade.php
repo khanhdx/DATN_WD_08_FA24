@@ -70,3 +70,23 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
+        $('.dropdownLink').on('click', function(e) {
+            if ($(window).width() > 992) {
+                window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
+            }
+        });
+
+        // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
+        $('.dropdown').on('mouseenter', function() {
+            if ($(window).width() > 992) {
+                $(this).addClass('open');
+            }
+        }).on('mouseleave', function() {
+            $(this).removeClass('open');
+        });
+    });
+</script>

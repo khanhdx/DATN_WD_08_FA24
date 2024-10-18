@@ -76,12 +76,14 @@
                                         </td>
                                         <td class="product-quantity">
                                             <div class="quantity">
-                                                <form action="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}" method="post">
+                                                <form
+                                                    action="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}"
+                                                    method="post">
                                                     @csrf
                                                     @method('PUT')
 
                                                     <input type="hidden" name="product_variant_id"
-                                                        value="{{ Auth::check() ? $cart->product_variant_id : $key}}">
+                                                        value="{{ Auth::check() ? $cart->product_variant_id : $key }}">
                                                     <input type="button" class="minus" value="-" id="decrease">
                                                     <input type="text" class="input-text qty text" title="Qty"
                                                         id="quantity"
@@ -94,11 +96,12 @@
                                         </td>
                                         <td class="product-subtotal">
                                             <span
-                                                class="amount">${{ Auth::check() ? $cart->price : $cart['total'] }}</span>
+                                                class="amount">${{ Auth::check() ? $cart->price : $total_price }}</span>
                                         </td>
                                         <td class="product-remove">
-                                            <form action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}" method="post"
-                                                id="form{{ $loop->iteration }}">
+                                            <form
+                                                action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}"
+                                                method="post" id="form{{ $loop->iteration }}">
                                                 @csrf
                                                 @method('DELETE')
 
@@ -178,7 +181,7 @@
                                         Cart Subtotal
                                     </th>
                                     <td>
-                                        <span class="amount">$431</span>
+                                        <span class="amount">${{ $total_price }}</span>
                                     </td>
                                 </tr>
                                 <tr class="shipping">
@@ -195,17 +198,17 @@
                                         Total
                                     </th>
                                     <td>
-                                        <span class="amount">$431</span>
+                                        <span class="amount">${{ $total_price }}</span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <p><input type="submit" value="Update Shopping Bag" class="btn btn-default btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
-                        <p><input type="submit" value="Proceed To checkout" class="btn btn-primary btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
-                        <p><input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
+                        {{-- <a href="{{ route('') }}"><input type="submit" value="Update Shopping Bag" class="btn btn-default btn-block btn-sm"
+                                data-loading-text="Loading..."></a> --}}
+                        <a href="{{ route('client.home') }}"><input type="submit" value="Proceed To checkout"
+                                class="btn btn-primary btn-block btn-sm" data-loading-text="Loading..."></a>
+                        <a href="{{ route('client.product.index') }}"><input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
+                                data-loading-text="Loading..."></a>
                     </div>
                 </div>
             </div>
