@@ -23,14 +23,17 @@
 
         <div class="container">
             <div class="row">
+                @if (session()->has('success') && session()->get('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+                @endif
                 <div class="col-sm-6">
                     <div class="product-preview">
                         <div class="flexslider">
                             <ul class="slides">
-                                <li
-                                    data-thumb="{{ $product->image }}">
-                                    <img src="{{ $product->image }}"
-                                        alt="">
+                                <li data-thumb="{{ $product->image }}">
+                                    <img src="{{ $product->image }}" alt="">
                                 </li>
                                 <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
                                     <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
@@ -62,41 +65,48 @@
                         </div>
 
                         <p class="price">
-                            <span class="amount">{{ $product->price_regular }}</span>
+                            <span class="amount">${{ $product->price_regular }}</span>
                         </p>
 
-                        <ul class="list-inline list-select clearfix">
-                            <li>
-                                <div class="list-sort">
-                                    <select class="formDropdown">
-                                        <option>Select Size</option>
-                                        <option>XS</option>
-                                        <option>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
-                                        <option>XXL</option>
-                                    </select>
-                                </div>
-                            </li>
-                            <li class="color"><a href="#" class="color1"></a></li>
-                            <li class="color"><a href="#" class="color2"></a></li>
-                            <li class="color"><a href="#" class="color3"></a></li>
-                            <li class="color"><a href="#" class="color4"></a></li>
-                        </ul>
+                        <form method="post" class="cart" action="{{ route('client.cart.add') }}">
+                            @csrf
 
-                        <form method="post" class="cart">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <ul class="list-inline list-select clearfix">
+                                <li>
+                                    <select class="formDropdown" name="size_id">
+                                        <option>Select Size</option>
+                                        @foreach ($product->variants->unique('size') as $item)
+                                            <option value="{{ $item->size->id }}">{{ $item->size->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </li>
+                                <li>
+                                    <select class="formDropdown" name="color_id">
+                                        <option>Select Color</option>
+                                        @foreach ($product->variants->unique('color') as $item)
+                                            <option value="{{ $item->color->id }}"
+                                                style="background-color:{{ $item->color->code_color }}">
+                                                {{ $item->color->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </li>
+                            </ul>
+
                             <div class="quantity pull-left">
-                                <input type="button" class="minus" value="-">
+                                <input type="button" class="minus" value="-" id="decrease">
                                 <input type="text" class="input-text qty" title="Qty" value="1" name="quantity"
-                                    min="1" step="1">
-                                <input type="button" class="plus" value="+">
+                                    id="quantity" min="1" step="1">
+                                <input type="button" class="plus" value="+" id="increase">
                             </div>
                             <a href="#" class="btn btn-grey">
                                 <span><i class="fa fa-heart"></i></span>
                             </a>
-                            <button href="#" class="btn btn-primary btn-icon"><i class="fa fa-shopping-cart"></i> Add
-                                to cart</button>
+                            <button type="submit" class="btn btn-primary btn-icon">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                            </button>
+
                         </form>
 
                         <ul class="list-unstyled product-meta">
@@ -222,8 +232,10 @@
                                             </div>
 
                                             <div class="product-thumb-info-content">
-                                                <span class="price pull-right">{{ $item->price_regular }} USD</span>
-                                                <h4><a href="shop-product-detail2.html">{{ $item->name }}</a></h4>
+                                                <span class="price pull-right">{{ $item->price_regular }}
+                                                    USD</span>
+                                                <h4><a href="shop-product-detail2.html">{{ $item->name }}</a>
+                                                </h4>
                                                 <span class="item-cat"><small><a
                                                             href="#">{{ $item->category->name }}</a></small></span>
                                             </div>
