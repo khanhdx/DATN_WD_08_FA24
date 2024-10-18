@@ -1,6 +1,5 @@
 delete colors , sizes => ảnh hưởng đến các sản phẩm biến thể, 
 
-Thêm biên thể ngay trong khi thêm sản phẩm+
 
 16/10 Sửa destroy bảng products thì bảng product_variants cũng bị destroy
 
