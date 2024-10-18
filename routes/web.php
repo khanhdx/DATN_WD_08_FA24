@@ -27,6 +27,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test', function (){
+   return view('admin.products.abcd'); 
+});
+
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
@@ -67,7 +71,6 @@ Route::prefix('admins')
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
                     // Route cho colors
                     Route::prefix('colors')->as('colors.')->group(function () {
-                        Route::get('/', [ColorController::class, 'index'])->name('index');
                         Route::post('/store', [ColorController::class, 'store'])->name('store');
                         Route::put('{id}/update', [ColorController::class, 'update'])->name('update');
                         Route::delete('{id}/delete', [ColorController::class, 'delete'])->name('delete');
@@ -75,7 +78,6 @@ Route::prefix('admins')
 
                     // Route cho sizes
                     Route::prefix('sizes')->as('sizes.')->group(function () {
-                        Route::get('/', [SizeController::class, 'index'])->name('index');
                         Route::post('/store', [SizeController::class, 'store'])->name('store');
                         Route::put('{id}/update', [SizeController::class, 'update'])->name('update');
                         Route::delete('{id}/delete', [SizeController::class, 'delete'])->name('delete');

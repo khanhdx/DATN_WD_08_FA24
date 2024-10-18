@@ -3,6 +3,7 @@
 namespace App\Services\Product;
 
 use App\Repositories\ProductRepository;
+use App\Repositories\VariantRepositopy;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
@@ -12,9 +13,11 @@ class ProductService implements IProductService
 {
     protected $productRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    protected $variantRepository;
+    public function __construct(ProductRepository $productRepository, VariantRepositopy $variantRepository)
     {
         $this->productRepository = $productRepository;
+        $this->variantRepository = $variantRepository;
     }
 
     public function getAll()
@@ -34,8 +37,11 @@ class ProductService implements IProductService
     public function insert($data)
     {
 
-        try {
+        // try {
             $productInput = $data;
+            $variants = $data['variants'];
+
+
             // Upload Image
             if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
                 $productInput['image'] = $productInput['image']->store('uploads/products', 'public');
@@ -45,12 +51,22 @@ class ProductService implements IProductService
             // dd($productInput);
 
             //Insert lên DB
-            $this->productRepository->insert($productInput);
+            $product = $this->productRepository->insert($productInput);
 
+            if (isset($variants) && !empty($variants)) {
+                $product_id = $product->id;
+
+                foreach ($variants as $variant) {
+                    $variant['product_id'] = $product_id;
+
+                    $this->variantRepository->insert($variant);
+                }
+
+            }
             return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('errors', $th->getMessage());
-        }
+        // } catch (\Throwable $th) {
+        //     return redirect()->back()->with('failed', $th->getMessage());
+        // }
     }
 
     public function update($id, $data)

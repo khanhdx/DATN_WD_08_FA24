@@ -33,7 +33,7 @@ class StatusOrder extends Model
         public function getStatusLabelAttribute()
         {
             switch ($this->name_status) {
-                case 'peding':
+                case 'pending':
                     return 'Chờ xử lý';
                 case 'processing':
                     return 'Đang xử lý';
