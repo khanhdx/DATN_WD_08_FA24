@@ -1,6 +1,5 @@
-Chưa old value ảnh và danh mục
+delete colors , sizes => ảnh hưởng đến các sản phẩm biến thể, 
 
-Chưa validate edit products, validate edit + insert + delete colors , sizes, 
 
-9/10 Validate color và size = js
+16/10 Sửa destroy bảng products thì bảng product_variants cũng bị destroy
 
