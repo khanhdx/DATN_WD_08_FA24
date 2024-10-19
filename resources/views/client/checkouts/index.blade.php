@@ -18,8 +18,8 @@
         <div class="container">
             <div class="row featured-boxes">
                 <div class="col-md-8">
-                    <form action="{{ route('checkout.process') }}" method="POST"> <!-- Thêm action và method cho form -->
-                        @csrf <!-- Bảo vệ CSRF -->
+                    <form action="{{ route('checkout.process') }}" method="POST">
+                        @csrf
                         <div class="featured-box featured-box-secondary featured-box-cart">
                             <div class="box-content">
                                 <h4>Địa Chỉ Thanh Toán</h4>
@@ -76,6 +76,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <h4>Phương Thức Thanh Toán</h4>
                         <div class="panel-group panel-group2" id="accordion">
                             <div class="panel panel-default">
@@ -112,10 +113,14 @@
                                 </div>
                             </div>
                         </div>
+
                         <p>
                             <button type="submit" class="btn btn-primary btn-block btn-sm">Đặt Hàng</button>
                         </p>
-                    </form> <!-- Kết thúc form -->
+
+                        <!-- Trường ẩn để lưu tổng giá đã giảm -->
+                        <input type="hidden" name="total_after_discount" id="totalAfterDiscount">
+                    </form>
                 </div>
 
                 <div class="col-md-4">
@@ -153,11 +158,18 @@
                                         <th>Phí Vận Chuyển</th>
                                         <td>Miễn Phí Vận Chuyển</td>
                                     </tr>
+                                    <tr class="discount">
+                                        <th>Giảm Giá</th>
+                                        <td class="product-price">
+                                            <span class="amount"
+                                                id="discountAmount">{{ number_format($discount, 0, ',', '.') }} ₫</span>
+                                        </td>
+                                    </tr>
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
                                             <strong><span class="amount"
-                                                    id="totalAmount">{{ number_format($totalPrice, 0, ',', '.') }}
+                                                    id="totalAmount">{{ number_format($totalPriceAfterDiscount, 0, ',', '.') }}
                                                     ₫</span></strong>
                                         </td>
                                     </tr>
@@ -165,17 +177,13 @@
                             </table>
 
                             <!-- Phần nhập voucher -->
-                            <div class="form-group">
-                                <label for="voucherCode">Mã Giảm Giá</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="voucherCode" name="voucher_code"
-                                        placeholder="Nhập mã giảm giá">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" id="applyVoucher">Áp Dụng</button>
-                                    </span>
-                                </div>
-                                <small class="form-text text-muted" id="voucherMessage"></small>
-                            </div>
+                            <h4>Sử Dụng Mã Giảm Giá</h4>
+                            <form id="voucherForm">
+                                <input type="text" name="voucher_code" class="form-control"
+                                    placeholder="Nhập mã giảm giá" required>
+                                <button type="submit" class="btn btn-secondary">Áp Dụng</button>
+                            </form>
+                            <div id="voucherMessage" class="mt-2"></div>
                         </div>
                     </div>
                 </div>
@@ -186,10 +194,9 @@
     <script>
         document.getElementById('applyVoucher').addEventListener('click', function() {
             const voucherCode = document.getElementById('voucherCode').value;
-            const subtotal = parseFloat(document.getElementById('subtotalAmount').innerText.replace(/[,. ₫]/g, ''));
+            const subtotal = Number(document.getElementById('subtotalAmount').innerText.replace(/[,. ₫]/g, ''));
 
             if (voucherCode) {
-                // Gửi yêu cầu AJAX đến backend để kiểm tra mã giảm giá
                 fetch(`{{ route('voucher.apply') }}`, {
                         method: 'POST',
                         headers: {
@@ -200,28 +207,32 @@
                             voucher_code: voucherCode
                         })
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
-                            const discount = data.discount; // Giảm giá trả về từ server
-                            const subtotal = parseFloat(document.getElementById('subtotalAmount').innerText
-                                .replace(/[,. ₫]/g, ''));
-                            const total = subtotal - discount; // Tính tổng sau khi áp dụng mã giảm giá
-                            document.getElementById('totalAmount').innerText = total.toLocaleString() +
-                            ' ₫'; // Cập nhật tổng
-                            document.getElementById('voucherMessage').innerText =
-                            'Mã giảm giá đã được áp dụng!';
+                            // Tải lại trang để cập nhật lại tổng giá
+                            location.reload(); // Tải lại trang
                         } else {
-                            document.getElementById('voucherMessage').innerText = data
-                            .message; // Hiển thị thông báo lỗi
+                            document.getElementById('voucherMessage').innerText = data.message;
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
+                        console.error('Có lỗi xảy ra:', error);
                     });
             } else {
                 document.getElementById('voucherMessage').innerText = 'Vui lòng nhập mã giảm giá.';
             }
+        });
+
+        // Xử lý sự kiện hủy mã giảm giá
+        document.getElementById('cancelVoucher').addEventListener('click', function() {
+            // Tải lại trang để cập nhật lại tổng giá
+            location.reload(); // Tải lại trang
         });
     </script>
 @endsection
