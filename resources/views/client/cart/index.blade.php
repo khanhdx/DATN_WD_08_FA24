@@ -56,23 +56,23 @@
                                         <td class="product-thumbnail">
                                             <a href="shop-product-sidebar.html">
                                                 <img alt="" width="80"
-                                                    src="{{ Auth::check() ? $cart->product_variant->product->image : $cart['image'] }}">
+                                                    src="{{ Auth::check() ? $cart->productVariant->product->image : $cart['image'] }}">
                                             </a>
                                         </td>
                                         <td class="product-name">
                                             <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->product_variant->product->name : $cart['name'] }}
+                                                {{ Auth::check() ? $cart->productVariant->product->name : $cart['name'] }}
                                             </a>
                                         </td>
                                         <td class="product-name">
                                             <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->product_variant->color->name : $cart['color'] }},
-                                                {{ Auth::check() ? $cart->product_variant->size->name : $cart['size'] }}
+                                                {{ Auth::check() ? $cart->productVariant->color->name : $cart['color'] }},
+                                                {{ Auth::check() ? $cart->productVariant->size->name : $cart['size'] }}
                                             </a>
                                         </td>
                                         <td class="product-price">
                                             <span
-                                                class="amount">${{ Auth::check() ? $cart->product_variant->price : $cart['price'] }}</span>
+                                                class="amount">${{ Auth::check() ? $cart->productVariant->price : $cart['price'] }}</span>
                                         </td>
                                         <td class="product-quantity">
                                             <div class="quantity">
@@ -80,8 +80,8 @@
                                                     @csrf
                                                     @method('PUT')
 
-                                                    <input type="hidden" name="product_variant_id"
-                                                        value="{{ Auth::check() ? $cart->product_variant_id : $key}}">
+                                                    <input type="hidden" name="productVariant_id"
+                                                        value="{{ Auth::check() ? $cart->productVariant_id : $key}}">
                                                     <input type="button" class="minus" value="-" id="decrease">
                                                     <input type="text" class="input-text qty text" title="Qty"
                                                         id="quantity"
@@ -202,8 +202,11 @@
                         </table>
                         <p><input type="submit" value="Update Shopping Bag" class="btn btn-default btn-block btn-sm"
                                 data-loading-text="Loading..."></p>
-                        <p><input type="submit" value="Proceed To checkout" class="btn btn-primary btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
+                                <p>
+                                    <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
+                                        Proceed To Checkout
+                                    </a>
+                                </p>                                
                         <p><input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
                                 data-loading-text="Loading..."></p>
                     </div>
