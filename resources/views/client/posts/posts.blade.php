@@ -28,7 +28,7 @@
                                             </span>
                                             <a href="{{ route('client.post_show', $post->id) }}">
                                                 @if ($post->image)
-                                                    <img src="{{ $post->image }}"
+                                                    <img src="{{ asset('storage/' . $post->image) }}"
                                                         alt="Image for {{ $post->title }}"
                                                         style="width: 200px; height: auto;">
                                                 @else

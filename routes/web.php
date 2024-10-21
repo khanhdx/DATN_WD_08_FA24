@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\Admin\AttributeController;
-use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\CategorysController;
-use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\DashbroadController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\SizeController;
-
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Client\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Admin\BannerController;
+
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CategorysController;
+use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\ProductVariantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,8 +110,9 @@ Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'
 Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
 Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
 
-// Route cho xác thực
-Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
+// Route để lưu bình luận
+// Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->middleware('auth')->name('comments.store');
+
 Route::post('register', [AuthController::class, 'register']);
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -40,11 +41,11 @@ class HomeController extends Controller
     {
         $post_show = Post::findOrFail($id);;
 
-        // Lấy 5 bài viết gần đây nhất
+        // Lấy 3 bài viết gần đây nhất
         $recentPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
 
-        // Lấy 5 bài viết được xem nhiều nhất
-        $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
+        // Lấy 3 bài viết được xem nhiều nhất
+        $mostViewedPosts = Post::orderBy('views', 'desc')->take(3)->get();
 
         return view('client.posts.post_show', compact('post_show', 'recentPosts', 'mostViewedPosts'));
     }
