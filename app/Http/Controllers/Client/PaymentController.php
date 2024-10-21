@@ -27,7 +27,7 @@ class PaymentController extends Controller
         }
 
         // Lấy dữ liệu từ giỏ hàng
-        $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
+        $cartItems = CartItem::where('cart_id', $cartId)->with('product_variant')->get();
 
         // Kiểm tra xem giỏ hàng có chứa sản phẩm không
         if ($cartItems->isEmpty()) {
@@ -40,32 +40,27 @@ class PaymentController extends Controller
 
     public function checkout(Request $request)
     {
-        // Validate các trường cần thiết
         $request->validate([
             'address' => 'required|string|max:255',
             'payment_method' => 'required|string',
             'voucher_id' => 'nullable|exists:vouchers,id',
         ]);
 
-        // Kiểm tra và lấy cart_id
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
-        // Kiểm tra xem giỏ hàng có tồn tại không
         if (!$cartId) {
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
-        // Lấy tất cả cart_items cho cart
-        $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
+        $cartItems = CartItem::with('product_variant')->where('cart_id', $cartId)->get();
 
-        // Kiểm tra xem giỏ hàng có chứa sản phẩm không
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
         }
 
-        // Tính tổng giá trị
+        // Tính tổng giá trị trong phương thức checkout
         $totalPrice = $cartItems->sum(function ($item) {
-            return $item->quantity * $item->productVariant->price;
+            return $item->totalPrice();
         });
 
         // Kiểm tra mã giảm giá và áp dụng nếu có
@@ -73,50 +68,43 @@ class PaymentController extends Controller
         if ($request->filled('voucher_id')) {
             $voucher = Voucher::find($request->voucher_id);
             if ($voucher && $voucher->status === 'Đang diễn ra' && $voucher->date_start <= now() && $voucher->date_end >= now()) {
-                // Áp dụng mã giảm giá
                 $discount = $voucher->decreased_value;
-                // Giảm tổng giá trị đơn hàng
                 $totalPrice -= $discount;
             }
         }
 
-        // Đảm bảo tổng giá trị không âm
         $totalPrice = max(0, $totalPrice);
 
-        // Lưu đơn hàng vào database
         try {
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'total_price' => $totalPrice,
                 'voucher_id' => $request->voucher_id,
-                'status_order_id' => 1, // Trạng thái mặc định
+                'status_order_id' => 1,
                 'date' => now(),
                 'address' => $request->address,
             ]);
 
-            // Lưu các chi tiết đơn hàng
             foreach ($cartItems as $item) {
                 OrderDetail::create([
                     'order_id' => $order->id,
-                    'product_id' => $item->productVariant->product_id,
-                    'product_variant_id' => $item->productVariant->id,
-                    'name_product' => $item->productVariant->product->name,
-                    'color' => $item->productVariant->color->name ?? null,
-                    'size' => $item->productVariant->size->name ?? null,
-                    'unit_price' => $item->productVariant->price,
+                    'product_id' => $item->product_variant->product_id,
+                    'product_variant_id' => $item->product_variant->id,
+                    'name_product' => $item->product_variant->product->name,
+                    'color' => $item->product_variant->color->name ?? null,
+                    'size' => $item->product_variant->size->name ?? null,
+                    'unit_price' => $item->product_variant->price,
                     'quantity' => $item->quantity,
-                    'total_price' => $item->quantity * $item->productVariant->price,
+                    'total_price' => $item->totalPrice(), // Sử dụng phương thức totalPrice
                 ]);
             }
-
-            // Tạo bản ghi trạng thái đơn hàng
+            // Lưu trạng thái đơn hàng
             StatusOrderDetail::create([
-                'status_order_id' => 1, // ID trạng thái "processing"
+                'status_order_id' => 1, // Trạng thái là "đang xử lý"
                 'order_id' => $order->id,
-                'name' => 'Đơn hàng mới',
+                'name' => '',
             ]);
 
-            // Lưu thông tin thanh toán
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => auth()->id(),
@@ -126,11 +114,10 @@ class PaymentController extends Controller
                 'status' => 0,
             ]);
         } catch (\Exception $e) {
-            Log::error('Error while creating order: '.$e->getMessage());
-            return redirect()->route('payment.form')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
+            Log::error('Error while creating order: ' . $e->getMessage());
+            return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
-        // Xóa giỏ hàng sau khi thanh toán
         CartItem::where('cart_id', $cartId)->delete();
 
         return redirect()->route('payment.success')->with('success', 'Đặt hàng thành công!');

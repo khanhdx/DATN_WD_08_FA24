@@ -56,23 +56,23 @@
                                         <td class="product-thumbnail">
                                             <a href="shop-product-sidebar.html">
                                                 <img alt="" width="80"
-                                                    src="{{ Auth::check() ? $cart->productVariant->product->image : $cart['image'] }}">
+                                                    src="{{ Auth::check() ? $cart->product_variant->product->image : $cart['image'] }}">
                                             </a>
                                         </td>
                                         <td class="product-name">
                                             <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->productVariant->product->name : $cart['name'] }}
+                                                {{ Auth::check() ? $cart->product_variant->product->name : $cart['name'] }}
                                             </a>
                                         </td>
                                         <td class="product-name">
                                             <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->productVariant->color->name : $cart['color'] }},
-                                                {{ Auth::check() ? $cart->productVariant->size->name : $cart['size'] }}
+                                                {{ Auth::check() ? $cart->product_variant->color->name : $cart['color'] }},
+                                                {{ Auth::check() ? $cart->product_variant->size->name : $cart['size'] }}
                                             </a>
                                         </td>
                                         <td class="product-price">
                                             <span
-                                                class="amount">${{ Auth::check() ? $cart->productVariant->price : $cart['price'] }}</span>
+                                                class="amount">${{ Auth::check() ? $cart->product_variant->price : $cart['price'] }}</span>
                                         </td>
                                         <td class="product-quantity">
                                             <div class="quantity">

@@ -5,6 +5,13 @@
 @section('content')
     <div role="main" class="main">
 
+        <!-- Thông báo lỗi -->
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        
         <!-- Begin page top -->
         <section class="page-top">
             <div class="container">
@@ -133,25 +140,22 @@
                                     @foreach ($cartItems as $item)
                                         <tr class="cart_item">
                                             <th>
-                                                @if ($item->product)
-                                                    {{ $item->product->name }} ({{ $item->quantity }})
+                                                @if ($item->product_variant && $item->product_variant->product)
+                                                    {{ $item->product_variant->product->name }} ({{ $item->quantity }})
                                                 @else
                                                     Sản phẩm không tìm thấy ({{ $item->quantity }})
                                                 @endif
                                             </th>
                                             <td class="product-price">
-                                                <span class="amount">{{ number_format($item->totalPrice(), 0, ',', '.') }}
-                                                    ₫</span>
+                                                <span class="amount">{{ number_format($item->totalPrice(), 0, ',', '.') }} ₫</span>
                                             </td>
                                         </tr>
                                         @php $totalPrice += $item->totalPrice(); @endphp
                                     @endforeach
-
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
                                         <td class="product-price">
-                                            <span class="amount"
-                                                id="subtotalAmount">{{ number_format($totalPrice, 0, ',', '.') }} ₫</span>
+                                            <span class="amount" id="subtotalAmount">{{ number_format($totalPrice, 0, ',', '.') }} ₫</span>
                                         </td>
                                     </tr>
                                     <tr class="shipping">
@@ -161,9 +165,7 @@
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
-                                            <strong><span class="amount"
-                                                    id="totalAmount">{{ number_format($totalPrice, 0, ',', '.') }}
-                                                    ₫</span></strong>
+                                            <strong><span class="amount" id="totalAmount">{{ number_format($totalPrice, 0, ',', '.') }} ₫</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -174,8 +176,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        
-    </script>
+    <script></script>
 @endsection

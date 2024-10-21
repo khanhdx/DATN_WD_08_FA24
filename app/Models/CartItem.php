@@ -13,7 +13,7 @@ class CartItem extends Model
     protected $fillable = ['cart_id', 'product_variant_id', 'quantity','price'];
 
     // Định nghĩa quan hệ với ProductVariant
-    public function productVariant()
+    public function product_variant()
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
@@ -33,6 +33,6 @@ class CartItem extends Model
     // Hàm để tính tổng giá trị của mục giỏ hàng
     public function totalPrice()
     {
-        return $this->quantity * $this->productVariant->price; // Sử dụng giá từ ProductVariant
+        return $this->quantity * ($this->product_variant->price ?? 0);
     }
 }

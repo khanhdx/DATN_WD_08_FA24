@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             ProductVariantSeeder::class,
             VoucherSeeder::class,
+            StatusOrderSeeder::class,
         ]);
         
         for ($i=0; $i < 10; $i++) {
