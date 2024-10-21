@@ -10,7 +10,7 @@ class OrderRepository
     {
         $orders = Order::with(['statuses' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->select('id', 'user_id', 'total_price', 'created_at')->get();
+        }])->select('id', 'user_id', 'total_price', 'date')->get();
 
         return $orders;
     }

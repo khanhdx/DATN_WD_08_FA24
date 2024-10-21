@@ -53,7 +53,7 @@ class VoucherController extends Controller
             }
             $voucher_new = Voucher::query()->create($data);
             if($voucher_new) {
-                return redirect()->route('vouchers.index')->with('success', 'Thêm mới thành công');
+                return redirect()->route('admin.vouchers.index')->with('success', 'Thêm mới thành công');
             }
             else {
                 return dd('Theem thaats baij');
@@ -103,4 +103,24 @@ class VoucherController extends Controller
             return redirect()->route('admin.voucher.index')->with('success', 'Thêm thành công');
         }
     }
+    public function applyVoucher(Request $request)
+{
+    $request->validate([
+        'voucher_code' => 'required|string|max:255',
+    ]);
+
+    $voucher = Voucher::where('voucher_code', $request->voucher_code)->first(); // Sửa `code` thành `voucher_code`
+
+    if (!$voucher) {
+        return response()->json(['success' => false, 'message' => 'Mã giảm giá không hợp lệ.']);
+    }
+
+    // Kiểm tra thời hạn và trạng thái của voucher
+    if ($voucher->date_start <= now() && $voucher->date_end >= now() && $voucher->status === 'Đang diễn ra') {
+        $discount = $voucher->value; // Hoặc tính theo phần trăm
+        return response()->json(['success' => true, 'discount' => $discount]);
+    }
+
+    return response()->json(['success' => false, 'message' => 'Mã giảm giá đã hết hạn hoặc không hợp lệ.']);
+}
 }

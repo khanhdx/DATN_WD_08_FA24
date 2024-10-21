@@ -14,6 +14,8 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\OrderController as ClientOrderController;
+use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +38,9 @@ Route::get('test', function (){
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
 
-Route::prefix('admins')
+
+    Route::resource('post', PostController::class);
+    Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
@@ -55,6 +59,8 @@ Route::prefix('admins')
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
+
+
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
@@ -85,11 +91,10 @@ Route::prefix('admins')
             });
 
             // Route quản lý orders
-            Route::prefix('orders')->as('orders.')->group(function (){
+            Route::prefix('orders')->as('orders.')->group(function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
-
+                Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
-
             });
         });
 });
@@ -122,7 +127,20 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
         'update',
         'destroy'
     ]);
+    Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
+    Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
+    Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
+    Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
+    // Route hiển thị đơn hàng
+    Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
 });
+
+//Route không cần đăng nhập
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('client.product_detail');
+Route::get('/posts', [HomeController::class, 'posts'])->name('client.posts');
+Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('client.post_show');
 
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
