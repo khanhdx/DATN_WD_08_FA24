@@ -2,20 +2,20 @@
     use App\Models\Cart;
     use App\Models\CartItem;
 
-    $total_price = 0;
+    $total = 0;
 
     if (Auth::check()) {
         $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-        $items = CartItem::with('product_variant')->where('cart_id', $cart->id);
+        $items = CartItem::with('productVariant')->where('cart_id', $cart->id);
 
         $carts = $items->latest('id')->get();
 
-        $total_price = $items->sum('sub_total');
+        $total = $items->sum('sub_total');
     } else {
         $carts = session()->get('cart', []);
 
-        $total_price = array_sum(array_column($carts, 'sub_total'));
+        $total = array_sum(array_column($carts, 'sub_total'));
     }
 @endphp
 
@@ -70,17 +70,17 @@
                                     </form>
                                     <div class="product-thumb-info-image">
                                         <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="{{ Auth::check() ? $cart->product_variant->product->image : $cart['image'] }}"></a>
+                                                src="{{ Auth::check() ? $cart->productVariant->product->image : $cart['image'] }}"></a>
                                     </div>
 
                                     <div class="product-thumb-info-content">
                                         <h4><a
-                                                href="">{{ Auth::check() ? $cart->product_variant->product->name : $cart['name'] }}</a>
+                                                href="">{{ Auth::check() ? $cart->productVariant->product->name : $cart['name'] }}</a>
                                         </h4>
                                         <span class="item-cat"><small><a
                                                     href="#">x{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}</a></small></span>
                                         <span
-                                            class="price">{{ Auth::check() ? $cart->product_variant->price : $cart['price'] }}
+                                            class="price">{{ Auth::check() ? $cart->productVariant->price : $cart['price'] }}
                                             USD</span>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                     <ul class="list-inline cart-subtotals text-right">
                         <li class="cart-subtotal"><strong>Subtotal</strong></li>
                         <li class="price"><span
-                                class="amount"><strong>${{ $total_price }}</strong></span>
+                                class="amount"><strong>${{ $total }}</strong></span>
                         </li>
                     </ul>
                     <div class="cart-buttons text-right">

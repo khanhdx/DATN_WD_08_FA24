@@ -23,7 +23,7 @@ class CartController extends Controller
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-            $items = CartItem::with('product_variant')->where('cart_id', $cart->id);
+            $items = CartItem::with('productVariant')->where('cart_id', $cart->id);
 
             $carts = $items->latest('id')->get();
 
@@ -118,7 +118,11 @@ class CartController extends Controller
             session()->put("cart.$id.sub_total", $sub_total);
         }
 
-        return back()->with('success', 'Cập nhật giỏ hàng thành công');
+        // return back()->with('success', 'Cập nhật giỏ hàng thành công');
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật giỏ hàng thành công'
+        ]);
     }
 
     public function destroy(string $id)

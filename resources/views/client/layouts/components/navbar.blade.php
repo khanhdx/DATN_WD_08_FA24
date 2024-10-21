@@ -16,7 +16,7 @@
             <li class="login">
                 @guest
                     <!-- Hiển thị nếu chưa đăng nhập -->
-                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
                 @endguest
 
                 @auth
@@ -35,7 +35,7 @@
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); 
                                    document.getElementById('logout-form').submit();">
-                                Đăng xuất
+                                Logout
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
@@ -51,7 +51,7 @@
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
-                <li><a href="/">Home</a></li>
+                {{-- <li><a href="/">Home</a></li> --}}
 
                 <li class="dropdown megamenu">
                     <a href="{{ route('client.product.index') }}" class="dropdown-toggle dropdownLink"
