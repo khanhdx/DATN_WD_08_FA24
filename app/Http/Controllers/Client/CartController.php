@@ -18,7 +18,7 @@ class CartController extends Controller
         // session()->forget('cart');
         $carts = [];
 
-        $total_price = 0;
+        $total = 0;
 
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
@@ -27,17 +27,17 @@ class CartController extends Controller
 
             $carts = $items->latest('id')->get();
 
-            $total_price = $items->sum('sub_total');
+            $total = $items->sum('sub_total');
         } else {
             $carts = session()->get('cart', []);
 
-            $total_price = array_sum(array_column($carts, 'sub_total'));
+            $total = array_sum(array_column($carts, 'sub_total'));
         }
         // dd($carts);
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'carts',
-            'total_price'
+            'total'
         ));
     }
 

@@ -77,8 +77,9 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
+                                            <a href="" data-toggle="modal"
+                                                data-target=".quickview-wrapper" class="view-product"
+                                                data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
                                             <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -92,7 +93,9 @@
 
                                     <div class="product-thumb-info-content">
                                         <span class="price pull-right">{{ $product->price_regular }} USD</span>
-                                        <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
+                                        <h4><a
+                                                href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                        </h4>
                                         <span class="item-cat"><small><a
                                                     href="#">{{ $product->category->name }}</a></small></span>
                                     </div>
@@ -128,7 +131,8 @@
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
                                                     <a href="javascript:void(0);" data-toggle="modal"
-                                                        data-target=".quickview-wrapper" class="view-product">
+                                                        data-target=".quickview-wrapper" class="view-product"
+                                                        data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>
                                                     </a>
                                                     <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -142,9 +146,14 @@
                                             </div>
                                             <div class="product-thumb-info-content">
                                                 <span class="price pull-right">{{ $product->price_regular }} USD</span>
-                                                <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
-                                                <span class="item-cat"><small><a
-                                                            href="#">{{ $product->category->name }}</a></small></span>
+                                                <h4><a
+                                                        href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                                </h4>
+                                                <span class="item-cat">
+                                                    <small>
+                                                        <a href="#">{{ $product->category->name }}</a>
+                                                    </small>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -164,7 +173,8 @@
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
                                                     <a href="javascript:void(0);" data-toggle="modal"
-                                                        data-target=".quickview-wrapper" class="view-product">
+                                                        data-target=".quickview-wrapper" class="view-product"
+                                                        data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>
                                                     </a>
                                                     <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -179,7 +189,9 @@
                                             <div class="product-thumb-info-content">
                                                 <span class="price pull-right">{{ $product->price_regular }}
                                                     USD</span>
-                                                <h4><a href="shop-product-detail2.html">{{ $product->name }}</a></h4>
+                                                <h4><a
+                                                        href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                                </h4>
                                                 <span class="item-cat"><small><a
                                                             href="#">{{ $product->category->name }}</a></small></span>
                                             </div>
@@ -242,3 +254,37 @@
     </section>
     <!-- End Latest Blogs -->
 @endsection
+
+{{-- @section('js')
+    <script>
+        $(document).ready(function() {
+            $('.view-product').click(function(e) {
+                e.preventDefault(); // Ngăn chặn reload trang
+
+                const productId = $(this).data('id');
+
+                $.ajax({
+                    url: `api/product/${productId}`,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#product-name').text(data.name);
+                        $('#product-sku').text(data.SKU);
+                        $('#product-description').text(data.description);
+                        $('#product-content').text(data.content);
+                        $('#product-price-regular').text(data.price_regular);
+
+                        $('#category-name').text(data.category.name);
+                        $('#category-type').text(data.category.type);
+
+                        if (data.image) {
+                            $('#product-image').attr('src', `${data.image}`);
+                        }
+                    },
+                    error: function() {
+                        alert('Không tìm thấy sản phẩm!');
+                    }
+                });
+            });
+        });
+    </script>
+@endsection --}}

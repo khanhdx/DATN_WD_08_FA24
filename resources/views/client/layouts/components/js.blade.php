@@ -23,7 +23,7 @@
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
 
 <script>
-    var quantityInput = document.getElementById('quantity');
+    var quantityInput = document.('quantity');
     var increaseButton = document.getElementById('increase');
     var decreaseButton = document.getElementById('decrease');
 
@@ -87,6 +87,38 @@
             }
         }).on('mouseleave', function() {
             $(this).removeClass('open');
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.view-product').click(function(e) {
+            e.preventDefault(); // Ngăn chặn reload trang
+            
+            const productId = $(this).data('id');
+            
+            $.ajax({
+                url: `/api/product/${productId}`,
+                type: 'GET',
+                success: function(data) {
+                    $('#product-name').text(data.name);
+                    $('#product-sku').text(data.SKU);
+                    $('#product-description').text(data.description);
+                    $('#product-content').text(data.content);
+                    $('#product-price-regular').text(data.price_regular);
+
+                    $('#category-name').text(data.category.name);
+                    $('#category-type').text(data.category.type);
+
+                    if (data.image) {
+                        $('#product-image').attr('src', `${data.image}`);
+                    }
+                },
+                error: function() {
+                    alert('Không tìm thấy sản phẩm!');
+                }
+            });
         });
     });
 </script>

@@ -38,6 +38,8 @@
     @include('client.layouts.components.styleswitcher')
 
     @include('client.layouts.components.js')
+
+    @yield('js')
 </body>
 
 </html>

@@ -96,7 +96,7 @@
                                         </td>
                                         <td class="product-subtotal">
                                             <span
-                                                class="amount">${{ Auth::check() ? $cart->price : $total_price }}</span>
+                                                class="amount">${{ Auth::check() ? $cart->price : $total }}</span>
                                         </td>
                                         <td class="product-remove">
                                             <form
@@ -181,7 +181,7 @@
                                         Cart Subtotal
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total_price }}</span>
+                                        <span class="amount">${{ $total }}</span>
                                     </td>
                                 </tr>
                                 <tr class="shipping">
@@ -198,7 +198,7 @@
                                         Total
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total_price }}</span>
+                                        <span class="amount">${{ $total }}</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -213,5 +213,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
 @endsection

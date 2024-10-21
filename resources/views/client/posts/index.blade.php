@@ -7,7 +7,8 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
-    <div class="container">
+    <div
+     class="container">
         <div class="row">
             <div class="blog-posts">
                 <div class="blog-masonry">
