@@ -144,7 +144,7 @@
                                                     Thêm biến thể
                                                 </button>
                                             </div>
-
+                                        </div>
                                     </form>
                                 </tr>
                             </tbody>

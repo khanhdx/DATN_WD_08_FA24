@@ -6,17 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\product\StoreProductRequest;
 use App\Http\Requests\product\UpdateProductRequest;
 use App\Models\Category;
+use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
+use App\Services\Size\ISizeService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     protected $productService;
+    protected $colorService;
+    protected $sizeService;
 
-    public function __construct(IProductService $productService)
+
+    public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService)
     {
-
         $this->productService = $productService;
+        $this->colorService = $iColorService;
+        $this->sizeService = $iSizeService;
     }
 
 
@@ -24,7 +30,7 @@ class ProductController extends Controller
     {
         $Category = new Category();
         $categories = $Category->all();
-
+      
         $products = $this->productService->getAll();
         return view('admin.products.index', compact('products', ['categories']));
     }
@@ -35,7 +41,10 @@ class ProductController extends Controller
         $Category = new Category();
         $categories = $Category->all();
 
-        return view('admin.products.create', compact('categories'));
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        return view('admin.products.create', compact('categories', ['colors', 'sizes']));
     }
 
     public function getDetail($id)
