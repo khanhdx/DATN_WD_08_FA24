@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\Cart;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +31,21 @@ class AuthController extends Controller
         if ($this->authService->userExists($request->email)) {
             return redirect()->back()->withErrors(['email' => 'Email đã tồn tại.'])->withInput();
         }
-
-        $this->authService->register($request->validated());
-        return redirect()->route('login')->with('success', 'Đăng ký thành công.');
+        try {
+            // Tạo người dùng mới
+            $user = $this->authService->register($request->validated());
+    
+            // Tạo giỏ hàng cho người dùng mới
+            Cart::create([
+                'user_id' => $user->id,
+                // Nếu có các trường khác cần thiết, hãy thêm vào đây
+            ]);
+            
+            return redirect()->route('login')->with('success', 'Đăng ký thành công.');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['email' => 'Đã xảy ra lỗi: ' . $e->getMessage()])->withInput();
+        }
     }
 
     // Hiển thị form đăng nhập
@@ -49,7 +62,7 @@ class AuthController extends Controller
         }
 
         if ($this->authService->login($request->validated())) {
-            return redirect()->route('client.home')->with('success', 'Đăng nhập thành công.');
+            return redirect()->route('home')->with('success', 'Đăng nhập thành công.');
         }
 
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);

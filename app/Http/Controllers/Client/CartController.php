@@ -21,7 +21,7 @@ class CartController extends Controller
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-            $carts = CartItem::with('product_variant')->where('cart_id', $cart->id)->latest('id')->get();
+            $carts = CartItem::with('productVariant')->where('cart_id', $cart->id)->latest('id')->get();
         } else {
             $carts = session()->get('cart', []);
         }
