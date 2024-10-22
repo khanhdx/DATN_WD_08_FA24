@@ -2,10 +2,12 @@
 
 namespace App\Services\Product;
 
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\VariantRepositopy;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,32 +40,31 @@ class ProductService implements IProductService
     {
 
         // try {
-            $productInput = $data;
-            $variants = $data['variants'];
+        $productInput = $data;
+        $variants = $data['variants'];
 
 
-            // Upload Image
-            if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
-                $productInput['image'] = $productInput['image']->store('uploads/products', 'public');
-            } else {
-                $productInput['image'] = null;
+        // Upload Image
+        if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
+            $productInput['image'] = $productInput['image']->store('uploads/products', 'public');
+        } else {
+            $productInput['image'] = null;
+        }
+        // dd($productInput);
+
+        //Insert lên DB
+        $product = $this->productRepository->insert($productInput);
+
+        if (isset($variants) && !empty($variants)) {
+            $product_id = $product->id;
+
+            foreach ($variants as $variant) {
+                $variant['product_id'] = $product_id;
+
+                $this->variantRepository->insert($variant);
             }
-            // dd($productInput);
-
-            //Insert lên DB
-            $product = $this->productRepository->insert($productInput);
-
-            if (isset($variants) && !empty($variants)) {
-                $product_id = $product->id;
-
-                foreach ($variants as $variant) {
-                    $variant['product_id'] = $product_id;
-
-                    $this->variantRepository->insert($variant);
-                }
-
-            }
-            return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
         // } catch (\Throwable $th) {
         //     return redirect()->back()->with('failed', $th->getMessage());
         // }
@@ -140,5 +141,73 @@ class ProductService implements IProductService
         } catch (\Throwable $th) {
             return redirect()->back()->with('errors', $th->getMessage());
         }
+    }
+
+    public function search($keyword)
+    {
+        $products = $this->productRepository->search($keyword);
+
+        // dd($products);
+
+        return $products;
+    }
+
+    public function filter($request)
+    {
+        $query = Product::query();
+        // $query->join('product_variants', 'products.id', '=', 'product_variants.product_id');
+       
+        // Lọc theo danh mục
+        if($request['category_id'] && $request['category_id'] != ''){
+            $query->where('category_id',$request['category_id']);
+
+        }
+        // Lọc theo khoảng giá 
+        if($request['price_min'] && $request['price_min'] != ''){
+            $query->where('price_regular','>=', $request['price_min']);
+        }
+
+        if($request['price_max'] && $request['price_max'] != ''){
+            $query->where('price_regular','<=', $request['price_max']);
+        }
+
+        // // Lọc theo trạng thái 
+        // if($request['status'] && $request->status != ''){
+        //     $query->where('status', $request->status);
+        // }
+
+        // Lọc theo khoảng ngày tạo sản phẩm
+        if($request['created_from'] && $request['created_from'] != ''){
+            $query->where('created_at','>=', $request['created_from']);
+        }
+
+        if($request['created_to'] && $request['created_to'] != ''){
+            $query->where('created_at','<=', $request['created_to']);
+        }
+
+        // // Lọc số lượng tồn kho
+        // if($request['stock') && $request->stock != ''){
+        //     $query->where('stock','>=', $request->stock);
+        // }
+
+        // Lọc biến thể sản phẩm ( theo thuộc tính )
+        if($request['color_id'] && $request['color_id'] != ''){
+            $query->where('product_variants.color_id', $request['color_id']);
+        }
+
+        if($request['size_id'] && $request['size_id'] != ''){
+            $query->where('product_variants.size_id', $request['size_id']);
+        }
+
+        // // Lọc theo rating 
+        // if($request['rating'] && $request->rating != ''){
+        //     $query->where('rating', $request->rating);
+        // }
+
+        $products = $query->select('products.*')->get();
+
+        // dd($products);
+
+        return $products;
     }
 }

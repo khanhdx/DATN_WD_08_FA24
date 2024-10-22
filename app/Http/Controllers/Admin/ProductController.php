@@ -26,20 +26,28 @@ class ProductController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $Category = new Category();
-        $categories = $Category->all();
-      
-        $products = $this->productService->getAll();
-        return view('admin.products.index', compact('products', ['categories']));
+        $categories =  Category::all();
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        $searchTerm = $request->input('keyword');
+
+        // Kiểm tra có tìm kiếm không 
+        if ($searchTerm) {
+            $products = $this->productService->search($searchTerm);
+        } else {
+            $products = $this->productService->getAll();
+        }
+
+        return view('admin.products.index', compact('products', ['categories', 'searchTerm']));
     }
 
     public function create()
     {
         // Lấy danh sách bảng categoreis
-        $Category = new Category();
-        $categories = $Category->all();
+        $categories = Category::all();
 
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
@@ -81,5 +89,16 @@ class ProductController extends Controller
     public function delete($id)
     {
         return $this->productService->softDeleteById($id);
+    }
+
+    public function filter(Request $request)
+    {
+        $categories =  Category::all();
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        $products = $this->productService->filter($request);
+
+        return view('admin.products.index', compact('products', ['categories', 'colors', 'sizes']));
     }
 }

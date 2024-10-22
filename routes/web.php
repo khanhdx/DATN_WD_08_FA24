@@ -59,9 +59,9 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
+                Route::get('filter', [ProductController::class, 'filter'])->name('filter');
 
-
-
+                
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
                     Route::get('/', [ProductVariantController::class, 'index'])->name('index');
