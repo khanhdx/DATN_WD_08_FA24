@@ -28,7 +28,9 @@
                         <td>
                             <strong>Trạng thái:</strong> 
                             @if ($order->statusOrder->isNotEmpty())  {{-- Kiểm tra xem có trạng thái không --}}
-                                {{ $order->statusOrder->first()->name_status }}  {{-- Lấy trạng thái đầu tiên --}}
+                               @foreach ($order->statusOrder as $status)
+                                   {{ $status->status_label }}
+                               @endforeach  
                             @else
                                 <span>Chưa có trạng thái</span>
                             @endif                        

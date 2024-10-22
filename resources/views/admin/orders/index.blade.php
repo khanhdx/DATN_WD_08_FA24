@@ -89,7 +89,7 @@
                                     <td>{{ $order->created_at }}</td>
                                     <td>
 
-                                        @foreach ($order->statuses as $c_status)
+                                        @foreach ($order->statusOrder as $c_status)
                                             <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
                                                 method="post">
                                                 @csrf
