@@ -23,30 +23,36 @@
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
 
 <script>
-    var quantityInput = document.getElementById('quantity');
-    var increaseButton = document.getElementById('increase');
-    var decreaseButton = document.getElementById('decrease');
+    $(document).ready(function() {
+        $('.plus').click(function() {
+            let input = $(this).siblings('.qty');
+            let currentValue = parseInt(input.val());
+            input.val(currentValue + 1);
+        });
 
-    // Xử lý khi nhấn nút Tăng
-    increaseButton.addEventListener('click', () => {
-        let currentValue = parseInt(quantityInput.value) || 0;
-        quantityInput.value = currentValue + 1;
-    });
+        $('.minus').click(function() {
+            let input = $(this).siblings('.qty');
+            let currentValue = parseInt(input.val());
+            if (currentValue > 1) {
+                input.val(currentValue - 1);
+            }
+        });
 
-    // Xử lý khi nhấn nút Giảm
-    decreaseButton.addEventListener('click', () => {
-        let currentValue = parseInt(quantityInput.value) || 0;
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-        }
-    });
+        $('.qty').on('input', function() {
+            let value = parseInt($(this).val());
 
-    // Đảm bảo giá trị nhập vào là số hợp lệ
-    quantityInput.addEventListener('input', (e) => {
-        const value = e.target.value;
-        if (!/^\d*$/.test(value)) {
-            e.target.value = value.replace(/\D/g, ''); // Xóa ký tự không phải số
-        }
+            if (isNaN(value) || value < 1) {
+                $(this).val(1);
+            }
+        });
+
+        $('.qty').on('keydown', function(e) {
+            if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
+                (e.key >= "0" && e.key <= "9")) {
+                return;
+            }
+            e.preventDefault();
+        });
     });
 </script>
 
@@ -67,6 +73,59 @@
             } else {
                 console.error(`Form với id "${formId}" không tồn tại.`);
             }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
+        $('.dropdownLink').on('click', function(e) {
+            if ($(window).width() > 992) {
+                window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
+            }
+        });
+
+        // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
+        $('.dropdown').on('mouseenter', function() {
+            if ($(window).width() > 992) {
+                $(this).addClass('open');
+            }
+        }).on('mouseleave', function() {
+            $(this).removeClass('open');
+        });
+    });
+</script>
+
+{{-- Dùng ajax để hiển thị chi tiết sản phẩm lên modal --}}
+<script>
+    $(document).ready(function() {
+        $('.view-product').click(function(e) {
+            e.preventDefault(); // Ngăn chặn reload trang
+
+            const productId = $(this).data('id');
+
+            $.ajax({
+                url: `/api/product/${productId}`,
+                type: 'GET',
+                success: function(data) {
+                    $('#product-name').text(data.name);
+                    $('#product-sku').text(data.SKU);
+                    $('#product-description').text(data.description);
+                    $('#product-content').text(data.content);
+                    $('#product-price-regular').text(data.price_regular);
+
+                    $('#category-name').text(data.category.name);
+                    $('#category-type').text(data.category.type);
+
+                    if (data.image) {
+                        $('#product-image').attr('src', `${data.image}`);
+                    }
+                },
+                error: function() {
+                    alert('Không tìm thấy sản phẩm!');
+                }
+            });
         });
     });
 </script>

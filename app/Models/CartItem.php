@@ -8,9 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     use HasFactory;
+    protected $table = 'cart_items';
 
-    // Mối quan hệ với bảng ProductVariant
-    protected $fillable = ['cart_id', 'product_variant_id', 'quantity','price'];
+    protected $fillable = [
+        'cart_id',
+        'product_variant_id',
+        'quantity',
+        'sub_total',
+    ];
 
     // Định nghĩa quan hệ với ProductVariant
     public function productVariant()
