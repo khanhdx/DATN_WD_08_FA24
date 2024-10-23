@@ -38,6 +38,6 @@ class CartItem extends Model
     // Hàm để tính tổng giá trị của mục giỏ hàng
     public function totalPrice()
     {
-        return $this->quantity * $this->productVariant->price; // Sử dụng giá từ ProductVariant
+        return $this->quantity * ($this->productVariant->price ?? 0);
     }
 }

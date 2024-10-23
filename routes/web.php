@@ -34,14 +34,14 @@ use App\Http\Controllers\Client\ProductController   as ClientProductController;
 |
 */
 
-Route::get('test', function (){
-   return view('admin.products.abcd'); 
+Route::get('test', function () {
+    return view('admin.products.abcd');
 });
 
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
     Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
-    
+
     Route::prefix('admins')
         ->as('admin.')
         ->group(function () {
@@ -139,12 +139,14 @@ Route::name('client.')->group(function () {
     Route::prefix('carts')
         ->middleware(['convert.cart'])
         ->controller(CartController::class)
-        ->name('cart.')
+        ->name('carts.')
         ->group(function () {
-            Route::get('/',         'index')->name('index');
-            Route::post('/add',     'addToCart')->name('add');
-            // Route::put('/{id}',     'updateCart')->name('update');
-            Route::delete('/{id}',  'destroy')->name('delete');
+            Route::get('/', 'index')->name('index');
+            Route::get('/cart', 'cart')->name('cart');
+            Route::get('/get', 'getCart')->name('get');
+            Route::post('/add', 'addToCart')->name('add');
+            Route::put('/{id}', 'updateCart')->name('update');
+            Route::delete('/{id}', 'destroy')->name('delete');
         });
 });
 

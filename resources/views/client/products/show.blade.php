@@ -66,7 +66,7 @@
                         <span class="amount">${{ $product->price_regular }}</span>
                     </p>
 
-                    <form method="post" class="cart" action="{{ route('client.cart.add') }}">
+                    <form method="post" class="cart" action="{{ route('client.carts.add') }}">
                         @csrf
 
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -93,10 +93,9 @@
                         </ul>
 
                         <div class="quantity pull-left">
-                            <input type="button" class="minus" value="-" id="decrease">
-                            <input type="text" class="input-text qty" title="Qty" value="1" name="quantity"
-                                id="quantity" min="1" step="1">
-                            <input type="button" class="plus" value="+" id="increase">
+                            <input type="button" class="minus" value="-">
+                            <input type="text" class="input-text qty" title="Qty" value="1" name="quantity" min="1" step="1">
+                            <input type="button" class="plus" value="+">
                         </div>
                         <a href="#" class="btn btn-grey">
                             <span><i class="fa fa-heart"></i></span>

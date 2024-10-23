@@ -48,7 +48,7 @@
                 </ul>
             </li>
             <li class="dropdown menu-shop">
-                <a href="{{ route('client.cart.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">
+                <a href="{{ route('client.carts.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="shopping-bag">{{ Auth::check() ? count($carts->toArray()) : count($carts) }}</span>
                 </a>
@@ -58,7 +58,7 @@
                         @foreach ($carts as $key => $cart)
                             <li class="product">
                                 <div class="product-thumb-info">
-                                    <form action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}"
+                                    <form action="{{ route('client.carts.delete', Auth::check() ? $cart->id : $key) }}"
                                         method="post" id="form{{ $loop->iteration }}">
                                         @csrf
                                         @method('DELETE')
@@ -95,7 +95,7 @@
                         </li>
                     </ul>
                     <div class="cart-buttons text-right">
-                        <a href="{{ route('client.cart.index') }}"><button class="btn btn-white">View Cart</button></a>
+                        <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">View Cart</button></a>
                         <button class="btn btn-primary">Checkout</button>
                     </div>
                 </div>

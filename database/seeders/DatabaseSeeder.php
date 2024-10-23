@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ProductVariantSeeder::class,
             PostSeeder::class,
             VoucherSeeder::class,
+            StatusOrderSeeder::class,
         ]);
     }
 }
