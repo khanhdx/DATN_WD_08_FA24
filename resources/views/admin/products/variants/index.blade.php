@@ -75,7 +75,6 @@
                                             <li><span class="fw-bold">Size: </span>{{ $item->size->name }}</li>
                                         </ul>
                                     </td>
-                                    <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->stock }}</td>
                                     <td class="desc">{{ $item->price }}</td>
                                     <td> 

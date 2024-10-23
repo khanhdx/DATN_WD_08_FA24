@@ -64,7 +64,7 @@
                                 <tr>
                                     <td>
                                         @if ($post->image)
-                                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                            <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
                                                 width="100">
                                         @endif
                                     </td>

@@ -36,10 +36,10 @@
                     <  <li class="has-sub">
                         <a href="#">
                             <i class="fas fa-list-ul"></i>
-                            <span class="bot-line"></span>Quản lý sản phẩm</a>
+                            <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
-                                <a href="{{ route('admin.products.index')}}">Sản phẩm</a>
+                                <a href="{{ route('admin.products.index')}}">Quản lý sản phẩm</a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
