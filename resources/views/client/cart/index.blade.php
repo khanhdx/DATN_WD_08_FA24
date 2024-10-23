@@ -91,7 +91,7 @@
                                         Cart Subtotal
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total }}</span>
+                                        {{-- <span class="amount">${{ $total }}</span> --}}
                                     </td>
                                 </tr>
                                 <tr class="shipping">
@@ -108,7 +108,7 @@
                                         Total
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total }}</span>
+                                        {{-- <span class="amount">${{ $total }}</span> --}}
                                     </td>
                                 </tr>
                             </tbody>
