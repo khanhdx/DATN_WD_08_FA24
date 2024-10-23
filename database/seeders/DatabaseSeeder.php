@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             VoucherSeeder::class,
             StatusOrderSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
