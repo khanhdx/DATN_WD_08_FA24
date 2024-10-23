@@ -19,13 +19,7 @@ class VoucherController extends Controller
         $search = $request->input('search');
         $date_start = $request->input('date_start');
         $date_end = $request->input('date_end');
-        $data['vouchers'] = Voucher::query()
-        ->when($search, function($query,$search) { return $query
-            ->where('name', 'like', "%{$search}%")
-            ->orwhere('id', 'like', "%{$search}%");})
-        ->whereBetween('date_start', [$date_start,$date_end])
-        ->whereBetween('date_end', [$date_start,$date_end])
-        ->paginate(10);
+        $data['vouchers'] = Voucher::query()->paginate(10);
         return view('admin.vouchers.index',$data);
     }
 
@@ -57,7 +51,7 @@ class VoucherController extends Controller
             }
             $voucher_new = Voucher::query()->create($data);
             if($voucher_new) {
-                return redirect()->route('admin.vouchers.index')->with('success', 'Thêm mới thành công');
+                return redirect()->route('admin.voucher.index')->with('success', 'Thêm mới thành công');
             }
             else {
                 return dd('Theem thaats baij');

@@ -105,7 +105,8 @@ Route::name('client.')->group(function () {
     Route::get('/product_detail/{product}', [HomeController::class, 'product_detail'])->name('product_detail');
     Route::get('/posts', [HomeController::class, 'posts'])->name('posts');
     Route::get('/post_show/{id}', [HomeController::class, 'post_show'])->name('post_show');
-
+    // Route voucher
+    Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
     // Route cho giỏ hàng (cart)
     Route::prefix('cart')
         ->middleware(['convert.cart'])
