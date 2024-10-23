@@ -164,7 +164,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('show');
 });
 
 // Route cho xác thực
