@@ -14,7 +14,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('slider.update', $banner->id) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.slider.update', $banner->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="row">

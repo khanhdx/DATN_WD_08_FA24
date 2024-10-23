@@ -31,7 +31,7 @@ class CartSeeder extends Seeder
                     'cart_id' => $cart->id,
                     'product_variant_id' => $productVariant->id,  // Sử dụng product_variant_id
                     'quantity' => $quantity = $faker->numberBetween(1, 5),
-                    'price' => $productVariant->price,
+                    'sub_total' => $productVariant->price * $quantity,
                 ]);
             }
         }

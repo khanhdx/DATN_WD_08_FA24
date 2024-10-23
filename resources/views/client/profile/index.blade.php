@@ -1,10 +1,13 @@
 @extends('client.layouts.master')
+
 @section('css')
-<style>
-    .col-md-12{
-        margin-bottom: 20px;
-    }
-</style>
+    <style>
+        .col-md-12 {
+            margin-bottom: 20px;
+        }
+    </style>
+@endsection
+
 @section('content')
     <!-- Begin Main -->
     <div role="main" class="main">

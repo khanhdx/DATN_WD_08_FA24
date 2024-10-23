@@ -1,7 +1,9 @@
 @php
     use App\Models\Category;
+
     $categories = Category::query()->get();
 @endphp
+
 <nav class="navbar navbar-default navbar-main navbar-main-slide" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -14,14 +16,14 @@
             <li class="login">
                 @guest
                     <!-- Hiển thị nếu chưa đăng nhập -->
-                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
                 @endguest
 
                 @auth
                     <!-- Hiển thị nếu đã đăng nhập với dropdown -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user"></i> Tài khoản <b class="caret"></b>
+                        <i class="fa fa-user"></i> {{ auth()->user()->name }} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         @if (auth()->user()->role == 'Khách hàng')
@@ -33,7 +35,7 @@
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); 
                                    document.getElementById('logout-form').submit();">
-                                Đăng xuất
+                                Logout
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
@@ -49,10 +51,12 @@
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
-                <li><a href="/">Home</a></li>
+                {{-- <li><a href="/">Home</a></li> --}}
 
-                <li class="dropdown megamenu"><a href="shop-list-sidebar.html" class="dropdown-toggle"
-                        data-toggle="dropdown">Shop</a>
+                <li class="dropdown megamenu">
+                    <a href="{{ route('client.product.index') }}" class="dropdown-toggle dropdownLink"
+                        data-toggle="dropdown">Shop
+                    </a>
                     <div class="dropdown-menu">
                         <div class="mega-menu-content">
                             <div class="row">
@@ -114,7 +118,7 @@
                                     <h3>Man</h3>
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $item)
-                                            @if ($item->type == "Man")
+                                            @if ($item->type == 'Man')
                                                 <li><a href="#">{{ $item->name }}</a></li>
                                             @endif
                                         @endforeach
@@ -125,7 +129,7 @@
                                     <h3>Woman</h3>
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $item)
-                                            @if ($item->type == "Woman")
+                                            @if ($item->type == 'Woman')
                                                 <li><a href="#">{{ $item->name }}</a></li>
                                             @endif
                                         @endforeach

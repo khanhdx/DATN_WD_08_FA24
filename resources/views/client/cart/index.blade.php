@@ -76,29 +76,36 @@
                                         </td>
                                         <td class="product-quantity">
                                             <div class="quantity">
-                                                <form action="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}" method="post">
+                                                <form
+                                                    action="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}"
+                                                    method="post">
                                                     @csrf
                                                     @method('PUT')
 
                                                     <input type="hidden" name="productVariant_id"
-                                                        value="{{ Auth::check() ? $cart->productVariant_id : $key}}">
-                                                    <input type="button" class="minus" value="-" id="decrease">
+                                                        value="{{ Auth::check() ? $cart->productVariant_id : $key }}">
+
+                                                    <input type="button" class="minus" value="-">
+
                                                     <input type="text" class="input-text qty text" title="Qty"
-                                                        id="quantity"
                                                         value="{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}"
                                                         name="quantity" min="1" step="1">
-                                                    <input type="button" class="plus" value="+" id="increase">
-                                                    <button type="submit" class="btn btn-xs">Confirm</button>
+
+                                                    <a
+                                                        href="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}">
+                                                        <input type="button" class="plus" value="+">
+                                                    </a>
+                                                    {{-- <button type="submit" class="btn btn-xs">Confirm</button> --}}
                                                 </form>
                                             </div>
                                         </td>
                                         <td class="product-subtotal">
-                                            <span
-                                                class="amount">${{ Auth::check() ? $cart->price : $cart['total'] }}</span>
+                                            <span class="amount">${{ Auth::check() ? $cart->sub_total : $total }}</span>
                                         </td>
                                         <td class="product-remove">
-                                            <form action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}" method="post"
-                                                id="form{{ $loop->iteration }}">
+                                            <form
+                                                action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}"
+                                                method="post" id="form{{ $loop->iteration }}">
                                                 @csrf
                                                 @method('DELETE')
 
@@ -178,7 +185,7 @@
                                         Cart Subtotal
                                     </th>
                                     <td>
-                                        <span class="amount">$431</span>
+                                        <span class="amount">${{ $total }}</span>
                                     </td>
                                 </tr>
                                 <tr class="shipping">
@@ -195,23 +202,46 @@
                                         Total
                                     </th>
                                     <td>
-                                        <span class="amount">$431</span>
+                                        <span class="amount">${{ $total }}</span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <p><input type="submit" value="Update Shopping Bag" class="btn btn-default btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
-                                <p>
-                                    <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
-                                        Proceed To Checkout
-                                    </a>
-                                </p>                                
-                        <p><input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
-                                data-loading-text="Loading..."></p>
+                        <p>
+                            <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
+                                Proceed To Checkout
+                            </a>
+                        </p>
+                        <a href="{{ route('client.home') }}">
+                            <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
+                                data-loading-text="Loading...">
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('js')
+    <script>
+        function updateQuantity(productId, quantity) {
+            $.ajax({
+                url: '/update-cart', // Đường dẫn đến API xử lý
+                method: 'POST', // Hoặc 'PUT' nếu phù hợp
+                data: {
+                    product_id: productId,
+                    quantity: quantity
+                    method:
+                },
+                success: function(response) {
+                    console.log('Cập nhật thành công:', response);
+                    // Có thể cập nhật UI dựa trên phản hồi từ server nếu cần
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi cập nhật số lượng:', xhr.responseText);
+                    alert('Cập nhật số lượng thất bại.');
+                }
+            });
+        }
+    </script>
 @endsection

@@ -23,7 +23,9 @@
         </header>
 
         <!-- Begin Main -->
-        @yield('content')
+        <div role="main" class="main">
+            @yield('content')
+        </div>
         <!-- End Main -->
 
         @include('client.layouts.components.footer')
@@ -36,6 +38,8 @@
     @include('client.layouts.components.styleswitcher')
 
     @include('client.layouts.components.js')
+
+    @yield('js')
 </body>
     @yield('js')
 </html>
