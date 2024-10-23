@@ -85,11 +85,11 @@
                                         ORDER-01
                                     </td>
                                     <td>{{ $order->user->name }}</td>
-                                    <td>{{ $order->total_price }}</td>
+                                    <td>{{ $order->total_price }} đ</td>
                                     <td>{{ $order->created_at }}</td>
                                     <td>
 
-                                        @foreach ($order->statuses as $c_status)
+                                        @foreach ($order->statusOrder as $c_status)
                                             <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
                                                 method="post">
                                                 @csrf
