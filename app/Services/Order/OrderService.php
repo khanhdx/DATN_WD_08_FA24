@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class OrderService implements IOrderService
 {
 
+ 
     protected $orderRepository;
 
     protected $statistical;

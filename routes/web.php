@@ -95,7 +95,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             // Route quản lý orders
             Route::prefix('orders')->as('orders.')->group(function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
-
+                Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
             });
         });
@@ -123,11 +123,8 @@ Route::name('client.')->group(function () {
             Route::get('/',       'index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
-    // Route xóa bình luận
-    // Route::delete('posts/{post}/comments', [CommentController::class, 'destroy'])
-    //     ->name('comments.destroy')
-    //     ->middleware('auth');
 
+    // Route xóa bình luận
     Route::delete('posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy')
         ->middleware('auth');
@@ -167,7 +164,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('show');
 });
 
 // Route cho xác thực
