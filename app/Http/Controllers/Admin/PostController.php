@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -78,7 +79,7 @@ class PostController extends Controller
         // Tăng lượt xem
         $post->increment('views');
 
-        return view('client.posts.post_show', compact('post'));
+        return view('client.posts.post_show', compact('post', 'comments'));
     }
 
     public function edit(Post $post)

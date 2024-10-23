@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\ProductVariant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart_items', function (Blueprint $table) {
+        Schema::create('wares_list', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Cart::class)->constrained();
-            $table->foreignIdFor(ProductVariant::class)->constrained();
-            $table->bigInteger('quantity');
-            $table->decimal('sub_total');
-
+            $table->foreignId('vouchers_ware_id')->constrained('vouchers_wares')->onDelete('cascade');
+            $table->enum('status',["Đã sử dụng", "Chưa sử dụng"]);
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('wares_list');
     }
 };

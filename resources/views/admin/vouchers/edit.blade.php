@@ -125,11 +125,11 @@
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="date_start">Ngày bắt đầu:</label>
-                                                        <input type="datetime-local" class="form-control form-control-sm col" value="{{$voucher->date_start}}" name="date_start" id="date_start"><!-- Kiểu giảm -->
+                                                        <input type="date" class="form-control form-control-sm col" value="{{$voucher->date_start}}" name="date_start" id="date_start"><!-- Kiểu giảm -->
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="date_end">Ngày kết thúc:</label>
-                                                        <input type="datetime-local" class="form-control form-control-sm col" value="{{$voucher->date_end}}" name="date_end" id="date_end"><!-- Kiểu giảm -->
+                                                        <input type="date" class="form-control form-control-sm col" value="{{$voucher->date_end}}" name="date_end" id="date_end"><!-- Kiểu giảm -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -184,15 +184,15 @@
                                             <span class="label">Ngày nhập</span>: <span class="text-dark">{{$voucher->created_at}}</span>
                                         </p></div>
                                         <div class=""><p style="font-size: 14px">
-                                            <span class="label">Cập nhập gần nhất</span>: <span class="text-dark">{{$voucher->updated_at}}</span>
+                                            <span class="label">Cập nhập ngày</span>: <span class="text-dark">{{$voucher->updated_at}}</span>
                                         </p></div>
                                     </div>
                                     <div class="card-footer">
                                         <div>
-                                            <a href="#" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;">Xóa mã này</a>
+                                            <a href="" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;" data-bs-toggle="modal" data-bs-target="#exampleModal">Xóa mã này</a>
                                         </div>
                                         <div>
-                                            <a href="#" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;">Hủy thay đổi</a>
+                                            <a href="" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;">Hủy thay đổi</a>
                                         </div>
                                         <div style="text-align: end;">
                                             <button class="btn btn-primary">Cập nhập</button>
@@ -206,6 +206,25 @@
             </div>
         </div>
     </section>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-header">
+                        <h3 class="modal-title fs-5" id="exampleModalLabel">Thông báo</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc muốn <span class="text-danger">Xóa</span> mã giảm giá: {{$voucher->name}}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-danger">Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     {{-- JAVA SCRIPT --}}

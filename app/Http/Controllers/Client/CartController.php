@@ -11,23 +11,28 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    const VIEW_CART = 'client.cart.';
+    const PATH_VIEW = 'client.cart.';
 
     public function index()
     {
+        return view(self::PATH_VIEW . __FUNCTION__);
+    }
+
+    public function cart()
+    {
         // session()->forget('cart');
-        $carts = [];
+        $cartItems = [];
 
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-            $carts = CartItem::with('productVariant')->where('cart_id', $cart->id)->latest('id')->get();
+            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->get();
         } else {
-            $carts = session()->get('cart', []);
+            $cartItems = session()->get('cart', []);
         }
-        // dd($carts);
+        // dd($cartItems);
 
-        return view(self::VIEW_CART . __FUNCTION__, compact('carts'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems'));
     }
 
     public function addToCart(Request $request)
@@ -37,7 +42,7 @@ class CartController extends Controller
             ->where('size_id', $request->size_id)
             ->firstOrFail();
 
-        $price = $request->quantity * $productVariant->price;
+        $sub_total = $request->quantity * $productVariant->price;
 
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
@@ -47,14 +52,14 @@ class CartController extends Controller
 
             if ($cart_item) {
                 $cart_item->quantity += $request->quantity;
-                $cart_item->price += $price;
+                $cart_item->sub_total += $sub_total;
                 $cart_item->save();
             } else {
                 CartItem::create([
                     'cart_id'             => $cart->id,
                     'product_variant_id'  => $productVariant->id,
                     'quantity'            => $request->quantity,
-                    'price'               => $price,
+                    'sub_total'           => $sub_total,
                 ]);
             }
         } else {
@@ -64,16 +69,16 @@ class CartController extends Controller
 
             if (isset($cart[$key])) {
                 $cart[$key]['quantity'] += $request->quantity;
-                $cart[$key]['total'] += $price;
+                $cart[$key]['sub_total'] += $sub_total;
             } else {
                 $cart[$key] = [
-                    'image'              => $productVariant->product->image,
-                    'name'               => $productVariant->product->name,
-                    'color'              => $productVariant->color->name,
-                    'size'               => $productVariant->size->name,
-                    'quantity'           => $request->quantity,
-                    'price'              => $productVariant->price,
-                    'total'              => $price,
+                    'image'     => $productVariant->product->image,
+                    'name'      => $productVariant->product->name,
+                    'color'     => $productVariant->color->name,
+                    'size'      => $productVariant->size->name,
+                    'quantity'  => $request->quantity,
+                    'price'     => $productVariant->price,
+                    'sub_total' => $sub_total,
                 ];
             }
 
@@ -85,40 +90,65 @@ class CartController extends Controller
 
     public function updateCart(Request $request, string $id)
     {
-        $productVariant = ProductVariant::where('id', $request->product_variant_id)->firstOrFail();
+        try {
+            $productVariant = ProductVariant::where('id', $request->product_variant_id)->firstOrFail();
 
-        $price = $request->quantity * $productVariant->price;
+            $sub_total = $request->quantity * $productVariant->price;
 
-        if (Auth::check()) {
+            if (Auth::check()) {
+                if ($request->quantity > 0) {
+                    $cart_item = CartItem::find($id);
+                    $total = $cart_item->sum('sub_total');
 
-            if ($request->quantity > 0) {
-                $cart_item = CartItem::where('id', $id)->firstOrFail();
+                    $data = [
+                        'quantity' => $request->quantity,
+                        'sub_total' => $sub_total
+                    ];
 
-                $cart_item->quantity = $request->quantity;
+                    $cart_item->update($data);
+                }
+            } else {
+                $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
 
-                $cart_item->price = $price;
+                session()->put("cart.$id.quantity", $request->quantity);
 
-                $cart_item->save();
+                session()->put("cart.$id.sub_total", $sub_total);
             }
-        } else {
-            session()->put("cart.$id.quantity", $request->quantity);
-            session()->put("cart.$id.total", $price);
-        }
 
-        return back()->with('success', 'Cập nhật giỏ hàng thành công');
+            return response()->json([
+                'message' => 'Cập nhật giỏ hàng thành công!',
+                'total' => $total
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi trong quá trình cập nhật',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy(string $id)
     {
-        if (Auth::check()) {
-            $cart_item = CartItem::where('id', $id)->firstOrFail();
+        try {
+            if (Auth::check()) {
+                $cart_item = CartItem::where('id', $id)->firstOrFail();
 
-            $cart_item->delete();
-        } else {
-            session()->forget("cart.$id");
+                $cart_item->delete();
+
+            } else {
+                session()->forget("cart.$id");
+            }
+
+            return response()->json([
+                'message' => 'Xóa giỏ hàng thành công!',
+            ], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Xóa giỏ hàng không thành công!',
+            ], 500);
         }
-
-        return back();
     }
 
     public function sessionCartToDatabase()
@@ -138,14 +168,14 @@ class CartController extends Controller
 
                 if ($cart_item) {
                     $cart_item->quantity += $item['quantity'];
-                    $cart_item->price += $item['total'];
+                    $cart_item->sub_total += $item['sub_total'];
                     $cart_item->save();
                 } else {
                     CartItem::updateOrCreate([
                         'cart_id'             => $cart->id,
                         'product_variant_id'  => $productVariant,
                         'quantity'            => $item['quantity'],
-                        'price'               => $item['total'],
+                        'sub_total'               => $item['sub_total'],
                     ]);
                 }
             }
