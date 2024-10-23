@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-
     protected $orderService;
     protected $statusService;
 
@@ -43,31 +42,26 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
 
-    public function show(string $id) {
-        // Truy vấn đơn hàng cùng với các mối quan hệ cần thiết
-        $order = Order::with([
-            'user', 
-            'orderDetails.product', 
-            'orderDetails.variant.color', // Màu sắc từ ProductVariant
-            'orderDetails.variant.size',  // Kích thước từ ProductVariant
-            'statuses', 
-            'payments'
-        ])->findOrFail($id);
-    
-        // Lấy thông tin chi tiết đơn hàng
-        $orderDetails = $order->orderDetails;
-    
-        // Kiểm tra dữ liệu
-        // dd($order);
-    
-        return view('admin.orders.show', compact('order', 'orderDetails'));
-    }
-    
-    
-    
-    
-    
-    
+    public function show(string $id)
+{
+    // Truy vấn đơn hàng cùng với các mối quan hệ cần thiết
+    $order = Order::with([
+        'user',                        // Quan hệ với User
+        'order_details',                // Quan hệ với OrderDetail
+        'order_details.product',        // Quan hệ với Product trong OrderDetail
+        'order_details.variant.color',  // Màu sắc từ ProductVariant
+        'order_details.variant.size',   // Kích thước từ ProductVariant
+        'statuses',                    // Quan hệ với StatusOrder qua bảng trung gian
+        'payments'                     // Quan hệ với Payment
+    ])->findOrFail($id);
+
+    $currentStatus = $order->statuses->last(); 
+    // Lấy các chi tiết đơn hàng từ quan hệ orderDetails
+    $order_details = $order->order_details;
+
+    // Trả về view với dữ liệu đơn hàng và chi tiết đơn hàng
+    return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
+}
 
     public function updateStatus(Request $request, $id)
     {

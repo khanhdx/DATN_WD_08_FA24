@@ -43,7 +43,7 @@ class Order extends Model
     // Quan hệ với chi tiết đơn hàng
     public function order_details()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id');
+        return $this->hasMany(OrderDetail::class);
     }
 
     // Quan hệ với thanh toán

@@ -8,18 +8,18 @@ class OrderRepository
 {
     public function getAll()
     {
-        $orders = Order::with(['statuses' => function ($query) {
+        $orders = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->select('id', 'user_id', 'total_price', 'date')->get();
+        }])->select('id', 'user_id', 'total_price', 'created_at')->get();
 
         return $orders;
     }
 
     public function getByStatus($status)
     {
-        $orders = Order::with(['statuses' => function ($query) {
+        $orders = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->whereHas('statuses', function ($query) use ($status) {
+        }])->whereHas('statusOrder', function ($query) use ($status) {
                 $query->where('name_status', $status);
             })->select('id', 'user_id', 'total_price', 'created_at')->get();
 
