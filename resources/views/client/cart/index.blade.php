@@ -21,104 +21,10 @@
             @endif
 
             <div class="col-md-12">
-                <h3>Your selection ({{ Auth::check() ? count($carts->toArray()) : count($carts) }} items)</h3>
+                {{-- <h3>Your selection ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} items)</h3> --}}
                 <div class="featured-box featured-box-cart">
-                    <div class="box-content">
-                        <table cellspacing="0" class="shop_table" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="product-thumbnail">
-                                        Item
-                                    </th>
-                                    <th class="product-name">
-                                        Product name
-                                    </th>
-                                    <th class="product-name">
-                                        Variants
-                                    </th>
-                                    <th class="product-price">
-                                        Price
-                                    </th>
-                                    <th class="product-quantity">
-                                        Quantity
-                                    </th>
-                                    <th class="product-subtotal">
-                                        SubTotal
-                                    </th>
-                                    <th class="product-remove">
-                                        &nbsp;
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($carts as $key => $cart)
-                                    <tr class="cart_table_item">
-                                        <td class="product-thumbnail">
-                                            <a href="shop-product-sidebar.html">
-                                                <img alt="" width="80"
-                                                    src="{{ Auth::check() ? $cart->productVariant->product->image : $cart['image'] }}">
-                                            </a>
-                                        </td>
-                                        <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->productVariant->product->name : $cart['name'] }}
-                                            </a>
-                                        </td>
-                                        <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
-                                                {{ Auth::check() ? $cart->productVariant->color->name : $cart['color'] }},
-                                                {{ Auth::check() ? $cart->productVariant->size->name : $cart['size'] }}
-                                            </a>
-                                        </td>
-                                        <td class="product-price">
-                                            <span
-                                                class="amount">${{ Auth::check() ? $cart->productVariant->price : $cart['price'] }}</span>
-                                        </td>
-                                        <td class="product-quantity">
-                                            <div class="quantity">
-                                                <form
-                                                    action="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('PUT')
+                    <div class="box-content cart-view">
 
-                                                    <input type="hidden" name="productVariant_id"
-                                                        value="{{ Auth::check() ? $cart->productVariant_id : $key }}">
-
-                                                    <input type="button" class="minus" value="-">
-
-                                                    <input type="text" class="input-text qty text" title="Qty"
-                                                        value="{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}"
-                                                        name="quantity" min="1" step="1">
-
-                                                    <a
-                                                        href="{{ route('client.cart.update', Auth::check() ? $cart->id : $key) }}">
-                                                        <input type="button" class="plus" value="+">
-                                                    </a>
-                                                    {{-- <button type="submit" class="btn btn-xs">Confirm</button> --}}
-                                                </form>
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">
-                                            <span class="amount">${{ Auth::check() ? $cart->sub_total : $total }}</span>
-                                        </td>
-                                        <td class="product-remove">
-                                            <form
-                                                action="{{ route('client.cart.delete', Auth::check() ? $cart->id : $key) }}"
-                                                method="post" id="form{{ $loop->iteration }}">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <a title="Remove this item" class="remove submitLink"
-                                                    data-form="form{{ $loop->iteration }}" href="#">
-                                                    <i class="fa fa-times-circle"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -222,26 +128,123 @@
         </div>
     </div>
 @endsection
+
 @section('js')
     <script>
-        function updateQuantity(productId, quantity) {
-            $.ajax({
-                url: '/update-cart', // Đường dẫn đến API xử lý
-                method: 'POST', // Hoặc 'PUT' nếu phù hợp
-                data: {
-                    product_id: productId,
-                    quantity: quantity
-                    method:
-                },
-                success: function(response) {
-                    console.log('Cập nhật thành công:', response);
-                    // Có thể cập nhật UI dựa trên phản hồi từ server nếu cần
-                },
-                error: function(xhr) {
-                    console.error('Lỗi khi cập nhật số lượng:', xhr.responseText);
-                    alert('Cập nhật số lượng thất bại.');
-                }
+        $(document).on('click', '.remove', function(e) {
+            e.preventDefault();
+
+            let href = $(this).attr('href');
+            let data = {
+                _token: '{{ csrf_token() }}',
+                _method: "DELETE"
+            };
+
+            $.post(href, data, function(res) {
+                load_cart();
+            });
+        })
+
+        function updateCart(id, productVariantId, qty) {
+            let data = {
+                _token: '{{ csrf_token() }}',
+                _method: 'PUT',
+                quantity: qty,
+                product_variant_id: productVariantId,
+            };
+
+            $.post(`http://datn_wd_08_fa24.test/carts/${id}`, data, function(res) {
+                load_cart();
             });
         }
+
+        function load_cart() {
+            $.get("{{ route('client.carts.cart') }}", function(res) {
+                $('.cart-view').html(res);
+            });
+        }
+
+        load_cart();
     </script>
+    {{-- <script>
+        $(document).ready(function() {
+            $('.remove').click(function(e) {
+                e.preventDefault();
+
+                let href = $(this).attr('href');
+                let data = {
+                    _token: '{{ csrf_token() }}',
+                    _method: "DELETE"
+                };
+
+                $.post(href, data, function(res) {
+                    load_cart();
+                });
+            })
+
+            $('.plus').click(function() {
+                let input = $(this).siblings('.qty');
+                let quantity = parseInt(input.val()) + 1;
+                input.val(quantity);
+
+                console.log(quantity);
+
+                if (window.location.pathname === '/cart') {
+                    let id = $(this).data('id');
+                    let productVariantId = $(this).data('variant-id');
+                    updateCart(id, productVariantId, quantity)
+                }
+            });
+
+            $('.minus').click(function() {
+                let input = $(this).siblings('.qty');
+                let quantity = parseInt(input.val());
+
+                if (quantity > 1) {
+                    input.val(quantity - 1);
+                    quantity -= 1
+                } else {
+                    return
+                }
+
+                console.log(quantity);
+
+                if (window.location.pathname === '/cart') {
+                    let id = $(this).data('id');
+                    let productVariantId = $(this).data('variant-id');
+                    updateCart(id, productVariantId, quantity)
+                }
+            });
+
+            $('.qty').on('input', function() {
+                let value = parseInt($(this).val());
+
+                if (isNaN(value) || value < 1) {
+                    $(this).val(1);
+                }
+
+                if (window.location.pathname === '/cart') {
+                    let id = $(this).data('id');
+                    let productVariantId = $(this).data('variant-id');
+                    let quantity = value;
+                    updateCart(id, productVariantId, quantity)
+                }
+            });
+
+            $('.qty').on('keydown', function(e) {
+                if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
+                    (e.key >= "0" && e.key <= "9")) {
+                    return;
+                }
+                e.preventDefault();
+            });
+
+            function load_cart() {
+                $.get("{{ route('client.carts.cart') }}", function(res) {
+                    $('.cart-view').html(res);
+                });
+            }
+            load_cart();
+        });
+    </script> --}}
 @endsection

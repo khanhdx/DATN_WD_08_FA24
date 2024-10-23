@@ -40,6 +40,8 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 // Nếu có các trường khác cần thiết, hãy thêm vào đây
             ]);
+
+            $user->createToken('datn_wd_08_fa24')->plainTextToken;
             
             return redirect()->route('login')->with('success', 'Đăng ký thành công.');
             
