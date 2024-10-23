@@ -22,62 +22,7 @@
 <!-- Style Switcher -->
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
 
-<script>
-    $(document).ready(function() {
-        $('.plus').click(function() {
-            let input = $(this).siblings('.qty');
-            let currentValue = parseInt(input.val());
-            input.val(currentValue + 1);
-        });
-
-        $('.minus').click(function() {
-            let input = $(this).siblings('.qty');
-            let currentValue = parseInt(input.val());
-            if (currentValue > 1) {
-                input.val(currentValue - 1);
-            }
-        });
-
-        $('.qty').on('input', function() {
-            let value = parseInt($(this).val());
-
-            if (isNaN(value) || value < 1) {
-                $(this).val(1);
-            }
-        });
-
-        $('.qty').on('keydown', function(e) {
-            if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
-                (e.key >= "0" && e.key <= "9")) {
-                return;
-            }
-            e.preventDefault();
-        });
-    });
-</script>
-
-<script>
-    // Chọn tất cả các thẻ <a> có class 'submitLink'
-    const submitLinks = document.querySelectorAll('.submitLink');
-
-    submitLinks.forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-            // Lấy giá trị của data-form để biết form nào cần submit
-            const formId = this.getAttribute('data-form');
-            const form = document.getElementById(formId);
-
-            if (form) {
-                form.submit();
-            } else {
-                console.error(`Form với id "${formId}" không tồn tại.`);
-            }
-        });
-    });
-</script>
-
-<script>
+{{-- <script>
     $(document).ready(function() {
         // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
         $('.dropdownLink').on('click', function(e) {
@@ -95,13 +40,70 @@
             $(this).removeClass('open');
         });
     });
+</script> --}}
+
+<script>
+    $(document).on('click', '.plus', function() {
+        let input = $(this).siblings('.qty');
+        let quantity = parseInt(input.val()) + 1;
+        input.val(quantity);
+
+        console.log(quantity);
+
+        if (window.location.pathname === '/carts') {
+            let id = $(this).data('id');
+            let productVariantId = $(this).data('variant-id');
+            updateCart(id, productVariantId, quantity)
+        }
+    });
+
+    $(document).on('click', '.minus', function() {
+        let input = $(this).siblings('.qty');
+        let quantity = parseInt(input.val());
+
+        if (quantity > 1) {
+            input.val(quantity - 1);
+            quantity -= 1
+        } else {
+            return
+        }
+        console.log(quantity);
+
+        if (window.location.pathname === '/carts') {
+            let id = $(this).data('id');
+            let productVariantId = $(this).data('variant-id');
+            updateCart(id, productVariantId, quantity)
+        }
+    });
+
+    $(document).on('change', '.qty', function() {
+        let value = parseInt($(this).val());
+
+        if (isNaN(value) || value < 1) {
+            $(this).val(1);
+        }
+
+        if (window.location.pathname === '/carts') {
+            let id = $(this).data('id');
+            let productVariantId = $(this).data('variant-id');
+            let quantity = value;
+            updateCart(id, productVariantId, quantity)
+        }
+    });
+
+    $(document).on('keydown', '.qty', function(e) {
+        if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
+            (e.key >= "0" && e.key <= "9")) {
+            return;
+        }
+        e.preventDefault();
+    });
 </script>
 
-{{-- Dùng ajax để hiển thị chi tiết sản phẩm lên modal --}}
 <script>
     $(document).ready(function() {
         $('.view-product').click(function(e) {
-            e.preventDefault(); // Ngăn chặn reload trang
+            e.preventDefault();
 
             const productId = $(this).data('id');
 

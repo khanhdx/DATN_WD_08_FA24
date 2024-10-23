@@ -15,30 +15,24 @@ class CartController extends Controller
 
     public function index()
     {
-        // session()->forget('cart');
-        $carts = [];
+        return view(self::PATH_VIEW . __FUNCTION__);
+    }
 
-        $total = 0;
+    public function cart()
+    {
+        // session()->forget('cart');
+        $cartItems = [];
 
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-            $items = CartItem::with('productVariant')->where('cart_id', $cart->id);
-
-            $carts = $items->latest('id')->get();
-
-            $total = $items->sum('sub_total');
+            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->get();
         } else {
-            $carts = session()->get('cart', []);
-
-            $total = array_sum(array_column($carts, 'sub_total'));
+            $cartItems = session()->get('cart', []);
         }
-        // dd($carts);
+        // dd($cartItems);
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'carts',
-            'total'
-        ));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems'));
     }
 
     public function addToCart(Request $request)
@@ -60,7 +54,6 @@ class CartController extends Controller
                 $cart_item->quantity += $request->quantity;
                 $cart_item->sub_total += $sub_total;
                 $cart_item->save();
-
             } else {
                 CartItem::create([
                     'cart_id'             => $cart->id,
@@ -69,7 +62,6 @@ class CartController extends Controller
                     'sub_total'           => $sub_total,
                 ]);
             }
-
         } else {
             $cart = session()->get('cart', []);
 
@@ -98,44 +90,65 @@ class CartController extends Controller
 
     public function updateCart(Request $request, string $id)
     {
-        $productVariant = ProductVariant::where('id', $request->product_variant_id)->firstOrFail();
+        try {
+            $productVariant = ProductVariant::where('id', $request->product_variant_id)->firstOrFail();
 
-        $sub_total = $request->quantity * $productVariant->price;
+            $sub_total = $request->quantity * $productVariant->price;
 
-        if (Auth::check()) {
+            if (Auth::check()) {
+                if ($request->quantity > 0) {
+                    $cart_item = CartItem::find($id);
+                    $total = $cart_item->sum('sub_total');
 
-            if ($request->quantity > 0) {
-                $cart_item = CartItem::where('id', $id)->firstOrFail();
+                    $data = [
+                        'quantity' => $request->quantity,
+                        'sub_total' => $sub_total
+                    ];
 
-                $cart_item->quantity = $request->quantity;
+                    $cart_item->update($data);
+                }
+            } else {
+                $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
 
-                $cart_item->sub_total = $sub_total;
+                session()->put("cart.$id.quantity", $request->quantity);
 
-                $cart_item->save();
+                session()->put("cart.$id.sub_total", $sub_total);
             }
-        } else {
-            session()->put("cart.$id.quantity", $request->quantity);
-            session()->put("cart.$id.sub_total", $sub_total);
-        }
 
-        // return back()->with('success', 'Cập nhật giỏ hàng thành công');
-        return response()->json([
-            'success' => true,
-            'message' => 'Cập nhật giỏ hàng thành công'
-        ]);
+            return response()->json([
+                'message' => 'Cập nhật giỏ hàng thành công!',
+                'total' => $total
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi trong quá trình cập nhật',
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy(string $id)
     {
-        if (Auth::check()) {
-            $cart_item = CartItem::where('id', $id)->firstOrFail();
+        try {
+            if (Auth::check()) {
+                $cart_item = CartItem::where('id', $id)->firstOrFail();
 
-            $cart_item->delete();
-        } else {
-            session()->forget("cart.$id");
+                $cart_item->delete();
+
+            } else {
+                session()->forget("cart.$id");
+            }
+
+            return response()->json([
+                'message' => 'Xóa giỏ hàng thành công!',
+            ], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Xóa giỏ hàng không thành công!',
+            ], 500);
         }
-
-        return back();
     }
 
     public function sessionCartToDatabase()

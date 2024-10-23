@@ -38,8 +38,6 @@ class ProductController extends Controller
     public function show_modal(Product $product) {
         $product->load(['category', 'sizes', 'colors']);
 
-        // $product = Product::with(['category', 'sizes', 'colors'])->find($id);
-
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);
         }
