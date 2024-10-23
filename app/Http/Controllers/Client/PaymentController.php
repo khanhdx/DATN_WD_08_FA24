@@ -114,7 +114,7 @@ class PaymentController extends Controller
                 'status' => 0,
             ]);
         } catch (\Exception $e) {
-            Log::error('Error while creating order: ' . $e->getMessage());
+            Log::error('Error while creating order: '.$e->getMessage());
             return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
