@@ -91,7 +91,7 @@
                                         Cart Subtotal
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total }}</span>
+                                        {{-- <span class="amount">${{ $total }}</span> --}}
                                     </td>
                                 </tr>
                                 <tr class="shipping">
@@ -108,7 +108,7 @@
                                         Total
                                     </th>
                                     <td>
-                                        <span class="amount">${{ $total }}</span>
+                                        {{-- <span class="amount">${{ $total }}</span> --}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -153,7 +153,7 @@
                 product_variant_id: productVariantId,
             };
 
-            $.post(`http://datn_wd_08_fa24.test/carts/${id}`, data, function(res) {
+            $.post(`http://127.0.0.1:8000/carts/${id}`, data, function(res) {
                 load_cart();
             });
         }
