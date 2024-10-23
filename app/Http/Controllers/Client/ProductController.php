@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\ColorController;
 
 class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
-
     public function index()
     {
-        $products = Product::with(['category'])->latest('id')->get();
+        $products = Product::with(['category'])->latest('id')->paginate(9);
+        $categories = Category::all();
+        $colors = Color::all();
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'products'
+            'products',
+            'categories',
+            'colors'
+            
         ));
     }
-
     public function show(Product $product)
     {
         $related_products = Product::with(['category'])->latest('id')->get();

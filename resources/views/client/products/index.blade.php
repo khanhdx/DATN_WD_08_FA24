@@ -7,6 +7,38 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
+    <style>
+        .product-thumb-info-image {
+            position: relative;
+        }
+
+        .product-thumb-info-act {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-thumb-info-image:hover .product-thumb-info-act {
+            opacity: 1;
+        }
+
+        .price-regular {
+            color: rgb(0, 255, 157);
+        }
+
+        .price-sale {
+            color: black;
+            text-decoration: line-through;
+        }
+    </style>
+
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -25,14 +57,9 @@
                     <aside class="block blk-cat">
                         <h4>Category</h4>
                         <ul class="list-unstyled list-cat">
-                            <li><a href="#">New</a></li>
-                            <li><a href="#">Tops</a></li>
-                            <li><a href="#">Bottoms</a></li>
-                            <li><a href="#">Denim</a></li>
-                            <li><a href="#">Outerwear</a></li>
-                            <li><a href="#">Shoes</a></li>
-                            <li><a href="#">Jackets</a></li>
-                            <li><a href="#">Accessories</a></li>
+                            @foreach($categories as $category)
+                                <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                            @endforeach
                         </ul>
                     </aside>
                     <aside class="block blk-brands">
@@ -50,12 +77,9 @@
                     <aside class="block blk-colors">
                         <h4>Colors</h4>
                         <ul class="list-unstyled list-cat">
-                            <li><a href="#">Black</a></li>
-                            <li><a href="#">Blue</a></li>
-                            <li><a href="#">Navy</a></li>
-                            <li><a href="#">Pink</a></li>
-                            <li><a href="#">Purple</a></li>
-                            <li><a href="#">Old Navy</a></li>
+                            @foreach($colors as $color)
+                                <li><a href="#">{{ $color->name }}</a></li>
+                            @endforeach
                         </ul>
                     </aside>
                     <aside class="block featured">
@@ -135,255 +159,90 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-1.jpg">
+                    <div class="container">
+                        @foreach($products->chunk(3) as $chunk)
+                            <div class="row">
+                                @foreach($chunk as $product)
+                                    <div class="col-xs-12 col-sm-6 col-md-4 animation">
+                                        <div class="product">
+                                            <div class="product-thumb-info">
+                                                <div class="product-thumb-info-image">
+                                                    <span class="product-thumb-info-act">
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                            data-target=".quickview-wrapper" class="view-product">
+                                                            <span><i class="fa fa-external-link"></i></span>
+                                                        </a>
+                                                        <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                            <span><i class="fa fa-shopping-cart"></i></span>
+                                                        </a>
+                                                    </span>
+                                                    <img alt="{{ $product->name }}" class="img-responsive"
+                                                        src="{{ url('storage/' . $product->image) }}">
+                                                </div>
+                                                <div class="product-thumb-info-content">
+                                                    <h4>{{ $product->name }}</h4>
+                                                    <div class="price-container">
+                                                        <span class="price-regular">{{ $product->price_regular }} đ</span>
+                                                        <span class="price-sale">{{ $product->price_sale }} đ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">29.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Denim shirt</a></h4>
-                                        <span class="item-cat"><small><a href="#">Jackets</a></small></span>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <a href="shop-product-detail1.html">
-                                    <span class="bag bag-hot">Hot</span>
-                                </a>
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-2.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">29.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Poplin shirt with fine pleated bands</a>
-                                        </h4>
-                                        <span class="item-cat"><small><a href="#">Shirts</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-3.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">29.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Contrasting shirt</a></h4>
-                                        <span class="item-cat"><small><a href="#">Stock clearance</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        @endforeach
                     </div>
+                    <div class="pagination-wrapper">
+                        @if ($products->hasPages())
+                            <nav>
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    @if ($products->onFirstPage())
+                                        <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                                            <span class="page-link" aria-hidden="true">&laquo;</span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&laquo;</a>
+                                        </li>
+                                    @endif
 
-                    <div class="row">
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-9.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">69.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Classic blazer</a></h4>
-                                        <span class="item-cat"><small><a href="#">Outerwear</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-10.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">39.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Striped full skirt</a></h4>
-                                        <span class="item-cat"><small><a href="#">Skirts</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <a href="shop-product-detail1.html">
-                                    <span class="bag bag-onsale">Sale</span>
-                                </a>
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-11.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">79.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Structured double-breasted blazer</a></h4>
-                                        <span class="item-cat"><small><a href="#">Outerwear</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($products->links()->elements as $element)
+                                        {{-- "Three Dots" Separator --}}
+                                        @if (is_string($element))
+                                            <li class="page-item disabled" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+                                        @endif
 
+                                        {{-- Array Of Links --}}
+                                        @if (is_array($element))
+                                            @foreach ($element as $page => $url)
+                                                @if ($page == $products->currentPage())
+                                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                                                @else
+                                                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($products->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&raquo;</a>
+                                        </li>
+                                    @else
+                                        <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                                            <span class="page-link" aria-hidden="true">&raquo;</span>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        @endif
                     </div>
-
-                    <div class="row">
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-17.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">59.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Gold chrono watch</a></h4>
-                                        <span class="item-cat"><small><a href="#">Accessories</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-18.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">7.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Long earrings</a></h4>
-                                        <span class="item-cat"><small><a href="#">Accessories</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 animation">
-                            <div class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <span class="product-thumb-info-act">
-                                            <a href="javascript:void(0);" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product">
-                                                <span><i class="fa fa-external-link"></i></span>
-                                            </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
-                                        </span>
-                                        <img alt="" class="img-responsive"
-                                            src="images/content/products/product-19.jpg">
-                                    </div>
-                                    <div class="product-thumb-info-content">
-                                        <span class="price pull-right">19.99 USD</span>
-                                        <h4><a href="shop-product-detail2.html">Braided belt</a></h4>
-                                        <span class="item-cat"><small><a href="#">Belts</a></small></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <ul class="pagination">
-                        <li class="disabled"><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
-
-
     </div>
 @endsection
