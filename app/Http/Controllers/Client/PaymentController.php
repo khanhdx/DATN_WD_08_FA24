@@ -127,7 +127,7 @@ class PaymentController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Error while creating order: '.$e->getMessage());
-            return redirect()->route('payment.form')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
+            return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
         // Xóa giỏ hàng sau khi thanh toán
