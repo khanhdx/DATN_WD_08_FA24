@@ -7,9 +7,12 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
-    <div
-     class="container">
+    <div class="container">
         <div class="row">
+            <!-- Hiển thị phân trang -->
+            <div class="pagination">
+                {{ $posts->links() }}
+            </div>
             <div class="blog-posts">
                 <div class="blog-masonry">
                     @if ($posts->count() > 0)
@@ -18,12 +21,12 @@
                                 <article class="post post-medium">
                                     <div class="post-image single">
                                         <span class="post-info-act">
-                                            <a href="{{ route('client.post.show', $post->id) }}"><i
-                                                    class="fa fa-caret-right"></i></a>
+                                            <a href="{{ route('client.post.show', $post->id) }}"><i class="fa fa-caret-right"></i></a>
                                         </span>
                                         <a href="{{ route('client.post.show', $post->id) }}">
                                             @if ($post->image)
-                                                <img src="{{ $post->image }}" alt="Image for {{ $post->title }}"
+                                                <img src="{{ \Storage::url($post->image ) }}"
+                                                    alt="Image for {{ $post->title }}"
                                                     style="width: 200px; height: auto;">
                                             @else
                                                 <p>Không có ảnh</p>
@@ -31,8 +34,7 @@
                                         </a>
                                     </div>
                                     <div class="post-content">
-                                        <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a>
-                                        </h3>
+                                        <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a></h3>
                                         <div class="post-meta">
                                             <span>By <a href="#">{{ $post->author }}</a> in <a
                                                     href="{{ route('client.post.show', $post->id) }}">Blog</a></span>
@@ -43,8 +45,8 @@
                                         <div class="post-meta post-meta-foot">
                                             <span class="pull-left"><i
                                                     class="fa fa-clock-o"></i>{{ $post->publish_date }}</span>
-                                            <span class="pull-right"><i class="fa fa-comment-o"></i> <a href="#">12
-                                                    Comments</a></span>
+                                            {{-- <span class="pull-right"><i class="fa fa-comment-o"></i> <a
+                                                    href="#">12 Comments</a></span> --}}
                                         </div>
 
                                         <p class="btn-loadmore text-center">
@@ -58,10 +60,6 @@
 
                             </div>
                         @endforeach
-                        <!-- Hiển thị phân trang -->
-                        <div class="pagination">
-                            {{ $posts->links() }}
-                        </div>
                     @else
                         <p>Hiện không có bài viết nào.</p>
                     @endif

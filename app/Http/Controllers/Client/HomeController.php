@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Post;
+use App\Models\Banner;
+use App\Models\Comment;
 use App\Models\Product;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use App\Models\ProductVariant;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -24,11 +25,13 @@ class HomeController extends Controller
         $latest_posts = Post::query()
             ->latest('id')
             ->paginate(2);
+            $banners = Banner::where('status', 1)->get();
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'newProduct',
             'topSeller',
             'latest_posts',
+            'banners'
         ));
     }
     public function contact() {
