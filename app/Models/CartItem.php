@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     use HasFactory;
+    protected $table = 'cart_items';
 
-    // Mối quan hệ với bảng ProductVariant
-    protected $fillable = ['cart_id', 'product_variant_id', 'quantity','price'];
+    protected $fillable = [
+        'cart_id',
+        'product_variant_id',
+        'quantity',
+        'sub_total',
+    ];
 
     // Định nghĩa quan hệ với ProductVariant
-    public function product_variant()
+    public function productVariant()
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
@@ -33,6 +38,6 @@ class CartItem extends Model
     // Hàm để tính tổng giá trị của mục giỏ hàng
     public function totalPrice()
     {
-        return $this->quantity * ($this->product_variant->price ?? 0);
+        return $this->quantity * ($this->productVariant->price ?? 0);
     }
 }

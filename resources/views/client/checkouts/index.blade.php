@@ -140,22 +140,22 @@
                                     @foreach ($cartItems as $item)
                                         <tr class="cart_item">
                                             <th>
-                                                @if ($item->product_variant && $item->product_variant->product)
-                                                    {{ $item->product_variant->product->name }} ({{ $item->quantity }})
+                                                @if ($item->productVariant && $item->productVariant->product)
+                                                    {{ $item->productVariant->product->name }} ({{ $item->quantity }})
                                                 @else
                                                     Sản phẩm không tìm thấy ({{ $item->quantity }})
                                                 @endif
                                             </th>
                                             <td class="product-price">
-                                                <span class="amount">{{ number_format($item->totalPrice(), 0, ',', '.') }} ₫</span>
+                                                <span class="amount">{{ $item->sub_total }}</span>
                                             </td>
                                         </tr>
-                                        @php $totalPrice += $item->totalPrice(); @endphp
+                                        @php $totalPrice += $item->sub_total; @endphp
                                     @endforeach
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
                                         <td class="product-price">
-                                            <span class="amount" id="subtotalAmount">{{ number_format($totalPrice, 0, ',', '.') }} ₫</span>
+                                            <span class="amount" id="subtotalAmount">{{ $totalPrice }} ₫</span>
                                         </td>
                                     </tr>
                                     <tr class="shipping">
@@ -165,7 +165,7 @@
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
-                                            <strong><span class="amount" id="totalAmount">{{ number_format($totalPrice, 0, ',', '.') }} ₫</span></strong>
+                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice }} ₫</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>

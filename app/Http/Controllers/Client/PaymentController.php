@@ -27,7 +27,7 @@ class PaymentController extends Controller
         }
 
         // Lấy dữ liệu từ giỏ hàng
-        $cartItems = CartItem::where('cart_id', $cartId)->with('product_variant')->get();
+        $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
 
         // Kiểm tra xem giỏ hàng có chứa sản phẩm không
         if ($cartItems->isEmpty()) {
@@ -52,7 +52,7 @@ class PaymentController extends Controller
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
-        $cartItems = CartItem::with('product_variant')->where('cart_id', $cartId)->get();
+        $cartItems = CartItem::with('productVariant')->where('cart_id', $cartId)->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
@@ -88,12 +88,12 @@ class PaymentController extends Controller
             foreach ($cartItems as $item) {
                 OrderDetail::create([
                     'order_id' => $order->id,
-                    'product_id' => $item->product_variant->product_id,
-                    'product_variant_id' => $item->product_variant->id,
-                    'name_product' => $item->product_variant->product->name,
-                    'color' => $item->product_variant->color->name ?? null,
-                    'size' => $item->product_variant->size->name ?? null,
-                    'unit_price' => $item->product_variant->price,
+                    'product_id' => $item->productVariant->product_id,
+                    'product_variant_id' => $item->productVariant->id,
+                    'name_product' => $item->productVariant->product->name,
+                    'color' => $item->productVariant->color->name ?? null,
+                    'size' => $item->productVariant->size->name ?? null,
+                    'unit_price' => $item->productVariant->price,
                     'quantity' => $item->quantity,
                     'total_price' => $item->totalPrice(), // Sử dụng phương thức totalPrice
                 ]);

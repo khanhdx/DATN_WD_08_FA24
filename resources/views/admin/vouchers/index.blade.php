@@ -38,16 +38,16 @@
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Quản lý mã giảm giá</h3>
                     <div class="d-flex justify-content-between mb-3">
-                        <form class="" style="width: 50%;">
-                            <input class="form-control mb-3" type="text" name="search" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
+                        <form class="" method="GET" style="width: 50%;">
+                            <input class="form-control mb-3" type="text" name="search" value="@if(isset($_GET['search'])) {{$_GET['search']}} @endif" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
                             <div class="row m-0" style="gap: 10px;">
                                 <div class="col p-0">
                                     <label class="m-0 form-label" for="date_start">Từ ngày</label>
-                                    <input name="date_start" id="date_start" type="date" class="form-control">
+                                    <input name="date_start" id="date_start" value="@if(isset($_GET['date_start'])) {{$_GET['date_start']}} @endif" type="date" class="form-control">
                                 </div>
                                 <div class="col p-0">
                                     <label class="m-0 form-label" for="date_end">Đến ngày</label>
-                                    <input name="date_end" id="date_end" type="date" class="form-control">
+                                    <input name="date_end" id="date_end" value="@if(isset($_GET['date_end'])) {{$_GET['date_end']}} @endif" type="date" class="form-control">
                                 </div>
                             </div>
                         </form>

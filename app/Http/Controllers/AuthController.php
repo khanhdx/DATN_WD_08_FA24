@@ -40,6 +40,8 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 // Nếu có các trường khác cần thiết, hãy thêm vào đây
             ]);
+
+            $user->createToken('datn_wd_08_fa24')->plainTextToken;
             
             return redirect()->route('login')->with('success', 'Đăng ký thành công.');
             
@@ -62,7 +64,7 @@ class AuthController extends Controller
         }
 
         if ($this->authService->login($request->validated())) {
-            return redirect()->route('home')->with('success', 'Đăng nhập thành công.');
+            return redirect()->route('client.home')->with('success', 'Đăng nhập thành công.');
         }
 
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
