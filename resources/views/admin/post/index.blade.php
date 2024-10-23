@@ -65,7 +65,7 @@
                                     <td>
                                         @if ($post->image)
                                             <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
-                                                width="100">
+                                                width="150" height="auto">
                                         @endif
                                     </td>
                                     <td class="desc">{{ $post->title }}</td>
