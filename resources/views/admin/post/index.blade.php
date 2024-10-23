@@ -97,6 +97,5 @@
             </div>
         </div>
     </section>
-
     <!-- END DATA TABLE-->
 @endsection

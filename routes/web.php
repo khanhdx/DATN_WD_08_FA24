@@ -123,11 +123,8 @@ Route::name('client.')->group(function () {
             Route::get('/',       'index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
-    // Route xóa bình luận
-    // Route::delete('posts/{post}/comments', [CommentController::class, 'destroy'])
-    //     ->name('comments.destroy')
-    //     ->middleware('auth');
 
+    // Route xóa bình luận
     Route::delete('posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy')
         ->middleware('auth');
