@@ -3,6 +3,13 @@
 @section('content')
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+            </div>
             <div class="col-md-6">
                 <h3 class="title-5 m-b-35">Màu sắc</h3>
                 <div class="table-data__tool">
@@ -50,21 +57,18 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="color_name">Tên màu:</label>
-                                            <input type="text" class="form-control" id="color_name" name="name"
-                                                required>
-                                                @error('name')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
+                                            <input type="text" class="form-control" id="color_name" name="name">
+                                            <p class="text-danger" id="name_error" style="display: none;">Tên màu là bắt
+                                                buộc!</p>
                                         </div>
                                         <div class="form-group">
                                             <label for="color_code">Mã màu:</label>
                                             <input type="text" class="form-control" id="color_code" name="code_color"
-                                                placeholder="#ff0000" required>
-                                                @error('color_code')
-                                                    <p class="text-danger">{{ $message }}</p>
-                                                @enderror
+                                                placeholder="#ff0000">
+                                            <p class="text-danger" id="color_code_error" style="display: none;">Mã màu là
+                                                bắt buộc!</p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Lưu màu</button>
+                                        <button type="submit" class="btn btn-primary" id="createColor">Lưu màu</button>
                                     </form>
                                 </div>
                             </div>
@@ -124,13 +128,13 @@
                                                                         <label for="color_name">Tên màu:</label>
                                                                         <input type="text" class="form-control"
                                                                             id="color_name" name="name"
-                                                                            value="{{ $item->name }}" required>
+                                                                            value="{{ $item->name }}">
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="color_code">Mã màu:</label>
                                                                         <input type="text" class="form-control"
                                                                             id="color_code" name="code_color"
-                                                                            value="{{ $item->code_color }}" required>
+                                                                            value="{{ $item->code_color }}">
                                                                     </div>
                                                                     <button type="submit" class="btn btn-primary">Cập
                                                                         nhật màu</button>
@@ -208,10 +212,11 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="name">Size:</label>
-                                            <input type="text" class="form-control" id="name" name="name"
-                                                required>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <p class="text-danger" id="size_error" style="display: none;">Tên màu là bắt
+                                                buộc!</p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Lưu size</button>
+                                        <button type="submit" class="btn btn-primary" id="createSize">Lưu size</button>
                                     </form>
                                 </div>
                             </div>
@@ -240,8 +245,7 @@
                                                 </button>
 
                                                 <!-- Modal chỉnh Size -->
-                                                <div class="modal fade" id="editSize{{ $item->id }}"
-                                                    tabindex="-1"
+                                                <div class="modal fade" id="editSize{{ $item->id }}" tabindex="-1"
                                                     aria-labelledby="editSizeModalLabel{{ $item->id }}"
                                                     aria-hidden="true">
                                                     <div class="modal-dialog">
@@ -265,7 +269,7 @@
                                                                         <label for="color_name">Size:</label>
                                                                         <input type="text" class="form-control"
                                                                             id="color_name" name="name"
-                                                                            value="{{ $item->name }}" required>
+                                                                            value="{{ $item->name }}">
                                                                     </div>
 
                                                                     <button type="submit" class="btn btn-primary">Cập
@@ -277,7 +281,7 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                <form action="{{ route('admin.products.delete', $item->id) }}"
+                                                <form action="{{ route('admin.products.variants.sizes.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                     @csrf
@@ -297,4 +301,57 @@
                 </div>
             </div>
         </div>
+    @endsection
+
+
+    @section('js')
+        <script>
+            document.getElementById('createColor').addEventListener('click', function(event) {
+                let colorName = document.getElementById('color_name').value.trim();
+                let colorCode = document.getElementById('color_code').value.trim();
+
+                let hasError = false;
+
+                // Validate tên màu 
+                if (colorName === '') {
+                    document.getElementById('name_error').style.display = 'block';
+                    hasError = true;
+                } else {
+                    document.getElementById('name_error').style.display = 'none';
+                }
+
+                // Validate Mã Màu (phải có định dạng hex)
+                let colorCodePattern = /^#[0-9A-F]{6}$/i;
+                if (!colorCodePattern.test(colorCode)) {
+                    document.getElementById('color_code_error').style.display = 'block';
+                    hasError = true;
+                } else {
+                    document.getElementById('color_code_error').style.display = 'none';
+                }
+
+                // Nếu có lỗi, ngăn chặn việc submit form
+                if (hasError) {
+                    event.preventDefault();
+                }
+            })
+
+            document.getElementById('createSize').addEventListener('click', function(event) {
+                let colorName = document.getElementById('name').value.trim();
+
+                let hasError = false;
+
+                // Validate tên màu 
+                if (colorName === '') {
+                    document.getElementById('size_error').style.display = 'block';
+                    hasError = true;
+                } else {
+                    document.getElementById('size_error').style.display = 'none';
+                }
+
+                // Nếu có lỗi, ngăn chặn việc submit form
+                if (hasError) {
+                    event.preventDefault();
+                }
+            })
+        </script>
     @endsection

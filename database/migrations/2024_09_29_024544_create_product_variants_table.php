@@ -19,8 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained();
             $table->foreignIdFor(Color::class)->constrained();
             $table->foreignIdFor(Size::class)->constrained();
+
             $table->unsignedBigInteger('stock');
-            $table->double('price');
+            $table->decimal('price');
             $table->timestamps();   
         });
     }

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\Color\ColorService;
 use App\Services\Color\IColorService;
+use App\Services\Order\IOrderService;
+use App\Services\Order\OrderService;
 use App\Services\Product\IProductService;
 use App\Services\Product\IVariantService;
 use App\Services\Product\ProductService;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ISizeService::class, SizeService::class);
         $this->app->bind(IProductService::class, ProductService::class);
         $this->app->bind(IVariantService::class, VariantService::class);
+        $this->app->bind(IOrderService::class, OrderService::class);
     }
 
     /**

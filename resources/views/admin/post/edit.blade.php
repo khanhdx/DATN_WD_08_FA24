@@ -24,7 +24,7 @@
                                         <div class="form-group">
                                             <label for="image">Ảnh:</label>
                                             @if ($post->image)
-                                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                                <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
                                                     width="100"><br>
                                             @endif
                                             <input class="au-input au-input--full" type="file" name="image"

@@ -195,14 +195,14 @@ body {
   border-radius: 50%;
   color: white;
   display: block;
-  font-size: .714em;
-  height: 13px;
+  /* font-size: .714em; */
+  height: 15px;
   line-height: 12px;
   position: absolute;
   right: 0;
   text-align: center;
   top: 10px;
-  width: 13px;
+  width: 15px;
 }
 
 /* Languages */

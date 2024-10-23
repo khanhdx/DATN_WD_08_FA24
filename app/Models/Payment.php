@@ -11,16 +11,17 @@ class Payment extends Model
 
     protected $fillable = [
         'order_id',
+        'user_id',
         'amount',
         'transaction_type',
         'payment_method',
         'status',
-        'note',
+        'note'
     ];
 
 
     public function order()
     {
-        $this->belongsTo(Order::class);
+       return $this->belongsTo(Order::class);
     }
 }

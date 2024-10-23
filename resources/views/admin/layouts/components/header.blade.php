@@ -36,10 +36,10 @@
                     <  <li class="has-sub">
                         <a href="#">
                             <i class="fas fa-list-ul"></i>
-                            <span class="bot-line"></span>Quản lý sản phẩm</a>
+                            <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
-                                <a href="{{ route('admin.products.index')}}">Sản phẩm</a>
+                                <a href="{{ route('admin.products.index')}}">Quản lý sản phẩm</a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
@@ -144,39 +144,40 @@
                             <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="John Doe" />
                         </div>
                         <div class="content">
-                            <a class="js-acc-btn" href="#">john doe</a>
+                            <a class="js-acc-btn" href="#">{{Auth::user()->name}}</a>
                         </div>
                         <div class="account-dropdown js-dropdown">
                             <div class="info clearfix">
                                 <div class="image">
                                     <a href="#">
-                                        <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="John Doe" />
+                                        @if (Auth::user()->user_image)
+                                            <img src="{{ Storage::url(Auth::user()->user_image) }}" alt="">
+                                        @else
+                                            <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="" />
+                                        @endif
                                     </a>
                                 </div>
                                 <div class="content">
                                     <h5 class="name">
-                                        <a href="#">john doe</a>
+                                        <a href="#">{{Auth::user()->name}}</a>
                                     </h5>
-                                    <span class="email">johndoe@example.com</span>
+                                    <span class="email">{{Auth::user()->email}}</span>
                                 </div>
                             </div>
                             <div class="account-dropdown__body">
                                 <div class="account-dropdown__item">
                                     <a href="#">
-                                        <i class="zmdi zmdi-account"></i>Account</a>
+                                        <i class="zmdi zmdi-account"></i>Tài khoản</a>
                                 </div>
+
                                 <div class="account-dropdown__item">
                                     <a href="#">
-                                        <i class="zmdi zmdi-settings"></i>Setting</a>
-                                </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
+                                        <i class="zmdi zmdi-settings"></i>Cài đặt</a>
                                 </div>
                             </div>
                             <div class="account-dropdown__footer">
                                 <a href="#">
-                                    <i class="zmdi zmdi-power"></i>Logout</a>
+                                    <i class="zmdi zmdi-power"></i>Đăng xuất</a>
                             </div>
                         </div>
                     </div>
