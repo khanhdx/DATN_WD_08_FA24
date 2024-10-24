@@ -51,11 +51,11 @@ class OrderController extends Controller
         'order_details.product',        // Quan hệ với Product trong OrderDetail
         'order_details.variant.color',  // Màu sắc từ ProductVariant
         'order_details.variant.size',   // Kích thước từ ProductVariant
-        'statuses',                    // Quan hệ với StatusOrder qua bảng trung gian
+        'statusOrder',                    // Quan hệ với StatusOrder qua bảng trung gian
         'payments'                     // Quan hệ với Payment
     ])->findOrFail($id);
 
-    $currentStatus = $order->statuses->last(); 
+    $currentStatus = $order->statusOrder->last(); 
     // Lấy các chi tiết đơn hàng từ quan hệ orderDetails
     $order_details = $order->order_details;
 

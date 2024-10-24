@@ -114,7 +114,7 @@
                                         <div class="table-data-feature">
 
                                             {{-- Xem chi tiết  --}}
-                                            <a href="">
+                                            <a href="{{route('admin.orders.show', $order->id)}}">
                                                 <button class="item mr-2" data-toggle="tooltip" data-placement="top"
                                                     title="Xem chi tiết đơn hàng">
                                                     <i class="fas fa-eye"></i>
