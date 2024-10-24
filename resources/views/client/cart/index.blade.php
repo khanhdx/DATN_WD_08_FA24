@@ -153,7 +153,7 @@
                 product_variant_id: productVariantId,
             };
 
-            $.post(`http://127.0.0.1:8000/carts/${id}`, data, function(res) {
+            $.post(`http://datn_wd_08_fa24.test/carts/${id}`, data, function(res) {
                 load_cart();
             });
         }
