@@ -164,7 +164,7 @@
 
                 <li><a href="{{ route('client.post.index') }}">Blog</a></li>
                 {{-- <li><a href="{{ route('client.voucher.index') }}">Voucher</a></li> --}}
-                <li><a href="page-contact1.html">Contact</a></li>
+                <li><a href="{{route('client.contact')}}">Contact</a></li>
             </ul>
         </div>
     </div>
