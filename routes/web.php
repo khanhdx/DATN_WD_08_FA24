@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
@@ -10,15 +9,17 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
-
 use App\Http\Controllers\Admin\ProductController;
+
+use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
-use App\Http\Controllers\Admin\ProductVariantController;
 
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -130,10 +131,17 @@ Route::name('client.')->group(function () {
         ->middleware('auth');
 
     // Route hiển thị bình luận
-    Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+    Route::post('posts/{post}/comments', [CommentController::class, 'store'])
+        ->name('comments.store')
+        ->middleware('auth');
 
-    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])
+        ->name('client.comments.destroy');
     
+    // Route cho đánh giá sản phẩm (reviews)
+    Route::post('products/{id}/reviews', [ReviewController::class, 'store'])
+        ->middleware('auth')
+        ->name('client.reviews.store');
 
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')

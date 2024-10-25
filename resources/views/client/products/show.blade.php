@@ -147,6 +147,7 @@
                                         href="#collapseThree">Reviews (3)</a> </h4>
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
+
                                 <div class="panel-body post-comments">
                                     <ul class="comments">
                                         <li>
@@ -191,6 +192,50 @@
                                         </li>
                                     </ul>
                                 </div>
+                                {{-- <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Reviews ({{ $product->reviews->count() }})</a> </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body post-comments">
+                                            <ul class="comments">
+                                                @foreach($product->reviews as $review)
+                                                    <li>
+                                                        <div class="comment">
+                                                            <div class="img-circle"> <img class="avatar" width="50" alt="" src="/assets/client/images/content/blog/avatar.png"> </div>
+                                                            <div class="comment-block">
+                                                                <span class="comment-by"> <strong>{{ $review->user->name }}</strong></span>
+                                                                <span class="date"><small><i class="fa fa-clock-o"></i> {{ $review->created_at->format('F d, Y') }}</small></span>
+                                                                <p>{{ $review->review }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            @auth
+                                            <form action="{{ url('products/'.$product->id.'/reviews') }}" method="POST">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <textarea name="review" class="form-control" placeholder="Nhập đánh giá"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="rating">Đánh giá (1-5 sao):</label>
+                                                    <select name="rating" id="rating" class="form-control">
+                                                        <option value="1">1 sao</option>
+                                                        <option value="2">2 sao</option>
+                                                        <option value="3">3 sao</option>
+                                                        <option value="4">4 sao</option>
+                                                        <option value="5">5 sao</option>
+                                                    </select>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                            </form>
+                                            @else
+                                            <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để đánh giá sản phẩm.</p>
+                                            @endauth
+                                        </div>
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
