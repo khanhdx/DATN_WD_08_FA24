@@ -21,8 +21,10 @@
 
 <!-- Style Switcher -->
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{{-- <script>
+<!-- Xử lý nút dropdown -->
+<script>
     $(document).ready(function() {
         // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
         $('.dropdownLink').on('click', function(e) {
@@ -40,8 +42,9 @@
             $(this).removeClass('open');
         });
     });
-</script> --}}
+</script>
 
+<!-- Xử lý nút tăng giảm -->
 <script>
     $(document).on('click', '.plus', function() {
         let input = $(this).siblings('.qty');
@@ -100,17 +103,18 @@
     });
 </script>
 
+<!-- Lấy dữ liệu ajax đổ ra modal -->
 <script>
     $(document).ready(function() {
         $('.view-product').click(function(e) {
             e.preventDefault();
-
             const productId = $(this).data('id');
 
             $.ajax({
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
+                    $('#product-id').val(data.id);
                     $('#product-name').text(data.name);
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
@@ -129,5 +133,142 @@
                 }
             });
         });
+    });
+</script>
+
+<script>
+    $(document).on('click', '.remove-cart', function(e) {
+        e.preventDefault();
+
+        let href = $(this).attr('href');
+        let data = {
+            _token: '{{ csrf_token() }}',
+            _method: "DELETE"
+        };
+
+        $.post(href, data, function(res) {
+            load_cart();
+            load_header();
+        });
+    });
+
+    function updateCart(id, productVariantId, qty) {
+        let data = {
+            _token: '{{ csrf_token() }}',
+            _method: 'PUT',
+            quantity: qty,
+            product_variant_id: productVariantId,
+        };
+
+        $.post(`{{ route('client.home') }}/carts/${id}`, data, function(res) {
+            load_cart();
+            load_header();
+        });
+    }
+
+    function load_cart() {
+        $.get("{{ route('client.carts.cart') }}", function(res) {
+            $('.cart-view').html(res);
+        });
+    }
+    load_cart();
+
+    function load_header() {
+        $.get("{{ route('client.header') }}", function(res) {
+            $('.header-view').html(res);
+        });
+    }
+    load_header();
+</script>
+
+<!-- Xử lý logic chọn màu và thêm giỏ hàng qua ajax -->
+<script>
+    $(document).ready(function() {
+        let selectedColor = null;
+        let selectedSize = null;
+        let productId = $('#product_id').val();
+
+        $('.btn-color').on('click', function(e) {
+            e.preventDefault();
+            $('.btn-color').removeClass('color-active');
+            $(this).addClass('color-active');
+
+            selectedColor = $(this).data('color-id');
+            // fetchAvailableSizes(selectedColor);
+        });
+
+        $('.btn-size').on('click', function(e) {
+            e.preventDefault();
+            $('.btn-size').removeClass('btn-active');
+            $(this).addClass('btn-active');
+
+            selectedSize = $(this).data('size-id');
+            fetchAvailableColors(selectedSize);
+        });
+
+        $('#addToCart').on('submit', function(e) {
+            e.preventDefault();
+
+            let quantity = $('#quantity').val();
+            let dataCart = {
+                product_id: productId,
+                color_id: selectedColor,
+                size_id: selectedSize,
+                quantity: quantity,
+                _token: '{{ csrf_token() }}',
+            }
+            console.log(dataCart);
+
+            if (selectedColor && selectedSize) {
+                $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
+                    if (res.status_code == 200) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: res.message,
+                            showConfirmButton: true,
+                            timer: 1500
+                        });
+                        load_header();
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: res.message,
+                        });
+                    }
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Vui lòng chọn phân loại!",
+                });
+            }
+        });
+
+        // function fetchAvailableSizes(colorId) {
+        //     $.get(`/api/product/${productId}`, function(res) {
+        //         $('.size-btn').hide();
+        //         res.variants.forEach(size => {
+        //             $(`.size-btn[data-size="${size.id}"]`).show();  // Hiển thị size hợp lệ
+        //         });
+        //     });
+        // }
+
+        function fetchAvailableColors(sizeId) {
+            let dataColor = {
+                product_id: productId,
+                size_id: sizeId
+            }
+            $.get("{{ route('get.color') }}", dataColor, function(res) {
+                $('.btn-color').hide();
+                $('.btn-color').removeClass('color-active');
+                res.forEach(item => {
+                    $(`.btn-color[data-color-id="${item.color_id}"]`).show();
+                    console.log(item.color_id);
+                });
+            });
+        }
     });
 </script>

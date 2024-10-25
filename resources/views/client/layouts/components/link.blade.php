@@ -31,3 +31,5 @@
 
 <!-- Theme Responsive-->
 <link href="{{ asset('assets/client/css/theme-responsive.css') }}" rel="stylesheet">
+
+@yield('css')

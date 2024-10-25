@@ -10,38 +10,37 @@
                         <div class="product-preview">
                             <ul class="bxslider" id="slider1">
                                 <li>
-                                    <img alt="" class="img-responsive" id="product-image"
-                                        src="">
+                                    <img alt="" class="img-responsive" id="product-image" src="">
                                 </li>
                                 <li>
                                     <img alt="" class="img-responsive"
-                                        src="assets/client/images/content/products/product-1-1.jpg">
+                                        src="/assets/client/images/content/products/product-1-1.jpg">
                                 </li>
                                 <li>
                                     <img alt="" class="img-responsive"
-                                        src="assets/client/images/content/products/product-1-2.jpg">
+                                        src="/assets/client/images/content/products/product-1-2.jpg">
                                 </li>
                                 <li>
                                     <img alt="" class="img-responsive"
-                                        src="assets/client/images/content/products/product-1-3.jpg">
+                                        src="/assets/client/images/content/products/product-1-3.jpg">
                                 </li>
                                 <li>
                                     <img alt="" class="img-responsive"
-                                        src="assets/client/images/content/products/product-1-4.jpg">
+                                        src="/assets/client/images/content/products/product-1-4.jpg">
                                 </li>
                             </ul>
 
                             <ul class="list-inline bx-pager">
                                 <li><a data-slide-index="0" href="#"><img alt="" class="img-responsive"
-                                            src="assets/client/images/content/products/product-thumb.jpg"></a></li>
+                                            src="/assets/client/images/content/products/product-thumb.jpg"></a></li>
                                 <li><a data-slide-index="1" href="#"><img alt="" class="img-responsive"
-                                            src="assets/client/images/content/products/product-thumb-1.jpg"></a></li>
+                                            src="/assets/client/images/content/products/product-thumb-1.jpg"></a></li>
                                 <li><a data-slide-index="2" href="#"><img alt="" class="img-responsive"
-                                            src="assets/client/images/content/products/product-thumb-2.jpg"></a></li>
+                                            src="/assets/client/images/content/products/product-thumb-2.jpg"></a></li>
                                 <li><a data-slide-index="3" href="#"><img alt="" class="img-responsive"
-                                            src="assets/client/images/content/products/product-thumb-3.jpg"></a></li>
+                                            src="/assets/client/images/content/products/product-thumb-3.jpg"></a></li>
                                 <li><a data-slide-index="4" href="#"><img alt="" class="img-responsive"
-                                            src="assets/client/images/content/products/product-thumb-4.jpg"></a></li>
+                                            src="/assets/client/images/content/products/product-thumb-4.jpg"></a></li>
                             </ul>
                         </div>
                     </div>
@@ -62,44 +61,77 @@
                                 $<span class="amount" id="product-price-regular"></span>
                             </p>
 
-                            <ul class="list-inline list-select clearfix">
-                                <li>
-                                    <div class="list-sort">
-                                        <select class="formDropdown">
-                                            <option>Select Size</option>
-                                            <option>XS</option>
-                                            <option>S</option>
-                                            <option>M</option>
-                                            <option>L</option>
-                                            <option>XL</option>
-                                            <option>XXL</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li class="color"><a href="#" class="color1"></a></li>
-                                <li class="color"><a href="#" class="color2"></a></li>
-                                <li class="color"><a href="#" class="color3"></a></li>
-                                <li class="color"><a href="#" class="color4"></a></li>
-                            </ul>
+                            {{-- <form method="post" class="cart" id="addToCart">
+                                @csrf
+                                <input type="hidden" name="product_id" id="product-id" value="">
 
-                            <form method="post" class="cart">
+                                <ul class="list-inline list-select clearfix">
+                                    <li class="btn-size">
+                                        
+
+                                    </li>
+                                    <li class="color"><a href="#" class="color1"></a></li>
+                                </ul>
+
                                 <div class="quantity pull-left">
                                     <input type="button" class="minus" value="-">
                                     <input type="text" class="input-text qty" title="Qty" value="1"
                                         name="quantity" min="1" step="1">
                                     <input type="button" class="plus" value="+">
                                 </div>
+
                                 <a href="#" class="btn btn-grey">
                                     <span><i class="fa fa-heart"></i></span>
                                 </a>
-                                <button href="#" class="btn btn-primary btn-icon">
+
+                                <button type="submit" class="btn btn-primary btn-icon">
+                                    <i class="fa fa-shopping-cart"></i> Add to cart
+                                </button>
+                            </form> --}}
+
+                            <form method="post" class="cart" id="addToCart">
+                                @csrf
+                                <input type="hidden" name="product_id" id="product_id" value="">
+    
+                                <ul class="list-inline list-select clearfix">
+                                    <li>
+                                        <h4 class="m-0">Size:</h4>
+                                    </li>
+    
+                                    <li id="size-btn">
+                                        
+                                    </li>
+                                </ul>
+                                
+                                <ul class="list-inline list-select clearfix">
+                                    <li>
+                                        <h4 class="m-0">Color:</h4>
+                                    </li>
+    
+                                    <li id="color-btn">
+
+                                    </li>
+                                </ul>
+    
+                                <div class="quantity pull-left">
+                                    <input type="button" class="minus" value="-">
+                                    <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
+                                        name="quantity" min="1" step="1">
+                                    <input type="button" class="plus" value="+">
+                                </div>
+    
+                                <a href="#" class="btn btn-grey">
+                                    <span><i class="fa fa-heart"></i></span>
+                                </a>
+    
+                                <button type="submit" class="btn btn-primary btn-icon">
                                     <i class="fa fa-shopping-cart"></i> Add to cart
                                 </button>
                             </form>
 
                             <ul class="list-unstyled product-meta">
                                 <li>SKU: <span id="product-sku"></span></li>
-                                <li>Categories: 
+                                <li>Categories:
                                     <a href="#" id="category-name"></a>
                                     <a href="#" id="category-type"></a>
                                 </li>
@@ -145,7 +177,7 @@
                                                     <div class="comment">
                                                         <div class="img-circle"> <img class="avatar" width="50"
                                                                 alt=""
-                                                                src="assets/client/images/content/blog/avatar.png">
+                                                                src="/assets/client/images/content/blog/avatar.png">
                                                         </div>
                                                         <div class="comment-block">
                                                             <span class="comment-by"> <strong>Frank
@@ -161,7 +193,7 @@
                                                     <div class="comment">
                                                         <div class="img-circle"> <img class="avatar" width="50"
                                                                 alt=""
-                                                                src="assets/client/images/content/blog/avatar.png">
+                                                                src="/assets/client/images/content/blog/avatar.png">
                                                         </div>
                                                         <div class="comment-block">
                                                             <span class="comment-by"> <strong>Frank
@@ -179,7 +211,7 @@
                                                     <div class="comment">
                                                         <div class="img-circle"> <img class="avatar" width="50"
                                                                 alt=""
-                                                                src="assets/client/images/content/blog/avatar.png">
+                                                                src="/assets/client/images/content/blog/avatar.png">
                                                         </div>
                                                         <div class="comment-block">
                                                             <span class="comment-by"> <strong>Frank
@@ -205,3 +237,78 @@
     </div>
 </div>
 <!-- End Quickview -->
+{{-- <script>
+    $(document).ready(function() {
+        let selectedColor = null;
+        let selectedSize = null;
+
+        $('.btn-color').on('click', function(e) {
+            e.preventDefault();
+            $('.btn-color').removeClass('color-active');
+            $(this).addClass('color-active');
+
+            selectedColor = $(this).data('color-id');
+            fetchAvailableSizes(selectedColor);
+        });
+
+        $('.btn-size').on('click', function(e) {
+            e.preventDefault();
+            $('.btn-size').removeClass('btn-active');
+            $(this).addClass('btn-active');
+
+            selectedSize = $(this).data('size-id');
+            fetchAvailableColors(selectedSize);
+        });
+
+        $('#addToCart').on('submit', function(e) {
+            e.preventDefault();
+
+            let productId = $('#product_id').val();
+            let quantity = $('#quantity').val();
+            let dataCart = {
+                product_id: productId,
+                color_id: selectedColor,
+                size_id: selectedSize,
+                quantity: quantity,
+                _token: '{{ csrf_token() }}',
+            }
+            console.log(dataCart);
+
+            if (selectedColor && selectedSize) {
+                $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: res.message,
+                        showConfirmButton: true,
+                        timer: 2000
+                    });
+                })
+            } else {
+                alert('Vui lòng chọn màu và size!')
+            }
+        });
+
+        function fetchAvailableSizes(colorId) {
+            $('.btn-size').hide(); // Ẩn tất cả nút size
+            $('.btn-size').each(function() {
+                const sizeId = $(this).data('size-id');
+                const exists = @json($product->variants).some(variant =>
+                    variant.color_id == colorId && variant.size_id == sizeId
+                );
+                if (exists) $(this).show();
+            });
+        }
+
+        function fetchAvailableColors(sizeId) {
+            $('.btn-color').hide();
+            $('.btn-color').each(function() {
+                const colorId = $(this).data('color-id');
+                const exists = @json($product->variants).some(variant =>
+                    variant.size_id == sizeId && variant.color_id == colorId
+                );
+                if (exists) $(this).show();
+            });
+        }
+    });
+</script> --}}

@@ -95,7 +95,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             // Route quản lý orders
             Route::prefix('orders')->as('orders.')->group(function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
-
+                Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
             });
         });
@@ -105,6 +105,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
+    Route::get('/header',  [HomeController::class, 'header'])->name('header');
 
     // Route cho sản phẩm (product)
     Route::prefix('products')
@@ -123,11 +124,8 @@ Route::name('client.')->group(function () {
             Route::get('/',       'index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
-    // Route xóa bình luận
-    // Route::delete('posts/{post}/comments', [CommentController::class, 'destroy'])
-    //     ->name('comments.destroy')
-    //     ->middleware('auth');
 
+    // Route xóa bình luận
     Route::delete('posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy')
         ->middleware('auth');

@@ -18,7 +18,10 @@
 <body>
     <div id="page">
         <header>
-            @include('client.layouts.components.header')
+            <div id="top" class="header-view">
+                
+            </div>
+
             @include('client.layouts.components.navbar')
         </header>
 
@@ -41,4 +44,5 @@
 
     @yield('js')
 </body>
+
 </html>

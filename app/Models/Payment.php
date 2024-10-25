@@ -16,12 +16,12 @@ class Payment extends Model
         'transaction_type',
         'payment_method',
         'status',
-        'note',
+        'note'
     ];
 
 
     public function order()
     {
-        $this->belongsTo(Order::class);
+       return $this->belongsTo(Order::class);
     }
 }
