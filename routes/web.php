@@ -105,7 +105,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
-
+    Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)
