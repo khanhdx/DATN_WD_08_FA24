@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'name'=> 'Admin123',
             'email'=> 'admin123@gmail.com',
             'phone_number'=> '012345678',
-            'password'=> 'Admin123',
+            'password'=> 'Admin12345',
             'role'=>'Quản lý',
         ];
         User::query()->create($data);
