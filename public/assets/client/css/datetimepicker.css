@@ -19,7 +19,8 @@
   text-transform: none;
 }
 /* line 24, ../sass/datetimepicker.scss */
-.bootstrap-datetimepicker-widget .btn:hover, .bootstrap-datetimepicker-widget .btn:focus {
+.bootstrap-datetimepicker-widget .btn:hover,
+.bootstrap-datetimepicker-widget .btn:focus {
   background-color: transparent;
   border-color: transparent;
   color: #333333;

@@ -105,7 +105,9 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
+    Route::get('/header',  [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
+    
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)
@@ -164,7 +166,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('show');
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
 });
 
 // Route cho xác thực
