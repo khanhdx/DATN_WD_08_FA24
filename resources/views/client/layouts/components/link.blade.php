@@ -31,5 +31,11 @@
 
 <!-- Theme Responsive-->
 <link href="{{ asset('assets/client/css/theme-responsive.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
 
+<style>
+    .swal2-title {
+        font-size: 40px;
+    }
+</style>
 @yield('css')

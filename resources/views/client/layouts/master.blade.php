@@ -19,9 +19,9 @@
     <div id="page">
         <header>
             <div id="top" class="header-view">
-                
+    
             </div>
-
+                        
             @include('client.layouts.components.navbar')
         </header>
 

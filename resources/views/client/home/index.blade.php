@@ -109,7 +109,7 @@
                                         <div class="product-thumb-info">
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
-                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                    <a href="" data-toggle="modal"
                                                         data-target=".quickview-wrapper" class="view-product"
                                                         data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>
@@ -151,7 +151,7 @@
                                         <div class="product-thumb-info">
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
-                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                    <a href="" data-toggle="modal"
                                                         data-target=".quickview-wrapper" class="view-product"
                                                         data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>

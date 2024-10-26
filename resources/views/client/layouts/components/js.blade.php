@@ -21,7 +21,7 @@
 
 <!-- Style Switcher -->
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
 <!-- Xử lý nút dropdown -->
 <script>
@@ -114,7 +114,7 @@
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
-                    $('#product-id').val(data.id);
+                    $('#product_id').val(data.id);
                     $('#product-name').text(data.name);
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
@@ -127,6 +127,22 @@
                     if (data.image) {
                         $('#product-image').attr('src', `${data.image}`);
                     }
+
+                    $('#size-btn').empty();
+                    data.sizes.forEach(item => {
+                        $('#size-btn').append(
+                            `<button class="btn-size mr-1"
+                                data-size-id="${item.id}">${item.name}</button>`
+                        );
+                    });
+
+                    $('#color-btn').empty();
+                    data.colors.forEach(item => {
+                        $('#color-btn').append(
+                            `<button class="btn-color mr-1" data-color-id="${item.id}"
+                                style="background-color:${item.code_color}"></button>`
+                        );
+                    });
                 },
                 error: function() {
                     alert('Không tìm thấy sản phẩm!');
@@ -136,6 +152,7 @@
     });
 </script>
 
+<!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>
     $(document).on('click', '.remove-cart', function(e) {
         e.preventDefault();
@@ -186,9 +203,8 @@
     $(document).ready(function() {
         let selectedColor = null;
         let selectedSize = null;
-        let productId = $('#product_id').val();
 
-        $('.btn-color').on('click', function(e) {
+        $('#color-btn').on('click', '.btn-color', function(e) {
             e.preventDefault();
             $('.btn-color').removeClass('color-active');
             $(this).addClass('color-active');
@@ -197,7 +213,7 @@
             // fetchAvailableSizes(selectedColor);
         });
 
-        $('.btn-size').on('click', function(e) {
+        $('#size-btn').on('click', '.btn-size', function(e) {
             e.preventDefault();
             $('.btn-size').removeClass('btn-active');
             $(this).addClass('btn-active');
@@ -208,7 +224,7 @@
 
         $('#addToCart').on('submit', function(e) {
             e.preventDefault();
-
+            let productId = $('#product_id').val();
             let quantity = $('#quantity').val();
             let dataCart = {
                 product_id: productId,
@@ -217,18 +233,29 @@
                 quantity: quantity,
                 _token: '{{ csrf_token() }}',
             }
-            console.log(dataCart);
 
             if (selectedColor && selectedSize) {
                 $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
                     if (res.status_code == 200) {
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: res.message,
-                            showConfirmButton: true,
-                            timer: 1500
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
                         });
+                        Toast.fire({
+                            icon: "success",
+                            title: res.message
+                        });
+                        quantity = $('#quantity').val(1);
+                        selectedColor = null;
+                        selectedSize = null;
+                        $('#productModal').modal('hide');
                         load_header();
                     } else {
                         Swal.fire({
@@ -247,16 +274,8 @@
             }
         });
 
-        // function fetchAvailableSizes(colorId) {
-        //     $.get(`/api/product/${productId}`, function(res) {
-        //         $('.size-btn').hide();
-        //         res.variants.forEach(size => {
-        //             $(`.size-btn[data-size="${size.id}"]`).show();  // Hiển thị size hợp lệ
-        //         });
-        //     });
-        // }
-
         function fetchAvailableColors(sizeId) {
+            let productId = $('#product_id').val();
             let dataColor = {
                 product_id: productId,
                 size_id: sizeId
