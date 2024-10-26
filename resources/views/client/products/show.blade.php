@@ -21,11 +21,6 @@
 
     <div class="container">
         <div class="row">
-            @if (session()->has('success') && session()->get('success'))
-                <div class="alert alert-success">
-                    {{ session()->get('success') }}
-                </div>
-            @endif
             <div class="col-sm-6">
                 <div class="product-preview">
                     <div class="flexslider">
@@ -66,45 +61,52 @@
                         <span class="amount">${{ $product->price_regular }}</span>
                     </p>
 
-                    <form method="post" class="cart" action="{{ route('client.carts.add') }}">
-                        @csrf
+                    <div>
+                        <form method="post" class="cart" id="addToCart">
+                            @csrf
+                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
 
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <ul class="list-inline list-select clearfix">
-                            <li>
-                                <select class="formDropdown" name="size_id">
-                                    <option>Select Size</option>
+                            <ul class="list-inline list-select clearfix">
+                                <li>
+                                    <h4 class="m-0">Size:</h4>
+                                </li>
+
+                                <li id="size-btn">
                                     @foreach ($product->variants->unique('size') as $item)
-                                        <option value="{{ $item->size->id }}">{{ $item->size->name }}</option>
+                                        <button class="btn-size mr-1"
+                                            data-size-id="{{ $item->size->id }}">{{ $item->size->name }}</button>
                                     @endforeach
-                                </select>
-                            </li>
-                            <li>
-                                <select class="formDropdown" name="color_id">
-                                    <option>Select Color</option>
+                                </li>
+                            </ul>
+                            <ul class="list-inline list-select clearfix">
+                                <li>
+                                    <h4 class="m-0">Color:</h4>
+                                </li>
+
+                                <li id="color-btn">
                                     @foreach ($product->variants->unique('color') as $item)
-                                        <option value="{{ $item->color->id }}"
-                                            style="background-color:{{ $item->color->code_color }}">
-                                            {{ $item->color->name }}
-                                        </option>
+                                        <button class="btn-color mr-1" data-color-id="{{ $item->color->id }}"
+                                            style="background-color:{{ $item->color->code_color }}"></button>
                                     @endforeach
-                                </select>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
 
-                        <div class="quantity pull-left">
-                            <input type="button" class="minus" value="-">
-                            <input type="text" class="input-text qty" title="Qty" value="1" name="quantity" min="1" step="1">
-                            <input type="button" class="plus" value="+">
-                        </div>
-                        <a href="#" class="btn btn-grey">
-                            <span><i class="fa fa-heart"></i></span>
-                        </a>
-                        <button type="submit" class="btn btn-primary btn-icon">
-                            <i class="fa fa-shopping-cart"></i> Add to cart
-                        </button>
+                            <div class="quantity pull-left">
+                                <input type="button" class="minus" value="-">
+                                <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
+                                    name="quantity" min="1" step="1">
+                                <input type="button" class="plus" value="+">
+                            </div>
 
-                    </form>
+                            <a href="#" class="btn btn-grey">
+                                <span><i class="fa fa-heart"></i></span>
+                            </a>
+
+                            <button type="submit" class="btn btn-primary btn-icon">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                            </button>
+                        </form>
+                    </div>
 
                     <ul class="list-unstyled product-meta">
                         <li>SKU: {{ $product->SKU }}</li>
@@ -239,7 +241,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

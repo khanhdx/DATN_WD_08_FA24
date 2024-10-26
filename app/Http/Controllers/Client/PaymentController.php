@@ -31,7 +31,7 @@ class PaymentController extends Controller
 
         // Kiểm tra xem giỏ hàng có chứa sản phẩm không
         if ($cartItems->isEmpty()) {
-            return redirect()->route('home')->with('error', 'Giỏ hàng trống.');
+            return redirect()->route('client.home')->with('error', 'Giỏ hàng trống.');
         }
 
         // Hiển thị form thanh toán và truyền biến cartItems

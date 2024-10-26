@@ -7,38 +7,6 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
-    <style>
-        .product-thumb-info-image {
-            position: relative;
-        }
-
-        .product-thumb-info-act {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .product-thumb-info-image:hover .product-thumb-info-act {
-            opacity: 1;
-        }
-
-        .price-regular {
-            color: rgb(0, 255, 157);
-        }
-
-        .price-sale {
-            color: black;
-            text-decoration: line-through;
-        }
-    </style>
-
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -57,8 +25,9 @@
                     <aside class="block blk-cat">
                         <h4>Category</h4>
                         <ul class="list-unstyled list-cat">
-                            @foreach($categories as $category)
-                                <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                            @foreach ($categories as $category)
+                                <li><a href=""
+                                        onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -77,7 +46,7 @@
                     <aside class="block blk-colors">
                         <h4>Colors</h4>
                         <ul class="list-unstyled list-cat">
-                            @foreach($colors as $color)
+                            @foreach ($colors as $color)
                                 <li><a href="#">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
@@ -89,7 +58,7 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="images/content/products/product-7.jpg"></a>
+                                                src="/assets/client/images/content/products/product-7.jpg"></a>
                                     </div>
 
                                     <div class="product-thumb-info-content">
@@ -103,7 +72,7 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="images/content/products/product-8.jpg"></a>
+                                                src="/assets/client/images/content/products/product-8.jpg"></a>
                                     </div>
 
                                     <div class="product-thumb-info-content">
@@ -117,7 +86,7 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="images/content/products/product-9.jpg"></a>
+                                                src="/assets/client/images/content/products/product-9.jpg"></a>
                                     </div>
 
                                     <div class="product-thumb-info-content">
@@ -160,15 +129,15 @@
                         </div>
                     </div>
                     <div class="container">
-                        @foreach($products->chunk(3) as $chunk)
+                        @foreach ($products->chunk(3) as $chunk)
                             <div class="row">
-                                @foreach($chunk as $product)
+                                @foreach ($chunk as $product)
                                     <div class="col-xs-12 col-sm-6 col-md-4 animation">
                                         <div class="product">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
                                                     <span class="product-thumb-info-act">
-                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                        <a href="" data-toggle="modal" data-id="{{ $product->id }}"
                                                             data-target=".quickview-wrapper" class="view-product">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
@@ -177,7 +146,7 @@
                                                         </a>
                                                     </span>
                                                     <img alt="{{ $product->name }}" class="img-responsive"
-                                                        src="{{ url('storage/' . $product->image) }}">
+                                                        src="{{ url($product->image) }}">
                                                 </div>
                                                 <div class="product-thumb-info-content">
                                                     <h4>{{ $product->name }}</h4>
@@ -199,12 +168,14 @@
                                 <ul class="pagination">
                                     {{-- Previous Page Link --}}
                                     @if ($products->onFirstPage())
-                                        <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                                        <li class="page-item disabled" aria-disabled="true"
+                                            aria-label="@lang('pagination.previous')">
                                             <span class="page-link" aria-hidden="true">&laquo;</span>
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&laquo;</a>
+                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev"
+                                                aria-label="@lang('pagination.previous')">&laquo;</a>
                                         </li>
                                     @endif
 
@@ -212,16 +183,19 @@
                                     @foreach ($products->links()->elements as $element)
                                         {{-- "Three Dots" Separator --}}
                                         @if (is_string($element))
-                                            <li class="page-item disabled" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+                                            <li class="page-item disabled" aria-disabled="true"><span
+                                                    class="page-link">{{ $element }}</span></li>
                                         @endif
 
                                         {{-- Array Of Links --}}
                                         @if (is_array($element))
                                             @foreach ($element as $page => $url)
                                                 @if ($page == $products->currentPage())
-                                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                                                    <li class="page-item active" aria-current="page"><span
+                                                            class="page-link">{{ $page }}</span></li>
                                                 @else
-                                                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                                    <li class="page-item"><a class="page-link"
+                                                            href="{{ $url }}">{{ $page }}</a></li>
                                                 @endif
                                             @endforeach
                                         @endif
@@ -230,10 +204,12 @@
                                     {{-- Next Page Link --}}
                                     @if ($products->hasMorePages())
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&raquo;</a>
+                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next"
+                                                aria-label="@lang('pagination.next')">&raquo;</a>
                                         </li>
                                     @else
-                                        <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                                        <li class="page-item disabled" aria-disabled="true"
+                                            aria-label="@lang('pagination.next')">
                                             <span class="page-link" aria-hidden="true">&raquo;</span>
                                         </li>
                                     @endif
@@ -245,4 +221,38 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('css')
+    <style>
+        .product-thumb-info-image {
+            position: relative;
+        }
+
+        .product-thumb-info-act {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-thumb-info-image:hover .product-thumb-info-act {
+            opacity: 1;
+        }
+
+        .price-regular {
+            color: rgb(0, 255, 157);
+        }
+
+        .price-sale {
+            color: black;
+            text-decoration: line-through;
+        }
+    </style>
 @endsection

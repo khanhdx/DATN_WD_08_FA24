@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')
         });
     });
 
-Route::get('/product/{product}', [ProductController::class, 'show_modal']);
-Route::put('/carts/{id}', [CartController::class, 'updateCart'])->name('carts.update');
+Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name('product.show');
+Route::get('/get-size', [ProductController::class, 'getSize'])->name('get.size');
+Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
