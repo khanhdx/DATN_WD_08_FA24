@@ -22,7 +22,7 @@
 <!-- Style Switcher -->
 <script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
 
-{{-- <script>
+<script>
     $(document).ready(function() {
         // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
         $('.dropdownLink').on('click', function(e) {
@@ -40,7 +40,7 @@
             $(this).removeClass('open');
         });
     });
-</script> --}}
+</script>
 
 <script>
     $(document).on('click', '.plus', function() {

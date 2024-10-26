@@ -26,7 +26,7 @@ class StatusOrder extends Model
             case '3':
                 return 'Đang giao hàng';   
             case '4':
-                return 'Giao hàng thành công';
+                return 'Hoàn Thành';
             case '5':
                 return 'Hủy đơn';   
             case '6':
@@ -48,7 +48,7 @@ class StatusOrder extends Model
             case 'shipping':
                 return 'Đang giao hàng';
             case 'completed':
-                return 'Giao hàng thành công';
+                return 'Hoàn Thành';
             case 'cancel':
                 return 'Hủy đơn';
             case 'canceled':

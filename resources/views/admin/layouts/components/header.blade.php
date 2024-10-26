@@ -11,7 +11,7 @@
                 <ul class="list-unstyled">
                     <li class="has-sub">
                         <a href="index3.html">
-                            <i class="fas fa-tachometer-alt"></i>Điều khiển
+                            <i></i>Điều khiển
                             <span class="bot-line"></span>
                         </a>
                         <ul class="header3-sub-list list-unstyled">
@@ -19,7 +19,7 @@
                     </li>
                     <li>
                         <a href="{{route('admin.post.index')}}">
-                            <i class="fas fa-shopping-basket"></i>
+                            <i ></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
@@ -29,13 +29,13 @@
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
-                            <i class="fa-solid fa-users"></i>
+                            <i ></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
                         
                     </li>
                     <  <li class="has-sub">
                         <a href="#">
-                            <i class="fas fa-list-ul"></i>
+                            <i ></i>
                             <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
@@ -56,8 +56,13 @@
                         </a>
                     <li class="has-sub">
                         <a href="{{ route('admin.slider.index') }}">
-                            <i class="fa-solid fa-users"></i>
+                            <i></i>
                             <span class="bot-line"></span>Quản lý slider</a>
+                        
+                    </li><li class="has-sub">
+                        <a href="{{ route('admin.orders.index') }}">
+                            <i></i>
+                            <span class="bot-line"></span>Quản lý đơn hàng</a>
                         
                     </li>
                 </ul>
