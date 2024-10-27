@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Voucher;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ class VoucherSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('vouchers')->insert([
+        $datas = [
             [
                 'name'=>'Tri ân khách hàng',
                 'voucher_code'=>'TriAnKhachHang',
@@ -29,21 +30,9 @@ class VoucherSeeder extends Seeder
                 'status'=>'Đang diên ra',
                 'description'=>'Tri ân khách hàng mới tham gia vào hệ thống.',
             ],
-            [
-                'name'=>'Khai trương của hàng',
-                'voucher_code'=>'KhaiTruongCuaHang',
-                'value'=>'Phần trăm',
-                'decreased_value'=>'50',
-                'max_value'=>'100000',
-                'quanlity'=>'10',
-                'condition'=>'500000',
-                'date_start'=>today().' 00:00:00',
-                'date_end'=>today().'23:59:59',
-                'type_code'=>'Công khai',
-                'status'=>'Đang diên ra',
-                'description'=>'Khai trương cửa hàng 10 mã giảm giá cho khách hàng nhanh tay đặt hàng',
-            ],
-
-        ]);
+        ];
+        foreach ($datas as $data) {
+            Voucher::query()->create($data);
+        }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:sanctum')
+    ->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+    });
+
+Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name('product.show');
+Route::get('/get-size', [ProductController::class, 'getSize'])->name('get.size');
+Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 class StatisticalService
 {
     // Dashbroad
+
+ 
     public function getRevenueByDay()
     {
         $revenues = Order::selectRaw('HOUR(created_at) as hour, SUM(total_price)')

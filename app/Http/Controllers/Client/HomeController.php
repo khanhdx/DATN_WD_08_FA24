@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Post;
+use App\Models\Banner;
 use App\Models\Product;
-use App\Models\ProductVariant;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    const PATH_VIEW = 'client.home.';
     public function index()
     {
         $newProduct = Product::with(['category', 'variants.size', 'variants.color'])
@@ -23,51 +25,35 @@ class HomeController extends Controller
         $latest_posts = Post::query()
             ->latest('id')
             ->paginate(2);
+            $banners = Banner::where('status', 1)->get();
 
-        return view('client.' . __FUNCTION__, compact(
+        return view(self::PATH_VIEW . __FUNCTION__, compact(
             'newProduct',
             'topSeller',
-            'latest_posts'
+            'latest_posts',
+            'banners'
         ));
     }
-
-    public function product_detail(Product $product)
-    {
-        $product->load(['category']);
-
-        $related_products = Product::with(['category'])->latest('id')->get();
-
-        return view('client.' . __FUNCTION__, compact('product', 'related_products'));
+    public function contact() {
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
-    public function posts()
+    public function header()
     {
-        $posts = Post::paginate(6);
+        $cartItems = [];
 
-        return view('client.posts.' . __FUNCTION__, compact('posts'));
+        if (Auth::check()) {
+            $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+
+            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->get();
+
+            $total = $cartItems->sum('sub_total');
+        } else {
+            $cartItems = session()->get('cart', []);
+
+            $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
+        }
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems', 'total'));
     }
-
-    public function post_show($id)
-    {
-        $post_show = Post::findOrFail($id);;
-
-        // Lấy 5 bài viết gần đây nhất
-        $recentPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
-
-        // Lấy 5 bài viết được xem nhiều nhất
-        $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
-
-        return view('client.posts.post_show', compact('post_show', 'recentPosts', 'mostViewedPosts'));
-    }
-    // public function post_make_show(Post $post)
-    // {
-    //     // Lấy 5 bài viết gần đây nhất
-    //     $recentPosts = Post::orderBy('created_at', 'desc')->take(5)->get();
-
-    //     // Lấy 5 bài viết được xem nhiều nhất
-    //     $mostViewedPosts = Post::orderBy('views', 'desc')->take(5)->get();
-
-    //     return view('client.posts.post_show', compact('post', 'recentPosts', 'mostViewedPosts'));
-    // }
-
 }

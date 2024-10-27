@@ -1,0 +1,147 @@
+@extends('client.layouts.master')
+
+@section('css')
+    <style>
+        .voucher-list {
+            padding: 0px 10px;
+            position: relative;
+            padding-left: 5%;
+            padding-right: 5%;
+            padding-top: 50px;
+            padding-bottom: -50px;
+            width: 100%;
+            background-color: gray; 
+            height: 200px
+        }
+        .card-voucher {
+            background: #000000;
+            display: grid;
+            grid-template-columns: 4fr 1fr;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+            position: absolute;
+            width: 90%;
+            margin: auto;
+        }
+        .voucher-right {
+            text-align: center;
+            padding: 10px;
+            font-family: 'circular' !important;
+        }
+        .voucher-title {
+            font-size: 90px;
+            font-style: italic;
+            font-weight: 700;
+        }
+        .voucher-left {
+            text-align: center;
+            border-left: 1px solid gray;
+        }
+        .voucher-name,.time-line {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .voucher-name span,.time-line span {
+            padding: 0px 10px;
+        }
+        .salse {
+            padding: 20px 20px 30px 20px;
+            position: relative;
+            display: inline-block;
+            background-color: #fff;
+            color: #000000;
+            text-align: center;
+            clip-path: polygon(0% -1%, 100% -1%, 100% 100%, 50% 75%, 0% 100%);
+            font-family: 'Roboto Slab' !important;
+            font-style: italic;
+            width: 60%;
+            height: 60%;
+            font-size: 40px;
+        }
+        .btn-save {
+            margin-top:20px; 
+            color: #FFFFFF !important;
+            border: 2px solid #FFFFFF !important;
+        }
+        .link {
+            font-size: 16px;
+            color: #58e9cc !important;
+        }
+        .link:hover {
+            color: #2FC2A5 !important;
+        }
+        .content {
+            margin-top: 100px; 
+        }
+        .title {
+            text-align: start !important;
+            font-size: medium !important;
+            margin-bottom: 20px !important;
+        }
+        .content p{
+            margin-left: 40px; 
+            margin-bottom:10px; 
+            font-family: 'circular';
+        }
+        .footer-content {
+            text-align: center;
+            margin: 20px;
+        }
+        .footer-content button {
+            width: 50%;
+        }
+    </style>
+@endsection
+@section('content')
+    <section id="lookbook">
+        <div class="container">
+            <div class="voucher-list">
+                    <div class="card-voucher">
+                        <div class="voucher-right">
+                            <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{$voucher->max_value}}đ</span>|<span>Đơn tối thiểu {{$voucher->condition}}đ</span></div>
+                            <div class="voucher-title">
+                                <span>Gift Coupon</span>
+                            </div>
+                            <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
+                        </div>
+                        <div class="voucher-left">
+                            <div class="salse"><span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span></div>
+                            <div>
+                                <button class="btn btn-save">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="content">
+                <div>
+                    <div class="title"><span>Hạn sử dụng mã</span></div>
+                    <p><span>Từ ngày: {{$voucher->date_start}} - đến hết ngày: {{$voucher->date_end}}</span></p>
+                </div>
+                <div>
+                    <div class="title"><span>Ưu đãi</span></div>
+                    <p>Lượt sử dụng có hạn. Nhanh tay kẻo lỡ bạn nhé! Giảm tới: {{$voucher->decreased_value}}đ </p>
+                </div>
+                <div>
+                    <div class="title"><span>Áp dụng cho</span></div>
+                    <p>Mã giảm giá được áp dùng cho các đơn hàng thanh toán với giá trị tối thiều: {{$voucher->condition}}đ</p>
+                </div>
+                <div>
+                    <div class="title"><span>Mã giảm giá loại</span></div>
+                    <p>{{$voucher->type_code}}: Mọi người đều có thể nhìn thấy và sử dụng nó.</p>
+                </div>
+                <div>
+                    <div class="title"><span>Chi tiết</span></div>
+                    <p>{{$voucher->description}}</p>
+                </div>
+                <div class="footer-content">
+                    <a href="{{ route('client.voucher.index') }}">
+                        <button class="btn btn-primary">Đã hiểu</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
+@section('js')
+
+@endsection

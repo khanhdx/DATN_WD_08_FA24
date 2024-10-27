@@ -85,7 +85,7 @@
                                         ORDER-01
                                     </td>
                                     <td>{{ $order->user->name }}</td>
-                                    <td>{{ $order->total_price }}</td>
+                                    <td>{{ $order->total_price }} đ</td>
                                     <td>{{ $order->created_at }}</td>
                                     <td>
 
@@ -114,7 +114,7 @@
                                         <div class="table-data-feature">
 
                                             {{-- Xem chi tiết  --}}
-                                            <a href="">
+                                            <a href="{{ route('admin.orders.show',$order->id) }}">
                                                 <button class="item mr-2" data-toggle="tooltip" data-placement="top"
                                                     title="Xem chi tiết đơn hàng">
                                                     <i class="fas fa-eye"></i>

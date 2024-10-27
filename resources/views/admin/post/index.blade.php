@@ -64,8 +64,8 @@
                                 <tr>
                                     <td>
                                         @if ($post->image)
-                                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
-                                                width="100">
+                                            <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
+                                                width="150" height="auto">
                                         @endif
                                     </td>
                                     <td class="desc">{{ $post->title }}</td>
@@ -97,6 +97,5 @@
             </div>
         </div>
     </section>
-
     <!-- END DATA TABLE-->
 @endsection

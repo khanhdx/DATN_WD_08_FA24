@@ -36,30 +36,6 @@ class StatusOrder extends Model
         }
     }
 
-
-    // // Accessor để hiển thị trạng thái dưới dạng tiếng Việt
-    public function getStatusLabelAttribute()
-    {
-        switch ($this->name_status) {
-            case 'pending':
-                return 'Chờ xử lý';
-            case 'processing':
-                return 'Đang xử lý';
-            case 'shipping':
-                return 'Đang giao hàng';
-            case 'completed':
-                return 'Giao hàng thành công';
-            case 'cancel':
-                return 'Hủy đơn';
-            case 'canceled':
-                return 'Đã hủy';
-            case 'refunding':
-                return 'Đang hoàn trả';
-            case 'refunded':
-                return 'Đã hoàn trả đơn';
-        }
-    }
-
     // Quan hệ với bảng status_order_details
     public function statusOrderDetails()
     {
