@@ -12,7 +12,7 @@
     <title>Flatize - Shop HTML5 Responsive Template</title>
 
     @include('client.layouts.components.link')
-
+    
 </head>
 
 <body>

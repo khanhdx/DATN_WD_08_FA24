@@ -53,8 +53,8 @@ class StatusOrder extends Model
                 return 'Hủy đơn';
             case 'canceled':
                 return 'Đã hủy';
-            case 'refund':
-                return 'Hoàn trả đơn';
+            case 'refunding':
+                return 'Đang hoàn trả';
             case 'refunded':
                 return 'Đã hoàn trả đơn';
         }

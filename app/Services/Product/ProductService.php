@@ -156,19 +156,18 @@ class ProductService implements IProductService
     {
         $query = Product::query();
         // $query->join('product_variants', 'products.id', '=', 'product_variants.product_id');
-       
-        // Lọc theo danh mục
-        if($request['category_id'] && $request['category_id'] != ''){
-            $query->where('category_id',$request['category_id']);
 
+        // Lọc theo danh mục
+        if ($request['category_id'] && $request['category_id'] != '') {
+            $query->where('category_id', $request['category_id']);
         }
         // Lọc theo khoảng giá 
-        if($request['price_min'] && $request['price_min'] != ''){
-            $query->where('price_regular','>=', $request['price_min']);
+        if ($request['price_min'] && $request['price_min'] != '') {
+            $query->where('price_regular', '>=', $request['price_min']);
         }
 
-        if($request['price_max'] && $request['price_max'] != ''){
-            $query->where('price_regular','<=', $request['price_max']);
+        if ($request['price_max'] && $request['price_max'] != '') {
+            $query->where('price_regular', '<=', $request['price_max']);
         }
 
         // // Lọc theo trạng thái 
@@ -177,12 +176,12 @@ class ProductService implements IProductService
         // }
 
         // Lọc theo khoảng ngày tạo sản phẩm
-        if($request['created_from'] && $request['created_from'] != ''){
-            $query->where('created_at','>=', $request['created_from']);
+        if ($request['created_from'] && $request['created_from'] != '') {
+            $query->where('created_at', '>=', $request['created_from']);
         }
 
-        if($request['created_to'] && $request['created_to'] != ''){
-            $query->where('created_at','<=', $request['created_to']);
+        if ($request['created_to'] && $request['created_to'] != '') {
+            $query->where('created_at', '<=', $request['created_to']);
         }
 
         // // Lọc số lượng tồn kho
@@ -191,11 +190,11 @@ class ProductService implements IProductService
         // }
 
         // Lọc biến thể sản phẩm ( theo thuộc tính )
-        if($request['color_id'] && $request['color_id'] != ''){
+        if ($request['color_id'] && $request['color_id'] != '') {
             $query->where('product_variants.color_id', $request['color_id']);
         }
 
-        if($request['size_id'] && $request['size_id'] != ''){
+        if ($request['size_id'] && $request['size_id'] != '') {
             $query->where('product_variants.size_id', $request['size_id']);
         }
 

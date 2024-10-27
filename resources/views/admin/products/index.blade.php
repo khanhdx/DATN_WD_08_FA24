@@ -1,26 +1,25 @@
 @extends('admin.layouts.master')
 
+@section('link-css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" />
+@endsection
+
 @section('css')
     <style>
         .modal {
             display: none;
-            /* Ẩn modal mặc định */
-            position: fixed;
-            /* Cố định vị trí modal trên màn hình */
-            z-index: 1;
-            /* Đưa modal lên trên cùng */
+            position: fixed;/ z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            /* Màu nền mờ */
+
         }
 
         .modal-content {
             background-color: white;
             margin: 15% auto;
-            /* Đặt modal ở giữa */
             padding: 20px;
             border-radius: 5px;
             width: 80%;
@@ -51,6 +50,107 @@
                         {{ session('success') }}
                     </div>
                 @endif
+                <div id="filterModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+
+                        <!-- Các bộ lọc thêm -->
+                        <form action="{{ route('admin.products.filter') }}" method="get">
+                            <span class="close" id="closeModalBtn">&times;</span>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <h2>Lọc sản phẩm</h2>
+                                    </div>
+                                    <div class="col-12 py-2 my-2">
+                                        <h5 class="mb-3">Giá sản phẩm</h5>
+                                        <div id="price-slider"></div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">
+                                                <label for="price-min" class="form-label">Giá
+                                                    từ:</label>
+                                                <input type="number" name="price_min" id="price-min" class="form-control"
+                                                    value="0" min="0" max="{{ $maxPrice }}" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="price-max"class="form-label">Đến:</label>
+                                                <input type="number" name="price_max" id="price-max" class="form-control"
+                                                    value="{{ $maxPrice }}" min="0" max="{{ $maxPrice }}"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 py-2">
+                                        <h5 class="mb-3">Ngày thêm sản phẩm</h5>
+                                        <div id="price-slider"></div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">
+                                                <label for="start-date" class="form-label">Ngày bắt đầu:</label>
+                                                <input type="date" id="start-date" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="end-date" class="form-label">Ngày kết thúc:</label>
+                                                <input type="date" id="end-date" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 py-2 flex">
+                                        <h5 class="mb-3">Trạng thái</h5>
+                                        <div class="form-check">
+                                            <input type="radio" id="all" name="status" class="form-check-input"
+                                                value="all" checked>
+                                            <label for="all" class="form-check-label">Tất cả</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="active" name="status" class="form-check-input"
+                                                value="active">
+                                            <label for="active" class="form-check-label">Đang hoạt động</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="inactive" name="status" class="form-check-input"
+                                                value="inactive">
+                                            <label for="inactive" class="form-check-label">Ngừng hoạt động</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="pending" name="status" class="form-check-input"
+                                                value="pending">
+                                            <label for="pending" class="form-check-label">Đang chờ xử lý</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lọc theo kích thước -->
+                            <label for="size">Kích thước:</label>
+                            <select name="size">
+                                <option value="">Tất cả</option>
+                                <option value="S" {{ request('size') == 'S' ? 'selected' : '' }}>S</option>
+                                <option value="M" {{ request('size') == 'M' ? 'selected' : '' }}>M</option>
+                                <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
+                                <option value="XL" {{ request('size') == 'XL' ? 'selected' : '' }}>XL</option>
+                            </select>
+
+                            <!-- Lọc theo màu sắc -->
+                            <label for="color">Màu sắc:</label>
+                            <select name="color">
+                                <option value="">Tất cả</option>
+                                <option value="Red" {{ request('color') == 'Red' ? 'selected' : '' }}>Đỏ
+                                </option>
+                                <option value="Blue" {{ request('color') == 'Blue' ? 'selected' : '' }}>Xanh
+                                </option>
+                                <option value="Green" {{ request('color') == 'Green' ? 'selected' : '' }}>Xanh lá
+                                </option>
+                                <option value="Black" {{ request('color') == 'Black' ? 'selected' : '' }}>Đen
+                                </option>
+                                <option value="White" {{ request('color') == 'White' ? 'selected' : '' }}>Trắng
+                                </option>
+                            </select>
+                            <button type="submit" id="apply-filter" class="btn btn-primary">Áp dụng</button>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="table-data__tool">
                     <form action="{{ route('admin.products.filter') }}" method="get">
                         <div class="table-data__tool-left">
@@ -59,10 +159,12 @@
                                     <option selected="selected">Danh mục</option>
                                     @foreach ($categories as $item)
                                         <option value="{{ $item->id }}"
-                                            {{ request('category_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}
+                                            {{ request('category_id') == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
                                         </option>
                                     @endforeach
                                 </select>
+                                <div class="dropDownSelect2"></div>
                             </div>
                             <button type="button" id="openFilterBtn" class="btn btn-primary">
                                 Mở bộ lọc thêm
@@ -72,49 +174,6 @@
                         </div>
                     </form>
 
-                    <div id="filterModal" class="modal" style="display: none;">
-                        <div class="modal-content">
-                            <span class="close" id="closeModalBtn">&times;</span>
-                            <h2>Lọc sản phẩm</h2>
-
-                            <!-- Các bộ lọc thêm -->
-                            <form action="{{ route('admin.products.filter') }}" method="get">
-                                <!-- Lọc theo khoảng giá -->
-                                <label for="price_min">Giá từ:</label>
-                                <input type="number" name="price_min" value="{{ request('price_min') }}" placeholder="Min">
-
-                                <label for="price_max">Đến:</label>
-                                <input type="number" name="price_max" value="{{ request('price_max') }}" placeholder="Max">
-
-                                <!-- Lọc theo kích thước -->
-                                <label for="size">Kích thước:</label>
-                                <select name="size">
-                                    <option value="">Tất cả</option>
-                                    <option value="S" {{ request('size') == 'S' ? 'selected' : '' }}>S</option>
-                                    <option value="M" {{ request('size') == 'M' ? 'selected' : '' }}>M</option>
-                                    <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
-                                    <option value="XL" {{ request('size') == 'XL' ? 'selected' : '' }}>XL</option>
-                                </select>
-
-                                <!-- Lọc theo màu sắc -->
-                                <label for="color">Màu sắc:</label>
-                                <select name="color">
-                                    <option value="">Tất cả</option>
-                                    <option value="Red" {{ request('color') == 'Red' ? 'selected' : '' }}>Đỏ
-                                    </option>
-                                    <option value="Blue" {{ request('color') == 'Blue' ? 'selected' : '' }}>Xanh
-                                    </option>
-                                    <option value="Green" {{ request('color') == 'Green' ? 'selected' : '' }}>Xanh lá
-                                    </option>
-                                    <option value="Black" {{ request('color') == 'Black' ? 'selected' : '' }}>Đen
-                                    </option>
-                                    <option value="White" {{ request('color') == 'White' ? 'selected' : '' }}>Trắng
-                                    </option>
-                                </select>
-                                <button type="submit" class="btn btn-primary">Áp dụng</button>
-                            </form>
-                        </div>
-                    </div>
 
                     <form class="au-form-icon" action="{{ route('admin.products.index') }}" method="GET">
                         <input class="au-input--w300 au-input--style2" name="keyword"
@@ -209,9 +268,13 @@
     </div>
 @endsection
 
-@section('js')
+@section('link-js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+@endsection
 
+@section('js')
     <script>
+        // Ản-hiện popup lọc
         document.addEventListener("DOMContentLoaded", function() {
             var modal = document.getElementById("filterModal");
             var openFilterBtn = document.getElementById("openFilterBtn");
@@ -235,6 +298,41 @@
             };
         });
 
-        
+        const maxPrice = Number(@json($maxPrice));
+
+        // Khởi tạo thanh kéo noUiSlider
+        var slider = document.getElementById('price-slider');
+        noUiSlider.create(slider, {
+            start: [0, maxPrice], // Giá trị bắt đầu cho khoảng giá
+            connect: true,
+            range: {
+                'min': 0,
+                'max': maxPrice,
+            },
+            step: 100000
+        });
+
+        // Cập nhật giá trị input khi người dùng di chuyển thanh kéo
+        slider.noUiSlider.on('update', function(values, handle) {
+            document.getElementById('price-min').value = Math.round(values[0]);
+            document.getElementById('price-max').value = Math.round(values[1]);
+        });
+
+        // Cập nhật thanh kéo khi người dùng thay đổi giá trị input "Min"
+        document.getElementById('price-min').addEventListener('change', function() {
+            var minValue = Math.min(Math.max(this.value, 0), maxPrice);
+            slider.noUiSlider.set([minValue, null]);
+        });
+
+        // Cập nhật thanh kéo khi người dùng thay đổi giá trị input "Max"
+        document.getElementById('price-max').addEventListener('change', function() {
+            var maxValue = Math.min(Math.max(this.value, 0), maxPrice);
+            slider.noUiSlider.set([null, maxValue]);
+        });
+
+        document.getElementById('apply-filter').addEventListener('click', function() {
+            const minPrice = document.getElementById('price-min').value;
+            const maxPrice = document.getElementById('price-max').value;
+        });
     </script>
 @endsection

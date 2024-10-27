@@ -3,11 +3,12 @@
 namespace App\Services\Statistical;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class StatisticalService
 {
-
+    // Dashbroad
     public function getRevenueByDay()
     {
         $revenues = Order::selectRaw('HOUR(created_at) as hour, SUM(total_price)')
@@ -20,7 +21,7 @@ class StatisticalService
     public function getRevenue() {}
 
 
-    // Thống kế về đơn hàng
+    // Orders
     public function countOrderGroupByStatus()
     {
         $query = DB::table('status_order_details')
@@ -36,5 +37,12 @@ class StatisticalService
     public function totalOrder()
     {
         return Order::count('id');
+    }
+
+
+    // Products
+    public function getMaxPrice()
+    {
+        return Product::max('price_regular');
     }
 }

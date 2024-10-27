@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
 use App\Services\Size\ISizeService;
+use App\Services\Statistical\StatisticalService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -17,12 +18,16 @@ class ProductController extends Controller
     protected $colorService;
     protected $sizeService;
 
+    protected $statisticalService;
 
-    public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService)
+
+
+    public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService, StatisticalService $statisticalService)
     {
         $this->productService = $productService;
         $this->colorService = $iColorService;
         $this->sizeService = $iSizeService;
+        $this->statisticalService = $statisticalService;
     }
 
 
@@ -31,6 +36,7 @@ class ProductController extends Controller
         $categories =  Category::all();
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
+        $maxPrice = $this->statisticalService->getMaxPrice();
 
         $searchTerm = $request->input('keyword');
 
@@ -41,7 +47,7 @@ class ProductController extends Controller
             $products = $this->productService->getAll();
         }
 
-        return view('admin.products.index', compact('products', ['categories', 'searchTerm']));
+        return view('admin.products.index', compact('products', ['categories', 'searchTerm', 'colors', 'sizes', 'maxPrice']));
     }
 
     public function create()
@@ -93,12 +99,15 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
+        dd($request->all());
         $categories =  Category::all();
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
+        $maxPrice = $this->statisticalService->getMaxPrice();
 
         $products = $this->productService->filter($request);
 
-        return view('admin.products.index', compact('products', ['categories', 'colors', 'sizes']));
+
+        return view('admin.products.index', compact('products', ['categories', 'colors', 'sizes', 'maxPrice']));
     }
 }
