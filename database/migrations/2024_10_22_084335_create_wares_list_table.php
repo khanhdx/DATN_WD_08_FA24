@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('wares_list', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vouchers_ware_id')->constrained('vouchers_wares')->onDelete('cascade');
+            $table->foreignId('voucher_id')->constrained('vouchers')->onDelete('cascade');
             $table->enum('status',["Đã sử dụng", "Chưa sử dụng"]);
             $table->timestamps();
         });

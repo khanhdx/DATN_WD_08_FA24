@@ -22,5 +22,9 @@ class Voucher extends Model
         'type_code',
         'status',
         'description',
-    ]; 
+    ];
+    public function wares_list()
+    {
+        return $this->hasMany(waresList::class, 'voucher_id');
+    }
 }

@@ -96,21 +96,35 @@
     <section id="lookbook">
         <div class="container">
             <div class="voucher-list">
-                    <div class="card-voucher">
-                        <div class="voucher-right">
-                            <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{$voucher->max_value}}đ</span>|<span>Đơn tối thiểu {{$voucher->condition}}đ</span></div>
-                            <div class="voucher-title">
-                                <span>Gift Coupon</span>
-                            </div>
-                            <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
+                <div class="card-voucher">
+                    <div class="voucher-right">
+                        <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{number_format($voucher->max_value,0,'','.')}}đ</span>|<span>Đơn tối thiểu {{number_format($voucher->condition,0,'','.')}}đ</span></div>
+                        <div class="voucher-title">
+                            <span>Gift Coupon</span>
                         </div>
-                        <div class="voucher-left">
-                            <div class="salse"><span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span></div>
-                            <div>
+                        <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
+                    </div>
+                    <div class="voucher-left">
+                        <div class="salse">
+                            @if ($voucher->value === "Cố định")
+                                <span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span>
+                            @else
+                                <span>{{$voucher->decreased_value}}%</span>
+                            @endif
+                        </div>
+                        <div>
+                            @if (Auth::user())
+                                <form action="{{ route('client.voucher.update',Auth::user()->id) }}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button class="btn btn-save">Lưu</button>
+                                </form>
+                            @else
                                 <button class="btn btn-save">Lưu</button>
-                            </div>
+                            @endif
                         </div>
                     </div>
+                </div>
             </div>
             <div class="content">
                 <div>

@@ -75,10 +75,10 @@
                 <span>New voucher</span>
             </div>
             <div class="voucher-list">
-                @foreach ($voucher_new as $voucher)
+                @foreach ($voucher_new as $key => $voucher)
                     <div class="card-voucher">
                         <div class="voucher-right">
-                            <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{$voucher->max_value}}đ</span>|<span>Đơn tối thiểu {{$voucher->condition}}đ</span></div>
+                            <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{number_format($voucher->max_value,0,'','.')}}đ</span>|<span>Đơn tối thiểu {{number_format($voucher->condition,0,'','.')}}đ</span></div>
                             <div class="voucher-title">
                                 <span>Gift Coupon</span>
                             </div>
@@ -94,13 +94,20 @@
                             </div>
                             <div>
                                 @if (Auth::user())
-                                    <form action="{{ route('client.voucher.update',Auth::user()->id) }}" method="post">
-                                        @csrf
-                                        @method('PUT')
-                                        <button class="btn btn-save">Lưu</button>
-                                    </form>
+                                    @foreach ($check as $mi)
+                                        @if ($mi->voucher_id == $voucher->id)
+                                            <button class="btn btn-save" disabled>Đã lưu</button>  
+                                        @else                              
+                                            <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
+                                                <button class="btn btn-save LuuVoucher">Lưu</button>
+                                            </form>
+                                        @endif
+                                    @endforeach
                                 @else
-                                    <button class="btn btn-save">Lưu</button>
+                                    <button class="btn btn-save saveVoucher">Lưu</button>
                                 @endif
                             </div>
                         </div>
@@ -111,5 +118,37 @@
     </section>
 @endsection
 @section('js')
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $('.saveVoucher').on('click', function () {
+            swal({
+                title: "Thông báo !",
+                text: "Bạn cần đăng nhập mới có thể sử dụng mã giảm giá.",
+                icon: "warning",
+            });
+        })
+        
+    </script>
+    {{-- Sử lí ajax --}}
+    {{-- <script>
+            $(document).ready(function() {
+            // Thay thế '.voucher-form' bằng class hoặc data attribute chung của các form voucher
+            $(document).on('submit', '.voucher-form', function(e) {
+                e.preventDefault();
 
+                var form = $(this);
+                var formData = form.serialize();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'PUT',
+                    data: formData,
+                    success: function(response) {
+                    },
+                    error: function(error) {
+                    }
+                });
+            });
+        });
+    </script> --}}
 @endsection

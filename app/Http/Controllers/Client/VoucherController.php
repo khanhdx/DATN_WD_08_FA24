@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Voucher;
+use App\Models\vouchersWare;
+use App\Models\waresList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
@@ -15,6 +19,10 @@ class VoucherController extends Controller
     {
         //
         $data['voucher_new'] = Voucher::query()->orderBy('created_at', 'desc')->where('type_code', '=','Công khai')->limit(5)->get();
+        if(Auth::user()) {
+            $data['check'] = waresList::query()->where('vouchers_ware_id', '=', Auth::user()->vouchers_ware->id)->get();
+            $data['miss'] = $data['voucher_new']->whereNotIn('id', $data['check']->pluck('voucher_id'));
+        }
         return view('client.vouchers.index', $data);
     }
 
@@ -62,7 +70,28 @@ class VoucherController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        dd($id);
+        $wari = Auth::user()->vouchers_ware;
+        $param = [
+            'voucher_id'=>$request->input('voucher_id'),
+            'status'=> 'Chưa sử dụng',
+        ];
+        if($wari==null) {
+            $data = [
+                'user_id' => Auth::user()->id,
+            ];
+            $vouchersWare = vouchersWare::query()->create($data);
+            $vouchersWare->wares_list()->create($param);
+        }
+        else {
+            $user = User::query()->find(Auth::user()->id);
+            $param = [
+                'voucher_id'=>$request->input('voucher_id'),
+                'vouchers_ware_id'=>$user->vouchers_ware->id,
+                'status'=> 'Chưa sử dụng',
+            ];
+            $lis = waresList::query()->create($param);
+        }
+        return redirect()->back();
     }
 
     /**

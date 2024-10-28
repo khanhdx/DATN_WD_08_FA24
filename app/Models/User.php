@@ -51,5 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Locations::class);
     }
+    public function vouchers_ware()
+    {
+        return $this->hasOne(vouchersWare::class, 'user_id');
+    }
 }
 
