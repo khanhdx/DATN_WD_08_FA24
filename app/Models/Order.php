@@ -58,4 +58,16 @@ class Order extends Model
     {
         return $this->hasMany(Refund::class);
     }
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class)->withPivot('quantity');
+    // }
+    // Quan hệ với sản phẩm thông qua bảng trung gian
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'order_product') // Giả sử bảng trung gian là 'order_product'
+            ->withPivot('quantity', 'price') // Thêm thông tin về số lượng và giá
+            ->withTimestamps();
+    }
+    
 }

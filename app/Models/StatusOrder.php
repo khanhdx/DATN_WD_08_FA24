@@ -73,4 +73,5 @@ class StatusOrder extends Model
                     ->withPivot('name', 'created_at', 'updated_at')
                     ->withTimestamps();
     }
+    
 }

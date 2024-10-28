@@ -140,10 +140,10 @@ Route::name('client.')->group(function () {
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])
         ->name('client.comments.destroy');
     
-    // Route cho đánh giá sản phẩm (reviews)
-    Route::post('products/{id}/reviews', [ReviewController::class, 'store'])
-        ->middleware('auth')
-        ->name('client.reviews.store');
+    // Route để gửi đánh giá sản phẩm
+    Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
+        ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
+        ->name('orders.product.review');
 
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')

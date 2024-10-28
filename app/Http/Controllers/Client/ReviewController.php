@@ -1,42 +1,43 @@
 <?php
 
 namespace App\Http\Controllers\Client;
+
+use App\Models\Order;
 use App\Models\Review;
 use Illuminate\Http\Request;
-use App\Models\StatusOrderDetail;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    public function store(Request $request, $productId)
+    public function submitReview(Request $request, $orderId, $productId)
     {
-        // Kiểm tra xem đơn hàng đã giao hay chưa (trạng thái 'Giao hàng thành công')
-        $order = StatusOrderDetail::where('order_id', $request->order_id)
-                    ->where('status_order_id', 4) // ID 4 là "Giao hàng thành công"
-                    ->first();
-
-        if (!$order) {
-            return redirect()->back()->with('error', 'Bạn chưa nhận được hàng, không thể đánh giá sản phẩm.');
-        }
-
-        // Kiểm tra xem khách hàng đã đánh giá sản phẩm này chưa
-        $existingReview = Review::where('product_id', $productId)
-                                ->where('user_id', auth()->id())
-                                ->first();
-
-        if ($existingReview) {
-            return redirect()->back()->with('error', 'Bạn đã đánh giá sản phẩm này rồi.');
-        }
-
-        // Tạo đánh giá mới
-        Review::create([
-            'product_id' => $productId,
-            'user_id' => auth()->id(),
-            'review' => $request->review,
-            'rating' => $request->rating,
+        // Xác thực dữ liệu yêu cầu
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|string|max:1000',
         ]);
 
-        return redirect()->back()->with('success', 'Cảm ơn bạn đã đánh giá sản phẩm!');
+        // Kiểm tra xem đơn hàng có hoàn thành không
+        $order = Order::findOrFail($orderId);
+        if ($order->statusOrder->name !== 'completed') {
+            return response()->json(['error' => 'Chỉ những đơn hàng đã hoàn thành mới có thể đánh giá.'], 403);
+        }
+
+        // Kiểm tra xem sản phẩm có trong đơn hàng không
+        if (!$order->products()->where('id', $productId)->exists()) {
+            return response()->json(['error' => 'Sản phẩm này không nằm trong đơn hàng.'], 403);
+        }
+
+        // Tạo đánh giá
+        $review = new Review();
+        $review->user_id = auth()->id(); // Lưu ID của người dùng đã đăng nhập
+        $review->product_id = $productId; // Gán ID sản phẩm
+        $review->order_id = $orderId; // Gán ID đơn hàng
+        $review->rating = $request->rating; // Gán điểm đánh giá
+        $review->review = $request->review; // Gán bình luận
+        $review->save(); // Lưu đánh giá vào cơ sở dữ liệu
+
+        return response()->json(['message' => 'Review submitted successfully!'], 200); // Trả về phản hồi thành công
     }
 }

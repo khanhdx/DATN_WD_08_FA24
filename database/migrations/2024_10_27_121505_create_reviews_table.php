@@ -13,15 +13,11 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('review');
-            $table->integer('rating'); // 1-5 sao
+            $table->unsignedTinyInteger('rating'); // Đánh giá từ 1 đến 5
             $table->timestamps();
-
-            // Thiết lập khóa ngoại
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

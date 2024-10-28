@@ -41,6 +41,11 @@ class Product extends Model
         return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id');
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
