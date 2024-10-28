@@ -10,15 +10,18 @@
     <meta name="author" content="pixelgeeklab.com">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flatize - Shop HTML5 Responsive Template</title>
-    @yield('css')
     @include('client.layouts.components.link')
+    @yield('css')
 
 </head>
 
 <body>
     <div id="page">
         <header>
-            @include('client.layouts.components.header')
+            <div id="top" class="header-view">
+    
+            </div>
+                        
             @include('client.layouts.components.navbar')
         </header>
 
@@ -41,4 +44,5 @@
 
     @yield('js')
 </body>
+
 </html>

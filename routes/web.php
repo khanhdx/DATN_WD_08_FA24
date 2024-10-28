@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
@@ -10,15 +9,17 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
-
 use App\Http\Controllers\Admin\ProductController;
+
+use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\Bannerhome1Controller;
+use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -46,12 +47,40 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
-            Route::resource('slider', BannerController::class);
+            // Route::resource('slider', BannerController::class);
             Route::resource('user', App\Http\Controllers\Admin\UserController::class);
             Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
             Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+
+            Route::prefix('slider')->as('slider.')->group(function () {
+                Route::get('/', [BannerController::class, 'index'])->name('index');
+                Route::get('/create', [BannerController::class, 'create'])->name('create');
+                Route::post('/store', [BannerController::class, 'store'])->name('store');
+                Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
+                Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
+                Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
+            
+               
+                Route::prefix('banner1')->as('banner1.')->group(function () {
+                    Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
+                    Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
+                    Route::post('/store', [Bannerhome1Controller::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [Bannerhome1Controller::class, 'edit'])->name('edit');
+                    Route::put('{id}/update', [Bannerhome1Controller::class, 'update'])->name('update');
+                    Route::delete('{id}', [Bannerhome1Controller::class, 'destroy'])->name('destroy');
+                });
+
+                Route::prefix('banner2')->as('banner2.')->group(function () {
+                    Route::get('/', [BannerHome2Controller::class, 'index'])->name('index');
+                    Route::get('/create', [BannerHome2Controller::class, 'create'])->name('create');
+                    Route::post('/store', [BannerHome2Controller::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [BannerHome2Controller::class, 'edit'])->name('edit');
+                    Route::put('{id}/update', [BannerHome2Controller::class, 'update'])->name('update');
+                    Route::delete('{id}', [BannerHome2Controller::class, 'destroy'])->name('destroy');
+                });
+            });
 
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
@@ -105,7 +134,9 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
+    Route::get('/header',  [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
+    
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)
@@ -171,7 +202,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('show');
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
 });
 
 // Route cho xác thực

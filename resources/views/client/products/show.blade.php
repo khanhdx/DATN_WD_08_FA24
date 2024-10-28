@@ -1,5 +1,13 @@
 @extends('client.layouts.master')
 
+@section('css')
+    <style>
+        span.stock {
+            margin-left: 15px;
+            line-height: 50px;
+        }
+    </style>
+@endsection
 @section('content')
     <!-- Begin page top -->
     <section class="page-top">
@@ -21,11 +29,6 @@
 
     <div class="container">
         <div class="row">
-            @if (session()->has('success') && session()->get('success'))
-                <div class="alert alert-success">
-                    {{ session()->get('success') }}
-                </div>
-            @endif
             <div class="col-sm-6">
                 <div class="product-preview">
                     <div class="flexslider">
@@ -63,48 +66,56 @@
                     </div>
 
                     <p class="price">
-                        <span class="amount">${{ $product->price_regular }}</span>
+                        <span class="amount">{{ number_format($product->price_regular, 3, ',') }} VND</span>
                     </p>
 
-                    <form method="post" class="cart" action="{{ route('client.carts.add') }}">
-                        @csrf
+                    <div>
+                        <form method="post" class="cart" id="addToCart">
+                            @csrf
+                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
 
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <ul class="list-inline list-select clearfix">
-                            <li>
-                                <select class="formDropdown" name="size_id">
-                                    <option>Select Size</option>
+                            <ul class="list-inline list-select clearfix">
+                                <li>
+                                    <h4 class="m-0">Size:</h4>
+                                </li>
+
+                                <li id="size-btn">
                                     @foreach ($product->variants->unique('size') as $item)
-                                        <option value="{{ $item->size->id }}">{{ $item->size->name }}</option>
+                                        <button class="btn-size mr-1"
+                                            data-size-id="{{ $item->size->id }}">{{ $item->size->name }}</button>
                                     @endforeach
-                                </select>
-                            </li>
-                            <li>
-                                <select class="formDropdown" name="color_id">
-                                    <option>Select Color</option>
+                                </li>
+                            </ul>
+                            <ul class="list-inline list-select clearfix">
+                                <li>
+                                    <h4 class="m-0">Color:</h4>
+                                </li>
+
+                                <li id="color-btn">
                                     @foreach ($product->variants->unique('color') as $item)
-                                        <option value="{{ $item->color->id }}"
-                                            style="background-color:{{ $item->color->code_color }}">
-                                            {{ $item->color->name }}
-                                        </option>
+                                        <button class="btn-color mr-1" data-color-id="{{ $item->color->id }}"
+                                            style="background-color:{{ $item->color->code_color }}"></button>
                                     @endforeach
-                                </select>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
 
-                        <div class="quantity pull-left">
-                            <input type="button" class="minus" value="-">
-                            <input type="text" class="input-text qty" title="Qty" value="1" name="quantity" min="1" step="1">
-                            <input type="button" class="plus" value="+">
-                        </div>
-                        <a href="#" class="btn btn-grey">
-                            <span><i class="fa fa-heart"></i></span>
-                        </a>
-                        <button type="submit" class="btn btn-primary btn-icon">
-                            <i class="fa fa-shopping-cart"></i> Add to cart
-                        </button>
+                            <div class="quantity pull-left">
+                                <input type="button" class="minus" value="-">
+                                <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
+                                    name="quantity" min="1" step="1">
+                                <input type="button" class="plus" value="+">
+                                <span class="stock">{{ $sumStock }} hàng có sẵn</span>
+                            </div>
 
-                    </form>
+                            <a href="#" class="btn btn-grey">
+                                <span><i class="fa fa-heart"></i></span>
+                            </a>
+
+                            <button type="submit" class="btn btn-primary btn-icon">
+                                <i class="fa fa-shopping-cart"></i> Add to cart
+                            </button>
+                        </form>
+                    </div>
 
                     <ul class="list-unstyled product-meta">
                         <li>SKU: {{ $product->SKU }}</li>
@@ -194,7 +205,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -228,8 +238,9 @@
                                         </div>
 
                                         <div class="product-thumb-info-content">
-                                            <span class="price pull-right">{{ $item->price_regular }}
-                                                USD
+                                            <span
+                                                class="price pull-right">{{ number_format($item->price_regular, 3, ',') }}
+                                                VND
                                             </span>
                                             <h4>
                                                 <a href="shop-product-detail2.html">{{ $item->name }}</a>
@@ -251,4 +262,100 @@
         </div>
     </section>
     <!-- End Top Selling -->
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            let selectedColor = null;
+            let selectedSize = null;
+
+            $('#color-btn').on('click', '.btn-color', function(e) {
+                e.preventDefault();
+                $('.btn-color').removeClass('color-active');
+                $(this).addClass('color-active');
+
+                selectedColor = $(this).data('color-id');
+                // fetchAvailableSizes(selectedColor);
+            });
+
+            $('#size-btn').on('click', '.btn-size', function(e) {
+                e.preventDefault();
+                $('.btn-size').removeClass('btn-active');
+                $(this).addClass('btn-active');
+
+                selectedSize = $(this).data('size-id');
+                fetchAvailableColors(selectedSize);
+            });
+
+            $('#addToCart').on('submit', function(e) {
+                e.preventDefault();
+                let productId = $('#product_id').val();
+                let quantity = $('#quantity').val();
+                let dataCart = {
+                    product_id: productId,
+                    color_id: selectedColor,
+                    size_id: selectedSize,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}',
+                }
+
+                if (selectedColor && selectedSize) {
+                    $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
+                        if (res.status_code == 200) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top",
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: `<span style="font-size: 1.5rem">${res.message}</span>`,
+                                width: 450
+                            });
+                            // quantity = $('#quantity').val(1);
+                            // selectedColor = null;
+                            // selectedSize = null;
+                            // $('#productModal').modal('hide');
+                            load_header();
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: res.message,
+                            });
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Vui lòng chọn phân loại!",
+                    });
+                }
+            });
+
+            function fetchAvailableColors(sizeId) {
+                let productId = $('#product_id').val();
+                let dataColor = {
+                    product_id: productId,
+                    size_id: sizeId
+                }
+                $.get("{{ route('get.color') }}", dataColor, function(res) {
+                    $('.btn-color').hide();
+                    // $('.btn-color').removeClass('color-active');
+                    res.forEach(item => {
+                        $(`.btn-color[data-color-id="${item.color_id}"]`).show();
+                        console.log(item.color_id);
+                    });
+                });
+            }
+        });
+    </script>
 @endsection
