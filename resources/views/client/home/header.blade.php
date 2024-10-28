@@ -9,8 +9,7 @@
             </ul>
         </li>
         <li class="dropdown my-account">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <span
-                    class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="#">My Dashboard</a></li>
                 <li><a href="#">Account Information</a></li>
@@ -21,7 +20,7 @@
         <li class="dropdown menu-shop">
             <a href="{{ route('client.carts.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">
                 <i class="fa fa-shopping-cart"></i>
-                <span class="shopping-bag">{{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }}</span>
+                <span class="shopping-bag">{{ Auth::check() ? $count : count($count) }}</span>
             </a>
             <div class="dropdown-menu">
                 <h3>Recently added item(s)</h3>
@@ -46,8 +45,19 @@
                                     <h4><a
                                             href="">{{ Auth::check() ? $cart->productVariant->product->name : $cart['name'] }}</a>
                                     </h4>
-                                    <span class="item-cat"><small><a
-                                                href="#">x{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}</a></small></span>
+                                    <span class="item-cat">
+                                        <small>
+                                            <a href="#">&times;{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}</a>
+                                        </small>
+                                    </span>
+                                    <span class="item-cat">
+                                        <small>
+                                            <a href="#">
+                                                {{ Auth::check() ? $cart->productVariant->color->name : $cart['color'] }},
+                                                {{ Auth::check() ? $cart->productVariant->size->name : $cart['size'] }}
+                                            </a>
+                                        </small>
+                                    </span>
                                     <span
                                         class="price">{{ Auth::check() ? $cart->productVariant->price : $cart['price'] }}
                                         USD</span>
@@ -58,7 +68,7 @@
 
                 </ul>
                 <ul class="list-inline cart-subtotals text-right">
-                    <li class="cart-subtotal"><strong>Subtotal</strong></li>
+                    <li class="cart-subtotal"><strong>Total</strong></li>
                     <li class="price"><span class="amount"><strong>${{ $total }}</strong></span>
                     </li>
                 </ul>

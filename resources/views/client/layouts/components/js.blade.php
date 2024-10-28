@@ -114,7 +114,7 @@
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
-                    $('#product_id').val(data.id);
+                    $('.product_id').val(data.id);
                     $('#product-name').text(data.name);
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
@@ -128,18 +128,38 @@
                         $('#product-image').attr('src', `${data.image}`);
                     }
 
-                    $('#size-btn').empty();
-                    data.sizes.forEach(item => {
-                        $('#size-btn').append(
-                            `<button class="btn-size mr-1"
+                    let size = new Set();
+                    let uniqueSizes = data.sizes.filter(value => {
+                        if (size.has(value.id)) {
+                            return false;
+                        }
+                        size.add(value.id);
+                        return true;
+                    });
+
+                    let color = new Set();
+                    let uniqueColors = data.colors.filter(value => {
+                        if (color.has(value.id)) {
+                            return false;
+                        }
+                        color.add(value.id);
+                        return true;
+                    });
+
+                    $('#size-quick').empty();
+                    uniqueSizes.forEach(item => {
+                        // console.log(item);
+
+                        $('#size-quick').append(
+                            `<button class="btn-size size-quick mr-1"
                                 data-size-id="${item.id}">${item.name}</button>`
                         );
                     });
 
-                    $('#color-btn').empty();
-                    data.colors.forEach(item => {
-                        $('#color-btn').append(
-                            `<button class="btn-color mr-1" data-color-id="${item.id}"
+                    $('#color-quick').empty();
+                    uniqueColors.forEach(item => {
+                        $('#color-quick').append(
+                            `<button class="btn-color color-quick mr-1" data-color-id="${item.id}"
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
@@ -204,27 +224,31 @@
         let selectedColor = null;
         let selectedSize = null;
 
-        $('#color-btn').on('click', '.btn-color', function(e) {
+        $('#color-quick').on('click', '.color-quick', function(e) {
             e.preventDefault();
-            $('.btn-color').removeClass('color-active');
+            $('.color-quick').removeClass('color-active');
             $(this).addClass('color-active');
 
             selectedColor = $(this).data('color-id');
+            console.log(selectedColor);
+            
             // fetchAvailableSizes(selectedColor);
         });
 
-        $('#size-btn').on('click', '.btn-size', function(e) {
+        $('#size-quick').on('click', '.size-quick', function(e) {
             e.preventDefault();
-            $('.btn-size').removeClass('btn-active');
+            $('.size-quick').removeClass('btn-active');
             $(this).addClass('btn-active');
 
             selectedSize = $(this).data('size-id');
+            console.log(selectedSize);
+            
             fetchAvailableColors(selectedSize);
         });
 
-        $('#addToCart').on('submit', function(e) {
+        $('#addToCartQuick').on('submit', function(e) {
             e.preventDefault();
-            let productId = $('#product_id').val();
+            let productId = $('.product_id').val();
             let quantity = $('#quantity').val();
             let dataCart = {
                 product_id: productId,
@@ -233,13 +257,15 @@
                 quantity: quantity,
                 _token: '{{ csrf_token() }}',
             }
+            console.log(dataCart);
+            
 
             if (selectedColor && selectedSize) {
                 $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
                     if (res.status_code == 200) {
                         const Toast = Swal.mixin({
                             toast: true,
-                            position: "top-end",
+                            position: "top",
                             showConfirmButton: false,
                             timer: 2500,
                             timerProgressBar: true,
@@ -250,8 +276,10 @@
                         });
                         Toast.fire({
                             icon: "success",
-                            title: res.message
+                            title: `<span style="font-size: 1.5rem">${res.message}</span>`,
+                            width: 450
                         });
+                        
                         quantity = $('#quantity').val(1);
                         selectedColor = null;
                         selectedSize = null;
@@ -275,16 +303,16 @@
         });
 
         function fetchAvailableColors(sizeId) {
-            let productId = $('#product_id').val();
+            let productId = $('.product_id').val();
             let dataColor = {
                 product_id: productId,
                 size_id: sizeId
             }
             $.get("{{ route('get.color') }}", dataColor, function(res) {
-                $('.btn-color').hide();
-                $('.btn-color').removeClass('color-active');
+                $('.color-quick').hide();
+                $('.color-quick').removeClass('color-active');
                 res.forEach(item => {
-                    $(`.btn-color[data-color-id="${item.color_id}"]`).show();
+                    $(`.color-quick[data-color-id="${item.color_id}"]`).show();
                     console.log(item.color_id);
                 });
             });

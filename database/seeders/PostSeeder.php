@@ -15,11 +15,10 @@ class PostSeeder extends Seeder
     {
         for ($i=0; $i < 10; $i++) {
             Post::create([
-                'image'         => fake()->imageUrl,        // Đường dẫn ảnh
+                'image'         => '/assets/client/images/content/products/product-' . rand(1, 17) . '.jpg',
                 'title'         => fake()->text(25),        // Tiêu đề bài viết
                 'content'       => fake()->text(500),       // Nội dung bài viết
-                'author'        => fake()->name(),          // Tác giả bài viết
-                'publish_date'  => date('Y/m/d'),   // Ngày đăng
+                'author'        => fake()->name(),                      // Tác giả bài viết
             ]);
         }
     }
