@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\Banner;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use App\Models\bannerhome1;
+use App\Models\BannerHome2;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
@@ -26,12 +28,16 @@ class HomeController extends Controller
             ->latest('id')
             ->paginate(2);
             $banners = Banner::where('status', 1)->get();
+            $listBanner2 = BannerHome2::where('status', 1)->get();
+            $listBanner1 = bannerhome1::where('status', 1)->take(3)->get();;
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'newProduct',
             'topSeller',
             'latest_posts',
-            'banners'
+            'banners',
+            'listBanner2',
+            'listBanner1'
         ));
     }
     public function contact() {
