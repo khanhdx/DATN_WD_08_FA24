@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Post;
 use App\Models\Banner;
-use App\Models\Comment;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
+use App\Models\bannerhome1;
+use App\Models\BannerHome2;
+use App\Models\Cart;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    const PATH_VIEW = 'client.';
+    const PATH_VIEW = 'client.home.';
     public function index()
     {
         $newProduct = Product::with(['category', 'variants.size', 'variants.color'])
@@ -26,15 +28,38 @@ class HomeController extends Controller
             ->latest('id')
             ->paginate(2);
             $banners = Banner::where('status', 1)->get();
+            $listBanner2 = BannerHome2::where('status', 1)->get();
+            $listBanner1 = bannerhome1::where('status', 1)->take(3)->get();;
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'newProduct',
             'topSeller',
             'latest_posts',
-            'banners'
+            'banners',
+            'listBanner2',
+            'listBanner1'
         ));
     }
     public function contact() {
         return view(self::PATH_VIEW . __FUNCTION__);
+    }
+
+    public function header()
+    {
+        $cartItems = [];
+
+        if (Auth::check()) {
+            $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+
+            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->get();
+
+            $total = $cartItems->sum('sub_total');
+        } else {
+            $cartItems = session()->get('cart', []);
+
+            $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
+        }
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems', 'total'));
     }
 }

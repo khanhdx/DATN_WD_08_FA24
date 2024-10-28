@@ -27,18 +27,13 @@
     <section class="ads">
         <div class="container">
             <div class="row">
-                <div class="col-xs-4 animation">
-                    <a href="#"><img src="/assets/client/images/content/products/ad-1.png" class="img-responsive"
-                            alt="Ad"></a>
-                </div>
-                <div class="col-xs-4 animation">
-                    <a href="#"><img src="/assets/client/images/content/products/ad-2.png" class="img-responsive"
-                            alt="Ad"></a>
-                </div>
-                <div class="col-xs-4 animation">
-                    <a href="#"><img src="/assets/client/images/content/products/ad-3.png" class="img-responsive"
-                            alt="Ad"></a>
-                </div>
+                @foreach($listBanner1 as $banner)
+                    <div class="col-xs-4 animation">
+                       <div style="width: 100%; height: 250px;">
+                        <a href="#"><img  style="width: 100%; height: 100%; object-fit:cover" src="{{ asset('storage/' . $banner->image) }}" class="img-responsive" alt="{{ $banner->title }}"></a>
+                       </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -109,7 +104,7 @@
                                         <div class="product-thumb-info">
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
-                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                    <a href="" data-toggle="modal"
                                                         data-target=".quickview-wrapper" class="view-product"
                                                         data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>
@@ -151,7 +146,7 @@
                                         <div class="product-thumb-info">
                                             <div class="product-thumb-info-image">
                                                 <span class="product-thumb-info-act">
-                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                    <a href="" data-toggle="modal"
                                                         data-target=".quickview-wrapper" class="view-product"
                                                         data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-external-link"></i></span>
@@ -188,25 +183,21 @@
     <!-- End New Products -->
 
     <!-- Begin Parallax -->
-    <section class="pi-parallax" data-stellar-background-ratio="0.6">
-        <div class="container">
-            <div id="owl-text-slide" class="owl-carousel">
-                <div class="item">
-                    <blockquote>
-                        <p>Design is a funny word. Some people think design means how it looks. But of course, if you
-                            dig deeper, it’s really how it works.</p>
-                        <footer>by <cite title="Steve Jobs">Steve Jobs</cite></footer>
-                    </blockquote>
-                </div>
-                <div class="item">
-                    <blockquote>
-                        <p>They may forget what you said, but they will never forget how you made them feel.</p>
-                        <footer>by <cite title="Steve Jobs">Carl W. Buechner</cite></footer>
-                    </blockquote>
+    @foreach($listBanner2 as $banner)
+    <div style="width: 100%; height: 500px;">
+        <section class="pi-parallax" data-stellar-background-ratio="0.6" style="background-image: url('{{ asset('storage/' . $banner->image) }}'); background-size: cover; width: 100%; height: 100%; object-fit:cover; background-repeat: no-repeat;">
+            <div class="container">
+                <div id="owl-text-slide" class="owl-carousel">
+                    <div class="item">
+                        <blockquote>
+                            <p>{{ $banner->title }}</p>
+                        </blockquote>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+    @endforeach
     <!-- End Parallax -->
 
     <!-- Begin Latest Blogs -->

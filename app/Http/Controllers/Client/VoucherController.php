@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 
 class VoucherController extends Controller
@@ -13,7 +14,8 @@ class VoucherController extends Controller
     public function index()
     {
         //
-        return view('client.vouchers.index');
+        $data['voucher_new'] = Voucher::query()->orderBy('created_at', 'desc')->where('type_code', '=','Công khai')->limit(5)->get();
+        return view('client.vouchers.index', $data);
     }
 
     /**
@@ -38,6 +40,12 @@ class VoucherController extends Controller
     public function show(string $id)
     {
         //
+        try {
+            $data['voucher'] = Voucher::query()->findOrFail($id);
+            return view('client.vouchers.detail', $data);
+        } catch (\Throwable $th) {
+            abort(404);
+        }
     }
 
     /**
