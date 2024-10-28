@@ -169,15 +169,14 @@
                                     <a href="#">
                                         <i class="zmdi zmdi-account"></i>Tài khoản</a>
                                 </div>
-
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-settings"></i>Cài đặt</a>
-                                </div>
                             </div>
                             <div class="account-dropdown__footer">
-                                <a href="#">
-                                    <i class="zmdi zmdi-power"></i>Đăng xuất</a>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                    <i class="zmdi zmdi-power"></i>Đăng xuất
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                             </div>
                         </div>
                     </div>

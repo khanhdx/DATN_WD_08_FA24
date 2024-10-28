@@ -85,9 +85,23 @@
                             <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$voucher->id) }}">Chi tiết</a></span></div>
                         </div>
                         <div class="voucher-left">
-                            <div class="salse"><span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span></div>
+                            <div class="salse">
+                                @if ($voucher->value === "Cố định")
+                                    <span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span>
+                                @else
+                                    <span>{{$voucher->decreased_value}}%</span>
+                                @endif
+                            </div>
                             <div>
-                                <button class="btn btn-save">Lưu</button>
+                                @if (Auth::user())
+                                    <form action="{{ route('client.voucher.update',Auth::user()->id) }}" method="post">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-save">Lưu</button>
+                                    </form>
+                                @else
+                                    <button class="btn btn-save">Lưu</button>
+                                @endif
                             </div>
                         </div>
                     </div>
