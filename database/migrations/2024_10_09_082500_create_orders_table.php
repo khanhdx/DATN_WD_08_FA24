@@ -17,9 +17,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
+            $table->string('slug')->nullable()->unique();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Shipper::class)->constrained();
+            $table->foreignIdFor(Shipper::class)->nullable()->constrained();
             $table->foreignIdFor(Voucher::class)->nullable()->constrained();
             $table->foreignIdFor(StatusOrder::class)->constrained();
             $table->dateTime('date');

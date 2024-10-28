@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Size::class)->constrained();
 
             $table->unsignedBigInteger('stock');
-            $table->decimal('price');
+            $table->decimal('price',8,3);
             $table->timestamps();   
         });
     }

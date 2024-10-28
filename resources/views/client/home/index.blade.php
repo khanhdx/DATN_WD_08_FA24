@@ -4,11 +4,12 @@
     <!-- Begin Main Slide -->
     <section class="main-slide">
         <div id="owl-main-demo" class="owl-carousel main-demo">
-            @foreach($banners as $banner)
+            @foreach ($banners as $banner)
                 <div class="item">
-                   <div style="width: 100%; height: 500px;" >
-                    <img src="{{url('storage/' . $banner->image) }}" style="width: 100%; height: 100%; object-fit:cover" class="img-responsive" alt="{{ $banner->title }}">
-                   </div>
+                    <div style="width: 100%; height: 500px;">
+                        <img src="{{ url('storage/' . $banner->image) }}" style="width: 100%; height: 100%; object-fit:cover"
+                            class="img-responsive" alt="{{ $banner->title }}">
+                    </div>
                     <div class="item-caption">
                         <div class="item-caption-inner">
                             <div class="item-caption-wrap">
@@ -51,9 +52,8 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <span class="product-thumb-info-act">
-                                            <a href="" data-toggle="modal"
-                                                data-target=".quickview-wrapper" class="view-product"
-                                                data-id="{{ $product->id }}">
+                                            <a href="" data-toggle="modal" data-target=".quickview-wrapper"
+                                                class="view-product" data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
                                             <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -61,17 +61,23 @@
                                             </a>
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                            <img loading="lazy" alt="" class="img-responsive"
+                                                src="{{ $product->image }}">
                                         </a>
                                     </div>
 
                                     <div class="product-thumb-info-content">
-                                        <span class="price pull-right">{{ $product->price_regular }} USD</span>
-                                        <h4><a
-                                                href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                        <h4>
+                                            <a href="{{ route('client.product.show', $product->id) }}">
+                                                {{ $product->name }}
+                                            </a>
                                         </h4>
-                                        <span class="item-cat"><small><a
-                                                    href="#">{{ $product->category->name }}</a></small></span>
+                                        <span class="item-cat">
+                                            <small>
+                                                <a href="#">{{ $product->category->name }}</a>
+                                            </small>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -97,82 +103,76 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="man">
                     <div class="row">
-                        @foreach ($newProduct as $product)
-                            @if ($product->category->type == 'Man')
-                                <div class="col-xs-6 col-sm-3 animation">
-                                    <div class="product">
-                                        <div class="product-thumb-info">
-                                            <div class="product-thumb-info-image">
-                                                <span class="product-thumb-info-act">
-                                                    <a href="" data-toggle="modal"
-                                                        data-target=".quickview-wrapper" class="view-product"
-                                                        data-id="{{ $product->id }}">
-                                                        <span><i class="fa fa-external-link"></i></span>
-                                                    </a>
-                                                    <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                        <span><i class="fa fa-shopping-cart"></i></span>
-                                                    </a>
-                                                </span>
-                                                <a href="{{ route('client.product.show', $product->id) }}">
-                                                    <img alt="" class="img-responsive"
-                                                        src="{{ $product->image }}">
-                                                </a>
-                                            </div>
-                                            <div class="product-thumb-info-content">
-                                                <span class="price pull-right">{{ $product->price_regular }} USD</span>
-                                                <h4><a
-                                                        href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
-                                                </h4>
-                                                <span class="item-cat">
-                                                    <small>
-                                                        <a href="#">{{ $product->category->name }}</a>
-                                                    </small>
-                                                </span>
-                                            </div>
-                                        </div>
+                        @foreach ($newProductMan as $product)
+                        <div class="col-xs-6 col-sm-3 animation">
+                            <div class="product">
+                                <div class="product-thumb-info">
+                                    <div class="product-thumb-info-image">
+                                        <span class="product-thumb-info-act">
+                                            <a href="" data-toggle="modal" data-target=".quickview-wrapper"
+                                                class="view-product" data-id="{{ $product->id }}">
+                                                <span><i class="fa fa-external-link"></i></span>
+                                            </a>
+                                            <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                <span><i class="fa fa-shopping-cart"></i></span>
+                                            </a>
+                                        </span>
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                        </a>
+                                    </div>
+                                    <div class="product-thumb-info-content">
+                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                        <h4><a
+                                                href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                        </h4>
+                                        <span class="item-cat">
+                                            <small>
+                                                <a href="#">{{ $product->category->name }}</a>
+                                            </small>
+                                        </span>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>
 
                 <div class="tab-pane" id="woman">
                     <div class="row">
-                        @foreach ($newProduct as $product)
-                            @if ($product->category->type == 'Woman')
-                                <div class="col-xs-6 col-sm-3 animation">
-                                    <div class="product">
-                                        <div class="product-thumb-info">
-                                            <div class="product-thumb-info-image">
-                                                <span class="product-thumb-info-act">
-                                                    <a href="" data-toggle="modal"
-                                                        data-target=".quickview-wrapper" class="view-product"
-                                                        data-id="{{ $product->id }}">
-                                                        <span><i class="fa fa-external-link"></i></span>
-                                                    </a>
-                                                    <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                        <span><i class="fa fa-shopping-cart"></i></span>
-                                                    </a>
-                                                </span>
-                                                <a href="{{ route('client.product.show', $product->id) }}">
-                                                    <img alt="" class="img-responsive"
-                                                        src="{{ $product->image }}">
-                                                </a>
-                                            </div>
-                                            <div class="product-thumb-info-content">
-                                                <span class="price pull-right">{{ $product->price_regular }}
-                                                    USD</span>
-                                                <h4><a
-                                                        href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
-                                                </h4>
-                                                <span class="item-cat"><small><a
-                                                            href="#">{{ $product->category->name }}</a></small></span>
-                                            </div>
-                                        </div>
+                        @foreach ($newProductWoman as $product)
+                        <div class="col-xs-6 col-sm-3 animation">
+                            <div class="product">
+                                <div class="product-thumb-info">
+                                    <div class="product-thumb-info-image">
+                                        <span class="product-thumb-info-act">
+                                            <a href="" data-toggle="modal"
+                                                data-target=".quickview-wrapper" class="view-product"
+                                                data-id="{{ $product->id }}">
+                                                <span><i class="fa fa-external-link"></i></span>
+                                            </a>
+                                            <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                <span><i class="fa fa-shopping-cart"></i></span>
+                                            </a>
+                                        </span>
+                                        <a href="{{ route('client.product.show', $product->id) }}">
+                                            <img alt="" class="img-responsive"
+                                                src="{{ $product->image }}">
+                                        </a>
+                                    </div>
+                                    <div class="product-thumb-info-content">
+                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                        <h4>
+                                            <a
+                                                href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                        </h4>
+                                        <span class="item-cat"><small><a
+                                                    href="#">{{ $product->category->name }}</a></small></span>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -205,7 +205,7 @@
         <div class="container">
             <h2 class="title"><span>Latest from the blog</span></h2>
             <div class="row">
-                @foreach ($latest_posts as $post)
+                @foreach ($latestPosts as $post)
                     <div class="col-xs-6 animation">
                         <article class="post">
                             <div class="post-image">
