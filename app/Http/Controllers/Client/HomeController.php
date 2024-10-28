@@ -15,26 +15,35 @@ class HomeController extends Controller
     const PATH_VIEW = 'client.home.';
     public function index()
     {
-        $newProduct = Product::with(['category', 'variants.size', 'variants.color'])
-            ->latest('id')
-            ->get();
-
         $topSeller = Product::with(['category', 'variants.size', 'variants.color'])
             ->paginate(8);
 
-        $latest_posts = Post::query()
+        $newProductMan = Product::with(['category', 'variants.size', 'variants.color'])
+            ->whereHas('category', function ($query) {
+                $query->where('type', 'Man');
+            })->latest('id')->paginate(12);
+
+        $newProductWoman = Product::with(['category', 'variants.size', 'variants.color'])
+            ->whereHas('category', function ($query) {
+                $query->where('type', 'Woman');
+            })->latest('id')->paginate(12);
+
+        $latestPosts = Post::query()
             ->latest('id')
             ->paginate(2);
-            $banners = Banner::where('status', 1)->get();
+
+        $banners = Banner::where('status', 1)->get();
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'newProduct',
             'topSeller',
-            'latest_posts',
+            'newProductMan',
+            'newProductWoman',
+            'latestPosts',
             'banners'
         ));
     }
-    public function contact() {
+    public function contact()
+    {
         return view(self::PATH_VIEW . __FUNCTION__);
     }
 
@@ -42,18 +51,24 @@ class HomeController extends Controller
     {
         $cartItems = [];
 
+        // $count = 0;
+
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
-            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->get();
+            $count = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->count();
+
+            $cartItems = CartItem::with(['productVariant'])->where('cart_id', $cart->id)->latest('id')->limit(3)->get();
 
             $total = $cartItems->sum('sub_total');
         } else {
-            $cartItems = session()->get('cart', []);
+            $count = session()->get('cart', []);
+
+            $cartItems = collect($count)->sortByDesc('id')->take(3);
 
             $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
         }
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems', 'total'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('cartItems', 'total', 'count'));
     }
 }

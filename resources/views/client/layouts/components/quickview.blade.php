@@ -61,16 +61,16 @@
                                 $<span class="amount" id="product-price-regular"></span>
                             </p>
 
-                            <form method="post" class="cart" id="addToCart">
+                            <form method="post" class="cart" id="addToCartQuick">
                                 @csrf
-                                <input type="hidden" name="product_id" id="product_id" value="">
+                                <input type="hidden" class="product_id" value="">
     
                                 <ul class="list-inline list-select clearfix">
                                     <li>
                                         <h4 class="m-0">Size:</h4>
                                     </li>
     
-                                    <li id="size-btn">
+                                    <li id="size-quick">
                                         
                                     </li>
                                 </ul>
@@ -80,7 +80,7 @@
                                         <h4 class="m-0">Color:</h4>
                                     </li>
     
-                                    <li id="color-btn">
+                                    <li id="color-quick">
                                         
                                     </li>
                                 </ul>

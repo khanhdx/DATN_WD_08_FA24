@@ -23,17 +23,20 @@ class ProductController extends Controller
             'products',
             'categories',
             'colors'
-
         ));
     }
     public function show(Product $product)
     {
         $product->load(['variants']);
+
+        $sumStock = Product::find($product->id)->variants->sum('stock');
+
         $related_products = Product::with(['category'])->latest('id')->get();
-        // dd($product->variants);
+
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'product',
-            'related_products'
+            'related_products',
+            'sumStock'
         ));
     }
 
@@ -61,7 +64,24 @@ class ProductController extends Controller
                 ->get();
 
             return response()->json($colors);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage()
+            ], 404);
+        }
+    }
+    public function inStock(Request $request)
+    {
+        try {
+            // $productId = $request->product_id;
+            // $sizeId = $request->size_id;
 
+            // $colors = ProductVariant::query()
+            //     ->where('product_id', $productId)
+            //     ->where('size_id', $sizeId)
+            //     ->get();
+
+            // return response()->json($colors);
         } catch (\Throwable $th) {
             return response()->json([
                 'errors' => $th->getMessage()
