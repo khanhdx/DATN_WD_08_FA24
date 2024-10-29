@@ -24,7 +24,7 @@ class MailConfirm extends Mailable
 
     public function build()
     {
-        $email = $this->view('client.contact.mail')
+        $email = $this->view('client.contact.create')
             ->with('contact', $this->contact)
             ->subject('Liên hệ từ website');
 

@@ -21,7 +21,7 @@ class ContactController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'subject' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            // 'phone' => 'required|string|max:20',
             'message' => 'required|string',
             'images' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
