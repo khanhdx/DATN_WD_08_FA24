@@ -1,7 +1,7 @@
 @extends('client.layouts.master')
 
 @section('text_page')
-    Get in touch with us
+    Get in touch 
 @endsection
 
 @section('content')
