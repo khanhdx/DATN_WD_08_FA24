@@ -82,7 +82,8 @@
                         <th scope="col">STT</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Số lượng</th>
-                        {{-- <th scope="col">Đơn vị</th> --}}
+                        <th scope="col">Màu sắc</th>
+                        <th scope="col">Kích thước</th>
                         <th scope="col">Giá sản phẩm</th>
                         <th scope="col">Thành tiền</th>
                     </tr>
@@ -93,6 +94,8 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $order_detail->name_product }}</td>
                         <td>{{ $order_detail->quantity }}</td>
+                        <td>{{ $order_detail->color ?? "Không có màu sắc" }}</td>
+                        <td>{{ $order_detail->size ?? "Khồn có size" }}</td>
                         <td>{{ number_format($order_detail->unit_price) }}đ</td>
                         <td>{{ number_format($order_detail->total_price) }}đ</td>
                     </tr>

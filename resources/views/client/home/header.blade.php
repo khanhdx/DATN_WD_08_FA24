@@ -1,20 +1,12 @@
 <div class="container">
     <p class="pull-left text-note">Free Shipping on all U.S orders over $50</p>
     <ul class="nav nav-pills nav-top navbar-right">
-        <li class="dropdown langs">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img
-                    src="/assets/client/images/flags/vietnam.png" alt="VN"> <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#"><img src="/assets/client/images/flags/en.gif" alt="English"></a></li>
-            </ul>
-        </li>
+
         <li class="dropdown my-account">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#">My Dashboard</a></li>
-                <li><a href="#">Account Information</a></li>
-                <li><a href="#">Address Book</a></li>
-                <li><a href="#">My Orders</a></li>
+            <ul class="dropdown-menu" role="">
+                <li><a href="{{route('orders.index')}}">My Orders</a></li>
+                <li><a href="#">My Favorites List</a></li>
             </ul>
         </li>
         <li class="dropdown menu-shop">
@@ -47,7 +39,8 @@
                                     </h4>
                                     <span class="item-cat">
                                         <small>
-                                            <a href="#">&times;{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}</a>
+                                            <a
+                                                href="#">&times;{{ Auth::check() ? $cart->quantity : $cart['quantity'] }}</a>
                                         </small>
                                     </span>
                                     <span class="item-cat">
