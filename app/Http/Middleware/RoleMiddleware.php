@@ -28,11 +28,11 @@ class RoleMiddleware
 
         // Chuyển hướng dựa trên vai trò
         if ($user->role === 'Khách hàng') {
-            return redirect()->route('home');
+            return redirect()->route('client.home');
         }
 
         if ($user->role === 'Quản lý') {
-            return redirect('/admin');
+            return redirect()->route('admin.dashboard');
         }
 
         return abort(403, 'Unauthorized action.');
