@@ -2,52 +2,40 @@
 
 @section('title', 'Login')
 
-@section('content')
-<div class="page-content--bge5">
-    <div class="container">
-        <div class="login-wrap">
-            <div class="login-content">
-                <div class="login-logo">
-                    <a href="#">
-                        <img src="images/icon/logo.png" alt="CoolAdmin">
-                    </a>
-                </div>
-                <div class="login-form">
-                    <form action="{{ route('login') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input class="au-input au-input--full" type="email" name="email" placeholder="Email" >
-                            @error('email')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input class="au-input au-input--full" type="password" name="password" placeholder="Password" >
-                            @error('password')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="login-checkbox">
-                            <label>
-                                <input type="checkbox" name="remember">Remember Me
-                            </label>
-                            <label>
-                                <a href="{{ route('password.request') }}">Forgotten Password?</a>
-                            </label>
-                        </div>
-                        <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Sign In</button>
-                        <div class="register-link">
-                            <p>
-                                Don't you have an account?
-                                <a href="{{ route('register') }}">Sign Up Here</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('text_page')
+    sing In
 @endsection
+
+@section('content')
+    @include('client.layouts.components.pagetop')
+    <div class="container">
+        <form action="{{ route('login') }}" method="post">
+            @csrf
+            <h4>Login</h4>
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address:</label>
+                <input type="email" id="email" name="email" class="form-control input-lg" placeholder="Email">
+                @error('email')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="inputpassword">Password:</label>
+                <input type="password" id="password" name="password" class="form-control input-lg" placeholder="Password">
+                @error('password')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            <ul class="list-inline">
+                <li><a href="{{ route('register') }}">Sign Up Here</a></li>
+                <li> <a href="{{ route('password.request') }}">Forgotten Password?</a></li>
+            </ul>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary btn-block" style="border-radius: 5px;">Sign
+                    In</button>
+            </div>
+        </form>
+    </div>
+
+@endsection
+

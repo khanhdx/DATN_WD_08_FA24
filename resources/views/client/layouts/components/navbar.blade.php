@@ -13,6 +13,7 @@
             <a class="logo" href="/"><img src="/assets/client/images/logo.png" alt="Flatize"></a>
         </div>
         <ul class="nav navbar-nav navbar-act pull-right">
+          
 
             <li class="search">
                 <a href="" data-toggle="modal" data-target=".bs-example-modal-lg">
