@@ -1,18 +1,18 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\ProductController;
 
-use App\Http\Controllers\Client\ReviewController;
-use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Client\ContactController;
+
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -93,9 +93,9 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
+                Route::get('filter', [ProductController::class, 'filter'])->name('filter');
 
-
-
+                
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
                     Route::get('/', [ProductVariantController::class, 'index'])->name('index');
@@ -129,6 +129,11 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+            });
+
+            // Route quản lý tồn kho 
+            Route::prefix('inventories')->as('inventories.')->group(function (){
+                Route::get('/', [InventoryController::class, 'index'])->name('index');
             });
         });
 });

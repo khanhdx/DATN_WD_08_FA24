@@ -16,25 +16,25 @@ class StatusOrder extends Model
     ];
 
     // Phương thức này trả về màu sắc dựa trên ID trạng thái
-    public function getColorAttribute()
-    {
-        switch ($this->id) {
-            case '1':
-                return 'Chờ xử lý';
-            case '2':
-                return 'Đang xử lý';
-            case '3':
-                return 'Đang giao hàng';   
-            case '4':
-                return 'Giao hàng thành công';
-            case '5':
-                return 'Hủy đơn';   
-            case '6':
-                return 'Đã hủy';  
-            case '7':
-                return 'Đã hủy đơn';
-        }
-    }
+    // public function getColorAttribute()
+    // {
+    //     switch ($this->id) {
+    //         case '1':
+    //             return 'Chờ xử lý';
+    //         case '2':
+    //             return 'Đang xử lý';
+    //         case '3':
+    //             return 'Đang giao hàng';   
+    //         case '4':
+    //             return 'Giao hàng thành công';
+    //         case '5':
+    //             return 'Hủy đơn';   
+    //         case '6':
+    //             return 'Đã hủy';  
+    //         case '7':
+    //             return 'Đã hủy đơn';
+    //     }
+    // }
 
 
     // // Accessor để hiển thị trạng thái dưới dạng tiếng Việt
@@ -53,10 +53,10 @@ class StatusOrder extends Model
                 return 'Hủy đơn';
             case 'canceled':
                 return 'Đã hủy';
-            case 'refund':
-                return 'Hoàn trả đơn';
+            case 'refunding':
+                return 'Đang hoàn trả';
             case 'refunded':
-                return 'Đã hoàn trả đơn';
+                return 'Đã hoàn trả';
         }
     }
 

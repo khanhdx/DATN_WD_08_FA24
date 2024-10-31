@@ -2,6 +2,8 @@
 
 namespace App\Services\Product;
 
+use Illuminate\Http\Request;
+
 interface IProductService{
     public function getAll();
 
@@ -12,5 +14,9 @@ interface IProductService{
     public function update($id, $data);
 
     public function softDeleteById($id);
+
+    public function search($keyword);
+
+    public function filter($request);
 
 }
