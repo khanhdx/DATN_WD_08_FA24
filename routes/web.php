@@ -2,26 +2,30 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\ProductController;
-
-use App\Http\Controllers\Client\CommentController;
-use App\Http\Controllers\Client\PaymentController;
-use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\ProductController;
+
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\PaymentController;
+use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ContactController;
-use App\Http\Controllers\Client\OrderController as ClientOrderController;
+use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
 
@@ -42,18 +46,18 @@ Route::get('test', function () {
 
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
-    Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
-
-    Route::prefix('admins')
+    Route::prefix('admin')
         ->as('admin.')
         ->group(function () {
+            Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
+
             Route::resource('category', CategorysController::class);
             // Route::resource('slider', BannerController::class);
-            Route::resource('user', App\Http\Controllers\Admin\UserController::class);
-            Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
-            Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
+            Route::resource('user', UserController::class);
+            Route::resource('location', LocationController::class);
+            Route::get('/export-excel', [UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
-            Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+            Route::resource('voucher', VoucherController::class);
 
             Route::prefix('slider')->as('slider.')->group(function () {
                 Route::get('/', [BannerController::class, 'index'])->name('index');
@@ -62,8 +66,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
-            
-               
+
+
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
                     Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
@@ -91,8 +95,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
-
-
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
@@ -134,10 +136,11 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 //Route cho máy khách (client)
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
-    Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
-    Route::get('/header',  [HomeController::class, 'header'])->name('header');
+    Route::get('/header',   [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
-    
+    Route::get('contact', [ContactController::class, 'index'])->name('contact');
+    Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
+
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)
@@ -166,12 +169,6 @@ Route::name('client.')->group(function () {
 
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
 
-    Route::get('contact', [ContactController::class, 'index'])->name('contact');
-    Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
-    
- 
-    
-
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
         ->middleware(['convert.cart'])
@@ -187,7 +184,6 @@ Route::name('client.')->group(function () {
         });
 });
 
-
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::resource('profile', ProfileController::class)->only([
@@ -196,7 +192,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
         'update',
         'destroy'
     ]);
-   
+
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công

@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@section('title')
+    Sản phẩm biến thể
+@endsection
 @section('content')
     <div class="container">
         <div class="row">

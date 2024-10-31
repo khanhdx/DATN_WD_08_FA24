@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@section('title')
+    Quản lý danh mục
+@endsection
 @section('content')
     <div class="content">
         <!-- Start Content-->

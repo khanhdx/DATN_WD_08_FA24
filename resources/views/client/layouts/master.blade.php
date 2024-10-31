@@ -38,8 +38,6 @@
 
     @include('client.layouts.components.search')
 
-
-
     @include('client.layouts.components.js')
 
     @yield('js')
