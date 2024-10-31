@@ -242,7 +242,7 @@
 
             selectedColor = $(this).data('color-id');
             console.log(selectedColor);
-
+            getInStock(selectedSize, selectedColor);
             // fetchAvailableSizes(selectedColor);
         });
 
@@ -253,7 +253,7 @@
 
             selectedSize = $(this).data('size-id');
             console.log(selectedSize);
-
+            getInStock(selectedSize, selectedColor);
             fetchAvailableColors(selectedSize);
         });
 
@@ -330,5 +330,27 @@
                 });
             });
         }
+
+        function getInStock(sizeId = null, colorId = null) {
+                let productId = $('.product_id').val();
+
+                data = {
+                    product_id: productId,
+                    size_id: sizeId,
+                    color_id: colorId,
+                }
+
+                $.get("{{ route('get.stock') }}", data, function(res) {
+                    if (Array.isArray(res)) {
+                        res.forEach(item => {
+                            $('.stock').text(item.stock);
+                            $('.amount').text(item.price + ' VND');
+                        });
+                    } else {
+                        $('.stock').text(res);
+                        $('#stock').val(res);
+                    }
+                })
+            }
     });
 </script>

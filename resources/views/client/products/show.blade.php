@@ -279,8 +279,6 @@
                 $(this).addClass('color-active');
 
                 selectedColor = $(this).data('color-id');
-                console.log(selectedColor);
-
                 getInStock(selectedSize, selectedColor);
             });
 
@@ -383,15 +381,6 @@
                     }
                 })
             }
-
-            // function checkQuantity(quantity) {
-            //     $('.qty').change(function() {
-            //         let value = parseInt($(this).val());
-            //         if (value > quantity) {
-            //             $(this).val(quantity);
-            //         }
-            //     })
-            // }
         });
     </script>
 @endsection

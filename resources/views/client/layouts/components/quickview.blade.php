@@ -58,7 +58,7 @@
                             </div>
 
                             <p class="price">
-                                $<span class="amount" id="product-price-regular"></span>
+                                <span class="amount" id="product-price-regular"></span>đ
                             </p>
 
                             <form method="post" class="cart" id="addToCartQuick">
@@ -90,6 +90,7 @@
                                     <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
                                         name="quantity" min="1" step="1">
                                     <input type="button" class="plus" value="+">
+                                    <span><span class="stock"></span> hàng có sẵn</span>
                                 </div>
     
                                 <a href="#" class="btn btn-grey">
