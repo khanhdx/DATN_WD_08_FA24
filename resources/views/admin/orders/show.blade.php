@@ -6,7 +6,8 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card text-center">
-                <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+                <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+
                 <div class="card-body">
                     <h5 class="card-title">{{ $order->user->name }}</h5>
                 </div>
@@ -18,7 +19,7 @@
                 <div class="card-body">
                     <p>Email: {{ $order->user->email }}</p>
                     <p>Số điện thoại: {{ $order->user->phone_number }}</p>
-                    <p>Mã giảm giá: DISCOUNT10</p>
+                
                 </div>
             </div>
         </div>

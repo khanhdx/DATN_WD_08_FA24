@@ -2,7 +2,7 @@
 
 @section('title', 'Danh sách đơn hàng')
 @section('text_page')
-Danh sách đơn hàng của bạn
+đơn hàng của bạn
 @endsection
 @section('content')
 @include('client.layouts.components.pagetop', ['md' => 'md'])
