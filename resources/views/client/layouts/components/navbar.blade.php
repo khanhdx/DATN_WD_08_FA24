@@ -15,12 +15,15 @@
         <ul class="nav navbar-nav navbar-act pull-right">
           
 
-            <li class="search"><a href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-lg"><i
-                        class="fa fa-search"></i></a></li>
+            <li class="search">
+                <a href="" data-toggle="modal" data-target=".bs-example-modal-lg">
+                    <i class="fa fa-search"></i>
+                </a>
+            </li>
+
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
-                {{-- <li><a href="/">Home</a></li> --}}
 
                 <li class="dropdown megamenu">
                     <a href="{{ route('client.product.index') }}" class="dropdown-toggle dropdownLink"
@@ -132,7 +135,7 @@
                 </li>
 
                 <li><a href="{{ route('client.post.index') }}">Blog</a></li>
-                <li><a href="{{ route('client.contact') }}">Contact</a></li>
+                <li><a href="{{ route('client.contact') }}">Liên hệ</a></li>
                 <li><a href="{{ route('client.voucher.index') }}">Voucher</a></li>
             </ul>
         </div>
