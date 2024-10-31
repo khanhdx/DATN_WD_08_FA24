@@ -49,6 +49,13 @@ class CartController extends Controller
 
             $sub_total = $request->quantity * $productVariant->price;
 
+            if ($request->quantity > $productVariant->stock) {
+                return response()->json([
+                    'message' => "Rất tiếc, bạn chỉ có thể mua tối đa $productVariant->stock sản phẩm!",
+                    'status_code' => 500,
+                ]);
+            }
+
             if (Auth::check()) {
                 $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
 
@@ -56,7 +63,16 @@ class CartController extends Controller
                     ->where('product_variant_id', $productVariant->id)->first();
 
                 if ($cart_item) {
+                    $quantity = $cart_item->quantity;
                     $cart_item->quantity += $request->quantity;
+
+                    if ($cart_item->quantity > $productVariant->stock) {
+                        return response()->json([
+                            'message' => "Bạn đã có $quantity sản phẩm trong giỏ hàng. Không thể mua thêm vì VƯỢT QUÁ số lượng cho phép!",
+                            'status_code' => 500,
+                        ]);
+                    }
+
                     $cart_item->sub_total += $sub_total;
                     $cart_item->save();
                 } else {
@@ -79,7 +95,17 @@ class CartController extends Controller
                 }
 
                 if (isset($cart[$key])) {
+                    $quantity = $cart[$key]['quantity'];
+
                     $cart[$key]['quantity'] += $request->quantity;
+
+                    if ($cart[$key]['quantity'] > $productVariant->stock) {
+                        return response()->json([
+                            'message' => "Bạn đã có $quantity sản phẩm trong giỏ hàng. Không thể mua thêm vì VƯỢT QUÁ số lượng cho phép!",
+                            'status_code' => 500,
+                        ]);
+                    }
+
                     $cart[$key]['sub_total'] += $sub_total;
                 } else {
                     $cart[$key] = [
@@ -102,7 +128,7 @@ class CartController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'Vui lòng chọn phân loại!',
+                'message' => 'Có lỗi trong quá trình thêm giỏ hàng!',
                 'errors' => $th->getMessage()
             ]);
         }
@@ -114,6 +140,14 @@ class CartController extends Controller
             $productVariant = ProductVariant::where('id', $request->product_variant_id)->firstOrFail();
 
             $sub_total = $request->quantity * $productVariant->price;
+
+            if ($request->quantity > $productVariant->stock) {
+                return response()->json([
+                    'message' => "Rất tiếc, bạn chỉ có thể mua tối đa $productVariant->stock sản phẩm!",
+                    'quantity' => $productVariant->stock,
+                    'status_code' => 500,
+                ]);
+            }
 
             if (Auth::check()) {
                 if ($request->quantity > 0) {
@@ -134,7 +168,8 @@ class CartController extends Controller
 
             return response()->json([
                 'message' => 'Cập nhật giỏ hàng thành công!',
-            ], 200);
+                'status_code' => 200
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Đã xảy ra lỗi trong quá trình cập nhật',

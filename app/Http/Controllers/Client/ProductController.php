@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\ColorController;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -70,18 +71,39 @@ class ProductController extends Controller
             ], 404);
         }
     }
-    public function inStock(Request $request)
+    public function getInStock(Request $request)
     {
         try {
-            // $productId = $request->product_id;
-            // $sizeId = $request->size_id;
+            $productId = $request->product_id;
+            $sizeId = $request->size_id;
+            $colorId = $request->color_id;
 
-            // $colors = ProductVariant::query()
-            //     ->where('product_id', $productId)
-            //     ->where('size_id', $sizeId)
-            //     ->get();
+            if ($sizeId && $colorId) {
+                $data = ProductVariant::query()
+                    ->select(DB::raw("SUM(stock) as stock, REPLACE(FORMAT(price, 0), ',', '.') as price"))
+                    ->where('product_id', $productId)
+                    ->where('color_id', $colorId)
+                    ->where('size_id', $sizeId)
+                    ->groupBy('price')
+                    ->get();
 
-            // return response()->json($colors);
+                return response()->json($data);
+            } elseif ($colorId) {
+                $data = ProductVariant::query()
+                    ->where('product_id', $productId)
+                    ->where('color_id', $colorId)
+                    ->sum('stock');
+
+                return response()->json($data);
+            } else {
+                $data = ProductVariant::query()
+                    ->where('product_id', $productId)
+                    ->where('size_id', $sizeId)
+                    ->sum('stock');
+
+                return response()->json($data);
+            }
+
         } catch (\Throwable $th) {
             return response()->json([
                 'errors' => $th->getMessage()

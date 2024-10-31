@@ -8,6 +8,7 @@
         }
     </style>
 @endsection
+
 @section('content')
     <!-- Begin page top -->
     <section class="page-top">
@@ -19,8 +20,8 @@
                     <li class="active">{{ $product->name }}</li>
                 </ol>
                 <ul class="pager pull-right">
-                    <li><a href="#">&laquo; Previous</a></li>
-                    <li><a href="#">Next &raquo;</a></li>
+                    <li><a href="#">&laquo; Trước</a></li>
+                    <li><a href="#">Sau &raquo;</a></li>
                 </ul>
             </div>
         </div>
@@ -66,13 +67,14 @@
                     </div>
 
                     <p class="price">
-                        <span class="amount">{{ number_format($product->price_regular, 3, ',') }} VND</span>
+                        <span class="amount">{{ number_format($product->price_regular, 0, ',', '.') }} VND</span>
                     </p>
 
                     <div>
                         <form method="post" class="cart" id="addToCart">
                             @csrf
                             <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                            <input type="hidden" id="stock" value="">
 
                             <ul class="list-inline list-select clearfix">
                                 <li>
@@ -88,7 +90,7 @@
                             </ul>
                             <ul class="list-inline list-select clearfix">
                                 <li>
-                                    <h4 class="m-0">Color:</h4>
+                                    <h4 class="m-0">Màu:</h4>
                                 </li>
 
                                 <li id="color-btn">
@@ -102,9 +104,9 @@
                             <div class="quantity pull-left">
                                 <input type="button" class="minus" value="-">
                                 <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
-                                    name="quantity" min="1" step="1">
+                                    name="quantity" step="1">
                                 <input type="button" class="plus" value="+">
-                                <span class="stock">{{ $sumStock }} hàng có sẵn</span>
+                                <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
 
                             <a href="#" class="btn btn-grey">
@@ -152,12 +154,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
+                        {{-- <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
                                         href="#collapseThree">Reviews (3)</a> </h4>
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
+
                                 <div class="panel-body post-comments">
                                     <ul class="comments">
                                         <li>
@@ -202,8 +205,95 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                            </div>
+                        </div> --}}
+                        <!-- Đánh giá sản phẩm -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
+                                        Reviews ({{ $product->reviews->count() }})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseReviews" class="panel-collapse collapse">
+                                <div class="panel-body post-comments">
+                                    <ul class="comments">
+                                        @foreach ($product->reviews as $review)
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="img-circle">
+                                                        <img class="avatar" width="50" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <strong>{{ $review->user->name }}</strong>
+                                                        </span>
+                                                        <span class="date">
+                                                            <small><i class="fa fa-clock-o"></i>
+                                                                {{ $review->created_at->format('F d, Y') }}</small>
+                                                        </span>
+                                                        <div class="rating">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="fa{{ $i <= $review->rating ? ' fa-star' : ' fa-star-o' }}"
+                                                                    aria-hidden="true"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <p>{{ $review->review }}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+
+                        {{-- <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Reviews ({{ $product->reviews->count() }})</a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body post-comments">
+                                    <ul class="comments">
+                                        @foreach ($product->reviews as $review)
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="img-circle">
+                                                        <img class="avatar" width="50" alt="" src="/assets/client/images/content/blog/avatar.png">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <strong>{{ $review->user->name }}</strong>
+                                                        </span>
+                                                        <span class="date">
+                                                            <small><i class="fa fa-clock-o"></i> {{ $review->created_at->format('F d, Y') }}</small>
+                                                        </span>
+                                                        <p>{{ $review->review }}</p>
+                                                        <span>Rating: {{ $review->rating }}/5</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form đánh giá chỉ hiện khi người dùng có quyền đánh giá -->
+                        @if ($canReview)
+                            <form action="{{ route('client.reviews.store', $product->id) }}" method="POST">
+                                @csrf
+                                <textarea name="review" placeholder="Nhập đánh giá của bạn" required></textarea>
+                                <input type="number" name="rating" min="1" max="5" placeholder="Đánh giá (1-5)" required>
+                                <button type="submit">Gửi đánh giá</button>
+                            </form>
+                        @else
+                            <p>Bạn cần mua sản phẩm này để có thể đánh giá.</p>
+                        @endif --}}
                     </div>
                 </div>
             </div>
@@ -213,7 +303,7 @@
     <!-- Begin Related Products -->
     <section class="products-slide">
         <div class="container">
-            <h2 class="title"><span>Related Products</span></h2>
+            <h2 class="title"><span>Sản Phẩm Liên Quan</span></h2>
             <div class="row">
                 <div id="owl-product-slide" class="owl-carousel product-slide">
                     @foreach ($related_products as $item)
@@ -238,12 +328,12 @@
                                         </div>
 
                                         <div class="product-thumb-info-content">
-                                            <span
-                                                class="price pull-right">{{ number_format($item->price_regular, 3, ',') }}
+                                            <span class="price pull-right">{{ number_format($item->price_regular, 0, ',', '.') }}
                                                 VND
                                             </span>
                                             <h4>
-                                                <a href="shop-product-detail2.html">{{ $item->name }}</a>
+                                                <a
+                                                    href="{{ route('client.product.show', $item->id) }}">{{ $item->name }}</a>
                                             </h4>
                                             <span class="item-cat">
                                                 <small>
@@ -269,6 +359,7 @@
         $(document).ready(function() {
             let selectedColor = null;
             let selectedSize = null;
+            let stock = $('#stock').val();
 
             $('#color-btn').on('click', '.btn-color', function(e) {
                 e.preventDefault();
@@ -276,7 +367,7 @@
                 $(this).addClass('color-active');
 
                 selectedColor = $(this).data('color-id');
-                // fetchAvailableSizes(selectedColor);
+                getInStock(selectedSize, selectedColor);
             });
 
             $('#size-btn').on('click', '.btn-size', function(e) {
@@ -285,6 +376,8 @@
                 $(this).addClass('btn-active');
 
                 selectedSize = $(this).data('size-id');
+                getInStock(selectedSize, selectedColor);
+
                 fetchAvailableColors(selectedSize);
             });
 
@@ -319,12 +412,11 @@
                                 title: `<span style="font-size: 1.5rem">${res.message}</span>`,
                                 width: 450
                             });
-                            // quantity = $('#quantity').val(1);
-                            // selectedColor = null;
-                            // selectedSize = null;
-                            // $('#productModal').modal('hide');
+
                             load_header();
                         } else {
+                        console.log(res.errors);
+
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
@@ -349,12 +441,33 @@
                 }
                 $.get("{{ route('get.color') }}", dataColor, function(res) {
                     $('.btn-color').hide();
-                    // $('.btn-color').removeClass('color-active');
+
                     res.forEach(item => {
                         $(`.btn-color[data-color-id="${item.color_id}"]`).show();
-                        console.log(item.color_id);
                     });
                 });
+            }
+
+            function getInStock(sizeId = null, colorId = null) {
+                let productId = $('#product_id').val();
+
+                data = {
+                    product_id: productId,
+                    size_id: sizeId,
+                    color_id: colorId,
+                }
+
+                $.get("{{ route('get.stock') }}", data, function(res) {
+                    if (Array.isArray(res)) {
+                        res.forEach(item => {
+                            $('.stock').text(item.stock);
+                            $('.amount').text(item.price + ' VND');
+                        });
+                    } else {
+                        $('.stock').text(res);
+                        $('#stock').val(res);
+                    }
+                })
             }
         });
     </script>

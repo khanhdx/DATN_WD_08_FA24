@@ -38,7 +38,7 @@
 
     @include('client.layouts.components.search')
 
-    @include('client.layouts.components.styleswitcher')
+
 
     @include('client.layouts.components.js')
 

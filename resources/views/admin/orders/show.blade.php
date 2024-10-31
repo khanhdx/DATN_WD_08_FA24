@@ -6,7 +6,8 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card text-center">
-                <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+                <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+
                 <div class="card-body">
                     <h5 class="card-title">{{ $order->user->name }}</h5>
                 </div>
@@ -18,7 +19,7 @@
                 <div class="card-body">
                     <p>Email: {{ $order->user->email }}</p>
                     <p>Số điện thoại: {{ $order->user->phone_number }}</p>
-                    <p>Mã giảm giá: DISCOUNT10</p>
+                
                 </div>
             </div>
         </div>
@@ -82,7 +83,8 @@
                         <th scope="col">STT</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Số lượng</th>
-                        {{-- <th scope="col">Đơn vị</th> --}}
+                        <th scope="col">Màu sắc</th>
+                        <th scope="col">Kích thước</th>
                         <th scope="col">Giá sản phẩm</th>
                         <th scope="col">Thành tiền</th>
                     </tr>
@@ -93,6 +95,8 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $order_detail->name_product }}</td>
                         <td>{{ $order_detail->quantity }}</td>
+                        <td>{{ $order_detail->color ?? "Không có màu sắc" }}</td>
+                        <td>{{ $order_detail->size ?? "Khồn có size" }}</td>
                         <td>{{ number_format($order_detail->unit_price) }}đ</td>
                         <td>{{ number_format($order_detail->total_price) }}đ</td>
                     </tr>

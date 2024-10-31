@@ -11,44 +11,51 @@
                 <ul class="list-unstyled">
                     <li class="has-sub">
                         <a href="index3.html">
-                            <i class="fas fa-tachometer-alt"></i>Điều khiển
+                            <i></i>Điều khiển
                             <span class="bot-line"></span>
                         </a>
                         <ul class="header3-sub-list list-unstyled">
                         </ul>
                     </li>
                     <li>
-                        <a href="{{route('admin.post.index')}}">
+                        <a href="{{ route('admin.post.index') }}">
                             <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
-                        <a href="{{route('admin.category.index')}}">
+                        <a href="{{ route('admin.category.index') }}">
                             <i class="fas fa-trophy"></i>
                             <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
-                            <i class="fa-solid fa-users"></i>
+                            <i ></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
-                        
+
                     </li>
-                    <  <li class="has-sub">
+                    <li class="has-sub">
                         <a href="#">
-                            <i class="fas fa-list-ul"></i>
+                            <i ></i>
                             <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
-                                <a href="{{ route('admin.products.index')}}">Quản lý sản phẩm</a>
+                                <a href="{{ route('admin.products.index') }}">Quản lý sản phẩm</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
+                                <a href="{{ route('admin.products.variants.index') }}">Sản phẩm biến thể</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.products.variants.getAllAttribute')}}">Thuộc tính biến thể</a>
+                                <a href="{{ route('admin.products.variants.getAllAttribute') }}">Thuộc tính biến thể</a>
                             </li>
-                            
+                            <li>
+                                <a href="{{ route('admin.inventories.index') }}">Tồn kho</a>
+                            </li>
                         </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{ route('admin.orders.index') }}">
+                            <i class="fas fa-list-ul"></i>
+                            <span class="bot-line"></span>Đơn hàng</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.voucher.index') }}">
@@ -56,18 +63,23 @@
                         </a>
                     <li class="has-sub">
                         <a href="#">
-                            <i class="fa-solid fa-users"></i>
-                            <span class="bot-line"></span>Slider</a>
+                            
+                            <span class="bot-line"></span>Quảng cáo</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
                                 <a href="{{ route('admin.slider.index') }}">Slider chính </a>
                             <li>
-                                <a href="{{ route('admin.slider.banner1.index')}}">Banner 1</a>
+                                <a href="{{ route('admin.slider.banner1.index')}}">Banner giảm giá</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.slider.banner2.index')}}">Banner 2</a>
+                                <a href="{{ route('admin.slider.banner2.index')}}">Banner giới thiệu</a>
                             </li>
                         </ul>
+                        
+                    </li><li class="has-sub">
+                        <a href="{{ route('admin.orders.index') }}">
+                            <i></i>
+                            <span class="bot-line"></span>Quản lý đơn hàng</a>
                         
                     </li>
                 </ul>
@@ -154,7 +166,7 @@
                             <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="John Doe" />
                         </div>
                         <div class="content">
-                            <a class="js-acc-btn" href="#">{{Auth::user()->name}}</a>
+                            <a class="js-acc-btn" href="#">{{ Auth::user()->name }}</a>
                         </div>
                         <div class="account-dropdown js-dropdown">
                             <div class="info clearfix">
@@ -163,15 +175,16 @@
                                         @if (Auth::user()->user_image)
                                             <img src="{{ Storage::url(Auth::user()->user_image) }}" alt="">
                                         @else
-                                            <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="" />
+                                            <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}"
+                                                alt="" />
                                         @endif
                                     </a>
                                 </div>
                                 <div class="content">
                                     <h5 class="name">
-                                        <a href="#">{{Auth::user()->name}}</a>
+                                        <a href="#">{{ Auth::user()->name }}</a>
                                     </h5>
-                                    <span class="email">{{Auth::user()->email}}</span>
+                                    <span class="email">{{ Auth::user()->email }}</span>
                                 </div>
                             </div>
                             <div class="account-dropdown__body">
