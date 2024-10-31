@@ -26,8 +26,7 @@
                         <h4>Category</h4>
                         <ul class="list-unstyled list-cat">
                             @foreach ($categories as $category)
-                                <li><a href=""
-                                        onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                                <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -115,8 +114,8 @@
                 <div class="catalog">
                     <div class="toolbar clearfix">
                         <ul class="list-inline list-icons pull-left">
-                            <li class="active"><a href="shop-sidebar.html"><i class="fa fa-th"></i></a></li>
-                            <li><a href="shop-list-sidebar.html"><i class="fa fa-th-list"></i></a></li>
+                            <li id="grid-view" class="active"><a href=""><i class="fa fa-th"></i></a></li>
+                            <li id="list-view"><a href=""><i class="fa fa-th-list"></i></a></li>
                         </ul>
                         <p class="pull-left">Showing 1-12 of 50 results</p>
                         <!-- Ordering -->
@@ -128,39 +127,79 @@
                             </select>
                         </div>
                     </div>
-                    <div class="container">
-                        @foreach ($products->chunk(3) as $chunk)
+                    <div id="products-grid">
+                        <div class="tab-pane active" id="man">
                             <div class="row">
-                                @foreach ($chunk as $product)
-                                    <div class="col-xs-12 col-sm-6 col-md-4 animation">
-                                        <div class="product">
+                                @foreach ($products as $product)
+                                    <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}">
+                                        <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
                                                     <span class="product-thumb-info-act">
-                                                        <a href="" data-toggle="modal" data-id="{{ $product->id }}"
-                                                            data-target=".quickview-wrapper" class="view-product">
+                                                        <a href="" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
                                                         <a href="shop-cart-full.html" class="add-to-cart-product">
                                                             <span><i class="fa fa-shopping-cart"></i></span>
                                                         </a>
                                                     </span>
-                                                    <img alt="{{ $product->name }}" class="img-responsive"
-                                                        src="{{ url($product->image) }}">
+                                                    <a href="{{ route('client.product.show', $product->id) }}">
+                                                        <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                                    </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
-                                                    <h4>{{ $product->name }}</h4>
-                                                    <div class="price-container">
-                                                        <span class="price-regular">{{ $product->price_regular }} đ</span>
-                                                        <span class="price-sale">{{ $product->price_sale }} đ</span>
-                                                    </div>
+                                                    <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                                    <h4><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h4>
+                                                    <span class="item-cat">
+                                                        <small>
+                                                            <a href="#">{{ $product->category->name }}</a>
+                                                        </small>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                        @endforeach
+                        </div>
+                        <div class="product product-list animation">
+                            @foreach ($products as $product)
+                                <div class="product-thumb-info" data-category-id="{{ $product->category->id }}">
+                                    <div class="row">
+                                        <div class="col-xs-5 col-sm-3">
+                                            <div class="product-thumb-info-image">
+                                                <a href="{{ route('client.product.show', $product->id) }}">
+                                                    <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            <div class="product-thumb-info-content">
+                                                <h4><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h4>
+                                                <div class="reviews-counter clearfix">
+                                                    <div class="rating five-stars pull-left">
+                                                        <div class="star-rating"></div>
+                                                        <div class="star-bg"></div>
+                                                    </div>
+                                                    <span>3 Reviews</span> | <a href="#">Add Your Review</a>
+                                                </div>
+                                                <p class="price">{{ $product->price_regular }} đ</p>
+                                                <p>{{ $product->description }}</p>
+                                                <p class="btn-group">
+                                                    <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
+                                                        <span><i class="fa fa-eye"></i></span>
+                                                    </a>                       
+                                                    <a href="#">
+                                                        <span><i class="fa fa-heart-o"></i></span>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     <div class="pagination-wrapper">
                         @if ($products->hasPages())
@@ -174,8 +213,8 @@
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev"
-                                                aria-label="@lang('pagination.previous')">&laquo;</a>
+                                            <a class="page-link" href="{{ $products->previousPageUrl() }}"
+                                                rel="prev" aria-label="@lang('pagination.previous')">&laquo;</a>
                                         </li>
                                     @endif
 
@@ -225,6 +264,10 @@
 
 @section('css')
     <style>
+        .product-list {
+            display: none;
+        }
+
         .product-thumb-info-image {
             position: relative;
         }
@@ -255,4 +298,23 @@
             text-decoration: line-through;
         }
     </style>
+@endsection
+@section('js')
+<script>
+    document.getElementById('list-view').addEventListener('click', function (event) {
+        event.preventDefault();
+        document.querySelector('.product-list').style.display = 'block';
+        document.querySelector('.tab-pane').style.display = 'none';
+        document.getElementById('grid-view').classList.remove('active');
+        this.classList.add('active');
+    });
+
+    document.getElementById('grid-view').addEventListener('click', function (event) {
+        event.preventDefault();
+        document.querySelector('.product-list').style.display = 'none';
+        document.querySelector('.tab-pane').style.display = 'block';
+        document.getElementById('list-view').classList.remove('active');
+        this.classList.add('active');
+    }); 
+</script>
 @endsection
