@@ -136,7 +136,7 @@ Route::name('client.')->group(function () {
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
     Route::get('/header',  [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
-    
+    Route::get('wave-voucher', [App\Http\Controllers\client\WareController::class, 'wareList'])->name('wave-voucher');
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)

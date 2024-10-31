@@ -18,10 +18,18 @@ class VoucherController extends Controller
     public function index()
     {
         //
-        $data['voucher_new'] = Voucher::query()->orderBy('created_at', 'desc')->where('type_code', '=','Công khai')->limit(5)->get();
+        $data['voucher_new'] = Voucher::query()->orderBy('created_at', 'desc')->where('type_code', '=','Công khai')->get();
         if(Auth::user()) {
             $data['check'] = waresList::query()->where('vouchers_ware_id', '=', Auth::user()->vouchers_ware->id)->get();
             $data['miss'] = $data['voucher_new']->whereNotIn('id', $data['check']->pluck('voucher_id'));
+        }
+        foreach ($data['voucher_new'] as $item) {
+            if(waresList::query()->where('vouchers_ware_id', '=', Auth::user()->vouchers_ware->id)->where('voucher_id','=',$item->id)->first()) {
+                $item->check = true;
+            }
+            else {
+                $item->check = false;
+            }
         }
         return view('client.vouchers.index', $data);
     }
@@ -50,6 +58,17 @@ class VoucherController extends Controller
         //
         try {
             $data['voucher'] = Voucher::query()->findOrFail($id);
+            if(Auth::user()) {
+                if(waresList::query()->where('vouchers_ware_id', '=', Auth::user()->vouchers_ware->id)->where('voucher_id','=',$data['voucher']->id)->first()) {
+                    $data['voucher']->check = true;
+                }
+                else {
+                    $data['voucher']->check = false;
+                }
+            }
+            else {
+                $data['voucher']->check = false;
+            }
             return view('client.vouchers.detail', $data);
         } catch (\Throwable $th) {
             abort(404);

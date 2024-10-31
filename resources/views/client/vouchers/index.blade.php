@@ -94,8 +94,7 @@
                             </div>
                             <div>
                                 @if (Auth::user())
-                                    @foreach ($check as $mi)
-                                        @if ($mi->voucher_id == $voucher->id)
+                                        @if ($voucher->check)
                                             <button class="btn btn-save" disabled>Đã lưu</button>  
                                         @else                              
                                             <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
@@ -105,7 +104,6 @@
                                                 <button class="btn btn-save LuuVoucher">Lưu</button>
                                             </form>
                                         @endif
-                                    @endforeach
                                 @else
                                     <button class="btn btn-save saveVoucher">Lưu</button>
                                 @endif

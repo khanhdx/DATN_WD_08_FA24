@@ -28,6 +28,7 @@
                     <ul class="dropdown-menu">
                         @if (auth()->user()->role == 'Khách hàng')
                             <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
+                            <li><a href="{{ route('client.wave-voucher') }}">Kho voucher</a></li>
                         @elseif (auth()->user()->role == 'Quản lý')
                             <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
                         @endif

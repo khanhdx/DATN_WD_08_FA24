@@ -114,13 +114,18 @@
                         </div>
                         <div>
                             @if (Auth::user())
-                                <form action="{{ route('client.voucher.update',Auth::user()->id) }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button class="btn btn-save">Lưu</button>
-                                </form>
+                                @if ($voucher->check)
+                                    <button class="btn btn-save" disabled>Đã lưu</button>  
+                                @else                              
+                                    <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
+                                        <button class="btn btn-save LuuVoucher">Lưu</button>
+                                    </form>
+                                @endif
                             @else
-                                <button class="btn btn-save">Lưu</button>
+                                <button class="btn btn-save saveVoucher">Lưu</button>
                             @endif
                         </div>
                     </div>
@@ -157,5 +162,14 @@
     </section>
 @endsection
 @section('js')
-
+<script>
+    $('.saveVoucher').on('click', function () {
+        swal({
+            title: "Thông báo !",
+            text: "Bạn cần đăng nhập mới có thể sử dụng mã giảm giá.",
+            icon: "warning",
+        });
+    })
+    
+</script>
 @endsection
