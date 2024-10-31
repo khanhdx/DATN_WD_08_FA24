@@ -32,7 +32,7 @@ class RoleMiddleware
         }
 
         if ($user->role === 'Quản lý') {
-            return redirect('/admin');
+            return redirect()->route('admin.dashboard');
         }
 
         return abort(403, 'Unauthorized action.');

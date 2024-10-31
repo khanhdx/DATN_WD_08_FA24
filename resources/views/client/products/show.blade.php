@@ -207,7 +207,6 @@
                             </div>
                         </div> --}}
                         <!-- Đánh giá sản phẩm -->
-
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -245,18 +244,6 @@
                                             </li>
                                         @endforeach
                                     </ul>
-
-                                    <!-- Form đánh giá chỉ hiện khi người dùng có quyền đánh giá -->
-                                    {{-- @if ($canReview)
-                                        <form action="{{ route('client.reviews.store', $product->id) }}" method="POST">
-                                            @csrf
-                                            <textarea name="review" placeholder="Nhập đánh giá của bạn" required></textarea>
-                                            <input type="number" name="rating" min="1" max="5" placeholder="Đánh giá (1-5)" required>
-                                            <button type="submit">Gửi đánh giá</button>
-                                        </form>
-                                    @else
-                                        <p>Bạn cần mua sản phẩm này để có thể đánh giá.</p>
-                                    @endif --}}
                                 </div>
                             </div>
                         </div>

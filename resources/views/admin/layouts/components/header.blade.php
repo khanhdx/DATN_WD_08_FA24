@@ -24,8 +24,8 @@
                     </li>
                     <li>
                         <a href="{{route('admin.category.index')}}">
-                            <i class="fas fa-trophy"></i>
-                            <span class="bot-line"></span>Category</a>
+                            
+                            <span class="bot-line"></span>Danh mục</a>
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
@@ -56,8 +56,8 @@
                         </a>
                     <li class="has-sub">
                         <a href="#">
-                            <i class="fa-solid fa-users"></i>
-                            <span class="bot-line"></span>Slider</a>
+                            
+                            <span class="bot-line"></span>Quảng cáo</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
                                 <a href="{{ route('admin.slider.index') }}">Slider chính </a>

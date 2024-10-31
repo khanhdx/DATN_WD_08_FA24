@@ -206,7 +206,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
-    Route::post('/apply-voucher', [PaymentController::class, 'applyVoucher'])->name('voucher.apply');
+    Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');

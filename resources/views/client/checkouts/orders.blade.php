@@ -1,10 +1,12 @@
 @extends('client.layouts.master')
 
 @section('title', 'Danh sách đơn hàng')
+@section('text_page')
+    Danh sách đơn hàng
+@endsection
 
 @section('content')
-    <div class="order-list">
-        <h1 class="page-title">Danh sách đơn hàng của bạn</h1>
+@include('client.layouts.components.pagetop', ['md' => 'md'])
 
         <table class="table table-striped">
             <thead>

@@ -69,4 +69,8 @@ class Order extends Model
     //     return $this->belongsTo(StatusOrder::class);
     // }
     
+    public function voucherWare()
+{
+    return $this->hasOne(VoucherWare::class, 'order_id', 'id');
+}
 }

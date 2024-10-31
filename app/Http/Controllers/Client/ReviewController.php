@@ -12,34 +12,43 @@ class ReviewController extends Controller
 {
     public function submitReview(Request $request, $orderId, $productId)
     {
-        // Xác thực dữ liệu yêu cầu
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|string|max:1000',
         ]);
 
-        // Kiểm tra xem đơn hàng có hoàn thành không
         $order = Order::findOrFail($orderId);
-        $statusOrder = $order->statusOrder->first(); // Lấy trạng thái đầu tiên
-        if ($statusOrder && $statusOrder->name !== 'completed') {
+        $statusOrder = $order->statusOrder->first();
+
+        if ($statusOrder && $statusOrder->id !== 4) { // 4 là trạng thái hoàn thành
             return response()->json(['error' => 'Chỉ những đơn hàng đã hoàn thành mới có thể đánh giá.'], 403);
         }
 
-         // Kiểm tra xem sản phẩm có trong đơn hàng không
         if (!$order->order_details()->where('product_id', $productId)->exists()) {
             return response()->json(['error' => 'Sản phẩm này không nằm trong đơn hàng.'], 403);
         }
-        
 
-        // Tạo đánh giá
+        // Kiểm tra xem đánh giá đã tồn tại cho sản phẩm và đơn hàng này chưa
+        $existingReview = Review::where('order_id', $orderId)
+            ->where('product_id', $productId)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingReview) {
+            return response()->json(['error' => 'Bạn đã đánh giá sản phẩm này cho đơn hàng này.'], 403);
+        }
+
         $review = new Review();
-        $review->user_id = auth()->id(); // Lưu ID của người dùng đã đăng nhập
-        $review->product_id = $productId; // Gán ID sản phẩm
-        $review->order_id = $orderId; // Gán ID đơn hàng
-        $review->rating = $request->rating; // Gán điểm đánh giá
-        $review->review = $request->review; // Gán bình luận
-        $review->save(); // Lưu đánh giá vào cơ sở dữ liệu
+        $review->user_id = Auth::id();
+        $review->product_id = $productId;
+        $review->order_id = $orderId;
+        $review->rating = $request->rating;
+        $review->review = $request->review;
+        $review->save();
 
-        return response()->json(['message' => 'Review submitted successfully!'], 200); // Trả về phản hồi thành công
+        return response()->json([
+            'message' => 'Đã gửi đánh giá thành công!',
+            'review' => $review->load('user')
+        ], 200);
     }
 }
