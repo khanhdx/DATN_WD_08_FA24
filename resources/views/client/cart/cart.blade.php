@@ -66,7 +66,7 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">${{ $cart->productVariant->price }}</span>
+                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} VND</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -95,7 +95,7 @@
 
                                         <td class="product-subtotal">
                                             <span class="amount sub-total-{{ $cart->id }}">
-                                                ${{ $cart->sub_total }}
+                                                {{ number_format($cart->sub_total, 0, ',', '.') }} VND
                                             </span>
                                         </td>
 
@@ -131,7 +131,7 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">${{ $cart['price'] }}</span>
+                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }} VND</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -159,7 +159,7 @@
 
                                         <td class="product-subtotal">
                                             <span class="amount sub-total-{{ $key }}">
-                                                ${{ $cart['sub_total'] }}
+                                                {{ number_format($cart['sub_total'], 0, ',', '.') }} VND
                                             </span>
                                         </td>
 
@@ -243,7 +243,7 @@
                                     Cart Subtotal
                                 </th>
                                 <td>
-                                    <span class="amount">${{ $total }}</span>
+                                    <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
                                 </td>
                             </tr>
                             <tr class="shipping">
@@ -256,11 +256,11 @@
                                 </td>
                             </tr>
                             <tr class="total">
-                                <th>
+                                <th>    
                                     Total
                                 </th>
                                 <td>
-                                    <span class="amount">${{ $total }}</span>
+                                    <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
                                 </td>
                             </tr>
                         </tbody>

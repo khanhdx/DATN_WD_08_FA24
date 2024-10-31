@@ -16,7 +16,7 @@
             <li class="login">
                 @guest
                     <!-- Hiển thị nếu chưa đăng nhập -->
-                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
+                    <a href="{{ route('login') }}"><i class="fa fa-user"></i></a>
                 @endguest
 
                 @auth
@@ -51,7 +51,6 @@
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
-                {{-- <li><a href="/">Home</a></li> --}}
 
                 <li class="dropdown megamenu">
                     <a href="{{ route('client.product.index') }}" class="dropdown-toggle dropdownLink"
@@ -163,9 +162,9 @@
                 </li>
 
                 <li><a href="{{ route('client.post.index') }}">Blog</a></li>
-                <li><a href="{{ route('client.contact') }}">Contact</a></li>
+                <li><a href="{{ route('client.contact') }}">Liên hệ</a></li>
                 <li><a href="{{ route('client.voucher.index') }}">Voucher</a></li>
-            </ul>
+            </ul>   
         </div>
     </div>
 </nav>

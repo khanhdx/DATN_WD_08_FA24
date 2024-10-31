@@ -14,23 +14,13 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            [
-                'name' => 'duc',
-                'email' => 'duc@gmail.com',
-                'phone_number' => '012345678',
-                'password' => 'duc@gmail.com',
-                'role' => 'Khách hàng',
-            ],
-            [
-                'name' => 'admin',
-                'email' => 'admin@gmail.com',
-                'phone_number' => '012345678',
-                'password' => 'admin@gmail.com',
-                'role' => 'Quản lý',
-            ]
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'phone_number' => '012345678',
+            'password' => 'admin@gmail.com',
+            'role' => 'Quản lý',
+
         ];
-        foreach ($data as $key => $value) {
-            User::query()->create($value);
-        }
+        User::query()->create($data);
     }
 }

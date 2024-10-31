@@ -198,8 +198,18 @@
         };
 
         $.post(`{{ route('client.home') }}/carts/${id}`, data, function(res) {
-            load_cart();
-            load_header();
+            if (res.status_code == 200) {
+                load_cart();
+                load_header();
+                console.log(res.message);
+            } else {
+                $('.qty').val(res.quantity);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: res.message,
+                });
+            }
         });
     }
 
@@ -218,7 +228,7 @@
     load_header();
 </script>
 
-<!-- Xử lý logic chọn màu và thêm giỏ hàng qua ajax -->
+<!-- Xử lý logic chọn màu và thêm giỏ hàng modal qua ajax -->
 <script>
     $(document).ready(function() {
         let selectedColor = null;
@@ -231,7 +241,7 @@
 
             selectedColor = $(this).data('color-id');
             console.log(selectedColor);
-            
+
             // fetchAvailableSizes(selectedColor);
         });
 
@@ -242,7 +252,7 @@
 
             selectedSize = $(this).data('size-id');
             console.log(selectedSize);
-            
+
             fetchAvailableColors(selectedSize);
         });
 
@@ -258,7 +268,7 @@
                 _token: '{{ csrf_token() }}',
             }
             console.log(dataCart);
-            
+
 
             if (selectedColor && selectedSize) {
                 $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
@@ -279,7 +289,7 @@
                             title: `<span style="font-size: 1.5rem">${res.message}</span>`,
                             width: 450
                         });
-                        
+
                         quantity = $('#quantity').val(1);
                         selectedColor = null;
                         selectedSize = null;

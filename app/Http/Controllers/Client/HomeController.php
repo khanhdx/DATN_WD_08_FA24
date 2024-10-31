@@ -23,12 +23,12 @@ class HomeController extends Controller
         $newProductMan = Product::with(['category', 'variants.size', 'variants.color'])
             ->whereHas('category', function ($query) {
                 $query->where('type', 'Man');
-            })->latest('id')->paginate(12);
+            })->latest('id')->paginate(8);
 
         $newProductWoman = Product::with(['category', 'variants.size', 'variants.color'])
             ->whereHas('category', function ($query) {
                 $query->where('type', 'Woman');
-            })->latest('id')->paginate(12);
+            })->latest('id')->paginate(8);
 
         $latestPosts = Post::query()
             ->latest('id')
