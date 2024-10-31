@@ -13,41 +13,13 @@
             <a class="logo" href="/"><img src="/assets/client/images/logo.png" alt="Flatize"></a>
         </div>
         <ul class="nav navbar-nav navbar-act pull-right">
-            <li class="login">
-                @guest
-                    <!-- Hiển thị nếu chưa đăng nhập -->
-                    <a href="{{ route('login') }}"><i class="fa fa-user"></i></a>
-                @endguest
 
-                @auth
-                    <!-- Hiển thị nếu đã đăng nhập với dropdown -->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user"></i> {{ auth()->user()->name }} <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        @if (auth()->user()->role == 'Khách hàng')
-                            <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
-                        @elseif (auth()->user()->role == 'Quản lý')
-                            <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
-                        @endif
-                        <li>
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); 
-                                   document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            @endauth
+            <li class="search">
+                <a href="" data-toggle="modal" data-target=".bs-example-modal-lg">
+                    <i class="fa fa-search"></i>
+                </a>
             </li>
 
-            <li class="search"><a href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-lg"><i
-                        class="fa fa-search"></i></a></li>
         </ul>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
@@ -164,7 +136,7 @@
                 <li><a href="{{ route('client.post.index') }}">Blog</a></li>
                 <li><a href="{{ route('client.contact') }}">Liên hệ</a></li>
                 <li><a href="{{ route('client.voucher.index') }}">Voucher</a></li>
-            </ul>   
+            </ul>
         </div>
     </div>
 </nav>

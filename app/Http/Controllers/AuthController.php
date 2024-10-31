@@ -62,11 +62,22 @@ class AuthController extends Controller
         if (!$this->authService->userExists($request->email)) {
             return redirect()->back()->withErrors(['email' => 'Email không tồn tại.']);
         }
-
+    
         if ($this->authService->login($request->validated())) {
+            // Lấy thông tin người dùng sau khi đăng nhập thành công
+            $user = Auth::user();
+            
+            // Chuyển hướng theo vai trò của người dùng
+            if ($user->role === 'Quản lý') {
+                return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
+            } elseif ($user->role === 'Khách hàng') {
+                return redirect()->route('client.home')->with('success', 'Đăng nhập thành công.');
+            }
+    
+            // Chuyển hướng mặc định nếu không có vai trò phù hợp
             return redirect()->route('client.home')->with('success', 'Đăng nhập thành công.');
         }
-
+    
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
     }
 
@@ -76,7 +87,7 @@ class AuthController extends Controller
         $this->authService->logout();
         session()->invalidate();
         session()->regenerateToken();
-        return back()->with('success', 'Đăng xuất thành công.');
+        return redirect()->route('client.home')->with('success', 'Đăng xuất thành công.');
     }
 
     // Hiển thị form đặt lại mật khẩu

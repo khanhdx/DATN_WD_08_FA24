@@ -1,11 +1,12 @@
 @extends('client.layouts.master')
 
 @section('title', 'Chi tiết đơn hàng')
-
+@section('text_page')
+    Chi tiết đơn hàng {{ $order->id }}
+@endsection
 @section('content')
 <div class="order-details">
-    <h1 class="page-title">Chi tiết đơn hàng #{{ $order->id }}</h1>
-
+    @include('client.layouts.components.pagetop', ['md' => 'md'])
     <div class="order-info">
         <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
         <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
@@ -15,6 +16,13 @@
             @endforeach
         </p>
         <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>
+        
+        @if($order->voucherWare)
+            <p><strong>Voucher:</strong> {{ $order->voucherWare->voucher->voucher_code }}</p>
+            <p><strong>Giá giảm:</strong> {{ $order->voucherWare->voucher->decreased_value }}</p>
+        @else
+            <p><strong>Voucher:</strong> Không có</p>
+        @endif
     </div>
 
     <h2 class="section-title">Sản phẩm trong đơn hàng</h2>
