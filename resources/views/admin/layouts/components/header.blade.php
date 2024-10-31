@@ -19,23 +19,23 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.post.index') }}">
-                            <i></i>
+                            <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.category.index') }}">
-
-                            <span class="bot-line"></span>Danh mục</a>
+                            <i class="fas fa-trophy"></i>
+                            <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
-                            <i></i>
+                            <i ></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
 
                     </li>
                     <li class="has-sub">
                         <a href="#">
-                            <i></i>
+                            <i ></i>
                             <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
@@ -62,31 +62,25 @@
                             <span class="bot-line"></span>Quản lý mã giảm giá
                         </a>
                     <li class="has-sub">
-                        <<<<<<< HEAD <a href="#">
-
+                        <a href="#">
+                            
                             <span class="bot-line"></span>Quảng cáo</a>
-                            <ul class="header3-sub-list list-unstyled">
-                                <li>
-                                    <a href="{{ route('admin.slider.index') }}">Slider chính </a>
-                                <li>
-                                    <a href="{{ route('admin.slider.banner1.index') }}">Banner giảm giá</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('admin.slider.banner2.index') }}">Banner giới thiệu</a>
-                                </li>
-                            </ul>
-
-                    </li>
-                    <li class="has-sub">
+                        <ul class="header3-sub-list list-unstyled">
+                            <li>
+                                <a href="{{ route('admin.slider.index') }}">Slider chính </a>
+                            <li>
+                                <a href="{{ route('admin.slider.banner1.index')}}">Banner giảm giá</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.slider.banner2.index')}}">Banner giới thiệu</a>
+                            </li>
+                        </ul>
+                        
+                    </li><li class="has-sub">
                         <a href="{{ route('admin.orders.index') }}">
                             <i></i>
                             <span class="bot-line"></span>Quản lý đơn hàng</a>
-
-                        =======
-                        <a href="{{ route('admin.slider.index') }}">
-                            <i class="fa-solid fa-users"></i>
-                            <span class="bot-line"></span>Quản lý slider</a>
-                        >>>>>>> 23052f60a78e7dc285ff8d03c568f68a54424ba2
+                        
                     </li>
                 </ul>
             </div>
