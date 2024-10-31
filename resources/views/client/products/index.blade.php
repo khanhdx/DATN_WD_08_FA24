@@ -1,7 +1,7 @@
 @extends('client.layouts.master')
 
 @section('text_page')
-    Shop - Sidebar
+    Shopping
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="col-md-3">
                 <aside class="sidebar">
                     <aside class="block filter-blk">
-                        <h4>Filter By Price</h4>
+                        <h4>Lọc theo giá</h4>
                         <div id="price-range">
                             <div class="padding-range">
                                 <div id="slider-range"></div>
@@ -23,35 +23,25 @@
                         </div>
                     </aside>
                     <aside class="block blk-cat">
-                        <h4>Category</h4>
+                        <h4>Danh mục</h4>
                         <ul class="list-unstyled list-cat">
                             @foreach ($categories as $category)
                                 <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
-                    <aside class="block blk-brands">
-                        <h4>Brands</h4>
-                        <ul class="list-unstyled list-cat">
-                            <li><a href="#">Louis Vuitton</a></li>
-                            <li><a href="#">Gucci</a></li>
-                            <li><a href="#">Levi’s</a></li>
-                            <li><a href="#">Prada</a></li>
-                            <li><a href="#">Dolce & Gabbana</a></li>
-                            <li><a href="#">Dior</a></li>
-                            <li><a href="#">Burberry</a></li>
-                        </ul>
-                    </aside>
+
                     <aside class="block blk-colors">
-                        <h4>Colors</h4>
+                        <h4>Màu sắc</h4>
                         <ul class="list-unstyled list-cat">
                             @foreach ($colors as $color)
                                 <li><a href="#">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
+
                     <aside class="block featured">
-                        <h4>Featured</h4>
+                        <h4>Sản phẩm trending</h4>
                         <ul class="list-unstyled list-thumbs-pro">
                             <li class="product">
                                 <div class="product-thumb-info">
@@ -100,17 +90,6 @@
                 </aside>
             </div>
             <div class="col-md-9">
-                <!-- Begin Lookbook Women -->
-                <section id="lookbook">
-                    <div class="lookbook">
-                        <h2><a href="#">Lookbook Women</a></h2>
-                        <p>Etiam aliquam risus ante, quis ultrices enim porta a. Integer et dolor sit amet enim feugiat
-                            faucibus. Donec sit amet egestas orci. Proin facilisis mi ornare turpis sollicitudin; vel rutrum
-                            est viverra. Vestibulum hendrerit egestas semper.</p>
-                    </div>
-                </section>
-                <!-- End Lookbook Women -->
-
                 <div class="catalog">
                     <div class="toolbar clearfix">
                         <ul class="list-inline list-icons pull-left">

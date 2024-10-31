@@ -43,7 +43,7 @@
     <!-- Begin Top Selling -->
     <section class="products-slide">
         <div class="container">
-            <h2 class="title"><span>Top Selling</span></h2>
+            <h2 class="title"><span>Top Sản Phẩm Bán Chạy</span></h2>
             <div class="row">
                 <div id="owl-product-slide" class="owl-carousel product-slide">
                     @foreach ($topSeller as $product)
@@ -67,7 +67,7 @@
                                     </div>
 
                                     <div class="product-thumb-info-content">
-                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                        <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
                                         <h4>
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 {{ $product->name }}
@@ -92,11 +92,11 @@
     <!-- Begin New Products -->
     <section class="product-tab">
         <div class="container">
-            <h2 class="title"><span>New Products</span></h2>
+            <h2 class="title"><span>Sản phẩm mới</span></h2>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs pro-tabs text-center animation" role="tablist">
-                <li class="active"><a href="#man" role="tab" data-toggle="tab">Man</a></li>
-                <li><a href="#woman" role="tab" data-toggle="tab">Woman</a></li>
+                <li class="active"><a href="#man" role="tab" data-toggle="tab">Nam</a></li>
+                <li><a href="#woman" role="tab" data-toggle="tab">Nữ</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -109,8 +109,9 @@
                                 <div class="product-thumb-info">
                                     <div class="product-thumb-info-image">
                                         <span class="product-thumb-info-act">
-                                            <a href="" data-toggle="modal" data-target=".quickview-wrapper"
-                                                class="view-product" data-id="{{ $product->id }}">
+                                            <a href="" data-toggle="modal"
+                                                data-target=".quickview-wrapper" class="view-product"
+                                                data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
                                             <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -118,19 +119,18 @@
                                             </a>
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                            <img alt="" class="img-responsive"
+                                                src="{{ $product->image }}">
                                         </a>
                                     </div>
                                     <div class="product-thumb-info-content">
-                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
-                                        <h4><a
+                                        <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
+                                        <h4>
+                                            <a
                                                 href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                         </h4>
-                                        <span class="item-cat">
-                                            <small>
-                                                <a href="#">{{ $product->category->name }}</a>
-                                            </small>
-                                        </span>
+                                        <span class="item-cat"><small><a
+                                                    href="#">{{ $product->category->name }}</a></small></span>
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
                                         </a>
                                     </div>
                                     <div class="product-thumb-info-content">
-                                        <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                        <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
                                         <h4>
                                             <a
                                                 href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
@@ -203,7 +203,7 @@
     <!-- Begin Latest Blogs -->
     <section class="latest-blog">
         <div class="container">
-            <h2 class="title"><span>Latest from the blog</span></h2>
+            <h2 class="title"><span>Bài viết mới nhất</span></h2>
             <div class="row">
                 @foreach ($latestPosts as $post)
                     <div class="col-xs-6 animation">
