@@ -16,6 +16,7 @@ class Product extends Model
         'image',
         'name',
         'SKU',
+        'base_stock',
         'price_regular',
         'price_sale',
         'description',
@@ -39,5 +40,10 @@ class Product extends Model
     public function colors()
     {
         return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id');
+    }
+
+    public function inventoryStocks()
+    {
+        return $this->hasMany(InventoryStock::class);
     }
 }

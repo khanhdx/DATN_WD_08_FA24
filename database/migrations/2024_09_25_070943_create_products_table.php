@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');                         // Tên sản phẩm
             $table->string('image');                        // Ảnh sản phẩm
             $table->string('SKU')->unique();                // Mã SKU
+            $table->unsignedBigInteger('base_stock');       // Số lượng tồn kho           
             $table->decimal('price_regular');               // Giá thường
             $table->decimal('price_sale')->nullable();      // Giá sale
             $table->string('description')->nullable();      // Mô tả

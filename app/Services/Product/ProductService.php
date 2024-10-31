@@ -5,9 +5,11 @@ namespace App\Services\Product;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\VariantRepositopy;
+use App\Services\Inventory\InventoryService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,10 +18,14 @@ class ProductService implements IProductService
     protected $productRepository;
 
     protected $variantRepository;
-    public function __construct(ProductRepository $productRepository, VariantRepositopy $variantRepository)
+
+    protected $inventoryService;
+
+    public function __construct(ProductRepository $productRepository, VariantRepositopy $variantRepository, InventoryService $inventoryService)
     {
         $this->productRepository = $productRepository;
         $this->variantRepository = $variantRepository;
+        $this->inventoryService = $inventoryService;
     }
 
     public function getAll()
@@ -38,36 +44,43 @@ class ProductService implements IProductService
 
     public function insert($data)
     {
-
-        // try {
+        DB::transaction(function () use ($data) {
+             // dd($data);
         $productInput = $data;
-        $variants = $data['variants'];
 
-
+        // Khởi tạo tồn kho tổng = 0
+        $productInput['base_stock'] = 0;
+     
         // Upload Image
         if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
             $productInput['image'] = $productInput['image']->store('uploads/products', 'public');
         } else {
             $productInput['image'] = null;
         }
-        // dd($productInput);
 
         //Insert lên DB
         $product = $this->productRepository->insert($productInput);
 
-        if (isset($variants) && !empty($variants)) {
+        if (isset($data['variants']) && !empty($data['variants'])) {
+            $variants = $data['variants'];
             $product_id = $product->id;
 
             foreach ($variants as $variant) {
                 $variant['product_id'] = $product_id;
 
-                $this->variantRepository->insert($variant);
+                $variant = $this->variantRepository->insert($variant);
+
+                $variant_id = $variant->id;
+
+                $initialStock = $variant['stock'] ?? 0;
+
+                if ( $initialStock > 0 ) {
+                    $this->inventoryService->importVariantStock($initialStock, $product_id, $variant_id);
+                }
             }
         }
+        }, 3);
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->with('failed', $th->getMessage());
-        // }
     }
 
     public function update($id, $data)

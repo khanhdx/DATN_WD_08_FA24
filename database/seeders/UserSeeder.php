@@ -15,12 +15,26 @@ class UserSeeder extends Seeder
     {
         //
         $data = [
-            'name'=> 'Admin123',
-            'email'=> 'admin123@gmail.com',
-            'phone_number'=> '012345678',
-            'password'=> 'Admin12345',
-            'role'=>'Quản lý',
+            [
+                'name' => 'Admin123',
+                'email' => 'admin123@gmail.com',
+                'phone_number' => '012345678',
+                'password' => bcrypt('Admin12345'),
+                'role' => 'Quản lý',
+            ],
+            [
+                'name' => 'user12345',
+                'email' => 'user123@gmail.com',
+                'phone_number' => '012345678',
+                'password' => bcrypt('abcd12345'),
+                'role' => 'Khách hàng',
+            ]
+
         ];
-        User::query()->create($data);
+
+        foreach ($data as $userData) {
+            User::query()->create($userData);
+        }
+      
     }
 }

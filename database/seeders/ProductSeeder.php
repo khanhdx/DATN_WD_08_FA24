@@ -20,6 +20,7 @@ class ProductSeeder extends Seeder
         $categoryType = Category::pluck('type', 'id')->toArray();
 
         for ($i = 0; $i < 10; $i++) {
+            $base_stock = rand(100, 999);
             $price = rand(100, 999);
             $sale = round($price * 0.6, 2); // Giảm 40%
             $category = $categoryIds[array_rand($categoryIds)];
@@ -30,6 +31,7 @@ class ProductSeeder extends Seeder
                 'image'         => '/assets/client/images/content/products/product-' . ( $type == "Man" ? rand(1, 8) : rand(9, 17) ) . '.jpg',
                 'name'          => fake()->text(20),
                 'SKU'           => "OB" . rand(10000, 99999),
+                'base_stock'    => $base_stock,
                 'price_regular' => $price,
                 'price_sale'    => $sale,
                 'description'   => fake()->text(200),

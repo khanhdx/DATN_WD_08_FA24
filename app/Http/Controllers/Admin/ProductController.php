@@ -80,11 +80,11 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        try {
+        // try {
             return $this->productService->insert($request->all());
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        // }
     }
 
     public function update($id, Request $request)

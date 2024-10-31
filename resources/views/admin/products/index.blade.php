@@ -201,6 +201,7 @@
                                     <th>Danh mục</th>
                                     <th>SKU</th>
                                     <th>Tên sản phẩm</th>
+                                    <th>Số lượng tồn kho</th>
                                     <th>Giá gốc</th>
                                     <th>Giá khuyến mãi</th>
                                     <th>Lượt xem</th>
@@ -216,6 +217,7 @@
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ $item->SKU }}</td>
                                         <td>{{ $item->name }}</td>
+                                        <td>{{ $item->base_stock }}</td>
                                         <td class="desc">{{ $item->price_regular }}</td>
                                         <td class="desc">{{ $item->price_sale }}</td>
                                         <td>{{ $item->views }}</td>
