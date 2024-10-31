@@ -66,7 +66,7 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} VND</span>
+                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} đ</span>
                                         </td>
 
                                         <td class="product-quantity">
