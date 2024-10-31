@@ -2,25 +2,28 @@
 
 @section('title', 'Chi tiết đơn hàng')
 @section('text_page')
-Chi tiết đơn hàng
+    Chi tiết đơn hàng {{ $order->id }}
 @endsection
-
 @section('content')
-@include('client.layouts.components.pagetop', ['md' => 'md'])
-<div class="container my-5">
-    <div class="order-details bg-light p-4 rounded shadow-sm">
-        {{-- <h1 class="page-title text-center mb-4">Chi tiết đơn hàng #{{ $order->id }}</h1> --}}
-
-        <div class="order-info mb-4">
-            <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
-            <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
-            <p><strong>Trạng thái:</strong> 
-                @foreach($order->statusOrder as $status)
-                    {{ $status->name_status }}
-                @endforeach
-            </p>
-            <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>
-        </div>
+<div class="order-details">
+    @include('client.layouts.components.pagetop', ['md' => 'md'])
+    <div class="order-info">
+        <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
+        <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
+        <p><strong>Trạng thái:</strong> 
+            @foreach($order->statusOrder as $status)
+                {{ $status->name_status }} 
+            @endforeach
+        </p>
+        <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>
+        
+        @if($order->voucherWare)
+            <p><strong>Voucher:</strong> {{ $order->voucherWare->voucher->voucher_code }}</p>
+            <p><strong>Giá giảm:</strong> {{ $order->voucherWare->voucher->decreased_value }}</p>
+        @else
+            <p><strong>Voucher:</strong> Không có</p>
+        @endif
+    </div>
 
         <h2 class="section-title mt-4 mb-3">Sản phẩm trong đơn hàng</h2>
         <table class="table table-bordered table-hover">

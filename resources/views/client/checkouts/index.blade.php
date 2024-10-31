@@ -1,26 +1,27 @@
 @extends('client.layouts.master')
 
 @section('title', 'Thanh Toán')
+@section('text_page')
+    Thanh Toán
+@endsection
 
 @section('content')
     <div role="main" class="main">
 
         <!-- Thông báo lỗi -->
-        @if(session('error'))
+        @if (session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
-        
-        <!-- Begin page top -->
-        <section class="page-top">
-            <div class="container">
-                <div class="page-top-in">
-                    <h2><span>Thanh Toán</span></h2>
-                </div>
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
-        </section>
-        <!-- End page top -->
+        @endif
+
+        @include('client.layouts.components.pagetop', ['md' => 'md'])
 
         <div class="container">
             <div class="row featured-boxes">
@@ -33,19 +34,11 @@
                                 <div class="form-horizontal">
                                     <!-- Thông tin địa chỉ -->
                                     <div class="form-group">
-                                        <label for="inputFN" class="col-sm-2 control-label">Họ <span
-                                                class="required">*</span></label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputFN" name="first_name"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputLN" class="col-sm-2 control-label">Tên <span
+                                        <label for="inputLN" class="col-sm-2 control-label">Họ và tên <span
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputLN" name="last_name"
-                                                required>
+                                                required value="{{ auth()->user() ? auth()->user()->name : '' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -53,15 +46,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputAdd" name="address"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputCity" class="col-sm-2 control-label">Thành Phố <span
-                                                class="required">*</span></label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputCity" name="city"
-                                                required>
+                                                required value="{{ auth()->user() ? auth()->user()->address : '' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -69,7 +54,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="email" class="form-control" id="inputEmail" name="email"
-                                                required>
+                                                required value="{{ auth()->user() ? auth()->user()->email : '' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -77,7 +62,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="tel" class="form-control" id="inputPhone" name="phone"
-                                                required>
+                                                required value="{{ auth()->user() ? auth()->user()->phone_number : '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -124,10 +109,8 @@
                         <p>
                             <button type="submit" class="btn btn-primary btn-block btn-sm">Đặt Hàng</button>
                         </p>
-
-                        <!-- Trường ẩn để lưu tổng giá đã giảm -->
-                        <input type="hidden" name="total_after_discount" id="totalAfterDiscount">
                     </form>
+
                 </div>
 
                 <div class="col-md-4">
@@ -136,7 +119,10 @@
                             <h4>Đơn Hàng Của Bạn</h4>
                             <table cellspacing="0" class="cart-totals" width="100%">
                                 <tbody>
-                                    @php $totalPrice = 0; @endphp
+                                    @php 
+                                        $totalPrice = 0; 
+                                        $discount = session('discount', 0); // Lấy giá trị giảm giá từ session
+                                    @endphp
                                     @foreach ($cartItems as $item)
                                         <tr class="cart_item">
                                             <th>
@@ -152,6 +138,7 @@
                                         </tr>
                                         @php $totalPrice += $item->sub_total; @endphp
                                     @endforeach
+                
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
                                         <td class="product-price">
@@ -162,17 +149,51 @@
                                         <th>Phí Vận Chuyển</th>
                                         <td>Miễn Phí Vận Chuyển</td>
                                     </tr>
+                                    <tr class="discount">
+                                        <th>Giảm Giá</th>
+                                        <td class="product-price">
+                                            <span class="amount" id="discountAmount">{{ $discount }} ₫</span>
+                                        </td>
+                                    </tr>
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
-                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice }} ₫</span></strong>
+                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice - $discount }} ₫</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
+                    <!-- Form nhập mã giảm giá -->
+                    <div class="featured-box featured-box-secondary">
+                        <div class="box-content">
+                            <h4>Nhập Mã Giảm Giá</h4>
+                            <form action="{{ route('processVoucher') }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="voucher_code" id="voucher_code" placeholder="Nhập mã giảm giá">
+                                </div>
+                                <p>
+                                    <button type="submit" name="action" value="apply" class="btn btn-primary">Áp Dụng</button>
+                                    <button type="submit" name="action" value="cancel" class="btn btn-danger">Hủy Voucher</button>
+                                </p>
+                            </form>
+                            <!-- Thông báo mã giảm giá -->
+                            @if (session('voucher_error'))
+                                <div class="alert alert-danger">
+                                    {{ session('voucher_error') }}
+                                </div>
+                            @endif
+                            @if (session('voucher_success'))
+                                <div class="alert alert-success">
+                                    {{ session('voucher_success') }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                </div> 
             </div>
         </div>
     </div>

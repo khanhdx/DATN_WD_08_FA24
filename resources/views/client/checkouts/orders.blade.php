@@ -2,13 +2,11 @@
 
 @section('title', 'Danh sách đơn hàng')
 @section('text_page')
-đơn hàng của bạn
+    Danh sách đơn hàng
 @endsection
+
 @section('content')
 @include('client.layouts.components.pagetop', ['md' => 'md'])
-    <div class="container my-5">
-        <div class="order-list">
-            {{-- <h1 class="page-title text-center mb-4">Danh sách đơn hàng của bạn</h1> --}}
 
             <table class="table table-hover table-bordered">
                 <thead class="table-dark text-center">
