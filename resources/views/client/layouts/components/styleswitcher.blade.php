@@ -1,5 +1,5 @@
 <!-- Begin Style Switcher -->
-<div id="style-switcher">
+{{-- <div id="style-switcher">
     <div id="toggle_button"> <a href="#"><i class="fa fa-pencil"></i></a> </div>
     <div id="style-switcher-menu">
         <h4 class="text-center">Style Switcher</h4>
@@ -24,5 +24,5 @@
             <div id="reset"> <a href="#" class="btn btn-sm btn-greyer reset">Reset</a> </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Begin Style Switcher -->

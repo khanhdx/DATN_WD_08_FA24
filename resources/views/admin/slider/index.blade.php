@@ -73,7 +73,7 @@
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->title}}</td>
                                 <td>
-                                    <img src="{{url('storage/', $item->image)}}" alt="Banner Image" width="150px">
+                                    <img src="{{ \Storage::url($item->image) }}" alt="Banner Image" width="150px">
                                 </td>
                                 <td><span class="{{ $item->status == 'Hiển thị' ? 'text-success' : 'text-danger' }}">
                                     {{$item->status}}

@@ -48,7 +48,7 @@ class StatusOrder extends Model
             case 'shipping':
                 return 'Đang giao hàng';
             case 'completed':
-                return 'Giao hàng thành công';
+                return 'Hoàn Thành';
             case 'cancel':
                 return 'Hủy đơn';
             case 'canceled':
@@ -67,10 +67,15 @@ class StatusOrder extends Model
     }
 
     // Quan hệ với bảng orders thông qua status_order_details
+    // public function orders()
+    // {
+    //     return $this->belongsToMany(Order::class, 'status_order_details', 'status_order_id', 'order_id')
+    //                 ->withPivot('name', 'created_at', 'updated_at')
+    //                 ->withTimestamps();
+    // }
+    
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'status_order_details', 'status_order_id', 'order_id')
-                    ->withPivot('name', 'created_at', 'updated_at')
-                    ->withTimestamps();
+        return $this->hasMany(Order::class);
     }
 }

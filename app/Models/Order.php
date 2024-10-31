@@ -58,6 +58,17 @@ class Order extends Model
     {
         return $this->hasMany(Refund::class);
     }
+    
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    // public function statusOrder()
+    // {
+    //     return $this->belongsTo(StatusOrder::class);
+    // }
+    
     public function voucherWare()
 {
     return $this->hasOne(VoucherWare::class, 'order_id', 'id');
