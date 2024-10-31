@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -51,20 +52,19 @@ class ProductSeeder extends Seeder
         ];
 
         $categoryIds = Category::pluck('id')->toArray();
-
         $categoryType = Category::pluck('type', 'id')->toArray();
 
         foreach ($sanPhamNam as $nam) {
-            foreach ($categoryIds as $key => $value) {
-                $price = rand(100, 9000);
+            foreach ($categoryIds as $cate) {
+                $price = rand(100000, 9000000);
                 $sale = round($price * 0.6, 3); // Giảm 40%
-                $type = $categoryType[$value];
+                $type = $categoryType[$cate];
                 if ($type == "Man") {
                     Product::create([
-                        'category_id'   => $value,
+                        'category_id'   => $cate,
                         'image'         => '/assets/client/images/content/products/product-' . rand(1, 8) . '.jpg',
                         'name'          => $nam,
-                        'SKU'           => "OB" . rand(10000, 99999),
+                        'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
                         'price_regular' => $price,
                         'price_sale'    => $sale,
                         'description'   => fake()->text(200),
@@ -76,17 +76,16 @@ class ProductSeeder extends Seeder
         }
 
         foreach ($sanPhamNu as $nu) {
-            foreach ($categoryIds as $key => $value) {
-                $price = rand(100, 9000);
-                $sale = round($price * 0.5, 3); // Giảm 50%
-                $type = $categoryType[$value];
-
+            foreach ($categoryIds as $cate) {
+                $price = rand(100000, 9000000);
+                $sale = round($price * 0.5, 3);
+                $type = $categoryType[$cate];
                 if ($type == "Woman") {
                     Product::create([
-                        'category_id'   => $value,
+                        'category_id'   => $cate,
                         'image'         => '/assets/client/images/content/products/product-' . rand(9, 17) . '.jpg',
                         'name'          => $nu,
-                        'SKU'           => "OB" . rand(10000, 99999),
+                        'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
                         'price_regular' => $price,
                         'price_sale'    => $sale,
                         'description'   => fake()->text(200),

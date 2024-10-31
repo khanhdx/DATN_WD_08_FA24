@@ -87,7 +87,7 @@ class AuthController extends Controller
         $this->authService->logout();
         session()->invalidate();
         session()->regenerateToken();
-        return back()->with('success', 'Đăng xuất thành công.');
+        return redirect()->route('client.home')->with('success', 'Đăng xuất thành công.');
     }
 
     // Hiển thị form đặt lại mật khẩu

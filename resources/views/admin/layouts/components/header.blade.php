@@ -62,10 +62,10 @@
                             <li>
                                 <a href="{{ route('admin.slider.index') }}">Slider chính </a>
                             <li>
-                                <a href="{{ route('admin.slider.banner1.index')}}">Banner 1</a>
+                                <a href="{{ route('admin.slider.banner1.index')}}">Banner giảm giá</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.slider.banner2.index')}}">Banner 2</a>
+                                <a href="{{ route('admin.slider.banner2.index')}}">Banner giới thiệu</a>
                             </li>
                         </ul>
                         

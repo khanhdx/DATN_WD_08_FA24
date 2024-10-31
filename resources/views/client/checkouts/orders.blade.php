@@ -6,10 +6,10 @@
 @endsection
 
 @section('content')
-@include('client.layouts.components.pagetop', ['md' => 'md'])
-
-        <table class="table table-striped">
-            <thead>
+    @include('client.layouts.components.pagetop', ['md' => 'md'])
+    <div class="container">
+        <table class="table table-hover table-bordered">
+            <thead class="table-dark text-center">
                 <tr>
                     <th>ID Đơn hàng</th>
                     <th>Ngày đặt</th>
@@ -22,26 +22,29 @@
             </thead>
             <tbody>
                 @foreach ($orders as $order)
-                    <tr>
+                    <tr class="align-middle text-center">
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->date }}</td>
-                        <td>{{ $order->total_price }}</td>
-
+                        <td>{{ $order->total_price }} VND</td>
                         <td>
-                            <strong>Trạng thái:</strong> 
-                            @if ($order->statusOrder->isNotEmpty())  {{-- Kiểm tra xem có trạng thái không --}}
-                                {{ $order->statusOrder->first()->name_status }}  {{-- Lấy trạng thái đầu tiên --}}
+                            @if ($order->statusOrder->isNotEmpty())
+                                <span>{{ $order->statusOrder->first()->name_status }}</span>
                             @else
                                 <span>Chưa có trạng thái</span>
-                            @endif                        
+                            @endif
                         </td>
-
                         <td>{{ $order->address }}</td>
-                        <td>{{ $order->note }}</td>
-                        <td><a class="btn btn-primary" href="{{ route('orders.show', $order->id) }}">Xem chi tiết</a></td>
+                        <td>{{ $order->note ?: 'Không có ghi chú' }}</td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order->id) }}">Xem chi
+                                tiết</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+    </div>
+    </div>
+
 @endsection

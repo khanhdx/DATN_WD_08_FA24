@@ -19,8 +19,8 @@
                     <li class="active">{{ $product->name }}</li>
                 </ol>
                 <ul class="pager pull-right">
-                    <li><a href="#">&laquo; Previous</a></li>
-                    <li><a href="#">Next &raquo;</a></li>
+                    <li><a href="#">&laquo; Trước</a></li>
+                    <li><a href="#">Sau &raquo;</a></li>
                 </ul>
             </div>
         </div>
@@ -66,13 +66,14 @@
                     </div>
 
                     <p class="price">
-                        <span class="amount">{{ number_format($product->price_regular, 3, ',') }} VND</span>
+                        <span class="amount">{{ number_format($product->price_regular, 0, ',', '.') }} VND</span>
                     </p>
 
                     <div>
                         <form method="post" class="cart" id="addToCart">
                             @csrf
                             <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                            <input type="hidden" id="stock" value="">
 
                             <ul class="list-inline list-select clearfix">
                                 <li>
@@ -88,7 +89,7 @@
                             </ul>
                             <ul class="list-inline list-select clearfix">
                                 <li>
-                                    <h4 class="m-0">Color:</h4>
+                                    <h4 class="m-0">Màu:</h4>
                                 </li>
 
                                 <li id="color-btn">
@@ -102,9 +103,9 @@
                             <div class="quantity pull-left">
                                 <input type="button" class="minus" value="-">
                                 <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
-                                    name="quantity" min="1" step="1">
+                                    name="quantity" step="1">
                                 <input type="button" class="plus" value="+">
-                                <span class="stock">{{ $sumStock }} hàng có sẵn</span>
+                                <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
 
                             <a href="#" class="btn btn-grey">
@@ -301,7 +302,7 @@
     <!-- Begin Related Products -->
     <section class="products-slide">
         <div class="container">
-            <h2 class="title"><span>Related Products</span></h2>
+            <h2 class="title"><span>Sản Phẩm Liên Quan</span></h2>
             <div class="row">
                 <div id="owl-product-slide" class="owl-carousel product-slide">
                     @foreach ($related_products as $item)
@@ -326,12 +327,12 @@
                                         </div>
 
                                         <div class="product-thumb-info-content">
-                                            <span
-                                                class="price pull-right">{{ number_format($item->price_regular, 3, ',') }}
+                                            <span class="price pull-right">{{ number_format($item->price_regular, 0, ',', '.') }}
                                                 VND
                                             </span>
                                             <h4>
-                                                <a href="shop-product-detail2.html">{{ $item->name }}</a>
+                                                <a
+                                                    href="{{ route('client.product.show', $item->id) }}">{{ $item->name }}</a>
                                             </h4>
                                             <span class="item-cat">
                                                 <small>
@@ -357,6 +358,7 @@
         $(document).ready(function() {
             let selectedColor = null;
             let selectedSize = null;
+            let stock = $('#stock').val();
 
             $('#color-btn').on('click', '.btn-color', function(e) {
                 e.preventDefault();
@@ -364,7 +366,9 @@
                 $(this).addClass('color-active');
 
                 selectedColor = $(this).data('color-id');
-                // fetchAvailableSizes(selectedColor);
+                console.log(selectedColor);
+
+                getInStock(selectedSize, selectedColor);
             });
 
             $('#size-btn').on('click', '.btn-size', function(e) {
@@ -373,6 +377,8 @@
                 $(this).addClass('btn-active');
 
                 selectedSize = $(this).data('size-id');
+                getInStock(selectedSize, selectedColor);
+
                 fetchAvailableColors(selectedSize);
             });
 
@@ -407,10 +413,7 @@
                                 title: `<span style="font-size: 1.5rem">${res.message}</span>`,
                                 width: 450
                             });
-                            // quantity = $('#quantity').val(1);
-                            // selectedColor = null;
-                            // selectedSize = null;
-                            // $('#productModal').modal('hide');
+
                             load_header();
                         } else {
                             Swal.fire({
@@ -437,12 +440,43 @@
                 }
                 $.get("{{ route('get.color') }}", dataColor, function(res) {
                     $('.btn-color').hide();
-                    // $('.btn-color').removeClass('color-active');
+
                     res.forEach(item => {
                         $(`.btn-color[data-color-id="${item.color_id}"]`).show();
-                        console.log(item.color_id);
                     });
                 });
+            }
+
+            function getInStock(sizeId = null, colorId = null) {
+                let productId = $('#product_id').val();
+
+                data = {
+                    product_id: productId,
+                    size_id: sizeId,
+                    color_id: colorId,
+                }
+
+                $.get("{{ route('get.stock') }}", data, function(res) {
+                    if (Array.isArray(res)) {
+                        res.forEach(item => {
+                            $('.stock').text(item.stock);
+                            $('.amount').text(item.price + ' VND');
+                        });
+                    } else {
+                        $('.stock').text(res);
+                        $('#stock').val(res);
+                    }
+                    checkQuantity(res);
+                })
+            }
+
+            function checkQuantity(quantity) {
+                $('.qty').change(function() {
+                    let value = parseInt($(this).val());
+                    if (value > quantity) {
+                        $(this).val(quantity);
+                    }
+                })
             }
         });
     </script>

@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -167,8 +168,12 @@ Route::name('client.')->group(function () {
         ->name('comments.store')
         ->middleware('auth');
 
-    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])
-        ->name('client.comments.destroy');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
+
+    Route::get('contact', [ContactController::class, 'index'])->name('contact');
+    Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
+    
+ 
     
     // Route để gửi đánh giá sản phẩm
     // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
@@ -195,6 +200,7 @@ Route::name('client.')->group(function () {
         });
 });
 
+
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::resource('profile', ProfileController::class)->only([
@@ -203,6 +209,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
         'update',
         'destroy'
     ]);
+   
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
