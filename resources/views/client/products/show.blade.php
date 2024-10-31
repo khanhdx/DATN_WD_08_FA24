@@ -8,6 +8,7 @@
         }
     </style>
 @endsection
+
 @section('content')
     <!-- Begin page top -->
     <section class="page-top">
@@ -328,6 +329,8 @@
 
                             load_header();
                         } else {
+                        console.log(res.errors);
+
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
@@ -378,18 +381,17 @@
                         $('.stock').text(res);
                         $('#stock').val(res);
                     }
-                    checkQuantity(res);
                 })
             }
 
-            function checkQuantity(quantity) {
-                $('.qty').change(function() {
-                    let value = parseInt($(this).val());
-                    if (value > quantity) {
-                        $(this).val(quantity);
-                    }
-                })
-            }
+            // function checkQuantity(quantity) {
+            //     $('.qty').change(function() {
+            //         let value = parseInt($(this).val());
+            //         if (value > quantity) {
+            //             $(this).val(quantity);
+            //         }
+            //     })
+            // }
         });
     </script>
 @endsection

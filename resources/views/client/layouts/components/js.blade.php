@@ -1,26 +1,27 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="{{ asset('assets/client/vendor/jquery.min.js') }}"></script>
+<script src="/assets/client/vendor/jquery.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="{{ asset('assets/client/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/client/bootstrap/js/bootstrap-hover-dropdown.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/owl-carousel/owl.carousel.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/modernizr.custom.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/jquery.stellar.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/imagesloaded.pkgd.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/masonry.pkgd.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/jquery.pricefilter.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/bxslider/jquery.bxslider.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/mediaelement-and-player.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/waypoints.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/flexslider/jquery.flexslider-min.js') }}"></script>
+<script src="/assets/client/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/client/bootstrap/js/bootstrap-hover-dropdown.min.js"></script>
+<script src="/assets/client/vendor/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/client/vendor/modernizr.custom.js"></script>
+<script src="/assets/client/vendor/jquery.stellar.js"></script>
+<script src="/assets/client/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/client/vendor/masonry.pkgd.min.js"></script>
+<script src="/assets/client/vendor/jquery.pricefilter.js"></script>
+<script src="/assets/client/vendor/bxslider/jquery.bxslider.min.js"></script>
+<script src="/assets/client/vendor/mediaelement-and-player.js"></script>
+<script src="/assets/client/vendor/waypoints.min.js"></script>
+<script src="/assets/client/vendor/flexslider/jquery.flexslider-min.js"></script>
 
 <!-- Theme Initializer -->
-<script src="{{ asset('assets/client/js/theme.plugins.js') }}"></script>
-<script src="{{ asset('assets/client/js/theme.js') }}"></script>
+<script src="/assets/client/js/theme.plugins.js"></script>
+<script src="/assets/client/js/theme.js"></script>
 
 <!-- Style Switcher -->
-<script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
+<script type="text/javascript" src="/assets/client/style-switcher/js/switcher.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
 <!-- Xử lý nút dropdown -->
@@ -296,6 +297,8 @@
                         $('#productModal').modal('hide');
                         load_header();
                     } else {
+                        console.log(res.errors);
+                        
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",

@@ -77,7 +77,7 @@
                                 
                                 <ul class="list-inline list-select clearfix">
                                     <li>
-                                        <h4 class="m-0">Color:</h4>
+                                        <h4 class="m-0">Màu sắc:</h4>
                                     </li>
     
                                     <li id="color-quick">
