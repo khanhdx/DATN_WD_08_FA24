@@ -20,14 +20,16 @@ class ReviewController extends Controller
 
         // Kiểm tra xem đơn hàng có hoàn thành không
         $order = Order::findOrFail($orderId);
-        if ($order->statusOrder->name !== 'completed') {
+        $statusOrder = $order->statusOrder->first(); // Lấy trạng thái đầu tiên
+        if ($statusOrder && $statusOrder->name !== 'completed') {
             return response()->json(['error' => 'Chỉ những đơn hàng đã hoàn thành mới có thể đánh giá.'], 403);
         }
 
-        // Kiểm tra xem sản phẩm có trong đơn hàng không
-        if (!$order->products()->where('id', $productId)->exists()) {
+         // Kiểm tra xem sản phẩm có trong đơn hàng không
+        if (!$order->order_details()->where('product_id', $productId)->exists()) {
             return response()->json(['error' => 'Sản phẩm này không nằm trong đơn hàng.'], 403);
         }
+        
 
         // Tạo đánh giá
         $review = new Review();

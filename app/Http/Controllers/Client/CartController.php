@@ -30,7 +30,7 @@ class CartController extends Controller
 
             $total = $cartItems->sum('sub_total');
         } else {
-            $cartItems = session()->get('cart', []);
+            $cartItems = collect(session()->get('cart', []))->sortByDesc('id');
 
             $total = array_sum(array_column(session()->get('cart', []), 'sub_total'));
         }
@@ -72,11 +72,18 @@ class CartController extends Controller
 
                 $key = $productVariant->id;
 
+                $newId = 1;
+                if (!empty($cart)) {
+                    $maxId = max(array_column($cart, 'id'));
+                    $newId = $maxId + 1;
+                }
+
                 if (isset($cart[$key])) {
                     $cart[$key]['quantity'] += $request->quantity;
                     $cart[$key]['sub_total'] += $sub_total;
                 } else {
                     $cart[$key] = [
+                        'id'        => $newId,
                         'image'     => $productVariant->product->image,
                         'name'      => $productVariant->product->name,
                         'color'     => $productVariant->color->name,
@@ -153,7 +160,7 @@ class CartController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Xóa giỏ hàng không thành công!',
-            ], 500);
+            ]);
         }
     }
 

@@ -47,29 +47,36 @@
                         <td>{{ number_format($orderDetail->unit_price, 0, ',', '.') }} VND</td>
                         <td>{{ number_format($orderDetail->total_price, 0, ',', '.') }} VND</td>
                         <td>
-                            @if ($order->status_order_id == 4 && Auth::check())
-                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#reviewModal-{{ $orderDetail->product_id }}">
-                                    Đánh giá
-                                </button>
-                            @else
-                                @if (Auth::check())
-                                    <p class="text-danger">Bạn chỉ có thể đánh giá khi đơn hàng đã hoàn thành.</p>
+                            @if (Auth::check())
+                                @if ($order->statusOrder->first()->id === 4)
+                                    <!-- Trạng thái đơn hàng đã hoàn thành -->
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#reviewModal-{{ $orderDetail->product_id }}">
+                                        Đánh giá
+                                    </button>
                                 @else
-                                    <p class="text-danger">Bạn cần đăng nhập để đánh giá sản phẩm.</p>
+                                    <p class="text-danger">Bạn chỉ có thể đánh giá khi đơn hàng đã hoàn thành.</p>
                                 @endif
+                            @else
+                                <p class="text-danger">Bạn cần đăng nhập để đánh giá sản phẩm.</p>
                             @endif
                         </td>
                     </tr>
+
                     <!-- Review Modal -->
-                    <div class="modal fade" id="reviewModal-{{ $orderDetail->product_id }}" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="reviewModal-{{ $orderDetail->product_id }}" tabindex="-1"
+                        aria-labelledby="reviewModalLabel-{{ $orderDetail->product_id }}" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form action="{{ route('client.orders.product.review', ['orderId' => $order->id, 'productId' => $orderDetail->product_id]) }}" method="POST">
+                            <form id="reviewForm-{{ $orderDetail->product_id }}"
+                                action="{{ route('client.orders.product.review', ['orderId' => $order->id, 'productId' => $orderDetail->product_id]) }}"
+                                method="POST" class="review-form">
                                 @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="reviewModalLabel">Đánh giá sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title" id="reviewModalLabel-{{ $orderDetail->product_id }}">
+                                            Đánh giá sản phẩm</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close">{{ $orderDetail->name_product }}</button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -105,4 +112,37 @@
 
         <a href="{{ route('orders.index') }}" class="btn btn-secondary">Quay lại danh sách đơn hàng</a>
     </div>
+
+    <script>
+        document.querySelectorAll('.review-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định
+    
+                const formData = new FormData(this);
+                const url = this.action;
+    
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Hiển thị thông báo thành công
+                        const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
+                        modal.hide(); // Đóng modal
+                        location.reload(); // Tải lại trang để cập nhật đánh giá
+                    } else {
+                        alert(data.error || "Đã xảy ra lỗi.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi gửi đánh giá:", error);
+                });
+            });
+        });
+    </script>
 @endsection

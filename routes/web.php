@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
 
+use App\Http\Controllers\Admin\Bannerhome1Controller;
+use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
@@ -47,12 +49,40 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::resource('category', CategorysController::class);
-            Route::resource('slider', BannerController::class);
+            // Route::resource('slider', BannerController::class);
             Route::resource('user', App\Http\Controllers\Admin\UserController::class);
             Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
             Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
             Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+
+            Route::prefix('slider')->as('slider.')->group(function () {
+                Route::get('/', [BannerController::class, 'index'])->name('index');
+                Route::get('/create', [BannerController::class, 'create'])->name('create');
+                Route::post('/store', [BannerController::class, 'store'])->name('store');
+                Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
+                Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
+                Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
+            
+               
+                Route::prefix('banner1')->as('banner1.')->group(function () {
+                    Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
+                    Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
+                    Route::post('/store', [Bannerhome1Controller::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [Bannerhome1Controller::class, 'edit'])->name('edit');
+                    Route::put('{id}/update', [Bannerhome1Controller::class, 'update'])->name('update');
+                    Route::delete('{id}', [Bannerhome1Controller::class, 'destroy'])->name('destroy');
+                });
+
+                Route::prefix('banner2')->as('banner2.')->group(function () {
+                    Route::get('/', [BannerHome2Controller::class, 'index'])->name('index');
+                    Route::get('/create', [BannerHome2Controller::class, 'create'])->name('create');
+                    Route::post('/store', [BannerHome2Controller::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [BannerHome2Controller::class, 'edit'])->name('edit');
+                    Route::put('{id}/update', [BannerHome2Controller::class, 'update'])->name('update');
+                    Route::delete('{id}', [BannerHome2Controller::class, 'destroy'])->name('destroy');
+                });
+            });
 
             // Route cho products
             Route::prefix('products')->as('products.')->group(function () {
@@ -141,9 +171,14 @@ Route::name('client.')->group(function () {
         ->name('client.comments.destroy');
     
     // Route để gửi đánh giá sản phẩm
+    // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
+    //     ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
+    //     ->name('orders.product.review');
+
+    // Route để gửi đánh giá sản phẩm
     Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
-        ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
-        ->name('orders.product.review');
+        ->name('orders.product.review')
+        ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')

@@ -41,11 +41,14 @@ class Product extends Model
         return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id');
     }
 
+
+    
     public function orders()
     {
         return $this->belongsToMany(Order::class);
     }
 
+    //quan hệ hiển thị đá giá
     public function reviews()
     {
         return $this->hasMany(Review::class);

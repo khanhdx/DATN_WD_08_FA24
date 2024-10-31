@@ -14,29 +14,29 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $woman = [
-            'Coats',
-            'Outerwear',
-            'Dresses',
-            'Tops',
-            'Trousers',
-            'Shirts',
-            'Jeans',
-            'T-shirts',
-            'Shoes',
-            'Handbags',
-            'Stock clearance',
+            'Áo sơ mi',
+            'Áo thun crop top',
+            'Áo hoodie',
+            'Áo khoác gió',
+            'Áo len cổ tim',
+            'Váy và Đầm',
+            'Quần jean skinny',
+            'Quần tây nữ',
+            'Quần legging',
+            'Quần váy',
         ];
 
         $man = [
-            'Jackets',
-            'Blazers',
-            'Suits',
-            'Trousers',
-            'Jeans',
-            'Shirts',
-            'Sweatshirts & Hoodies',
-            'Swimwear',
-            'Accessories',
+            'Áo sơ mi',
+            'Áo thun',
+            'Áo khoác',
+            'Áo len',
+            'Áo polo',
+            'Quần jean',
+            'Quần tây',
+            'Quần short',
+            'Quần jogger',
+            'Vest và Blazer',
         ];
 
         foreach ($man as $item) {
@@ -45,13 +45,12 @@ class CategorySeeder extends Seeder
                 'type' => 'Man',
             ]);
         }
-        
+
         foreach ($woman as $item) {
             Category::create([
                 'name' => $item,
                 'type' => 'Woman',
             ]);
         }
-
     }
 }

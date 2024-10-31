@@ -55,9 +55,19 @@
                             <span class="bot-line"></span>Quản lý mã giảm giá
                         </a>
                     <li class="has-sub">
-                        <a href="{{ route('admin.slider.index') }}">
-                            <i></i>
-                            <span class="bot-line"></span>Quản lý slider</a>
+                        <a href="#">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="bot-line"></span>Slider</a>
+                        <ul class="header3-sub-list list-unstyled">
+                            <li>
+                                <a href="{{ route('admin.slider.index') }}">Slider chính </a>
+                            <li>
+                                <a href="{{ route('admin.slider.banner1.index')}}">Banner 1</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.slider.banner2.index')}}">Banner 2</a>
+                            </li>
+                        </ul>
                         
                     </li><li class="has-sub">
                         <a href="{{ route('admin.orders.index') }}">

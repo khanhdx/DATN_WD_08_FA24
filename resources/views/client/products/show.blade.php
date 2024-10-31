@@ -1,5 +1,13 @@
 @extends('client.layouts.master')
 
+@section('css')
+    <style>
+        span.stock {
+            margin-left: 15px;
+            line-height: 50px;
+        }
+    </style>
+@endsection
 @section('content')
     <!-- Begin page top -->
     <section class="page-top">
@@ -58,7 +66,7 @@
                     </div>
 
                     <p class="price">
-                        <span class="amount">${{ $product->price_regular }}</span>
+                        <span class="amount">{{ number_format($product->price_regular, 3, ',') }} VND</span>
                     </p>
 
                     <div>
@@ -96,6 +104,7 @@
                                 <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
                                     name="quantity" min="1" step="1">
                                 <input type="button" class="plus" value="+">
+                                <span class="stock">{{ $sumStock }} hàng có sẵn</span>
                             </div>
 
                             <a href="#" class="btn btn-grey">
@@ -330,8 +339,9 @@
                                         </div>
 
                                         <div class="product-thumb-info-content">
-                                            <span class="price pull-right">{{ $item->price_regular }}
-                                                USD
+                                            <span
+                                                class="price pull-right">{{ number_format($item->price_regular, 3, ',') }}
+                                                VND
                                             </span>
                                             <h4>
                                                 <a href="shop-product-detail2.html">{{ $item->name }}</a>
@@ -353,4 +363,100 @@
         </div>
     </section>
     <!-- End Top Selling -->
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            let selectedColor = null;
+            let selectedSize = null;
+
+            $('#color-btn').on('click', '.btn-color', function(e) {
+                e.preventDefault();
+                $('.btn-color').removeClass('color-active');
+                $(this).addClass('color-active');
+
+                selectedColor = $(this).data('color-id');
+                // fetchAvailableSizes(selectedColor);
+            });
+
+            $('#size-btn').on('click', '.btn-size', function(e) {
+                e.preventDefault();
+                $('.btn-size').removeClass('btn-active');
+                $(this).addClass('btn-active');
+
+                selectedSize = $(this).data('size-id');
+                fetchAvailableColors(selectedSize);
+            });
+
+            $('#addToCart').on('submit', function(e) {
+                e.preventDefault();
+                let productId = $('#product_id').val();
+                let quantity = $('#quantity').val();
+                let dataCart = {
+                    product_id: productId,
+                    color_id: selectedColor,
+                    size_id: selectedSize,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}',
+                }
+
+                if (selectedColor && selectedSize) {
+                    $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
+                        if (res.status_code == 200) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top",
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: `<span style="font-size: 1.5rem">${res.message}</span>`,
+                                width: 450
+                            });
+                            // quantity = $('#quantity').val(1);
+                            // selectedColor = null;
+                            // selectedSize = null;
+                            // $('#productModal').modal('hide');
+                            load_header();
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: res.message,
+                            });
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Vui lòng chọn phân loại!",
+                    });
+                }
+            });
+
+            function fetchAvailableColors(sizeId) {
+                let productId = $('#product_id').val();
+                let dataColor = {
+                    product_id: productId,
+                    size_id: sizeId
+                }
+                $.get("{{ route('get.color') }}", dataColor, function(res) {
+                    $('.btn-color').hide();
+                    // $('.btn-color').removeClass('color-active');
+                    res.forEach(item => {
+                        $(`.btn-color[data-color-id="${item.color_id}"]`).show();
+                        console.log(item.color_id);
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

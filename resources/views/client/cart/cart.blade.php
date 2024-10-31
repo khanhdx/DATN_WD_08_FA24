@@ -1,4 +1,4 @@
-@if ($cartItems->isEmpty())
+@if (count($cartItems) == 0)
     <div class="row featured-boxes">
         <div class="col-xs-5">
             <h4>Không có sản phẩm nào trong giỏ hàng của bạn.</h4>
@@ -71,7 +71,7 @@
 
                                         <td class="product-quantity">
                                             <div class="quantity">
-                                                <form method="post" class="cartUpdate_{{ $cart->id }}">
+                                                <form method="post">
                                                     @csrf
 
                                                     <input type="hidden" name="product_variant_id"
@@ -166,7 +166,7 @@
                                         <td class="product-remove">
                                             <form method="post">
                                                 @csrf
-                                                <a title="Remove this item" class="remove"
+                                                <a title="Remove this item" class="remove-cart"
                                                     href="{{ route('client.carts.delete', $key) }}">
                                                     <i class="fa fa-times-circle"></i>
                                                 </a>

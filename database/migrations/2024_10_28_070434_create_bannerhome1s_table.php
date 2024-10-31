@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('bannerhome1s', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('review');
-            $table->unsignedTinyInteger('rating'); // Đánh giá từ 1 đến 5
+            $table->string('title');
+            $table->string('image')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('bannerhome1s');
     }
 };
