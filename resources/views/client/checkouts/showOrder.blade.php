@@ -228,37 +228,5 @@
             });
         });
     </script>
-    {{-- <script>
-        document.querySelectorAll('.review-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Ngăn chặn hành vi mặc định
-    
-                const formData = new FormData(this);
-                const url = this.action;
-    
-                fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message); // Hiển thị thông báo thành công
-                        const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
-                        modal.hide(); // Đóng modal
-                        location.reload(); // Tải lại trang để cập nhật đánh giá
-                    } else {
-                        alert(data.error || "Đã xảy ra lỗi.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Lỗi gửi đánh giá:", error);
-                });
-            });
-        });
-    </script> --}}
 @endsection
 
