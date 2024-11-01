@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@section('title')
+    Sản phẩm biến thể
+@endsection
 @section('content')
     <div class="container">
         <div class="row">
@@ -44,9 +46,8 @@
                         <a href="{{ route('admin.products.create') }}">
                             <button class="au-btn au-btn-icon au-btn--green au-btn--small">
                                 <i class="zmdi zmdi-plus"></i>Create</button>
-                        </a> --}}
-
-                    </div>
+                        </a>
+                    </div> --}}
                 </div>
                 <div class="table-responsive table-responsive-data2">
                     <table class="table table-data2">

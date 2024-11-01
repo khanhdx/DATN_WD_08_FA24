@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35 mt-3">Tồn kho sản phẩm</h3>
@@ -65,6 +65,5 @@
                 </table>
             </div>
         </div>
-    </div>
     </div>
 @endsection
