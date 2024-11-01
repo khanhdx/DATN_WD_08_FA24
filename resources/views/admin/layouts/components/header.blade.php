@@ -18,37 +18,44 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{route('admin.post.index')}}">
-                            <i ></i>
+                        <a href="{{ route('admin.post.index') }}">
+                            <i class="fas fa-shopping-basket"></i>
                             <span class="bot-line"></span>Bài đăng</a>
                     </li>
                     <li>
-                        <a href="{{route('admin.category.index')}}">
-                            
-                            <span class="bot-line"></span>Danh mục</a>
+                        <a href="{{ route('admin.category.index') }}">
+                            <i class="fas fa-trophy"></i>
+                            <span class="bot-line"></span>Category</a>
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
                             <i ></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
-                        
+
                     </li>
-                    <  <li class="has-sub">
+                    <li class="has-sub">
                         <a href="#">
                             <i ></i>
                             <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
-                                <a href="{{ route('admin.products.index')}}">Quản lý sản phẩm</a>
+                                <a href="{{ route('admin.products.index') }}">Quản lý sản phẩm</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.products.variants.index')}}">Sản phẩm biến thể</a>
+                                <a href="{{ route('admin.products.variants.index') }}">Sản phẩm biến thể</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.products.variants.getAllAttribute')}}">Thuộc tính biến thể</a>
+                                <a href="{{ route('admin.products.variants.getAllAttribute') }}">Thuộc tính biến thể</a>
                             </li>
-                            
+                            <li>
+                                <a href="{{ route('admin.inventories.index') }}">Tồn kho</a>
+                            </li>
                         </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{ route('admin.orders.index') }}">
+                            <i class="fas fa-list-ul"></i>
+                            <span class="bot-line"></span>Đơn hàng</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.voucher.index') }}">
@@ -159,7 +166,7 @@
                             <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="John Doe" />
                         </div>
                         <div class="content">
-                            <a class="js-acc-btn" href="#">{{Auth::user()->name}}</a>
+                            <a class="js-acc-btn" href="#">{{ Auth::user()->name }}</a>
                         </div>
                         <div class="account-dropdown js-dropdown">
                             <div class="info clearfix">
@@ -168,15 +175,16 @@
                                         @if (Auth::user()->user_image)
                                             <img src="{{ Storage::url(Auth::user()->user_image) }}" alt="">
                                         @else
-                                            <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}" alt="" />
+                                            <img src="{{ asset('assets/admin/images/icon/avatar-01.jpg') }}"
+                                                alt="" />
                                         @endif
                                     </a>
                                 </div>
                                 <div class="content">
                                     <h5 class="name">
-                                        <a href="#">{{Auth::user()->name}}</a>
+                                        <a href="#">{{ Auth::user()->name }}</a>
                                     </h5>
-                                    <span class="email">{{Auth::user()->email}}</span>
+                                    <span class="email">{{ Auth::user()->email }}</span>
                                 </div>
                             </div>
                             <div class="account-dropdown__body">
