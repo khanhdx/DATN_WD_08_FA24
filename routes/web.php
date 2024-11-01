@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -17,6 +16,7 @@ use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Controllers\Client\CartController;
@@ -28,6 +28,7 @@ use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
+use App\Http\Controllers\Client\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [ProductController::class, 'update'])->name('update');
                 Route::delete('{id}/delete', [ProductController::class, 'delete'])->name('delete');
+                Route::get('filter', [ProductController::class, 'filter'])->name('filter');
+
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
@@ -129,6 +132,11 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+            });
+
+            // Route quản lý tồn kho 
+            Route::prefix('inventories')->as('inventories.')->group(function () {
+                Route::get('/', [InventoryController::class, 'index'])->name('index');
             });
         });
 });
@@ -165,9 +173,21 @@ Route::name('client.')->group(function () {
         ->middleware('auth');
 
     // Route hiển thị bình luận
-    Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+    Route::post('posts/{post}/comments', [CommentController::class, 'store'])
+        ->name('comments.store')
+        ->middleware('auth');
 
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
+
+    // Route để gửi đánh giá sản phẩm
+    // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
+    //     ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
+    //     ->name('orders.product.review');
+
+    // Route để gửi đánh giá sản phẩm
+    Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
+        ->name('orders.product.review')
+        ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')

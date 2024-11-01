@@ -5,7 +5,11 @@
         <li class="dropdown my-account">
             @guest
                 <!-- Hiển thị nếu chưa đăng nhập -->
-                <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
+                <li class="login">
+                    <a href="#">
+                        <i class="fa fa-user"></i> Login
+                    </a>
+                </li>
             @endguest
             @auth
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span

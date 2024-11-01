@@ -27,8 +27,11 @@
                         <td>{{ $order->date }}</td>
                         <td>{{ $order->total_price }} VND</td>
                         <td>
-                            @if ($order->statusOrder->isNotEmpty())
-                                <span>{{ $order->statusOrder->first()->name_status }}</span>
+                            <strong>Trạng thái:</strong> 
+                            @if ($order->statusOrder->isNotEmpty())  {{-- Kiểm tra xem có trạng thái không --}}
+                               @foreach ($order->statusOrder as $status)
+                                   {{ $status->status_label }}
+                               @endforeach  
                             @else
                                 <span>Chưa có trạng thái</span>
                             @endif

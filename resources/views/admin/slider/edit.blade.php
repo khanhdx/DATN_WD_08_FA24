@@ -33,7 +33,7 @@
                                     <div class="form-group">
                                         <label for="hinh_anh">Hình Ảnh</label>
                                         <input type="file" id="image" name="image" class="form-control" onchange="showImage(event)">
-                                        <img id="img_banner" src="{{ url('storage/', $banner->image) }}" style="width: 200px" alt="Hình ảnh banner">
+                                        <img id="img_banner" src="{{ \Storage::url($banner->image) }}" style="width: 200px" alt="Hình ảnh banner">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">

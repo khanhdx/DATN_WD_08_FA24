@@ -1,4 +1,3 @@
-<!-- MENU SIDEBAR-->
 <aside class="menu-sidebar2">
     <div class="logo">
         <a href="{{ route('admin.dashboard') }}">
@@ -15,7 +14,7 @@
         </div>
         <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">
-                <li class="active has-sub">
+                <li class="has-sub">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-tachometer-alt"></i>Quản lý
                         <span class="arrow">
@@ -67,7 +66,7 @@
                                 <i class="fas fa-code-fork"></i>Thuộc tính biến thể</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{ route('admin.inventories.index') }}">
                                 <i class="fas fa-archive"></i>Tồn kho</a>
                         </li>
                     </ul>
@@ -99,4 +98,3 @@
         </nav>
     </div>
 </aside>
-<!-- END MENU SIDEBAR-->

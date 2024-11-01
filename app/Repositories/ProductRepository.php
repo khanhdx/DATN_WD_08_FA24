@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
 use App\Models\Product;
 
-class ProductRepository {
+class ProductRepository
+{
     public function getAll()
     {
         return Product::all();
@@ -42,16 +43,14 @@ class ProductRepository {
     }
 
 
-    public function searchByName($keyword)
+    public function search($keyword)
     {
-        $products = Product::where('name', 'like', '%' . $keyword . '%');
+        $products = Product::where(function ($query) use ($keyword) {
+            $query->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('SKU', 'like', '%' . $keyword . '%');
+        })->get();
 
         return $products;
     }
 
-    // Lọc
-    public function filter()
-    {
-        
-    }
 }

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master');
+@extends('admin.layouts.master')
 
 @section('title')
     Quản lý bài viết
@@ -15,7 +15,6 @@
                         <input class="au-input--w300 au-input--style2" type="date" name="publish_date"
                             placeholder="Chọn ngày" value="{{ request()->input('publish_date') }}">
 
-
                         <input class="au-input--w300 au-input--style2" type="text" name="title"
                             placeholder="Nhập tiêu đề để tìm kiếm." value="{{ request()->input('title') }}">
 
@@ -26,23 +25,22 @@
                         </div>
                     </form>
                     <div class="table-data__tool-right">
-                        <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                            <a class="au-breadcrumb-span" href="{{ route('admin.post.index') }}">Xóa tất cả các bộ lọc</a>
-                        </button>
-                    </div>
-                    <div class="table-data__tool-right">
-                        <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                            <a class="au-breadcrumb-span" href="{{ route('admin.post.create') }}">Thêm bài</a>
-                        </button>
+                        <a href="{{ route('admin.post.index') }}">
+                            <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-2">
+                                Xóa tất cả các bộ lọc
+                            </button>
+                        </a>
+                        <a href="{{ route('admin.post.create') }}">
+                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                Thêm bài
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--sm">
-                        </div>
+                        <div class="rs-select2--light rs-select2--sm"></div>
                     </div>
-
-
                 </div>
                 @if (session('success'))
                     <div>{{ session('success') }}</div>
@@ -61,36 +59,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-shadow">
-                                @foreach ($posts as $post)
-                            <tr>
-                                <td>
-                                    @if ($post->image)
-                                        <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
-                                            width="150" height="auto">
-                                    @endif
-                                </td>
-                                <td class="desc">{{ $post->title }}</td>
-                                <td>{{ $post->content }}</td>
-                                <td>{{ $post->author }}</td>
-                                <td>{{ $post->publish_date }}</td>
-                                <td>{{ $post->views }}</td>
-                                <td>
-                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Sửa">
-                                        <a href="{{ route('admin.post.edit', $post->id) }}" class="zmdi zmdi-edit"></a>
-                                    </button>
-                                    <form action="{{ route('admin.post.destroy', $post->id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="item" data-toggle="tooltip" data-placement="top"
-                                            title="Delete" onclick="return confirm('Bạn có muốn xóa bài viết không ?')">
-                                            <i class="zmdi zmdi-delete"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            </tr>
+                            @foreach ($posts as $post)
+                                <tr class="tr-shadow">
+                                    <td>
+                                        @if ($post->image)
+                                            <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
+                                                width="150" height="auto">
+                                        @endif
+                                    </td>
+                                    <td class="desc">{{ $post->title }}</td>
+                                    <td>{{ $post->content }}</td>
+                                    <td>{{ $post->author }}</td>
+                                    <td>{{ $post->publish_date }}</td>
+                                    <td>{{ $post->views }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.post.edit', $post->id) }}"
+                                            class="zmdi zmdi-edit text-dark">
+                                            <button class="item" data-toggle="tooltip" data-placement="top"
+                                                title="Sửa">
+                                            </button>
+                                        </a>
+
+                                        <form action="{{ route('admin.post.destroy', $post->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="item" data-toggle="tooltip" data-placement="top"
+                                                title="Delete" onclick="return confirm('Bạn có muốn xóa bài viết không ?')">
+                                                <i class="zmdi zmdi-delete"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
                             @endforeach
                         </tbody>
                     </table>

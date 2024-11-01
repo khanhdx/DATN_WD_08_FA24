@@ -16,6 +16,7 @@ class Product extends Model
         'image',
         'name',
         'SKU',
+        'base_stock',
         'price_regular',
         'price_sale',
         'description',

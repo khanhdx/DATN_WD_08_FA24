@@ -10,9 +10,10 @@
     <meta name="author" content="pixelgeeklab.com">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flatize - Shop HTML5 Responsive Template</title>
-    @include('client.layouts.components.link')
-    @yield('css')
 
+    @include('client.layouts.components.link')
+
+    @yield('css')
 </head>
 
 <body>
@@ -24,6 +25,8 @@
                         
             @include('client.layouts.components.navbar')
         </header>
+
+        @include('client.layouts.components.beginlogin')
 
         <!-- Begin Main -->
         <div role="main" class="main">

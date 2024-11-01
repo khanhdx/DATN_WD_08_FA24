@@ -21,3 +21,5 @@
 
     <!-- Main JS-->
     <script src="/assets/admin/js/main.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>

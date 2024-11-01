@@ -19,3 +19,11 @@
 
 <!-- Main CSS-->
 <link href="/assets/admin/css/theme.css" rel="stylesheet" media="all">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" />
+
+<style>
+    a, a:hover {
+        color: white;
+    }
+</style>

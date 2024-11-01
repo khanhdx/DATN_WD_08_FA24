@@ -154,12 +154,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
+                        {{-- <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
                                         href="#collapseThree">Reviews (3)</a> </h4>
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
+
                                 <div class="panel-body post-comments">
                                     <ul class="comments">
                                         <li>
@@ -204,8 +205,95 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                            </div>
+                        </div> --}}
+                        <!-- Đánh giá sản phẩm -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
+                                        Reviews ({{ $product->reviews->count() }})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseReviews" class="panel-collapse collapse">
+                                <div class="panel-body post-comments">
+                                    <ul class="comments">
+                                        @foreach ($product->reviews as $review)
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="img-circle">
+                                                        <img class="avatar" width="50" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <strong>{{ $review->user->name }}</strong>
+                                                        </span>
+                                                        <span class="date">
+                                                            <small><i class="fa fa-clock-o"></i>
+                                                                {{ $review->created_at->format('F d, Y') }}</small>
+                                                        </span>
+                                                        <div class="rating">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="fa{{ $i <= $review->rating ? ' fa-star' : ' fa-star-o' }}"
+                                                                    aria-hidden="true"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <p>{{ $review->review }}</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+
+                        {{-- <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Reviews ({{ $product->reviews->count() }})</a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body post-comments">
+                                    <ul class="comments">
+                                        @foreach ($product->reviews as $review)
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="img-circle">
+                                                        <img class="avatar" width="50" alt="" src="/assets/client/images/content/blog/avatar.png">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <strong>{{ $review->user->name }}</strong>
+                                                        </span>
+                                                        <span class="date">
+                                                            <small><i class="fa fa-clock-o"></i> {{ $review->created_at->format('F d, Y') }}</small>
+                                                        </span>
+                                                        <p>{{ $review->review }}</p>
+                                                        <span>Rating: {{ $review->rating }}/5</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form đánh giá chỉ hiện khi người dùng có quyền đánh giá -->
+                        @if ($canReview)
+                            <form action="{{ route('client.reviews.store', $product->id) }}" method="POST">
+                                @csrf
+                                <textarea name="review" placeholder="Nhập đánh giá của bạn" required></textarea>
+                                <input type="number" name="rating" min="1" max="5" placeholder="Đánh giá (1-5)" required>
+                                <button type="submit">Gửi đánh giá</button>
+                            </form>
+                        @else
+                            <p>Bạn cần mua sản phẩm này để có thể đánh giá.</p>
+                        @endif --}}
                     </div>
                 </div>
             </div>
