@@ -24,7 +24,7 @@ class PaymentController extends Controller
 
         // Kiểm tra xem giỏ hàng có tồn tại không
         if (!$cartId) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng không tồn tại.');
+            return redirect()->route('carts.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
         // Lấy dữ liệu từ giỏ hàng

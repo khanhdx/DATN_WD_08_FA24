@@ -6,7 +6,7 @@
             @guest
                 <!-- Hiển thị nếu chưa đăng nhập -->
                 <li class="login">
-                    <a href="#">
+                    <a href="">
                         <i class="fa fa-user"></i> Login
                     </a>
                 </li>
@@ -17,19 +17,15 @@
                 <ul class="dropdown-menu" role="menu">
                     @if (auth()->user()->role == 'Khách hàng')
                         <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
-                        <li><a href="{{ route('orders.index') }}">My Orders</a></li>
+                        <li><a href="{{ route('orders.index') }}">Đơn hàng của tôi</a></li>
                     @elseif (auth()->user()->role == 'Quản lý')
                         <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
                     @endif
                     <li>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); 
-                               document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <a href="" class="logout">Đăng xuất</a>
+                        {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                        </form>
+                        </form> --}}
                     </li>
                 </ul>
             @endauth

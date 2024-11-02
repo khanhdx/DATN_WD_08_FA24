@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
 use Illuminate\Http\Request;

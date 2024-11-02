@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Chi tiết voucher')
+
 @section('css')
     <style>
         .voucher-list {

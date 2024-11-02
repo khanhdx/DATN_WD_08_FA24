@@ -3,7 +3,7 @@
         <div class="col-xs-5">
             <h4>Không có sản phẩm nào trong giỏ hàng của bạn.</h4>
             <a href="{{ route('client.home') }}">
-                <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
+                <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm"
                     data-loading-text="Loading...">
             </a>
             <h1></h1>
@@ -12,29 +12,29 @@
 @else
     <div class="row featured-boxes">
         <div class="col-md-12">
-            <h3>Your selection ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} items)</h3>
+            <h3>Giỏ hàng của bạn ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} sản phẩm)</h3>
             <div class="featured-box featured-box-cart">
                 <div class="box-content">
                     <table cellspacing="0" class="shop_table" width="100%">
                         <thead>
                             <tr>
-                                <th class="product-thumbnail">
-                                    Item
+                                <th class="product-thumbnail" colspan="2">
+                                    Sản phẩm
                                 </th>
-                                <th class="product-name">
+                                {{-- <th class="product-name">
                                     Product name
-                                </th>
+                                </th> --}}
                                 <th class="product-name">
-                                    Variants
+                                    Phân loại
                                 </th>
                                 <th class="product-price">
-                                    Price
+                                    Đơn giá
                                 </th>
                                 <th class="product-quantity">
-                                    Quantity
+                                    Số lượng
                                 </th>
                                 <th class="product-subtotal">
-                                    SubTotal
+                                    Số tiền
                                 </th>
                                 <th class="product-remove">
                                     &nbsp;
@@ -46,20 +46,20 @@
                                 @if (Auth::check())
                                     <tr class="cart_table_item">
                                         <td class="product-thumbnail">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart->productVariant->product->id) }}">
                                                 <img alt="" width="80"
                                                     src="{{ $cart->productVariant->product->image }}">
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart->productVariant->product->id) }}">
                                                 {{ $cart->productVariant->product->name }}
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="">
                                                 {{ $cart->productVariant->color->name }},
                                                 {{ $cart->productVariant->size->name }}
                                             </a>
@@ -112,19 +112,19 @@
                                 @else
                                     <tr class="cart_table_item">
                                         <td class="product-thumbnail">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart['product_id']) }}">
                                                 <img alt="" width="80" src="{{ $cart['image'] }}">
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart['product_id']) }}">
                                                 {{ $cart['name'] }}
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="">
                                                 {{ $cart['color'] }},
                                                 {{ $cart['size'] }}
                                             </a>
@@ -183,7 +183,7 @@
     </div>
 
     <div class="row featured-boxes">
-        <div class="col-xs-4">
+        {{-- <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
                     <h4>Promotional Code</h4>
@@ -231,16 +231,16 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="col-xs-4">
+        </div> --}}
+        <div class="col-xs-12">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
-                    <h4>Shopping bag summary</h4>
+                    <h4>Tổng giỏ hàng</h4>
                     <table cellspacing="0" class="cart-totals" width="100%">
                         <tbody>
                             <tr class="cart-subtotal">
                                 <th>
-                                    Cart Subtotal
+                                    Thành tiền
                                 </th>
                                 <td>
                                     <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
@@ -248,16 +248,16 @@
                             </tr>
                             <tr class="shipping">
                                 <th>
-                                    Shipping
+                                    Phí vận chuyển
                                 </th>
                                 <td>
-                                    Free Shipping<input type="hidden" value="free_shipping" id="shipping_method"
+                                    Freeship<input type="hidden" value="free_shipping" id="shipping_method"
                                         name="shipping_method">
                                 </td>
                             </tr>
                             <tr class="total">
                                 <th>    
-                                    Total
+                                    Tổng thanh toán
                                 </th>
                                 <td>
                                     <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
@@ -267,11 +267,11 @@
                     </table>
                     <p>
                         <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
-                            Proceed To Checkout
+                            Thanh toán
                         </a>
                     </p>
                     <a href="{{ route('client.home') }}">
-                        <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
+                        <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm"
                             data-loading-text="Loading...">
                     </a>
                 </div>

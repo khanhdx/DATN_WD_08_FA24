@@ -37,4 +37,8 @@
     .swal2-title {
         font-size: 40px;
     }
+
+    #form-login input {
+        color: #fff;
+    }
 </style>

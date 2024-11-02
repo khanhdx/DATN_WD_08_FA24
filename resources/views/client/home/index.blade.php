@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Trang chủ')
+
 @section('content')
     <!-- Begin Main Slide -->
     <section class="main-slide">
@@ -7,7 +9,7 @@
             @foreach ($banners as $banner)
                 <div class="item">
                     <div style="width: 100%; height: 500px;">
-                        <img src="{{ url('storage/' . $banner->image) }}" style="width: 100%; height: 100%; object-fit:cover"
+                        <img loading="lazy" src="{{ url('storage/' . $banner->image) }}" style="width: 100%; height: 100%; object-fit:cover"
                             class="img-responsive" alt="{{ $banner->title }}">
                     </div>
                     <div class="item-caption">
@@ -31,7 +33,7 @@
                 @foreach($listBanner1 as $banner)
                     <div class="col-xs-4 animation">
                        <div style="width: 100%; height: 250px;">
-                        <a href="#"><img  style="width: 100%; height: 100%; object-fit:cover" src="{{ asset('storage/' . $banner->image) }}" class="img-responsive" alt="{{ $banner->title }}"></a>
+                        <a href="#"><img loading="lazy"  style="width: 100%; height: 100%; object-fit:cover" src="{{ asset('storage/' . $banner->image) }}" class="img-responsive" alt="{{ $banner->title }}"></a>
                        </div>
                     </div>
                 @endforeach
@@ -119,7 +121,7 @@
                                             </a>
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img alt="" class="img-responsive"
+                                            <img loading="lazy" alt="" class="img-responsive"
                                                 src="{{ $product->image }}">
                                         </a>
                                     </div>
@@ -157,7 +159,7 @@
                                             </a>
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img alt="" class="img-responsive"
+                                            <img loading="lazy" alt="" class="img-responsive"
                                                 src="{{ $product->image }}">
                                         </a>
                                     </div>
@@ -212,7 +214,7 @@
                                 <span class="post-info-act">
                                     <a href="blog-single.html"><i class="fa fa-caret-right"></i></a>
                                 </span>
-                                <img class="img-responsive" src="{{ $post->image }}" alt="Blog">
+                                <img loading="lazy" class="img-responsive" src="{{ $post->image }}" alt="Blog">
                             </div>
                             <h3><a href="blog-single.html">{{ $post->title }}</a></h3>
                             <p class="post-meta">{{ $post->publish_date }}</p>

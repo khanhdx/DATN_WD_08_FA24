@@ -1,5 +1,9 @@
 @extends('client.layouts.master')
 
+@section('title')
+{{ $product->name }}
+@endsection
+
 @section('css')
     <style>
         span.stock {
@@ -209,7 +213,7 @@
                             </div>
                         </div> --}}
                         <!-- Đánh giá sản phẩm -->
-                        <div class="panel panel-default">
+                        {{-- <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
@@ -248,7 +252,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="panel panel-default">
                             <div class="panel-heading">

@@ -25,22 +25,19 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
-        $('.dropdownLink').on('click', function(e) {
-            if ($(window).width() > 992) {
-                window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
-            }
-        });
+    $(document).on('click', '.dropdownLink', function(e) {
+        if ($(window).width() > 992) {
+            window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
+        }
+    });
 
-        // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
-        $('.dropdown').on('mouseenter', function() {
-            if ($(window).width() > 992) {
-                $(this).addClass('open');
-            }
-        }).on('mouseleave', function() {
-            $(this).removeClass('open');
-        });
+    // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
+    $(document).on('mouseenter', '.dropdown', function() {
+        if ($(window).width() > 992) {
+            $(this).addClass('open');
+        }
+    }).on('mouseleave', '.dropdown', function() {
+        $(this).removeClass('open');
     });
 </script>
 
@@ -355,16 +352,105 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        // e.preventDefault();
-        $(document).on('click', '.login > a', function() {
+    $(document).ready(function() {
         var wrapper = $('.login-wrapper');
 
-        if (wrapper.hasClass('open')) {
-            wrapper.removeClass('open');
-        } else {
-            wrapper.addClass('open');
-        }
-    });
+        $(document).on('click', '.login > a', function(e) {
+            e.preventDefault();
+            if (wrapper.hasClass('open')) {
+                wrapper.removeClass('open');
+            } else {
+                wrapper.addClass('open');
+            }
+        });
+
+        $(document).on('click', '.logout', function(e) {
+            e.preventDefault();
+
+            let data = {
+                _token: '{{ csrf_token() }}'
+            }
+
+            $.post("{{ route('logout') }}", data, function(res) {
+                let path = window.location.pathname;
+                if (path === '/profile' || path === '/orders' || path === '/checkout' ||
+                    path === '/payment-success') {
+                    window.location.href = "{{ route('client.home') }}";
+                }
+                if (res.status_code == 200) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top",
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: `<span style="font-size: 1.5rem">${res.message}</span>`,
+                        width: 280
+                    });
+
+                    load_header();
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: res.message,
+                    });
+                }
+            });
+        });
+
+        $('#form-login').submit(function(e) {
+            e.preventDefault();
+            let data = $(this).serialize();
+
+            $('#errorEmail').html('');
+            $('#errorPassword').html('');
+
+            $.post("{{ route('login') }}", data)
+                .done(function(res) {
+                    if (res.admin) {
+                        window.location.href = res.admin;
+                    } else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top",
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: `<span style="font-size: 1.5rem">${res.message}</span>`,
+                            width: 280
+                        });
+                        wrapper.removeClass('open');
+                        load_header();
+                    }
+                })
+                .fail(function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorEmail = errors.email;
+                        let errorPassword = errors.password;
+
+                        $('#errorEmail').html(errorEmail);
+                        $('#errorPassword').html(errorPassword);
+                    } else {
+                        $('#errorEmail').html(xhr.responseJSON.message);
+                    }
+                });
+        });
+
     })
 </script>

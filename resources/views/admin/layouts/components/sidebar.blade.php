@@ -10,6 +10,7 @@
                 <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />
             </div>
             <h4 class="name">{{ Auth::user()->name }}</h4>
+            <form action="" method="get"></form>
             <a href="{{ route('logout') }}">Đăng xuất</a>
         </div>
         <nav class="navbar-sidebar2">

@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Blog single')
+
 @section('text_page')
     Blog single
 @endsection

@@ -53,7 +53,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
 
             Route::resource('category', CategorysController::class);
-            // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
             Route::resource('location', LocationController::class);
             Route::get('/export-excel', [UserController::class, 'exportExcel']);
@@ -206,12 +205,7 @@ Route::name('client.')->group(function () {
 
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
-    Route::resource('profile', ProfileController::class)->only([
-        'index',
-        'edit',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('profile', ProfileController::class);
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
@@ -225,10 +219,14 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
+
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'loginAjax'])->name('loginAjax');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
