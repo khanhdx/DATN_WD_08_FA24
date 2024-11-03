@@ -22,33 +22,23 @@
                     </div>
                 @endif
                 <div class="table-data__tool">
-                    <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--md">
-                            <select class="js-select2" name="property">
-                                <option selected="selected">Danh mục</option>
-                                {{-- @foreach ($categories as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach --}}
+                    <form class="form-inline" method="GET">
+                        <div class="form-group mr-3">
+                            <label for="status">Trạng thái:</label>
+                            <select class="form-control ml-2" name="status" id="status">
+                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
+                                @foreach ($statuses as $status)
+                                    <option value="{{ $status->name_status }}" {{ request('status') == $status->name_status ? 'selected' : '' }}>
+                                        {{ $status->status_label }}
+                                    </option>
+                                @endforeach
                             </select>
-                            <div class="dropDownSelect2"></div>
                         </div>
-                        <div class="rs-select2--light rs-select2--sm">
-                            <select class="js-select2" name="time">
-                                <option selected="selected">Sắp xếp</option>
-                                <option value="">Mới nhất</option>
-                                <option value="">Cũ nhất</option>
-                            </select>
-                            <div class="dropDownSelect2"></div>
+                        <div class="form-group mr-3">
+                            <label for="date">Ngày đặt:</label>
+                            <input type="date" class="form-control ml-2" name="date" id="date" value="{{ request('date') }}">
                         </div>
-                        <button class="au-btn-filter">
-                            <i class="zmdi zmdi-filter-list"></i>Lọc</button>
-                    </div>
-                    <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Tìm kiếm..." />
-                        <button class="au-btn--submit2" type="submit">
-                            <i class="zmdi zmdi-search"></i>
-                        </button>
+                        <button type="submit" class="btn btn-primary">Tìm </button>
                     </form>
                     <div class="table-data__tool-right">
                         <a href="{{ route('admin.products.create') }}">

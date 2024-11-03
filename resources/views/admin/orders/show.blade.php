@@ -6,27 +6,27 @@
 @endsection
 @section('content')
 <div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+    <div >
+            {{-- <div class="col-md-4">
+                <div class="card text-center">
+                    <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
 
-                <div class="card-body">
-                    <h5 class="card-title">{{ $order->user->name }}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $order->user->name }}</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-header">
-                    Thông tin khách hàng
+                <div class="card mt-3">
+                    <div class="card-header">
+                        Thông tin khách hàng
+                    </div>
+                    <div class="card-body">
+                        <p>Email: {{ $order->user->email }}</p>
+                        <p>Số điện thoại: {{ $order->user->phone_number }}</p>
+                    
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>Email: {{ $order->user->email }}</p>
-                    <p>Số điện thoại: {{ $order->user->phone_number }}</p>
-                
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
+            </div> --}}
+        <div >
             <div class="card">
                 <div class="card-header">
                     Thông tin đơn hàng: DHBVQH144309
