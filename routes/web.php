@@ -9,24 +9,25 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\ProductController;
 
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
+
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\InventoryController;
 
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
-use App\Http\Controllers\Client\ContactController;
-
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -182,18 +183,15 @@ Route::name('client.')->group(function () {
     Route::get('contact', [ContactController::class, 'index'])->name('contact');
     Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
 
-
-
-    // Route để gửi đánh giá sản phẩm
-    // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
-    //     ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
-    //     ->name('orders.product.review');
-
     // Route để gửi đánh giá sản phẩm
     Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
+     // Route cho trang sản phẩm đã bình luận
+    Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])
+        ->name('product.review.page');
+    
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
         ->middleware(['convert.cart'])

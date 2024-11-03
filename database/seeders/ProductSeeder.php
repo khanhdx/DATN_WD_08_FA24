@@ -68,6 +68,7 @@ class ProductSeeder extends Seeder
                 'SKU'           => "OB" . rand(10000, 99999),
                 'price_regular' => $price,
                 'price_sale'    => $sale,
+                'base_stock' => 50,
                 'description'   => fake()->text(200),
                 'views'         => rand(1, 100),
                 'content'       => fake()->text(500),
