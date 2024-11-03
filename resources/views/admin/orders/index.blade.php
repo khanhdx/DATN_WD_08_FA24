@@ -38,15 +38,9 @@
                             <label for="date">Ngày đặt:</label>
                             <input type="date" class="form-control ml-2" name="date" id="date" value="{{ request('date') }}">
                         </div>
-                        <button type="submit" class="btn btn-primary">Tìm </button>
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </form>
-                    <div class="table-data__tool-right">
-                        <a href="{{ route('admin.products.create') }}">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>Thêm</button>
-                        </a>
-
-                    </div>
+                    
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">

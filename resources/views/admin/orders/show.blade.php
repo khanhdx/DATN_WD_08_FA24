@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="orderStatus" class="form-label">Trạng thái đơn hàng</label>
-                            <input type="text" class="form-control" id="orderStatus" value="{{ $currentStatus->name_status }}" disabled>
+                            <input type="text" class="form-control" id="orderStatus" value="{{ $currentStatus->status_label }}" disabled>
                         </div>
                     </div>
                     <div class="mb-3">
