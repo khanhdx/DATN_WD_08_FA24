@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
-@section('link-css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" />
+@section('title')
+    Quản lý sản phẩm 
 @endsection
 
 @section('css')
@@ -268,10 +268,6 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('link-js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
 @endsection
 
 @section('js')

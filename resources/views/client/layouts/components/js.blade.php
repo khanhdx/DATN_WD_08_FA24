@@ -24,7 +24,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
-<!-- Xử lý nút dropdown -->
 <script>
     $(document).ready(function() {
         // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
@@ -298,7 +297,7 @@
                         load_header();
                     } else {
                         console.log(res.errors);
-                        
+
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -332,25 +331,40 @@
         }
 
         function getInStock(sizeId = null, colorId = null) {
-                let productId = $('.product_id').val();
+            let productId = $('.product_id').val();
 
-                data = {
-                    product_id: productId,
-                    size_id: sizeId,
-                    color_id: colorId,
-                }
-
-                $.get("{{ route('get.stock') }}", data, function(res) {
-                    if (Array.isArray(res)) {
-                        res.forEach(item => {
-                            $('.stock').text(item.stock);
-                            $('.amount').text(item.price + ' VND');
-                        });
-                    } else {
-                        $('.stock').text(res);
-                        $('#stock').val(res);
-                    }
-                })
+            data = {
+                product_id: productId,
+                size_id: sizeId,
+                color_id: colorId,
             }
+
+            $.get("{{ route('get.stock') }}", data, function(res) {
+                if (Array.isArray(res)) {
+                    res.forEach(item => {
+                        $('.stock').text(item.stock);
+                        $('.amount').text(item.price + ' VND');
+                    });
+                } else {
+                    $('.stock').text(res);
+                    $('#stock').val(res);
+                }
+            })
+        }
     });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // e.preventDefault();
+        $(document).on('click', '.login > a', function() {
+        var wrapper = $('.login-wrapper');
+
+        if (wrapper.hasClass('open')) {
+            wrapper.removeClass('open');
+        } else {
+            wrapper.addClass('open');
+        }
+    });
+    })
 </script>

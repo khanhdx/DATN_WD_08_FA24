@@ -80,6 +80,38 @@ class AuthController extends Controller
     
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
     }
+    public function loginAjax(LoginRequest $request)
+    {
+        if (!$this->authService->userExists($request->email)) {
+            return response()->json([
+                'message' => 'Email không tồn tại!',
+                'status_code' => 500,
+            ]);
+        }
+    
+        if ($this->authService->login($request->validated())) {
+            $user = Auth::user();
+            
+            if ($user->role === 'Quản lý') {
+                return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
+            } elseif ($user->role === 'Khách hàng') {
+                return response()->json([
+                    'message' => 'Đăng nhập thành công!',
+                    'status_code' => 200,
+                ]);
+            }
+    
+            return response()->json([
+                'message' => 'Đăng nhập thành công!',
+                'status_code' => 200,
+            ]);
+        }
+    
+        return response()->json([
+            'message' => 'Sai tên đăng nhập hoặc mật khẩu!',
+            'status_code' => 500,
+        ]);
+    }
 
     // Xử lý đăng xuất
     public function logout()
