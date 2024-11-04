@@ -88,7 +88,7 @@
     @yield('link-js')
     <!-- Main JS-->
     <script src="{{ asset('assets/admin/js/main.js') }}"></script>
-
+   
     @yield('js')
 </body>
 

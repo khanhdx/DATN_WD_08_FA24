@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Models\StatusOrderDetail;
 use App\Repositories\OrderRepository;
 use App\Services\Statistical\StatisticalService;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class OrderService implements IOrderService
         $orders = $this->orderRepository->getAll();
         $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
         $totalOrder = $this->statistical->totalOrder();
+       
 
         return [$orders, $countOrderByStatus, $totalOrder];
     }
@@ -59,7 +61,7 @@ class OrderService implements IOrderService
         if ($orderExists) {
             DB::table('status_order_details')
                 ->where('order_id', $id)
-                ->update(['status_order_id' => $data]);
+                ->update(['status_order_id' => $data, 'updated_at' => now()]);
         }
     }
 

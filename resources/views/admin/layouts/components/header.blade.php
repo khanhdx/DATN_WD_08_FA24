@@ -29,13 +29,13 @@
                     </li>
                     <li class="has-sub">
                         <a href="{{ route('admin.user.index') }}">
-                            <i ></i>
+                            <i></i>
                             <span class="bot-line"></span>Quản lý tài khoản</a>
 
                     </li>
                     <li class="has-sub">
                         <a href="#">
-                            <i ></i>
+                            <i></i>
                             <span class="bot-line"></span>Sản phẩm</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
@@ -62,26 +62,17 @@
                             <span class="bot-line"></span>Quản lý mã giảm giá
                         </a>
                     <li class="has-sub">
-                        <a href="#">
-                            
-                            <span class="bot-line"></span>Quảng cáo</a>
+                        <span class="bot-line"></span>Quảng cáo</a>
                         <ul class="header3-sub-list list-unstyled">
                             <li>
                                 <a href="{{ route('admin.slider.index') }}">Slider chính </a>
                             <li>
-                                <a href="{{ route('admin.slider.banner1.index')}}">Banner giảm giá</a>
+                                <a href="{{ route('admin.slider.banner1.index') }}">Banner giảm giá</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.slider.banner2.index')}}">Banner giới thiệu</a>
+                                <a href="{{ route('admin.slider.banner2.index') }}">Banner giới thiệu</a>
                             </li>
                         </ul>
-                        
-                    </li><li class="has-sub">
-                        <a href="{{ route('admin.orders.index') }}">
-                            <i></i>
-                            <span class="bot-line"></span>Quản lý đơn hàng</a>
-                        
-                    </li>
                 </ul>
             </div>
             <div class="header__tool">
