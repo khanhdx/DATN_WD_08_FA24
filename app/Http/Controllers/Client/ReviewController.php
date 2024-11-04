@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Order;
 use App\Models\Review;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -50,5 +51,11 @@ class ReviewController extends Controller
             'message' => 'Đã gửi đánh giá thành công!',
             'review' => $review->load('user')
         ], 200);
+    }
+
+    public function showReviewPage($productId)
+    {
+        $product = Product::with('reviews.user')->findOrFail($productId); // Lấy sản phẩm cùng với đánh giá và thông tin người dùng
+        return view('client.products.show', compact('product'));
     }
 }

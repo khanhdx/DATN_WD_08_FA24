@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('SKU')->unique();                // Mã SKU
             $table->integer('price_regular');               // Giá thường
             $table->integer('price_sale')->nullable();      // Giá sale
-            $table->unsignedBigInteger('base_stock');       // Số lượng tồn kho           
+            $table->unsignedBigInteger('base_stock')->default(0);       // Số lượng tồn kho           
             $table->string('description')->nullable();      // Mô tả
             $table->integer('views')->default(0);    // Lượt xem
             $table->text('content')->nullable();            // Nội dung
