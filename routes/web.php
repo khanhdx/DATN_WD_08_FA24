@@ -5,26 +5,27 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Admin\BannerController;
 
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
-use App\Http\Controllers\Admin\AttributeController;
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
-use App\Http\Controllers\Admin\InventoryController;
 
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -236,3 +237,12 @@ Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+
+
+// Route cho giao hàng nhanh
+Route::middleware('auth')->group(function () {
+    Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+    Route::get('/districts', [ShippingController::class, 'getDistricts']);
+    Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
+    Route::post('/create-order', [ShippingController::class, 'createOrder']);
+});
