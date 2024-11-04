@@ -1,8 +1,11 @@
 @extends('admin.layouts.master')
 
-@section('css')
+@section('title')
+    Sản phẩm biến thể
 @endsection
 
+@section('css')
+@endsection
 
 @section('content')
     <!-- DATA TABLE-->

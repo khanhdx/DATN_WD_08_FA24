@@ -1,7 +1,10 @@
 @extends('admin.layouts.master')
 
-@section('css')
+@section('title')
+    Quản lý sản phẩm
 @endsection
+
+@section('css')
 <style>
     .preview-image {
         width: 100px;
@@ -16,6 +19,7 @@
         flex-grow: 1;
     }
 </style>
+@endsection
 
 @section('content')
     <!-- DATA TABLE-->

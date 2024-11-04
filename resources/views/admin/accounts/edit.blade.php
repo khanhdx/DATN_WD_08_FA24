@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    Danh sách người dùng
+    Cập nhật người dùng
 @endsection
 @section('css')
     {{-- CSS --}}

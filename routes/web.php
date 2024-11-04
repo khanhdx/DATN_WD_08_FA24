@@ -1,36 +1,34 @@
 <?php
-
-
-use App\Http\Controllers\Admin\ProductVariantController;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\InventoryController;
-use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\ProductController;
-
-use App\Http\Controllers\Client\ReviewController;
-use App\Http\Controllers\Client\CommentController;
-use App\Http\Controllers\Client\PaymentController;
-use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
-
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
-use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\OrderController as ClientOrderController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\PaymentController;
+use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
+use App\Http\Controllers\Client\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,18 +47,18 @@ Route::get('test', function () {
 
 // Route cho quản lý (admin)
 Route::group(['middleware' => ['role:Quản lý']], function () {
-    Route::get('/admin', [DashbroadController::class, 'index'])->name('admin.dashboard');
-
-    Route::prefix('admins')
+    Route::prefix('admin')
         ->as('admin.')
         ->group(function () {
+            Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
+
             Route::resource('category', CategorysController::class);
             // Route::resource('slider', BannerController::class);
-            Route::resource('user', App\Http\Controllers\Admin\UserController::class);
-            Route::resource('location', App\Http\Controllers\Admin\LocationController::class);
-            Route::get('/export-excel', [App\Http\Controllers\Admin\UserController::class, 'exportExcel']);
+            Route::resource('user', UserController::class);
+            Route::resource('location', LocationController::class);
+            Route::get('/export-excel', [UserController::class, 'exportExcel']);
             Route::resource('post', PostController::class);
-            Route::resource('voucher', App\Http\Controllers\Admin\VoucherController::class);
+            Route::resource('voucher', VoucherController::class);
 
             Route::prefix('slider')->as('slider.')->group(function () {
                 Route::get('/', [BannerController::class, 'index'])->name('index');
@@ -147,9 +145,10 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
 //Route cho máy khách (client)
 Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
-    Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
-    Route::get('/header',  [HomeController::class, 'header'])->name('header');
+    Route::get('/header',   [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
+    Route::get('contact', [ContactController::class, 'index'])->name('contact');
+    Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
 
     // Route cho sản phẩm (product)
     Route::prefix('products')
@@ -181,11 +180,6 @@ Route::name('client.')->group(function () {
 
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
 
-    Route::get('contact', [ContactController::class, 'index'])->name('contact');
-    Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
-
-
-
     // Route để gửi đánh giá sản phẩm
     // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
     //     ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
@@ -210,7 +204,6 @@ Route::name('client.')->group(function () {
             Route::delete('/{id}', 'destroy')->name('delete');
         });
 });
-
 
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {

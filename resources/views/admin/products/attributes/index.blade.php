@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@section('title')
+    Thuộc tính biến thể
+@endsection
 @section('content')
     <div class="container">
         <div class="row">
@@ -281,7 +283,8 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                <form action="{{ route('admin.products.variants.sizes.delete', $item->id) }}"
+                                                <form
+                                                    action="{{ route('admin.products.variants.sizes.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                     @csrf
