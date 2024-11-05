@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\StatusOrder;
 use App\Services\Order\IOrderService;
 use App\Services\Order\Status\StatusService;
 use Illuminate\Http\Request;
@@ -77,4 +78,31 @@ class OrderController extends Controller
             return redirect()->back()->withErrors($th->getMessage());
         }
     }
+
+    public function destroy($id)
+    {
+        // Lấy đơn hàng theo ID
+        $order = Order::findOrFail($id);
+    
+        // Kiểm tra xem đơn hàng có trạng thái 'canceled' không
+        if ($order->statusOrder->contains('name_status', 'canceled')) {
+            // Xóa các bản ghi liên quan trong bảng status_order_details
+            $order->statusOrderDetails()->delete();
+    
+            // Xóa các bản ghi liên quan trong bảng payments
+            $order->payments()->delete();
+    
+            // Xóa các chi tiết đơn hàng
+            $order->orderDetails()->delete();
+    
+            // Xóa đơn hàng
+            $order->delete();
+    
+            return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được xóa thành công.');
+        } else {
+            return redirect()->route('admin.orders.index')->with('error', 'Chỉ có thể xóa đơn hàng đã hủy.');
+        }
+    }
+    
+
 }

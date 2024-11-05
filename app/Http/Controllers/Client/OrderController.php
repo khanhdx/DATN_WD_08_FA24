@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\StatusOrder;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -27,4 +28,30 @@ class OrderController extends Controller
         }
         return view('client.checkouts.showOrder', compact('order')); // Truyền cả order và status
     }
+
+    public function update(Request $request, $id)
+    {
+        // Lấy đơn hàng theo ID
+        $order = Order::findOrFail($id);
+    
+        // Kiểm tra xem đơn hàng có trạng thái 'pending' không
+        if ($order->statusOrder->contains('name_status', 'pending')) {
+            // Thay đổi trạng thái đơn hàng thành 'canceled'
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'canceled')->first()->id => [
+                    'name' => 'canceled',
+                    'updated_at' => now(),
+                ]
+            ]);
+    
+            // Xóa các chi tiết đơn hàng của đơn hàng đã hủy
+            $order->orderDetails()->delete();
+    
+            return redirect()->route('orders.index')->with('success', 'Đơn hàng đã được hủy thành công.');
+        } else {
+            // Nếu trạng thái không phải là 'pending', không cho phép hủy
+            return redirect()->route('orders.index')->with('error', 'Không thể hủy đơn hàng này.');
+        }
+    }
+    
 }

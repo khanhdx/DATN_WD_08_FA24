@@ -100,8 +100,8 @@
                         <td>{{ $order_detail->quantity }}</td>
                         <td>{{ $order_detail->color ?? "Không có màu sắc" }}</td>
                         <td>{{ $order_detail->size ?? "Khồn có size" }}</td>
-                        <td>{{ number_format($order_detail->unit_price) }}đ</td>
-                        <td>{{ number_format($order_detail->total_price) }}đ</td>
+                        <td>{{ number_format($order_detail->unit_price, 0, ',', '.') }} VND</td>
+                        <td>{{ number_format($order_detail->total_price, 0, ',', '.') }} VND</td>
                     </tr>
                 @endforeach
                 </tbody>

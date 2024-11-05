@@ -25,13 +25,15 @@
                     <tr class="align-middle text-center">
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->date }}</td>
-                        <td>{{ $order->total_price }} VND</td>
+                        <td>{{ number_format($order->total_price, 0, ',', '.'
+                        ) }} VND</td>
                         <td>
-                            <strong>Trạng thái:</strong> 
-                            @if ($order->statusOrder->isNotEmpty())  {{-- Kiểm tra xem có trạng thái không --}}
-                               @foreach ($order->statusOrder as $status)
-                                   {{ $status->status_label }}
-                               @endforeach  
+                            <strong>Trạng thái:</strong>
+                            @if ($order->statusOrder->isNotEmpty())
+                                {{-- Kiểm tra xem có trạng thái không --}}
+                                @foreach ($order->statusOrder as $status)
+                                    {{ $status->status_label }}
+                                @endforeach
                             @else
                                 <span>Chưa có trạng thái</span>
                             @endif
@@ -41,6 +43,17 @@
                         <td>
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order->id) }}">Xem chi
                                 tiết</a>
+
+
+                                @if ($order->statusOrder->contains('name_status', 'pending'))
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="canceled">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Hủy đơn hàng</button>
+                                </form>
+                            @endif
+                            
                         </td>
                     </tr>
                 @endforeach

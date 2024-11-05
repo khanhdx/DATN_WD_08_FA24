@@ -28,7 +28,8 @@
                             <select class="form-control ml-2" name="status" id="status">
                                 <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->name_status }}" {{ request('status') == $status->name_status ? 'selected' : '' }}>
+                                    <option value="{{ $status->name_status }}"
+                                        {{ request('status') == $status->name_status ? 'selected' : '' }}>
                                         {{ $status->status_label }}
                                     </option>
                                 @endforeach
@@ -36,11 +37,12 @@
                         </div>
                         <div class="form-group mr-3">
                             <label for="date">Ngày đặt:</label>
-                            <input type="date" class="form-control ml-2" name="date" id="date" value="{{ request('date') }}">
+                            <input type="date" class="form-control ml-2" name="date" id="date"
+                                value="{{ request('date') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </form>
-                    
+
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
@@ -50,7 +52,8 @@
                             @if ($item->status_order_id == 5 || $item->status_order_id == 7)
                                 @continue
                             @else
-                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}" class="mr-3 text-capitalize">{{ $item->name_status }}<span
+                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
+                                    class="mr-3 text-capitalize">{{ $item->name_status }}<span
                                         class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
                             @endif
                         @endforeach
@@ -77,7 +80,7 @@
                                         ORDER-01
                                     </td>
                                     <td>{{ $order->user->name }}</td>
-                                    <td>{{ $order->total_price }} đ</td>
+                                    <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
                                     <td>{{ $order->created_at }}</td>
                                     <td>
 
@@ -106,11 +109,23 @@
                                         <div class="table-data-feature">
 
                                             {{-- Xem chi tiết  --}}
-                                            <a href="{{ route('admin.orders.show',$order->id) }}">
+                                            <a href="{{ route('admin.orders.show', $order->id) }}">
                                                 <button class="item mr-2" data-toggle="tooltip" data-placement="top"
                                                     title="Xem chi tiết đơn hàng">
                                                     <i class="fas fa-eye"></i>
                                                 </button></a>
+
+                                                @if ($order->statusOrder->contains('name_status', 'canceled'))    
+                                            <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST"
+                                                onsubmit="return confirm('Bạn có muốn xóa không')" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="item mr-2" data-toggle="tooltip"
+                                                    data-placement="top" title="Xóa đơn hàng">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
