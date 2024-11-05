@@ -9,7 +9,7 @@
             <div class="image img-cir img-120">
                 <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />
             </div>
-            <h4 class="name">{{ Auth::user()->name }}</h4>
+            <a href="{{ route('admin.project') }}"><h4 class="name">{{ Auth::user()->name }}</h4></a>
             <a href="{{ route('logout') }}">Đăng xuất</a>
         </div>
         <nav class="navbar-sidebar2">

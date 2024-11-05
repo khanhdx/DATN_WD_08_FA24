@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -53,7 +54,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
-
+            Route::get('project', [ProjectController::class, 'index'])->name('project');
             Route::resource('category', CategorysController::class);
             // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
@@ -148,6 +149,7 @@ Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/header',   [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
+    Route::get('wave-voucher', [App\Http\Controllers\client\WareController::class, 'wareList'])->name('wave-voucher');
     Route::get('contact', [ContactController::class, 'index'])->name('contact');
     Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
 
