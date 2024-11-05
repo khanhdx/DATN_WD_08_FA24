@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GHTKController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
@@ -30,14 +31,6 @@ Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.colo
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
 
 
-// Route cho giao hàng nhanh
-Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-Route::get('/districts', [ShippingController::class, 'getDistricts']);
-Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-Route::post('/create-order', [ShippingController::class, 'createOrder']);
-// Route::middleware('auth')->group(function () {
-//     Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-//     Route::get('/districts', [ShippingController::class, 'getDistricts']);
-//     Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-//     Route::post('/create-order', [ShippingController::class, 'createOrder']);
-// });
+Route::post('/ghtk/order', [GHTKController::class, 'createOrder']);
+Route::get('/ghtk/order/{orderId}', [GHTKController::class, 'getOrderStatus']);
+Route::post('/ghtk/fee', [GHTKController::class, 'calculateShippingFee']);

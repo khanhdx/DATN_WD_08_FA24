@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\GhtkController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
@@ -17,8 +18,8 @@ use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
-use App\Http\Controllers\Client\PaymentController;
 
+use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
@@ -238,11 +239,6 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
-
-// Route cho giao hàng nhanh
-Route::middleware('auth')->group(function () {
-    Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-    Route::get('/districts', [ShippingController::class, 'getDistricts']);
-    Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-    Route::post('/create-order', [ShippingController::class, 'createOrder']);
-});
+Route::post('/ghtk/order', [GHTKController::class, 'createOrder']);
+Route::get('/ghtk/order/{orderId}', [GHTKController::class, 'getOrderStatus']);
+Route::post('/ghtk/fee', [GHTKController::class, 'calculateShippingFee']);

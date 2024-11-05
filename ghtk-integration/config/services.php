@@ -31,9 +31,4 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'ghtk' => [
-        'token' => env('GHTK_API_TOKEN'),
-        'base_url' => env('GHTK_BASE_URL'),
-    ],
-
 ];
