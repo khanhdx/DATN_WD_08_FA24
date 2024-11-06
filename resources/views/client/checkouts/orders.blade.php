@@ -46,7 +46,7 @@
 
 
                                 @if ($order->statusOrder->contains('name_status', 'pending'))
-                                <form action="{{ route('orders.update', $order->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng không')" style="display:inline;">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="name_status" value="canceled">

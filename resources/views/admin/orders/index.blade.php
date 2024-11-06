@@ -122,7 +122,7 @@
                                                 @method('DELETE')
                                                 <button type="submit" class="item mr-2" data-toggle="tooltip"
                                                     data-placement="top" title="Xóa đơn hàng">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                             @endif

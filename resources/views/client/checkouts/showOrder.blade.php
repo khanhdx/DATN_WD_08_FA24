@@ -7,6 +7,7 @@
 @section('content')
     <div class="order-details">
         @include('client.layouts.components.pagetop', ['md' => 'md'])
+        <div class="container">
         <div class="order-info">
             <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
             <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
@@ -174,6 +175,7 @@
 
         <a href="{{ route('orders.index') }}" class="btn btn-secondary">Quay lại danh sách đơn hàng</a>
     </div>
+</div>
 
     <script>
         document.querySelectorAll('.review-form').forEach(form => {
