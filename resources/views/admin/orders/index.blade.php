@@ -53,14 +53,14 @@
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
-                        <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="mr-3">Tất cả <span
+                        <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="mr-3" style="color: black">Tất cả <span
                                 class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $totalOrder }})</span></a>
                         @foreach ($countOrderByStatus as $item)
                             @if ($item->status_order_id == 5 || $item->status_order_id == 7)
                                 @continue
                             @else
                                 <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
-                                    class="mr-3 text-capitalize">{{ trans('status.' . $item->name_status) }}<span
+                                    class="mr-3 text-capitalize" style="color: black">{{ trans('status.' . $item->name_status) }}<span
                                         class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
                             @endif
                         @endforeach
