@@ -81,18 +81,18 @@ class OrderController extends Controller
 
     public function destroy($id)
     {
-        // Lấy đơn hàng theo ID
+        
         $order = Order::findOrFail($id);
     
-        // Kiểm tra xem đơn hàng có trạng thái 'canceled' không
+        
         if ($order->statusOrder->contains('name_status', 'canceled')) {
-            // Xóa các bản ghi liên quan trong bảng status_order_details
+           
             $order->statusOrderDetails()->delete();
-            // Xóa các bản ghi liên quan trong bảng payments
+            
             $order->payments()->delete();
-            // Xóa các chi tiết đơn hàng
+          
             $order->orderDetails()->delete();
-            // Xóa đơn hàng
+         
             $order->delete();
         }
         return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được xóa thành công.');

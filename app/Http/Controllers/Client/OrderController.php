@@ -33,9 +33,9 @@ class OrderController extends Controller
     {
         // Lấy đơn hàng theo ID
         $order = Order::findOrFail($id);
-        // Kiểm tra xem đơn hàng có trạng thái 'pending' không
+        
         if ($order->statusOrder->contains('name_status', 'pending')) {
-            // Thay đổi trạng thái đơn hàng thành 'canceled'
+    
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'canceled')->first()->id => [
                     'name' => 'canceled',
