@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class OrderService implements IOrderService
 {
 
- 
+
     protected $orderRepository;
 
     protected $statistical;
@@ -45,6 +45,26 @@ class OrderService implements IOrderService
         return $this->orderRepository->getOneById($id);
     }
 
+    public function getByDate($date)
+    {
+        $orders = $this->orderRepository->getByDate($date);
+        $countOrderByStatus = $this->statistical->countOrderGroupByStatus($date);
+        $totalOrder = $this->statistical->totalOrder($date);
+
+        return [$orders, $countOrderByStatus, $totalOrder];
+    }
+
+    public function getByStatusAndDate($status, $date)
+    {
+        $orders = $this->orderRepository->getByStatusAndDate($status, $date);
+        $countOrderByStatus = $this->statistical->countOrderGroupByStatus($date);
+        $totalOrder = $this->statistical->totalOrder($date);
+
+        return [$orders, $countOrderByStatus, $totalOrder];
+    }
+
+
+
     public function store($data, $id,) {}
 
     public function update($data, $id) {}
@@ -64,8 +84,4 @@ class OrderService implements IOrderService
                 ->update(['status_order_id' => $data, 'updated_at' => now()]);
         }
     }
-
-   
-
-
 }

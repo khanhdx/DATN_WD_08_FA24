@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\StatusOrderDetail;
 use App\Services\Order\IOrderService;
 use App\Services\Order\Status\StatusService;
 use Illuminate\Http\Request;
@@ -23,27 +22,28 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        // Xử lý hiện theo trạng thái khác nhau 
+        // Lấy tham số lọc từ request
         $status = $request->input('status', 'all');
-
+        $date = $request->input('date');
+    
+        // Gọi phương thức lấy đơn hàng dựa vào trạng thái và ngày
         if ($status == 'all') {
-            $data = $this->orderService->getAll();
+            $data = $this->orderService->getByDate($date);
         } else {
-            $data = $this->orderService->getByStatus($status);
+            $data = $this->orderService->getByStatusAndDate($status, $date);
         }
 
+        // dd($data[0]);
 
         $orders = $data[0];
         $countOrderByStatus = $data[1];
         $totalOrder = $data[2];
         $statuses = $this->statusService->getAll();
 
-        // dd($orders);
-
 
         return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
-
+    
     public function show(string $id)
     {
         $order = Order::with([
@@ -81,20 +81,4 @@ class OrderController extends Controller
         }
     }
 
-
-    public function confirmProcessing($id)
-    {
-        $order = $this->orderService->getOneById($id);
-
-        if (!$order) {
-            return redirect()->back()->with('error', 'Đơn hàng không tồn tại');
-        }
-
-        try {
-            StatusOrderDetail::where('order_id', $id)->update(['status_order_id' => 2]);
-            return  redirect()->back()->with('success', "Đơn hàng mã " . $order->slug . " đã xác nhận thành công.");
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', "Đơn hàng mã" . $order->slug  . " đã xác nhận thát bại. Hãy thử lại!!");
-        }
-    }
 }

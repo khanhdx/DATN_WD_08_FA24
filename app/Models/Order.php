@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'orders';
-    
+
     protected $fillable = [
         'slug',
         'user_id',
@@ -33,6 +33,11 @@ class Order extends Model
         return $this->belongsToMany(StatusOrder::class, 'status_order_details', 'order_id', 'status_order_id')
             ->withPivot('name', 'updated_at')
             ->withTimestamps();
+    }
+
+    public function statusOrderDetails()
+    {
+        return $this->hasMany(StatusOrderDetail::class, 'order_id');
     }
 
     // Quan hệ với shipper
@@ -58,7 +63,7 @@ class Order extends Model
     {
         return $this->hasMany(Refund::class);
     }
-    
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
@@ -68,9 +73,9 @@ class Order extends Model
     // {
     //     return $this->belongsTo(StatusOrder::class);
     // }
-    
+
     public function voucherWare()
-{
-    return $this->hasOne(VoucherWare::class, 'order_id', 'id');
-}
+    {
+        return $this->hasOne(VoucherWare::class, 'order_id', 'id');
+    }
 }

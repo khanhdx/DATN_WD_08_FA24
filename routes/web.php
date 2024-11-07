@@ -136,7 +136,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
-                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 
@@ -230,6 +229,9 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
+
+
 });
 
 // Route cho xác thực

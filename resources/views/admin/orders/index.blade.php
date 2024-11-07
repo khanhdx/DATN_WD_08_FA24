@@ -22,34 +22,33 @@
                     </div>
                 @endif
                 <div class="table-data__tool">
-                    <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--md">
-                            <select class="js-select2" name="property">
-                                <option selected="selected">Danh mục</option>
-                                {{-- @foreach ($categories as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach --}}
+                    <form class="form-inline" method="GET">
+                        <div class="form-group mr-3">
+                            <label for="status">Trạng thái:</label>
+                            <select class="form-control ml-2" name="status" id="status">
+                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
+                                @foreach ($statuses as $status)
+                                    <option value="{{ $status->name_status }}"
+                                        {{ request('status') == $status->name_status ? 'selected' : '' }}>
+                                        {{ $status->status_label }}
+                                    </option>
+                                @endforeach
                             </select>
-                            <div class="dropDownSelect2"></div>
                         </div>
-                        <div class="rs-select2--light rs-select2--sm">
-                            <select class="js-select2" name="time">
-                                <option selected="selected">Sắp xếp</option>
-                                <option value="">Mới nhất</option>
-                                <option value="">Cũ nhất</option>
-                            </select>
-                            <div class="dropDownSelect2"></div>
+                        <div class="form-group mr-3">
+                            <label for="date">Ngày đặt:</label>
+                            <input type="date" class="form-control ml-2" name="date" id="date"
+                                value="{{ request('date') }}">
                         </div>
-                        <button class="au-btn-filter">
-                            <i class="zmdi zmdi-filter-list"></i>Lọc</button>
-                    </div>
-                    <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Tìm kiếm..." />
-                        <button class="au-btn--submit2" type="submit">
-                            <i class="zmdi zmdi-search"></i>
-                        </button>
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </form>
+                    <div class="table-data__tool-right">
+                        <a href="{{ route('admin.products.create') }}">
+                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <i class="zmdi zmdi-plus"></i>Thêm</button>
+                        </a>
+
+                    </div>
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
@@ -59,41 +58,36 @@
                             @if ($item->status_order_id == 5 || $item->status_order_id == 7)
                                 @continue
                             @else
-                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
-                                    class="mr-3 text-capitalize" style="color: black">{{ trans('status.' . $item->name_status) }}<span
+                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}" class="mr-3 text-capitalize">{{ $item->name_status }}<span
                                         class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
                             @endif
                         @endforeach
                     </div>
                     <br />
                 </div>
-
-                <div class="row">
-                    <div
-                        class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
-                        <div class="table-responsive table-responsive-data2">
-                            <table class="table table-data2">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Mã đơn hàng</th>
-                                        <th>Khách hàng</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Ngày đặt</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($orders as $order)
-                                        <tr class="tr-shadow">
-                                            <td>{{ $order->id }}</td>
-                                            <td>
-                                                {{ $order->slug }}
-                                            </td>
-                                            <td>{{ $order->user->name }}</td>
-                                            <td>{{ $order->total_price }} đ</td>
-                                            <td>{{ $order->created_at }}</td>
-                                            <td>
+                <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                <tr class="tr-shadow">
+                                    <td>{{ $order->id }}</td>
+                                    <td>
+                                        ORDER-01
+                                    </td>
+                                    <td>{{ $order->user->name }}</td>
+                                    <td>{{ $order->total_price }} đ</td>
+                                    <td>{{ $order->created_at }}</td>
+                                    <td>
 
                                                 @foreach ($order->statusOrder as $c_status)
                                                     <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
@@ -119,54 +113,19 @@
                                             <td>
                                                 <div class="table-data-feature">
 
-                                                    {{-- Xem chi tiết  --}}
-                                                    <a href="{{ route('admin.orders.show', $order->id) }}">
-                                                        <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                            title="Xem chi tiết đơn hàng">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2">
-                        @foreach ($orders as $order)
-                            @foreach ($order->statusOrder as $status)
-                                @if ($status['id_status'] == 1)
-                                    <form action="{{ route('admin.orders.confirmProcessing', $order->id) }}"
-                                        method="post">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
-                                            style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
-                                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                                                data-bs-autohide="false" id="orderStatusToast">
-                                                <div class="toast-header">
-                                                    <strong class="me-auto">Xác nhận đơn hàng</strong>
-                                                    <small class="text-muted"><span id="order-time-{{ $order->id }}"
-                                                            data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></small>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="toast-body">
-                                                    <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
-                                                    <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
-                                                    <p>
-                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
-                                                            nhận đơn hàng</button>
-                                                </div>
-                                            </div>
+                                            {{-- Xem chi tiết  --}}
+                                            <a href="{{ route('admin.orders.show',$order->id) }}">
+                                                <button class="item mr-2" data-toggle="tooltip" data-placement="top"
+                                                    title="Xem chi tiết đơn hàng">
+                                                    <i class="fas fa-eye"></i>
+                                                </button></a>
                                         </div>
-                                    </form>
-                                @endif
+                                    </td>
+                                </tr>
                             @endforeach
-                        @endforeach
-                    </div>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

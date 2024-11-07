@@ -6,27 +6,27 @@
 @endsection
 @section('content')
 <div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+    <div >
+            {{-- <div class="col-md-4">
+                <div class="card text-center">
+                    <img src="{{ $order->user->user_image ? Storage::url($order->user->user_image) : asset('assets/admin/images/icon/avatar-01.jpg') }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
 
-                <div class="card-body">
-                    <h5 class="card-title">{{ $order->user->name }}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $order->user->name }}</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-header">
-                    Thông tin khách hàng
+                <div class="card mt-3">
+                    <div class="card-header">
+                        Thông tin khách hàng
+                    </div>
+                    <div class="card-body">
+                        <p>Email: {{ $order->user->email }}</p>
+                        <p>Số điện thoại: {{ $order->user->phone_number }}</p>
+                    
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>Email: {{ $order->user->email }}</p>
-                    <p>Số điện thoại: {{ $order->user->phone_number }}</p>
-                
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
+            </div> --}}
+        <div >
             <div class="card">
                 <div class="card-header">
                     Thông tin đơn hàng: DHBVQH144309
@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="orderStatus" class="form-label">Trạng thái đơn hàng</label>
-                            <input type="text" class="form-control" id="orderStatus" value="{{ $currentStatus->name_status }}" disabled>
+                            <input type="text" class="form-control" id="orderStatus" value="{{ $currentStatus->status_label }}" disabled>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -100,8 +100,8 @@
                         <td>{{ $order_detail->quantity }}</td>
                         <td>{{ $order_detail->color ?? "Không có màu sắc" }}</td>
                         <td>{{ $order_detail->size ?? "Khồn có size" }}</td>
-                        <td>{{ number_format($order_detail->unit_price) }}đ</td>
-                        <td>{{ number_format($order_detail->total_price) }}đ</td>
+                        <td>{{ number_format($order_detail->unit_price, 0, ',', '.') }} VND</td>
+                        <td>{{ number_format($order_detail->total_price, 0, ',', '.') }} VND</td>
                     </tr>
                 @endforeach
                 </tbody>
