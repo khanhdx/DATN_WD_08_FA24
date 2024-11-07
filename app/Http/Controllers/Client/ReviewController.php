@@ -53,9 +53,4 @@ class ReviewController extends Controller
         ], 200);
     }
 
-    public function showReviewPage($productId)
-    {
-        $product = Product::with('reviews.user')->findOrFail($productId); // Lấy sản phẩm cùng với đánh giá và thông tin người dùng
-        return view('client.products.show', compact('product'));
-    }
 }

@@ -140,13 +140,16 @@
                                 {{-- Reviews --}}
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
-                                                href="#collapseThree">Reviews (3)</a> </h4>
+                                        <h4 class="panel-title"> 
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
+                                                Reviews (0) 
+                                            </a> 
+                                        </h4>
                                     </div>
-                                    <div id="collapseThree" class="panel-collapse collapse">
+                                    <div id="collapseReviews" class="panel-collapse collapse">
                                         <div class="panel-body post-comments">
-                                            <ul class="comments">
-                                                <li>
+                                            <ul class="comments" id="reviewsList">
+                                                {{-- <li>
                                                     <div class="comment">
                                                         <div class="img-circle"> <img class="avatar" width="50"
                                                                 alt=""
@@ -196,7 +199,7 @@
                                                                 elit.</p>
                                                         </div>
                                                     </div>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>

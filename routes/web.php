@@ -2,7 +2,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-use App\Http\Controllers\GhtkController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
@@ -13,12 +12,13 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Admin\LocationController;
+
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
-
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
@@ -28,7 +28,6 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -241,6 +240,3 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
-Route::post('/ghtk/order', [GHTKController::class, 'createOrder']);
-Route::get('/ghtk/order/{orderId}', [GHTKController::class, 'getOrderStatus']);
-Route::post('/ghtk/fee', [GHTKController::class, 'calculateShippingFee']);

@@ -157,7 +157,7 @@
                     });
 
                     $('#color-quick').empty();
-                    uniqueColors.forEach(item => {
+                    uniqueColors.forEach(item => {  
                         $('#color-quick').append(
                             `<button class="btn-color color-quick mr-1" data-color-id="${item.id}"
                                 style="background-color:${item.code_color}"></button>`
@@ -368,3 +368,5 @@
     });
     })
 </script>
+
+

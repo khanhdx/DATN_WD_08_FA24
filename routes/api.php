@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GHTKController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
@@ -30,7 +30,5 @@ Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
 
-
-Route::post('/ghtk/order', [GHTKController::class, 'createOrder']);
-Route::get('/ghtk/order/{orderId}', [GHTKController::class, 'getOrderStatus']);
-Route::post('/ghtk/fee', [GHTKController::class, 'calculateShippingFee']);
+Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
+Route::post('/create-order', [ShippingController::class, 'createOrder']);
