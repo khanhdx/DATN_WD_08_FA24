@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Client\MomoPay;
+use App\Http\Controllers\Client\MomoPayController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -61,8 +63,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
-            
-               
+
+
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
                     Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
@@ -136,7 +138,7 @@ Route::name('client.')->group(function () {
     Route::get('/contact',  [HomeController::class, 'contact'])->name('contact');
     Route::get('/header',  [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
-    
+
     // Route cho sản phẩm (product)
     Route::prefix('products')
         ->controller(ClientProductController::class)
@@ -164,7 +166,7 @@ Route::name('client.')->group(function () {
     Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
-    
+
 
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
