@@ -2,33 +2,35 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-use App\Http\Controllers\Admin\VoucherController;
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\PaymentController;
+
+use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategorysController;
 use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\BannerController;
-use App\Http\Controllers\Admin\InventoryController;
-use App\Http\Controllers\Admin\ProductController;
-
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\CommentController;
-use App\Http\Controllers\Client\PaymentController;
-use App\Http\Controllers\Client\ProfileController;
-use App\Http\Controllers\Client\ContactController;
-use App\Http\Controllers\Client\OrderController     as ClientOrderController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
+use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
-use App\Http\Controllers\Client\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +53,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
-
+            Route::get('project', [ProjectController::class, 'index'])->name('project');
             Route::resource('category', CategorysController::class);
             // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
@@ -67,6 +69,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
+
+
 
 
                 Route::prefix('banner1')->as('banner1.')->group(function () {
@@ -147,6 +151,7 @@ Route::name('client.')->group(function () {
     Route::get('/',         [HomeController::class, 'index'])->name('home');
     Route::get('/header',   [HomeController::class, 'header'])->name('header');
     Route::resource('voucher', App\Http\Controllers\Client\VoucherController::class);
+    Route::get('wave-voucher', [App\Http\Controllers\client\WareController::class, 'wareList'])->name('wave-voucher');
     Route::get('contact', [ContactController::class, 'index'])->name('contact');
     Route::post('send-contact', [ContactController::class, 'store'])->name('sendContact');
 
@@ -190,6 +195,10 @@ Route::name('client.')->group(function () {
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
+     // Route cho trang sản phẩm đã bình luận
+    Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])
+        ->name('product.review.page');
+    
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
         ->middleware(['convert.cart'])
@@ -233,3 +242,12 @@ Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+
+
+// Route cho giao hàng nhanh
+Route::middleware('auth')->group(function () {
+    Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+    Route::get('/districts', [ShippingController::class, 'getDistricts']);
+    Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
+    Route::post('/create-order', [ShippingController::class, 'createOrder']);
+});
