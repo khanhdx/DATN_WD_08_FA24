@@ -207,7 +207,7 @@ class PaymentController extends Controller
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
-        $amount = $order->total_price * 100;  // Chuyển giá trị thành tiền đồng
+        $amount = $order->total_price;  // Chuyển giá trị thành tiền đồng
         $orderId = time();
         $redirectUrl = route('checkout.process');  
         $ipnUrl = route('checkout.process');  
