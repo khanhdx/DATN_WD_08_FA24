@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashbroadController;
+use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
 use Illuminate\Http\Request;
@@ -27,3 +29,7 @@ Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name
 
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
+
+Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
+Route::get('/order', [StatisticalController::class, 'getOrderData']);
+Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);
