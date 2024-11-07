@@ -67,10 +67,9 @@
 
                                     @if ($existingReview)
                                         <p class="text-success">Bạn đã đánh giá sản phẩm này.</p>
-                                        <button class="btn btn-info" data-bs-toggle="modal"
-                                            data-bs-target="#viewReviewModal-{{ $orderDetail->product_id }}">
+                                        <a href="{{ route('client.product.review.page', ['productId' => $orderDetail->product_id]) }}" class="btn btn-info">
                                             Xem đánh giá
-                                        </button>
+                                        </a>
                                     @else
                                         <button class="btn btn-primary" data-toggle="modal"
                                             data-target="#reviewModal-{{ $orderDetail->product_id }}">
@@ -87,44 +86,6 @@
                     </tr>
 
                     <!-- Review Modal -->
-                    {{-- <div class="modal fade" id="reviewModal-{{ $orderDetail->product_id }}" tabindex="-1"
-                        aria-labelledby="reviewModalLabel-{{ $orderDetail->product_id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form id="reviewForm-{{ $orderDetail->product_id }}"
-                                action="{{ route('client.orders.product.review', ['orderId' => $order->id, 'productId' => $orderDetail->product_id]) }}"
-                                method="POST" class="review-form">
-                                @csrf
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="reviewModalLabel-{{ $orderDetail->product_id }}">
-                                            Đánh giá sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close">{{ $orderDetail->name_product }}</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="rating" class="form-label">Xếp hạng</label>
-                                            <select name="rating" id="rating" class="form-select" required>
-                                                <option value="" disabled selected>Chọn xếp hạng</option>
-                                                <option value="1">1 Sao</option>
-                                                <option value="2">2 Sao</option>
-                                                <option value="3">3 Sao</option>
-                                                <option value="4">4 Sao</option>
-                                                <option value="5">5 Sao</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="review" class="form-label">Nhận xét</label>
-                                            <textarea name="review" id="review" class="form-control" rows="3" required></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div> --}}
                     <div class="modal fade" id="reviewModal-{{ $orderDetail->product_id }}" tabindex="-1"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -230,37 +191,5 @@
             });
         });
     </script>
-    {{-- <script>
-        document.querySelectorAll('.review-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Ngăn chặn hành vi mặc định
-    
-                const formData = new FormData(this);
-                const url = this.action;
-    
-                fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message); // Hiển thị thông báo thành công
-                        const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
-                        modal.hide(); // Đóng modal
-                        location.reload(); // Tải lại trang để cập nhật đánh giá
-                    } else {
-                        alert(data.error || "Đã xảy ra lỗi.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Lỗi gửi đánh giá:", error);
-                });
-            });
-        });
-    </script> --}}
 @endsection
 

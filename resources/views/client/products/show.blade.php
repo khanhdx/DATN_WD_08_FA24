@@ -224,7 +224,7 @@
                                             <li>
                                                 <div class="comment">
                                                     <div class="img-circle">
-                                                        <img class="avatar" width="50" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
+                                                        <img class="avatar" style="width: 60px; height: 60px;" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
                                                     </div>
                                                     <div class="comment-block">
                                                         <span class="comment-by">
