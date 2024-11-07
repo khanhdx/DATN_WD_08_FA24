@@ -7,7 +7,6 @@
 
 @section('content')
     <div role="main" class="main">
-
         <!-- Thông báo lỗi -->
         @if (session('error'))
             <div class="alert alert-danger">
@@ -91,15 +90,15 @@
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
                                         <label>
-                                            <input type="radio" name="payment_method" value="VNPay" required>
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseVNPay">Thanh
-                                                Toán Qua VNPay</a>
+                                            <input type="radio" name="payment_method" value="MOMO" required>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseMomo">Thanh
+                                                Toán Qua Momo</a>
                                         </label>
                                     </h5>
                                 </div>
-                                <div id="collapseVNPay" class="panel-collapse collapse">
+                                <div id="collapseMomo" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                        <p>Thanh toán qua VNPay. Bạn sẽ được chuyển hướng tới trang VNPay để thực hiện giao
+                                        <p>Thanh toán qua Momo. Bạn sẽ được chuyển hướng tới trang Momo để thực hiện giao
                                             dịch.</p>
                                     </div>
                                 </div>
@@ -138,7 +137,7 @@
                                         </tr>
                                         @php $totalPrice += $item->sub_total; @endphp
                                     @endforeach
-                
+                                    
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
                                         <td class="product-price">
@@ -192,7 +191,6 @@
                             @endif
                         </div>
                     </div>
-                    
                 </div> 
             </div>
         </div>
