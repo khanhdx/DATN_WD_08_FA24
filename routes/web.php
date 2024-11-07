@@ -71,6 +71,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
 
 
+
+
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
                     Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
