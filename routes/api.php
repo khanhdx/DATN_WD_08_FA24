@@ -34,10 +34,3 @@ Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.st
 Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
 Route::get('/order', [StatisticalController::class, 'getOrderData']);
 Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);
-
-
-// Route cho giao hàng nhanh
-// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-// Route::get('/districts', [ShippingController::class, 'getDistricts']);
-// Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-// Route::post('/create-order', [ShippingController::class, 'createOrder']);

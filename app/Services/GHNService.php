@@ -8,50 +8,46 @@ use Illuminate\Support\Facades\Log;
 class GHNService
 {
     // Nội dung của class ở đây
-    protected $baseUrl;
     protected $apiId;
     protected $apiToken;
+    protected $baseUrl;
 
     public function __construct()
     {
-        $this->baseUrl = config('ghn.base_url');
-        $this->apiId = config('ghn.api_id');
-        $this->apiToken = config('ghn.api_token');
+        $this->apiId = env('GHN_API_ID');
+        $this->apiToken = env('GHN_API_TOKEN');
+        $this->baseUrl = env('GHN_BASE_URL');
     }
 
-    private function sendRequest($endpoint, $data = [])
+    // Hàm lấy thông tin tỉnh thành
+    public function getProvinces()
     {
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Token' => $this->apiToken,
-            'ShopId' => $this->apiId
-        ])->post($this->baseUrl . $endpoint, $data);
+            'Token' => $this->apiToken
+        ])->get("{$this->baseUrl}/master-data/province");
 
         return $response->json();
     }
 
-    public function getProvinces()
-    {
-        return $this->sendRequest('/master-data/province');
-    }
-
+    // Hàm lấy thông tin quận/huyện theo tỉnh thành
     public function getDistricts($provinceId)
     {
-        return $this->sendRequest('/master-data/district', ['province_id' => $provinceId]);
+        $response = Http::withHeaders([
+            'Token' => $this->apiToken
+        ])->get("{$this->baseUrl}/master-data/district", [
+            'province_id' => $provinceId
+        ]);
+
+        return $response->json();
     }
 
-    public function getWards($districtId)
-    {
-        return $this->sendRequest('/master-data/ward', ['district_id' => $districtId]);
-    }
-
-    public function calculateShippingFee($data)
-    {
-        return $this->sendRequest('/v2/shipping-order/fee', $data);
-    }
-
+    // Hàm tạo đơn hàng
     public function createOrder($data)
     {
-        return $this->sendRequest('/v2/shipping-order/create', $data);
+        $response = Http::withHeaders([
+            'Token' => $this->apiToken
+        ])->post("{$this->baseUrl}/v2/shipping-order/create", $data);
+
+        return $response->json();
     }
 }

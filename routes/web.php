@@ -245,3 +245,7 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Route cho vận chuyển.
+Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+Route::get('/districts', [ShippingController::class, 'getDistricts']);
+Route::post('/create-order', [ShippingController::class, 'createOrder']);
