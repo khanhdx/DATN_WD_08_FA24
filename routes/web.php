@@ -229,6 +229,9 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
+
+
 });
 
 // Route cho xác thực
