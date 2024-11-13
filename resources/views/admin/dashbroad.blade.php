@@ -64,20 +64,15 @@
                         <div class="recent-report2">
                             <h3 class="title-3">Biểu đồ doanh thu</h3>
                             <div class="chart-info">
-                                <div class="chart-info__left">
-                                </div>
-                                <div class="chart-info-right">
-                                    <div class="rs-select2--dark rs-select2--md m-r-10">
-                                    </div>
-                                    <div class="rs-select2--dark rs-select2--sm">
-                                        <select id="timeSelect" class="js-select2 au-select-dark" name="time">
-                                            <option value="day" selected="selected">7 ngày trước</option>
-                                            <option value="month">Theo tháng</option>
-                                            <option value="day">Theo ngày</option>
-                                        </select>
-                                        <div class="dropDownSelect2"></div>
-                                    </div>
-                                </div>
+                                <div class="date-filter">
+                                    <label for="startRevenueDate">Từ ngày:</label>
+                                    <input type="date" id="startRevenueDate" name="start_date">
+                                    
+                                    <label for="endRevenueDate">Đến ngày:</label>
+                                    <input type="date" id="endRevenueDate" name="end_date">
+                                    
+                                    <button id="updateRevenueChartButton">Cập nhật biểu đồ</button>
+                                </div>  
                             </div>
                             <div class="recent-report__chart">
                                 <canvas id="revenueChart" width="400" height="200"></canvas>
@@ -88,19 +83,14 @@
                                 <div class="recent-report2">
                                     <h3 class="title-3">Biểu đồ Đơn hàng</h3>
                                     <div class="chart-info">
-                                        <div class="chart-info__left">
-                                        </div>
-                                        <div class="chart-info-right">
-                                            <div class="rs-select2--dark rs-select2--md m-r-10">
-                                            </div>
-                                            <div class="rs-select2--dark rs-select2--sm">
-                                                {{-- <select id="timeSelect" class="js-select2 au-select-dark" name="time">
-                                                    <option value="day" selected="selected">7 ngày trước</option>
-                                                    <option value="month">Theo tháng</option>
-                                                    <option value="day">Theo ngày</option>
-                                                </select> --}}
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
+                                        <div class="date-filter">
+                                            <label for="startOrderDate">Từ ngày:</label>
+                                            <input type="date" id="startOrderDate" name="start_date">
+                                            
+                                            <label for="endOrderDate">Đến ngày:</label>
+                                            <input type="date" id="endOrderDate" name="end_date">
+                                            
+                                            <button id="updateOrderChartButton">Cập nhật biểu đồ</button>
                                         </div>
                                     </div>
                                     <div class="recent-report__chart">
@@ -112,10 +102,27 @@
                             <div class="col-lg-4 ">
                                 <div class="recent-report2">
                                     <h3 class="title-3">Trạng thái đơn hàng</h3>
+                                    <div class="recent-report__chart">
+                                        <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
+                                    </div>
                                 </div>
+                                
+                            </div>
+                        </div>
+                        <div class="recent-report2">
+                            <div class="recent-report__chart">
+                                <h3 class="title-3">Top sản phẩm bán chạy nhất</h3>
                                 <div class="recent-report__chart">
-                                    <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
-                                </div>
+                                <canvas id="mostOrderedProductChart" width="400" height="200"></canvas>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="recent-report2">
+                            <div class="recent-report__chart">
+                                <h3 class="title-3">Số lượng tồn kho sản phầm</h3>
+                                <div class="recent-report__chart">
+                                <canvas id="inventoryChart" width="400" height="200"></canvas>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -395,4 +402,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('assets/js/revenue-chart.js') }}"></script>
     <script src="{{ asset('assets/js/order-chart.js') }}"></script>
+    <script src="{{ asset('assets/js/product-chart.js') }}"></script>
+
 @endsection
