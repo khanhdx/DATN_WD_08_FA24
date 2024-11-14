@@ -157,7 +157,7 @@
                     });
 
                     $('#color-quick').empty();
-                    uniqueColors.forEach(item => {  
+                    uniqueColors.forEach(item => {
                         $('#color-quick').append(
                             `<button class="btn-color color-quick mr-1" data-color-id="${item.id}"
                                 style="background-color:${item.code_color}"></button>`
@@ -171,6 +171,59 @@
         });
     });
 </script>
+
+{{-- <script>
+    $(document).ready(function() {
+        var productId = {{ $product->id }}; // Giả sử bạn đã truyền productId từ controller
+
+        // Hàm để tải danh sách đánh giá
+        function loadReviews() {
+            $.ajax({
+                url: '/products/' + productId + '/reviews',
+                method: 'GET',
+                success: function(response) {
+                    // Xóa danh sách đánh giá cũ để tránh trùng lặp
+                    $('#reviewsList').empty();
+
+                    // Cập nhật số lượng đánh giá trong tiêu đề
+                    $('#reviewCount').text(response.length);
+
+                    // Duyệt qua từng đánh giá và tạo HTML để hiển thị
+                    response.forEach(function(review) {
+                        // HTML cho từng đánh giá
+                        var reviewHtml = `
+                        <li>
+                            <div class="comment">
+                                <div class="img-circle">
+                                    <img class="avatar" width="50" alt="avatar" src="${review.user.avatar ? review.user.avatar : '/assets/client/images/content/blog/avatar.png'}">
+                                </div>
+                                <div class="comment-block">
+                                    <span class="comment-by">
+                                        <strong>${review.user.name}</strong>
+                                    </span>
+                                    <span class="date">
+                                        <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
+                                    </span>
+                                    <p>${review.comment}</p>
+                                    <p>Đánh giá: ${'⭐'.repeat(review.rating)}</p>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                        $('#reviewsList').append(
+                        reviewHtml); // Thêm HTML vào danh sách đánh giá
+                    });
+                },
+                error: function() {
+                    alert('Không thể tải đánh giá. Vui lòng thử lại.');
+                }
+            });
+        }
+
+        // Gọi hàm loadReviews khi trang được tải
+        loadReviews();
+    });
+</script> --}}
 
 <!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>
@@ -355,18 +408,16 @@
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // e.preventDefault();
         $(document).on('click', '.login > a', function() {
-        var wrapper = $('.login-wrapper');
+            var wrapper = $('.login-wrapper');
 
-        if (wrapper.hasClass('open')) {
-            wrapper.removeClass('open');
-        } else {
-            wrapper.addClass('open');
-        }
-    });
+            if (wrapper.hasClass('open')) {
+                wrapper.removeClass('open');
+            } else {
+                wrapper.addClass('open');
+            }
+        });
     })
 </script>
-
-

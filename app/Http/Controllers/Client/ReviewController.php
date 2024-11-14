@@ -53,4 +53,14 @@ class ReviewController extends Controller
         ], 200);
     }
 
+    public function getReviews($productId)
+    {
+        $reviews = Review::where('product_id', $productId)
+                        ->with('user') // Đảm bảo có quan hệ với user để lấy thông tin người đánh giá
+                        ->latest()
+                        ->get();
+
+        return response()->json($reviews);
+    }
+
 }

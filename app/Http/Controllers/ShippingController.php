@@ -32,11 +32,11 @@ class ShippingController extends Controller
     public function createOrder(Request $request)
     {
         $data = [
-            "from_name" => "Tên người gửi",
-            "from_phone" => "Số điện thoại người gửi",
-            "from_address" => "Địa chỉ người gửi",
-            "from_ward_code" => "Mã phường/xã",
-            "from_district_id" => 1447, // ID quận/huyện người gửi
+            "from_name" => "khanhdx",
+            "from_phone" => "0333464071",
+            "from_address" => "hà nội",
+            "from_ward_code" => "156750",
+            "from_district_id" => 1493, // ID quận/huyện người gửi
             "to_name" => $request->input('to_name'),
             "to_phone" => $request->input('to_phone'),
             "to_address" => $request->input('to_address'),
@@ -47,6 +47,16 @@ class ShippingController extends Controller
             "length" => $request->input('length'),
             "width" => $request->input('width'),
             "height" => $request->input('height'),
+            "required_note" => "KHONGCHOXEMHANG", // Hoặc ghi chú về đơn hàng nếu cần
+            "items" => [
+                [
+                    "name" => "test",  // Tên sản phẩm
+                    "quantity" => 10,  // Số lượng
+                    "category" => (object)[],   // Danh mục (có thể để trống hoặc cung cấp thông tin cụ thể)
+                    "weight" => 2  // Trọng lượng của sản phẩm
+                ]
+                ],
+            "payment_type_id" => 2
         ];
 
         $order = $this->ghnService->createOrder($data);

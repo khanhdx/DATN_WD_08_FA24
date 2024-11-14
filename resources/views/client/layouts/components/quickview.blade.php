@@ -97,9 +97,9 @@
                                     <span><i class="fa fa-heart"></i></span>
                                 </a>
     
-                                <button type="submit" class="btn btn-primary btn-icon">
+                                {{-- <button type="submit" class="btn btn-primary btn-icon">
                                     <i class="fa fa-shopping-cart"></i> Add to cart
-                                </button>
+                                </button> --}}
                             </form>
 
                             <ul class="list-unstyled product-meta">
@@ -142,48 +142,14 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title"> 
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
-                                                Reviews (0) 
+                                                Reviews (<span id="reviewCount">0</span>) 
                                             </a> 
                                         </h4>
                                     </div>
                                     <div id="collapseReviews" class="panel-collapse collapse">
                                         <div class="panel-body post-comments">
                                             <ul class="comments" id="reviewsList">
-                                                {{-- <li>
-                                                    <div class="comment">
-                                                        <div class="img-circle"> <img class="avatar" width="50"
-                                                                alt=""
-                                                                src="/assets/client/images/content/blog/avatar.png">
-                                                        </div>
-                                                        <div class="comment-block">
-                                                            <span class="comment-by"> <strong>Frank
-                                                                    Reman</strong></span>
-                                                            <span class="date"><small><i class="fa fa-clock-o"></i>
-                                                                    January 12,
-                                                                    2013</small></span>
-                                                            <p>Lorem ipsum dolor sit amet.</p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="comment">
-                                                        <div class="img-circle"> <img class="avatar" width="50"
-                                                                alt=""
-                                                                src="/assets/client/images/content/blog/avatar.png">
-                                                        </div>
-                                                        <div class="comment-block">
-                                                            <span class="comment-by"> <strong>Frank
-                                                                    Reman</strong></span>
-                                                            <span class="date"><small><i class="fa fa-clock-o"></i>
-                                                                    July 11,
-                                                                    2014</small></span>
-                                                            <p>Nam viverra euismod odio, gravida pellentesque urna
-                                                                varius vitae, gravida pellentesque urna varius vitae
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
+                                                {{--<li>
                                                     <div class="comment">
                                                         <div class="img-circle"> <img class="avatar" width="50"
                                                                 alt=""

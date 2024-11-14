@@ -165,7 +165,7 @@
                                                 <p class="price">{{ $product->price_regular }} đ</p>
                                                 <p>{{ $product->description }}</p>
                                                 <p class="btn-group">
-                                                    <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                                                    {{-- <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button> --}}
                                                     <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-eye"></i></span>
                                                     </a>                       

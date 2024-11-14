@@ -185,14 +185,12 @@ Route::name('client.')->group(function () {
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('client.comments.destroy');
 
     // Route để gửi đánh giá sản phẩm
-    // Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
-    //     ->middleware('auth') // Chỉ cho phép người dùng đã xác thực gửi đánh gia
-    //     ->name('orders.product.review');
-
-    // Route để gửi đánh giá sản phẩm
     Route::post('/orders/{orderId}/products/{productId}/review', [ReviewController::class, 'submitReview'])
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
+
+    Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
+        ->name('products.reviews');
 
      // Route cho trang sản phẩm đã bình luận
     Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])
@@ -245,7 +243,7 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
-// Route cho vận chuyển.
+// Route api cho vận chuyển.
 Route::get('/provinces', [ShippingController::class, 'getProvinces']);
 Route::get('/districts', [ShippingController::class, 'getDistricts']);
 Route::post('/create-order', [ShippingController::class, 'createOrder']);
