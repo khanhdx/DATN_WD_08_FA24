@@ -56,9 +56,9 @@
                                                 class="view-product" data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
+                                            {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
                                                 <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
+                                            </a> --}}
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
                                             <img loading="lazy" alt="" class="img-responsive"
@@ -114,9 +114,9 @@
                                                 data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
+                                            {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
                                                 <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
+                                            </a> --}}
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
                                             <img alt="" class="img-responsive"
@@ -152,9 +152,9 @@
                                                 data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
-                                            <a href="shop-cart-full.html" class="add-to-cart-product">
+                                            {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
                                                 <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a>
+                                            </a> --}}
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
                                             <img alt="" class="img-responsive"
@@ -210,11 +210,11 @@
                         <article class="post">
                             <div class="post-image">
                                 <span class="post-info-act">
-                                    <a href="blog-single.html"><i class="fa fa-caret-right"></i></a>
+                                    <a href="{{ route('client.post.show', $post->id) }}"><i class="fa fa-caret-right"></i></a>
                                 </span>
-                                <img class="img-responsive" src="{{ $post->image }}" alt="Blog">
+                                <img class="img-responsive" src="{{ \Storage::url($post->image ) }}" alt="Blog" style="width: 170px; height: 200px;">
                             </div>
-                            <h3><a href="blog-single.html">{{ $post->title }}</a></h3>
+                            <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a></h3>
                             <p class="post-meta">{{ $post->publish_date }}</p>
                         </article>
                     </div>

@@ -1,5 +1,5 @@
 <div class="container">
-    <p class="pull-left text-note">MIỄN PHÍ VẬN CHUYỂN CHO TẤT CẢ CÁC ĐƠN HÀNG TRÊN 50K</p>
+    <p class="pull-left text-note">MIỄN PHÍ VẬN CHUYỂN CHO TẤT CẢ CÁC ĐƠN HÀNG TRÊN 4999K</p>
     <ul class="nav nav-pills nav-top navbar-right">
 
         <li class="dropdown my-account">

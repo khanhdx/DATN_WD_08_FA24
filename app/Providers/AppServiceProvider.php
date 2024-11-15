@@ -2,17 +2,18 @@
 
 namespace App\Providers;
 
+use App\Services\GHNService;
+use App\Services\Size\SizeService;
+use App\Services\Size\ISizeService;
 use App\Services\Color\ColorService;
+use App\Services\Order\OrderService;
 use App\Services\Color\IColorService;
 use App\Services\Order\IOrderService;
-use App\Services\Order\OrderService;
-use App\Services\Product\IProductService;
-use App\Services\Product\IVariantService;
+use Illuminate\Support\ServiceProvider;
 use App\Services\Product\ProductService;
 use App\Services\Product\VariantService;
-use App\Services\Size\ISizeService;
-use App\Services\Size\SizeService;
-use Illuminate\Support\ServiceProvider;
+use App\Services\Product\IProductService;
+use App\Services\Product\IVariantService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IProductService::class, ProductService::class);
         $this->app->bind(IVariantService::class, VariantService::class);
         $this->app->bind(IOrderService::class, OrderService::class);
+        
+        $this->app->singleton(GHNService::class, function ($app) {
+            return new GHNService();
+        });
     }
 
     /**

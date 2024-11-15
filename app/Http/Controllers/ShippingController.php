@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\GhnService;
+use App\Services\GHNService;
 use Illuminate\Http\Request;
 
 class ShippingController extends Controller
@@ -14,56 +14,52 @@ class ShippingController extends Controller
         $this->ghnService = $ghnService;
     }
 
+    // Lấy danh sách tỉnh/thành
     public function getProvinces()
     {
         $provinces = $this->ghnService->getProvinces();
-        if ($provinces === null) {
-            return response()->json(['error' => 'Could not retrieve provinces.'], 500);
-        }
         return response()->json($provinces);
     }
 
+    // Lấy danh sách quận/huyện
     public function getDistricts(Request $request)
     {
-        $request->validate([
-            'province_id' => 'required|integer',
-        ]);
-
-        $provinceId = $request->input('province_id');
-        $districts = $this->ghnService->getDistricts($provinceId);
-        if ($districts === null) {
-            return response()->json(['error' => 'Could not retrieve districts.'], 500);
-        }
+        $districts = $this->ghnService->getDistricts($request->province_id);
         return response()->json($districts);
     }
 
-    public function calculateShippingFee(Request $request)
-    {
-        $request->validate([
-            'to_district_id' => 'required|integer',
-            'weight' => 'required|numeric',
-        ]);
-
-        $feeData = $request->all();
-        $fee = $this->ghnService->calculateShippingFee($feeData);
-        if ($fee === null) {
-            return response()->json(['error' => 'Could not calculate shipping fee.'], 500);
-        }
-        return response()->json($fee);
-    }
-
+    // Tạo đơn hàng mới
     public function createOrder(Request $request)
     {
-        $request->validate([
-            'order_details' => 'required|array',
-            'to_district_id' => 'required|integer',
-        ]);
+        $data = [
+            "from_name" => "khanhdx",
+            "from_phone" => "0333464071",
+            "from_address" => "hà nội",
+            "from_ward_code" => "156750",
+            "from_district_id" => 1493, // ID quận/huyện người gửi
+            "to_name" => $request->input('to_name'),
+            "to_phone" => $request->input('to_phone'),
+            "to_address" => $request->input('to_address'),
+            "to_ward_code" => $request->input('to_ward_code'),
+            "to_district_id" => $request->input('to_district_id'),
+            "cod_amount" => $request->input('cod_amount'),
+            "weight" => $request->input('weight'),
+            "length" => $request->input('length'),
+            "width" => $request->input('width'),
+            "height" => $request->input('height'),
+            "required_note" => "KHONGCHOXEMHANG", // Hoặc ghi chú về đơn hàng nếu cần
+            "items" => [
+                [
+                    "name" => "test",  // Tên sản phẩm
+                    "quantity" => 10,  // Số lượng
+                    "category" => (object)[],   // Danh mục (có thể để trống hoặc cung cấp thông tin cụ thể)
+                    "weight" => 2  // Trọng lượng của sản phẩm
+                ]
+                ],
+            "payment_type_id" => 2
+        ];
 
-        $orderData = $request->all();
-        $order = $this->ghnService->createOrder($orderData);
-        if ($order === null) {
-            return response()->json(['error' => 'Could not create order.'], 500);
-        }
+        $order = $this->ghnService->createOrder($data);
         return response()->json($order);
     }
 }

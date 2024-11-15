@@ -163,6 +163,47 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+                    const reviewCount = data.reviews.length;
+                    $('#reviewCount').text(reviewCount); 
+                    
+                    data.reviews.forEach(review => {
+                        let imagePath = review.user.user_image; 
+                        let parts = imagePath.split('/');
+                        let imagePart = parts[1];
+
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= review.rating) {
+                                stars += '<i class="fa fa-star" aria-hidden="true"></i>';
+                            } else {
+                                stars += '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                            }
+                        }
+
+                        $('#reviewsList').append(`
+                            <li>
+                                <div class="comment">
+                                    <div class="img-circle">
+                                        <img class="avatar" width="50" alt=""
+                                            src="/storage/user_images/${imagePart}">
+                                    </div>
+                                    <div class="comment-block">
+                                        <span class="comment-by">
+                                            <strong>${review.user.name}</strong>
+                                        </span>
+                                        <span class="date">
+                                            <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
+                                        </span>
+                                        <div class="rating">
+                                            ${stars}
+                                        </div>
+                                        
+                                        <p>${review.review}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
+                    });
                 },
                 error: function() {
                     alert('Không tìm thấy sản phẩm!');
@@ -171,6 +212,8 @@
         });
     });
 </script>
+
+
 
 <!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>
@@ -355,16 +398,16 @@
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // e.preventDefault();
         $(document).on('click', '.login > a', function() {
-        var wrapper = $('.login-wrapper');
+            var wrapper = $('.login-wrapper');
 
-        if (wrapper.hasClass('open')) {
-            wrapper.removeClass('open');
-        } else {
-            wrapper.addClass('open');
-        }
-    });
+            if (wrapper.hasClass('open')) {
+                wrapper.removeClass('open');
+            } else {
+                wrapper.addClass('open');
+            }
+        });
     })
 </script>
