@@ -97,9 +97,9 @@
                                     <span><i class="fa fa-heart"></i></span>
                                 </a>
     
-                                {{-- <button type="submit" class="btn btn-primary btn-icon">
+                                <button type="submit" class="btn btn-primary btn-icon">
                                     <i class="fa fa-shopping-cart"></i> Add to cart
-                                </button> --}}
+                                </button>
                             </form>
 
                             <ul class="list-unstyled product-meta">

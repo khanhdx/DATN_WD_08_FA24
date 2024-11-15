@@ -163,6 +163,47 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+                    const reviewCount = data.reviews.length;
+                    $('#reviewCount').text(reviewCount); 
+                    
+                    data.reviews.forEach(review => {
+                        let imagePath = review.user.user_image; 
+                        let parts = imagePath.split('/');
+                        let imagePart = parts[1];
+
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= review.rating) {
+                                stars += '<i class="fa fa-star" aria-hidden="true"></i>';
+                            } else {
+                                stars += '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                            }
+                        }
+
+                        $('#reviewsList').append(`
+                            <li>
+                                <div class="comment">
+                                    <div class="img-circle">
+                                        <img class="avatar" width="50" alt=""
+                                            src="/storage/user_images/${imagePart}">
+                                    </div>
+                                    <div class="comment-block">
+                                        <span class="comment-by">
+                                            <strong>${review.user.name}</strong>
+                                        </span>
+                                        <span class="date">
+                                            <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
+                                        </span>
+                                        <div class="rating">
+                                            ${stars}
+                                        </div>
+                                        
+                                        <p>${review.review}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
+                    });
                 },
                 error: function() {
                     alert('Không tìm thấy sản phẩm!');
@@ -172,58 +213,7 @@
     });
 </script>
 
-{{-- <script>
-    $(document).ready(function() {
-        var productId = {{ $product->id }}; // Giả sử bạn đã truyền productId từ controller
 
-        // Hàm để tải danh sách đánh giá
-        function loadReviews() {
-            $.ajax({
-                url: '/products/' + productId + '/reviews',
-                method: 'GET',
-                success: function(response) {
-                    // Xóa danh sách đánh giá cũ để tránh trùng lặp
-                    $('#reviewsList').empty();
-
-                    // Cập nhật số lượng đánh giá trong tiêu đề
-                    $('#reviewCount').text(response.length);
-
-                    // Duyệt qua từng đánh giá và tạo HTML để hiển thị
-                    response.forEach(function(review) {
-                        // HTML cho từng đánh giá
-                        var reviewHtml = `
-                        <li>
-                            <div class="comment">
-                                <div class="img-circle">
-                                    <img class="avatar" width="50" alt="avatar" src="${review.user.avatar ? review.user.avatar : '/assets/client/images/content/blog/avatar.png'}">
-                                </div>
-                                <div class="comment-block">
-                                    <span class="comment-by">
-                                        <strong>${review.user.name}</strong>
-                                    </span>
-                                    <span class="date">
-                                        <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
-                                    </span>
-                                    <p>${review.comment}</p>
-                                    <p>Đánh giá: ${'⭐'.repeat(review.rating)}</p>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                        $('#reviewsList').append(
-                        reviewHtml); // Thêm HTML vào danh sách đánh giá
-                    });
-                },
-                error: function() {
-                    alert('Không thể tải đánh giá. Vui lòng thử lại.');
-                }
-            });
-        }
-
-        // Gọi hàm loadReviews khi trang được tải
-        loadReviews();
-    });
-</script> --}}
 
 <!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>

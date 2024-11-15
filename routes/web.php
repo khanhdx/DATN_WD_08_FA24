@@ -189,8 +189,8 @@ Route::name('client.')->group(function () {
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
-    Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
-        ->name('products.reviews');
+     Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
+         ->name('products.reviews');
 
      // Route cho trang sản phẩm đã bình luận
     Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])

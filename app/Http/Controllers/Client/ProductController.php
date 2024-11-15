@@ -45,7 +45,7 @@ class ProductController extends Controller
     public function show_modal(Product $product)
     {
         try {
-            $product->load(['variants', 'category', 'sizes', 'colors' ]);
+            $product->load(['variants', 'category', 'sizes', 'colors', 'reviews.user' ]);
 
             return response()->json($product);
         } catch (\Throwable $th) {

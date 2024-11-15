@@ -118,9 +118,9 @@
                                                         <a href="" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
-                                                        <a href="shop-cart-full.html" class="add-to-cart-product">
+                                                        {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
                                                             <span><i class="fa fa-shopping-cart"></i></span>
-                                                        </a>
+                                                        </a> --}}
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
                                                         <img alt="" class="img-responsive" src="{{ $product->image }}">
