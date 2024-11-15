@@ -54,6 +54,8 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
             Route::get('project', [ProjectController::class, 'index'])->name('project');
+            Route::get('project/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+            Route::put('project/{id}', [ProjectController::class, 'update'])->name('project.update');
             Route::resource('category', CategorysController::class);
             // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
