@@ -15,16 +15,26 @@
                         <h4>Lọc theo giá</h4>
                         <div id="price-range">
                             <div class="padding-range">
-                                <div id="slider-range"></div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price1" name="price" value="0-500">
+                                    <label class="form-check-label" for="price1">Dưới 500,000 đ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price2" name="price" value="500-1000">
+                                    <label class="form-check-label" for="price2">500,000 đ - 1,000,000 đ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price3" name="price" value="1000-100000">
+                                    <label class="form-check-label" for="price3">Trên 1,000,000 đ</label>
+                                </div>
+                                <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="filterByPrice()">Apply Filter</a></p>
                             </div>
-                            <label for="amount">Price:</label>
-                            <input type="text" id="amount">
-                            <p class="clearfix"><a href="#" class="btn btn-primary btn-sm">Apply Filter</a></p>
                         </div>
                     </aside>
                     <aside class="block blk-cat">
                         <h4>Danh mục</h4>
                         <ul class="list-unstyled list-cat">
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Products</a></li>
                             @foreach ($categories as $category)
                                 <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
@@ -34,8 +44,9 @@
                     <aside class="block blk-colors">
                         <h4>Màu sắc</h4>
                         <ul class="list-unstyled list-cat">
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Colors</a></li>
                             @foreach ($colors as $color)
-                                <li><a href="#">{{ $color->name }}</a></li>
+                                <li><a href="javascript:void(0);" onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -108,9 +119,9 @@
                     </div>
                     <div id="products-grid">
                         <div class="tab-pane active" id="man">
-                            <div class="row">
+                            <div class="row" id="product-container">
                                 @foreach ($products as $product)
-                                    <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}">
+                                    <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}" data-color-id="{{ $product->color_id }}" data-price="{{ $product->price_regular }}">
                                         <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
@@ -295,5 +306,62 @@
         document.getElementById('list-view').classList.remove('active');
         this.classList.add('active');
     }); 
+
+    function filterByCategory(categoryId) {
+        var products = document.querySelectorAll('#product-container .animation');
+        products.forEach(function(product) {
+            if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+
+    function filterByColor(colorId) {
+        var products = document.querySelectorAll('#product-container .animation');
+        products.forEach(function(product) {
+            if (product.getAttribute('data-color-id') == colorId || colorId == 0) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+
+    function filterByPrice() {
+        var selectedPrices = document.querySelectorAll('input[name="price"]:checked');
+        var products = document.querySelectorAll('#product-container .animation');
+        if (selectedPrices.length === 0) {
+            products.forEach(function(product) {
+                product.style.display = 'block';
+            });
+            return;
+        }
+        products.forEach(function(product) {
+            var productPrice = parseFloat(product.getAttribute('data-price'));
+            var showProduct = false;
+            selectedPrices.forEach(function(price) {
+                var priceRange = price.value.split('-');
+                var minPrice = parseFloat(priceRange[0]);
+                var maxPrice = parseFloat(priceRange[1]);
+                if (productPrice >= minPrice && productPrice <= maxPrice) {
+                    showProduct = true;
+                }
+            });
+            if (showProduct) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+
+    function showAllProducts() {
+        var products = document.querySelectorAll('#product-container .animation');
+        products.forEach(function(product) {
+            product.style.display = 'block';
+        });
+    }
 </script>
 @endsection
