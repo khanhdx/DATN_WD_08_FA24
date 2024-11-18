@@ -22,13 +22,15 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        // Xử lý hiện theo trạng thái khác nhau 
+        // Lấy tham số lọc từ request
         $status = $request->input('status', 'all');
-
+        $date = $request->input('date');
+    
+        // Gọi phương thức lấy đơn hàng dựa vào trạng thái và ngày
         if ($status == 'all') {
-            $data = $this->orderService->getAll();
+            $data = $this->orderService->getByDate($date);
         } else {
-            $data = $this->orderService->getByStatus($status);
+            $data = $this->orderService->getByStatusAndDate($status, $date);
         }
 
         // dd($data[0]);
@@ -41,37 +43,42 @@ class OrderController extends Controller
 
         return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
-
+    
     public function show(string $id)
-{
-    // Truy vấn đơn hàng cùng với các mối quan hệ cần thiết
-    $order = Order::with([
-        'user',                        // Quan hệ với User
-        'order_details',                // Quan hệ với OrderDetail
-        'order_details.product',        // Quan hệ với Product trong OrderDetail
-        'order_details.variant.color',  // Màu sắc từ ProductVariant
-        'order_details.variant.size',   // Kích thước từ ProductVariant
-        'statusOrder',                    // Quan hệ với StatusOrder qua bảng trung gian
-        'payments'                     // Quan hệ với Payment
-    ])->findOrFail($id);
+    {
+        $order = Order::with([
+            'user',
+            'order_details',
+            'order_details.product',
+            'order_details.variant.color',
+            'order_details.variant.size',
+            'statusOrder',
+            'payments'
+        ])->findOrFail($id);
 
-    $currentStatus = $order->statusOrder->last(); 
-    // Lấy các chi tiết đơn hàng từ quan hệ orderDetails
-    $order_details = $order->order_details;
+        $currentStatus = $order->statusOrder->last();
+        $order_details = $order->order_details;
 
-    // Trả về view với dữ liệu đơn hàng và chi tiết đơn hàng
-    return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
-}
+        return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
+    }
 
     public function updateStatus(Request $request, $id)
     {
+        $newStatusId = $request->input('status_order');
+        $order = $this->orderService->getOneById($id);
+        $currentStatusId = $order->statusOrder->last()->id;
+
+
+        if ($newStatusId < $currentStatusId) {
+            return redirect()->back()->with('error', 'Không thể cập nhật trạng thái ngược lại.');
+        }
 
         try {
-            $this->orderService->updateStatus($request->input('status_order'), $id);
-
+            $this->orderService->updateStatus($newStatusId, $id);
             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
         }
     }
+
 }

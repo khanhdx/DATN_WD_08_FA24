@@ -15,13 +15,14 @@ class StatusOrderSeeder extends Seeder
     {
         // Mảng chứa các trạng thái đơn hàng
         $statuses = [
-            ['name_status' => 'Chờ xử lý'],
-            ['name_status' => 'Đang xử lý'],
-            ['name_status' => 'Đang giao hàng'],
-            ['name_status' => 'Giao hàng thành công'],
-            ['name_status' => 'Hủy đơn'],
-            ['name_status' => 'Đã hủy'],
-            ['name_status' => 'Đã hủy đơn'],
+            ['name_status' => 'pending'],
+            ['name_status' => 'processing'],
+            ['name_status' => 'shipping'],
+            ['name_status' => 'completed'],
+            ['name_status' => 'cancel'],
+            ['name_status' => 'canceled'],
+            ['name_status' => 'refunding'],
+            ['name_status' => 'refunded'],
         ];
 
         // Lặp qua mảng và tạo bản ghi trong bảng status_orders

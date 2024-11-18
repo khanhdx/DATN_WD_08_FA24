@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\Admin\StatisticalController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +27,10 @@ Route::middleware('auth:sanctum')
     });
 
 Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name('product.show');
-Route::get('/get-size', [ProductController::class, 'getSize'])->name('get.size');
+
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
+Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
+
+Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
+Route::get('/order', [StatisticalController::class, 'getOrderData']);
+Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);

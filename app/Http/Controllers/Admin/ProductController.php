@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
 use App\Services\Size\ISizeService;
+use App\Services\Statistical\StatisticalService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -17,29 +18,42 @@ class ProductController extends Controller
     protected $colorService;
     protected $sizeService;
 
+    protected $statisticalService;
 
-    public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService)
+
+
+    public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService, StatisticalService $statisticalService)
     {
         $this->productService = $productService;
         $this->colorService = $iColorService;
         $this->sizeService = $iSizeService;
+        $this->statisticalService = $statisticalService;
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $Category = new Category();
-        $categories = $Category->all();
-      
-        $products = $this->productService->getAll();
-        return view('admin.products.index', compact('products', ['categories']));
+        $categories =  Category::all();
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+        $maxPrice = $this->statisticalService->getMaxPrice();
+
+        $searchTerm = $request->input('keyword');
+
+        // Kiểm tra có tìm kiếm không 
+        if ($searchTerm) {
+            $products = $this->productService->search($searchTerm);
+        } else {
+            $products = $this->productService->getAll();
+        }
+
+        return view('admin.products.index', compact('products', ['categories', 'searchTerm', 'colors', 'sizes', 'maxPrice']));
     }
 
     public function create()
     {
         // Lấy danh sách bảng categoreis
-        $Category = new Category();
-        $categories = $Category->all();
+        $categories = Category::all();
 
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
@@ -66,11 +80,11 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        try {
+        // try {
             return $this->productService->insert($request->all());
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        // }
     }
 
     public function update($id, Request $request)
@@ -81,5 +95,19 @@ class ProductController extends Controller
     public function delete($id)
     {
         return $this->productService->softDeleteById($id);
+    }
+
+    public function filter(Request $request)
+    {
+        dd($request->all());
+        $categories =  Category::all();
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+        $maxPrice = $this->statisticalService->getMaxPrice();
+
+        $products = $this->productService->filter($request);
+
+
+        return view('admin.products.index', compact('products', ['categories', 'colors', 'sizes', 'maxPrice']));
     }
 }

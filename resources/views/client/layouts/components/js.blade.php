@@ -1,29 +1,29 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="{{ asset('assets/client/vendor/jquery.min.js') }}"></script>
+<script src="/assets/client/vendor/jquery.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="{{ asset('assets/client/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/client/bootstrap/js/bootstrap-hover-dropdown.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/owl-carousel/owl.carousel.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/modernizr.custom.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/jquery.stellar.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/imagesloaded.pkgd.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/masonry.pkgd.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/jquery.pricefilter.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/bxslider/jquery.bxslider.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/mediaelement-and-player.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/waypoints.min.js') }}"></script>
-<script src="{{ asset('assets/client/vendor/flexslider/jquery.flexslider-min.js') }}"></script>
+<script src="/assets/client/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/client/bootstrap/js/bootstrap-hover-dropdown.min.js"></script>
+<script src="/assets/client/vendor/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/client/vendor/modernizr.custom.js"></script>
+<script src="/assets/client/vendor/jquery.stellar.js"></script>
+<script src="/assets/client/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/client/vendor/masonry.pkgd.min.js"></script>
+<script src="/assets/client/vendor/jquery.pricefilter.js"></script>
+<script src="/assets/client/vendor/bxslider/jquery.bxslider.min.js"></script>
+<script src="/assets/client/vendor/mediaelement-and-player.js"></script>
+<script src="/assets/client/vendor/waypoints.min.js"></script>
+<script src="/assets/client/vendor/flexslider/jquery.flexslider-min.js"></script>
 
 <!-- Theme Initializer -->
-<script src="{{ asset('assets/client/js/theme.plugins.js') }}"></script>
-<script src="{{ asset('assets/client/js/theme.js') }}"></script>
+<script src="/assets/client/js/theme.plugins.js"></script>
+<script src="/assets/client/js/theme.js"></script>
 
 <!-- Style Switcher -->
-<script type="text/javascript" src="{{ asset('assets/client/style-switcher/js/switcher.js') }}"></script>
+<script type="text/javascript" src="/assets/client/style-switcher/js/switcher.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
-<!-- Xử lý nút dropdown -->
 <script>
     $(document).ready(function() {
         // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
@@ -163,6 +163,47 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+                    const reviewCount = data.reviews.length;
+                    $('#reviewCount').text(reviewCount); 
+                    
+                    data.reviews.forEach(review => {
+                        let imagePath = review.user.user_image; 
+                        let parts = imagePath.split('/');
+                        let imagePart = parts[1];
+
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= review.rating) {
+                                stars += '<i class="fa fa-star" aria-hidden="true"></i>';
+                            } else {
+                                stars += '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                            }
+                        }
+
+                        $('#reviewsList').append(`
+                            <li>
+                                <div class="comment">
+                                    <div class="img-circle">
+                                        <img class="avatar" width="50" alt=""
+                                            src="/storage/user_images/${imagePart}">
+                                    </div>
+                                    <div class="comment-block">
+                                        <span class="comment-by">
+                                            <strong>${review.user.name}</strong>
+                                        </span>
+                                        <span class="date">
+                                            <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
+                                        </span>
+                                        <div class="rating">
+                                            ${stars}
+                                        </div>
+                                        
+                                        <p>${review.review}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
+                    });
                 },
                 error: function() {
                     alert('Không tìm thấy sản phẩm!');
@@ -171,6 +212,8 @@
         });
     });
 </script>
+
+
 
 <!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>
@@ -198,8 +241,18 @@
         };
 
         $.post(`{{ route('client.home') }}/carts/${id}`, data, function(res) {
-            load_cart();
-            load_header();
+            if (res.status_code == 200) {
+                load_cart();
+                load_header();
+                console.log(res.message);
+            } else {
+                $('.qty').val(res.quantity);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: res.message,
+                });
+            }
         });
     }
 
@@ -218,7 +271,7 @@
     load_header();
 </script>
 
-<!-- Xử lý logic chọn màu và thêm giỏ hàng qua ajax -->
+<!-- Xử lý logic chọn màu và thêm giỏ hàng modal qua ajax -->
 <script>
     $(document).ready(function() {
         let selectedColor = null;
@@ -231,7 +284,7 @@
 
             selectedColor = $(this).data('color-id');
             console.log(selectedColor);
-            
+            getInStock(selectedSize, selectedColor);
             // fetchAvailableSizes(selectedColor);
         });
 
@@ -242,7 +295,7 @@
 
             selectedSize = $(this).data('size-id');
             console.log(selectedSize);
-            
+            getInStock(selectedSize, selectedColor);
             fetchAvailableColors(selectedSize);
         });
 
@@ -258,7 +311,7 @@
                 _token: '{{ csrf_token() }}',
             }
             console.log(dataCart);
-            
+
 
             if (selectedColor && selectedSize) {
                 $.post("{{ route('client.carts.add') }}", dataCart, function(res) {
@@ -279,13 +332,15 @@
                             title: `<span style="font-size: 1.5rem">${res.message}</span>`,
                             width: 450
                         });
-                        
+
                         quantity = $('#quantity').val(1);
                         selectedColor = null;
                         selectedSize = null;
                         $('#productModal').modal('hide');
                         load_header();
                     } else {
+                        console.log(res.errors);
+
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -317,5 +372,42 @@
                 });
             });
         }
+
+        function getInStock(sizeId = null, colorId = null) {
+            let productId = $('.product_id').val();
+
+            data = {
+                product_id: productId,
+                size_id: sizeId,
+                color_id: colorId,
+            }
+
+            $.get("{{ route('get.stock') }}", data, function(res) {
+                if (Array.isArray(res)) {
+                    res.forEach(item => {
+                        $('.stock').text(item.stock);
+                        $('.amount').text(item.price + ' VND');
+                    });
+                } else {
+                    $('.stock').text(res);
+                    $('#stock').val(res);
+                }
+            })
+        }
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // e.preventDefault();
+        $(document).on('click', '.login > a', function() {
+            var wrapper = $('.login-wrapper');
+
+            if (wrapper.hasClass('open')) {
+                wrapper.removeClass('open');
+            } else {
+                wrapper.addClass('open');
+            }
+        });
+    })
 </script>

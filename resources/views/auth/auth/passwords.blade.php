@@ -2,36 +2,34 @@
 
 @section('title', 'Forgot Password')
 
-@section('content')
-<div class="page-content--bge5">
-    <div class="container">
-        <div class="login-wrap">
-            <div class="login-content">
-                <div class="login-logo">
-                    <a href="#">
-                        <img src="images/icon/logo.png" alt="App Logo">
-                    </a>
-                </div>
-                <div class="login-form">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form action="{{ route('password.email') }}" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input class="au-input au-input--full" type="email" name="email" placeholder="Email" required>
-                            @error('email')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Send Password Reset Link</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@section('text_page')
+Forgot Password
 @endsection
+
+@section('content')
+    @include('client.layouts.components.pagetop')
+    <div class="container">
+        @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+        <form action="{{ route('password.email') }}" method="post">
+            @csrf
+            <h4>Forgot Password</h4>
+           
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address:</label>
+                <input type="email" id="email" name="email" class="form-control input-lg" placeholder="Email" >
+                @error('email')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary btn-block" style="border-radius: 5px;">Send Password Reset Link</button>
+            </div>
+        </form>
+    </div>
+
+@endsection
+

@@ -10,6 +10,9 @@ interface IOrderService
     public function getByStatus($status);
 
     public function getOneById($id);
+    public function getByDate($date);
+    public function getByStatusAndDate($status, $date);
+  
 
     public function store($data, $id,);
 

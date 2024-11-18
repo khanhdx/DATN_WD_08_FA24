@@ -29,7 +29,7 @@ class UpdateVoucherRequest extends FormRequest
             'max_value'=>'required|numeric|max:9999999999',
             'quanlity'=>'integer|required',
             'condition'=>'required|numeric|max:9999999999',
-            'date_start'=>'required|after:now',
+            'date_start'=>'required',
             'date_end'=>'required|after:date_start',
             'type_code'=>'required',
             'description'=>'string|max:255',
