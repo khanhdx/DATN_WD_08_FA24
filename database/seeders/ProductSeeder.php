@@ -96,5 +96,6 @@ class ProductSeeder extends Seeder
                 ]);
             }
         }
+        
     }
 }

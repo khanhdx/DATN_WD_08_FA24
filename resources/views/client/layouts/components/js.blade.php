@@ -351,6 +351,7 @@
     });
 </script>
 
+<!-- Xử lý login và logut qua ajax -->
 <script>
     $(document).ready(function() {
         var wrapper = $('.login-wrapper');
