@@ -23,3 +23,5 @@
     <script src="/assets/admin/js/main.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="{{ asset('assets/js/notification-js') }}"></script>

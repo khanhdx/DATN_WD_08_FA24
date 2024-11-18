@@ -48,7 +48,6 @@
     </div>
 
     @include('admin.layouts.components.js')
-
     @yield('js')
 </body>
 
