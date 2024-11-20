@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\GHTKController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,12 +11,12 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
+
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Admin\LocationController;
-
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\PaymentController;
@@ -211,6 +211,8 @@ Route::name('client.')->group(function () {
             Route::put('/{id}', 'updateCart')->name('update');
             Route::delete('/{id}', 'destroy')->name('delete');
         });
+
+    //Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
 });
 
 // Route cho khách hàng (client)
@@ -231,7 +233,6 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
 
-
 });
 
 // Route cho xác thực
@@ -245,7 +246,5 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
-// Route api cho vận chuyển.
-Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-Route::get('/districts', [ShippingController::class, 'getDistricts']);
-Route::post('/create-order', [ShippingController::class, 'createOrder']);
+// Route cho vận chuyển GHTK.
+Route::post('/ghtk/create-order', [GHTKController::class, 'createOrder']);

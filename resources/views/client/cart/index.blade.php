@@ -1,7 +1,7 @@
 @extends('client.layouts.master')
 
 @section('text_page')
-    Shopping Bag
+    Túi mua sắm
 @endsection
 
 @section('content')

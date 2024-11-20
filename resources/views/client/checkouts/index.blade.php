@@ -17,6 +17,8 @@
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+                <h4>Đặt hàng thành công!</h4>
+                <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng.</p>
             </div>
         @endif
 
@@ -37,7 +39,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputLN" name="last_name"
-                                                required value="{{ auth()->user() ? auth()->user()->name : '' }}">
+                                                required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -45,7 +47,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputAdd" name="address"
-                                                required value="{{ auth()->user() ? auth()->user()->address : '' }}">
+                                                required value="{{ auth()->check() ? auth()->user()->address : old('address') }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -53,7 +55,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="email" class="form-control" id="inputEmail" name="email"
-                                                required value="{{ auth()->user() ? auth()->user()->email : '' }}">
+                                                required value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -61,7 +63,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="tel" class="form-control" id="inputPhone" name="phone"
-                                                required value="{{ auth()->user() ? auth()->user()->phone_number : '' }}">
+                                                required value="{{ auth()->check() ? auth()->user()->phone_number : old('phone') }}">
                                         </div>
                                     </div>
                                 </div>

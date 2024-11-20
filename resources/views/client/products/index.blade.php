@@ -1,7 +1,7 @@
 @extends('client.layouts.master')
 
 @section('text_page')
-    Shopping
+    Mua sắm
 @endsection
 
 @section('content')
@@ -96,13 +96,13 @@
                             <li id="grid-view" class="active"><a href=""><i class="fa fa-th"></i></a></li>
                             <li id="list-view"><a href=""><i class="fa fa-th-list"></i></a></li>
                         </ul>
-                        <p class="pull-left">Showing 1-12 of 50 results</p>
+                        {{-- <p class="pull-left">Showing 1-12 of 50 results</p> --}}
                         <!-- Ordering -->
                         <div class="list-sort pull-right">
                             <select class="formDropdown">
-                                <option>Default Sorting</option>
-                                <option>Sort by Popularity</option>
-                                <option>Sort by Newness</option>
+                                <option>Sắp xếp mặc định</option>
+                                <option>Sắp xếp theo mức độ phổ biến</option>
+                                <option>Sắp xếp theo độ mới</option>
                             </select>
                         </div>
                     </div>
@@ -160,7 +160,8 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>3 Reviews</span> | <a href="#">Add Your Review</a>
+                                                    <span>({{ $product->reviews->count() }}) Reviews</span> | 
+                                                    {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">{{ $product->price_regular }} đ</p>
                                                 <p>{{ $product->description }}</p>

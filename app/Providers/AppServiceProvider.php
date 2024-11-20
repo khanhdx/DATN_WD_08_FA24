@@ -28,9 +28,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IVariantService::class, VariantService::class);
         $this->app->bind(IOrderService::class, OrderService::class);
         
-        $this->app->singleton(GHNService::class, function ($app) {
-            return new GHNService();
-        });
     }
 
     /**

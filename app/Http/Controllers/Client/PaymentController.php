@@ -22,7 +22,7 @@ class PaymentController extends Controller
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
         if (!$cartId) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng không tồn tại.');
+            return redirect()->route('client.carts.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
         $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
