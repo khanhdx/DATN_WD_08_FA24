@@ -50,6 +50,7 @@
                             @endforeach
                         </ul>
                     </aside>
+                    
 
                     <aside class="block featured">
                         <h4>Sản phẩm trending</h4>
@@ -121,8 +122,8 @@
                         <div class="tab-pane active" id="man">
                             <div class="row" id="product-container">
                                 @foreach ($products as $product)
-                                    <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}" data-color-id="{{ $product->color_id }}" data-price="{{ $product->price_regular }}">
-                                        <div class="product" data-category="{{ $product->category->name }}">
+                                <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}" data-color-id="{{ $product->color_id }}" data-price="{{ $product->price_regular }}">
+                                    <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
                                                     <span class="product-thumb-info-act">
@@ -154,7 +155,7 @@
                         </div>
                         <div class="product product-list animation">
                             @foreach ($products as $product)
-                                <div class="product-thumb-info" data-category-id="{{ $product->category->id }}">
+                                <div class="product-thumb-info" data-color-id="{{ $product->color_id }}" data-category-id="{{ $product->category->id }}">
                                     <div class="row">
                                         <div class="col-xs-5 col-sm-3">
                                             <div class="product-thumb-info-image">
@@ -287,6 +288,7 @@
             color: black;
             text-decoration: line-through;
         }
+        
     </style>
 @endsection
 @section('js')
