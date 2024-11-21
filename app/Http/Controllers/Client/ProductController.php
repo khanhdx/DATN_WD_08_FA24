@@ -16,17 +16,26 @@ class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
     public function index()
-    {
-        $products = Product::with(['category'])->latest('id')->paginate(9);
-        $categories = Category::all();
-        $colors = Color::all();
+{
+    $products = Product::with(['category'])->latest('id')->paginate(9);
+    $categories = Category::all();
+    $colors = Color::all();
+    $trendingProducts = Product::with('category')
+        ->withCount(['orderDetails as total_sales' => function ($query) {
+            $query->select(DB::raw('SUM(quantity)'));
+        }])
+        ->orderByDesc('total_sales')
+        ->take(3)
+        ->get();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'products',
-            'categories',
-            'colors'
-        ));
-    }
+    return view(self::PATH_VIEW . __FUNCTION__, compact(
+        'products',
+        'categories',
+        'colors',
+        'trendingProducts'
+    ));
+}
+
     public function show(Product $product)
     {
         $product->load(['variants']);
@@ -112,7 +121,8 @@ class ProductController extends Controller
         }
     }
 
-   
+
+    
 
 
 }

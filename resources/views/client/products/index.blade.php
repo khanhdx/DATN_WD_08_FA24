@@ -55,50 +55,30 @@
                     <aside class="block featured">
                         <h4>Sản phẩm trending</h4>
                         <ul class="list-unstyled list-thumbs-pro">
-                            <li class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="/assets/client/images/content/products/product-7.jpg"></a>
+                            @foreach ($trendingProducts as $product)
+                                <li class="product">
+                                    <div class="product-thumb-info">
+                                        <div class="product-thumb-info-image">
+                                            <a href="{{ route('client.product.show', $product->id) }}">
+                                                <img alt="{{ $product->name }}" width="60" src="{{ asset($product->image) }}">
+                                            </a>
+                                        </div>
+                    
+                                        <div class="product-thumb-info-content">
+                                            <h4>
+                                                <a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                            </h4>
+                                            <span class="item-cat">
+                                                <small><a href="#">{{ $product->category->name }}</a></small>
+                                            </span>
+                                            <span class="price">{{ number_format($product->price_sale ?? $product->price_regular, 2) }} đ</span>
+                                        </div>
                                     </div>
-
-                                    <div class="product-thumb-info-content">
-                                        <h4><a href="shop-product-detail2.html">Striped sweater</a></h4>
-                                        <span class="item-cat"><small><a href="#">Stock clearance</a></small></span>
-                                        <span class="price">29.99 USD</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="/assets/client/images/content/products/product-8.jpg"></a>
-                                    </div>
-
-                                    <div class="product-thumb-info-content">
-                                        <h4><a href="shop-product-detail2.html">Checked shirt with pocket</a></h4>
-                                        <span class="item-cat"><small><a href="#">Shirts</a></small></span>
-                                        <span class="price">29.99 USD</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="product">
-                                <div class="product-thumb-info">
-                                    <div class="product-thumb-info-image">
-                                        <a href="shop-product-detail1.html"><img alt="" width="60"
-                                                src="/assets/client/images/content/products/product-9.jpg"></a>
-                                    </div>
-
-                                    <div class="product-thumb-info-content">
-                                        <h4><a href="shop-product-detail2.html">Classic blazer</a></h4>
-                                        <span class="item-cat"><small><a href="#">Outerwear</a></small></span>
-                                        <span class="price">29.99 USD</span>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
                     </aside>
+                    
                 </aside>
             </div>
             <div class="col-md-9">
