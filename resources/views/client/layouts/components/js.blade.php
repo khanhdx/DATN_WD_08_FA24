@@ -24,6 +24,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
+<script src="/assets/js/increase-decrease.js"></script>
+<script src="/assets/js/login.js"></script>
+
 <script>
     $(document).on('click', '.dropdownLink', function(e) {
         if ($(window).width() > 992) {
@@ -38,65 +41,6 @@
         }
     }).on('mouseleave', '.dropdown', function() {
         $(this).removeClass('open');
-    });
-</script>
-
-<!-- Xử lý nút tăng giảm -->
-<script>
-    $(document).on('click', '.plus', function() {
-        let input = $(this).siblings('.qty');
-        let quantity = parseInt(input.val()) + 1;
-        input.val(quantity);
-
-        console.log(quantity);
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            updateCart(id, productVariantId, quantity)
-        }
-    });
-
-    $(document).on('click', '.minus', function() {
-        let input = $(this).siblings('.qty');
-        let quantity = parseInt(input.val());
-
-        if (quantity > 1) {
-            input.val(quantity - 1);
-            quantity -= 1
-        } else {
-            return
-        }
-        console.log(quantity);
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            updateCart(id, productVariantId, quantity)
-        }
-    });
-
-    $(document).on('change', '.qty', function() {
-        let value = parseInt($(this).val());
-
-        if (isNaN(value) || value < 1) {
-            $(this).val(1);
-        }
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            let quantity = value;
-            updateCart(id, productVariantId, quantity)
-        }
-    });
-
-    $(document).on('keydown', '.qty', function(e) {
-        if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
-            (e.key >= "0" && e.key <= "9")) {
-            return;
-        }
-        e.preventDefault();
     });
 </script>
 
@@ -116,7 +60,7 @@
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
                     $('#product-content').text(data.content);
-                    $('#product-price-regular').text(data.price_regular);
+                    $('#product-price-regular').text(data.price_regular.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
 
                     $('#category-name').text(data.category.name);
                     $('#category-type').text(data.category.type);
@@ -159,6 +103,47 @@
                             `<button class="btn-color color-quick mr-1" data-color-id="${item.id}"
                                 style="background-color:${item.code_color}"></button>`
                         );
+                    });
+                    const reviewCount = data.reviews.length;
+                    $('#reviewCount').text(reviewCount); 
+                    
+                    data.reviews.forEach(review => {
+                        let imagePath = review.user.user_image; 
+                        let parts = imagePath.split('/');
+                        let imagePart = parts[1];
+
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= review.rating) {
+                                stars += '<i class="fa fa-star" aria-hidden="true"></i>';
+                            } else {
+                                stars += '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                            }
+                        }
+
+                        $('#reviewsList').append(`
+                            <li>
+                                <div class="comment">
+                                    <div class="img-circle">
+                                        <img class="avatar" width="50" alt=""
+                                            src="/storage/user_images/${imagePart}">
+                                    </div>
+                                    <div class="comment-block">
+                                        <span class="comment-by">
+                                            <strong>${review.user.name}</strong>
+                                        </span>
+                                        <span class="date">
+                                            <small><i class="fa fa-clock-o"></i> ${new Date(review.created_at).toLocaleDateString()}</small>
+                                        </span>
+                                        <div class="rating">
+                                            ${stars}
+                                        </div>
+                                        
+                                        <p>${review.review}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
                     });
                 },
                 error: function() {
@@ -349,109 +334,4 @@
             })
         }
     });
-</script>
-
-<!-- Xử lý login và logut qua ajax -->
-<script>
-    $(document).ready(function() {
-        var wrapper = $('.login-wrapper');
-
-        $(document).on('click', '.login > a', function(e) {
-            e.preventDefault();
-            if (wrapper.hasClass('open')) {
-                wrapper.removeClass('open');
-            } else {
-                wrapper.addClass('open');
-            }
-        });
-
-        $(document).on('click', '.logout', function(e) {
-            e.preventDefault();
-
-            let data = {
-                _token: '{{ csrf_token() }}'
-            }
-
-            $.post("{{ route('logout') }}", data, function(res) {
-                let path = window.location.pathname;
-                if (path === '/profile' || path === '/orders' || path === '/checkout' ||
-                    path === '/payment-success') {
-                    window.location.href = "{{ route('client.home') }}";
-                }
-                if (res.status_code == 200) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top",
-                        showConfirmButton: false,
-                        timer: 2500,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: `<span style="font-size: 1.5rem">${res.message}</span>`,
-                        width: 280
-                    });
-
-                    load_header();
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: res.message,
-                    });
-                }
-            });
-        });
-
-        $('#form-login').submit(function(e) {
-            e.preventDefault();
-            let data = $(this).serialize();
-
-            $('#errorEmail').html('');
-            $('#errorPassword').html('');
-
-            $.post("{{ route('login') }}", data)
-                .done(function(res) {
-                    if (res.admin) {
-                        window.location.href = res.admin;
-                    } else {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: "top",
-                            showConfirmButton: false,
-                            timer: 2500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
-                        Toast.fire({
-                            icon: "success",
-                            title: `<span style="font-size: 1.5rem">${res.message}</span>`,
-                            width: 280
-                        });
-                        wrapper.removeClass('open');
-                        load_header();
-                    }
-                })
-                .fail(function(xhr) {
-                    if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorEmail = errors.email;
-                        let errorPassword = errors.password;
-
-                        $('#errorEmail').html(errorEmail);
-                        $('#errorPassword').html(errorPassword);
-                    } else {
-                        $('#errorEmail').html(xhr.responseJSON.message);
-                    }
-                });
-        });
-
-    })
 </script>

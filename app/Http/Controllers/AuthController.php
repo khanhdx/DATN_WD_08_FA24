@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\Cart;
+use App\Models\ChatRoom;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,10 @@ class AuthController extends Controller
             Cart::create([
                 'user_id' => $user->id,
                 // Nếu có các trường khác cần thiết, hãy thêm vào đây
+            ]);
+
+            ChatRoom::firstOrCreate([
+                'user_id' => $user->id,
             ]);
 
             $this->authService->login($request->validated());
@@ -79,14 +84,14 @@ class AuthController extends Controller
 
         return redirect()->back()->withErrors(['email' => 'Sai tên đăng nhập hoặc mật khẩu.']);
     }
-    
+
     public function loginAjax(LoginRequest $request)
     {
         if (!$this->authService->userExists($request->email)) {
             return response()->json([
                 'message' => 'Email không tồn tại!',
                 'status_code' => 404,
-            ],404);
+            ], 404);
         }
 
         if ($this->authService->login($request->validated())) {
@@ -109,17 +114,8 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Sai tên đăng nhập hoặc mật khẩu!',
             'status_code' => 500,
-        ],500);
+        ], 500);
     }
-
-    // Xử lý đăng xuất
-    // public function logout()
-    // {
-    //     $this->authService->logout();
-    //     session()->invalidate();
-    //     session()->regenerateToken();
-    //     return redirect()->route('client.home')->with('success', 'Đăng xuất thành công.');
-    // }
 
     public function logout()
     {
@@ -128,11 +124,8 @@ class AuthController extends Controller
         session()->invalidate();
 
         session()->regenerateToken();
-        
-        return response()->json([
-            'message' => 'Đăng xuất thành công!',
-            'status_code' => 200,
-        ]);
+
+        return redirect()->route('client.home')->with('success', 'Đăng xuất thành công.');
     }
 
     // Hiển thị form đặt lại mật khẩu

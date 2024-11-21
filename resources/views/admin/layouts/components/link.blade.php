@@ -19,8 +19,10 @@
 
 <!-- Main CSS-->
 <link href="/assets/admin/css/theme.css" rel="stylesheet" media="all">
+<link href="/assets/admin/css/chat.css" rel="stylesheet" media="all">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,300,0,0" />
 
 <style>
     a, a:hover {

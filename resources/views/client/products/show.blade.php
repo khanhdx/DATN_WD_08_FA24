@@ -67,7 +67,7 @@
                             <div class="star-rating"></div>
                             <div class="star-bg"></div>
                         </div>
-                        <span>3 Reviews</span>
+                        <span>{{ $product->reviews->count() }} Reviews</span>
                     </div>
 
                     <p class="price">
@@ -117,9 +117,9 @@
                                 <span><i class="fa fa-heart"></i></span>
                             </a>
 
-                            <button type="submit" class="btn btn-primary btn-icon">
+                            {{-- <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Add to cart
-                            </button>
+                            </button> --}}
                         </form>
                     </div>
 
@@ -158,62 +158,8 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapseThree">Reviews (3)</a> </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse">
-
-                                <div class="panel-body post-comments">
-                                    <ul class="comments">
-                                        <li>
-                                            <div class="comment">
-                                                <div class="img-circle"> <img class="avatar" width="50"
-                                                        alt=""
-                                                        src="/assets/client/images/content/blog/avatar.png"> </div>
-                                                <div class="comment-block">
-                                                    <span class="comment-by"> <strong>Frank Reman</strong></span>
-                                                    <span class="date"><small><i class="fa fa-clock-o"></i> January
-                                                            12, 2013</small></span>
-                                                    <p>Lorem ipsum dolor sit amet.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="comment">
-                                                <div class="img-circle"> <img class="avatar" width="50"
-                                                        alt=""
-                                                        src="/assets/client/images/content/blog/avatar.png"> </div>
-                                                <div class="comment-block">
-                                                    <span class="comment-by"> <strong>Frank Reman</strong></span>
-                                                    <span class="date"><small><i class="fa fa-clock-o"></i> July 11,
-                                                            2014</small></span>
-                                                    <p>Nam viverra euismod odio, gravida pellentesque urna varius vitae,
-                                                        gravida pellentesque urna varius vitae</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="comment">
-                                                <div class="img-circle"> <img class="avatar" width="50"
-                                                        alt=""
-                                                        src="/assets/client/images/content/blog/avatar.png"> </div>
-                                                <div class="comment-block">
-                                                    <span class="comment-by"> <strong>Frank Reman</strong></span>
-                                                    <span class="date"><small><i class="fa fa-clock-o"></i> July 11,
-                                                            2014</small></span>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div> --}}
-                        <!-- Đánh giá sản phẩm -->
-                        {{-- <div class="panel panel-default">
+                        <!-- Hiển thị Đánh giá sản phẩm -->
+                        <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
@@ -228,7 +174,7 @@
                                             <li>
                                                 <div class="comment">
                                                     <div class="img-circle">
-                                                        <img class="avatar" width="50" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
+                                                        <img class="avatar" style="width: 60px; height: 60px;" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
                                                     </div>
                                                     <div class="comment-block">
                                                         <span class="comment-by">
@@ -252,52 +198,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div> --}}
-
-                        {{-- <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Reviews ({{ $product->reviews->count() }})</a>
-                                </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse">
-                                <div class="panel-body post-comments">
-                                    <ul class="comments">
-                                        @foreach ($product->reviews as $review)
-                                            <li>
-                                                <div class="comment">
-                                                    <div class="img-circle">
-                                                        <img class="avatar" width="50" alt="" src="/assets/client/images/content/blog/avatar.png">
-                                                    </div>
-                                                    <div class="comment-block">
-                                                        <span class="comment-by">
-                                                            <strong>{{ $review->user->name }}</strong>
-                                                        </span>
-                                                        <span class="date">
-                                                            <small><i class="fa fa-clock-o"></i> {{ $review->created_at->format('F d, Y') }}</small>
-                                                        </span>
-                                                        <p>{{ $review->review }}</p>
-                                                        <span>Rating: {{ $review->rating }}/5</span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
-
-                        <!-- Form đánh giá chỉ hiện khi người dùng có quyền đánh giá -->
-                        @if ($canReview)
-                            <form action="{{ route('client.reviews.store', $product->id) }}" method="POST">
-                                @csrf
-                                <textarea name="review" placeholder="Nhập đánh giá của bạn" required></textarea>
-                                <input type="number" name="rating" min="1" max="5" placeholder="Đánh giá (1-5)" required>
-                                <button type="submit">Gửi đánh giá</button>
-                            </form>
-                        @else
-                            <p>Bạn cần mua sản phẩm này để có thể đánh giá.</p>
-                        @endif --}}
                     </div>
                 </div>
             </div>

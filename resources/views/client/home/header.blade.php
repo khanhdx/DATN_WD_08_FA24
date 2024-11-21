@@ -1,34 +1,39 @@
 <div class="container">
-    <p class="pull-left text-note">MIỄN PHÍ VẬN CHUYỂN CHO TẤT CẢ CÁC ĐƠN HÀNG TRÊN 50K</p>
+    <p class="pull-left text-note">MIỄN PHÍ VẬN CHUYỂN CHO TẤT CẢ CÁC ĐƠN HÀNG TRÊN 4999K</p>
     <ul class="nav nav-pills nav-top navbar-right">
 
         <li class="dropdown my-account">
             @guest
                 <!-- Hiển thị nếu chưa đăng nhập -->
-                <li class="login">
-                    <a href="">
-                        <i class="fa fa-user"></i> Login
-                    </a>
-                </li>
-            @endguest
-            @auth
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span
-                        class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    @if (auth()->user()->role == 'Khách hàng')
-                        <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
-                        <li><a href="{{ route('orders.index') }}">Đơn hàng của tôi</a></li>
-                    @elseif (auth()->user()->role == 'Quản lý')
-                        <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
-                    @endif
-                    <li>
-                        <a href="" class="logout">Đăng xuất</a>
-                        {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            <li class="login">
+                <a href="">
+                    <i class="fa fa-user"></i> Login
+                </a>
+            </li>
+        @endguest
+        @auth
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span
+                    class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                @if (auth()->user()->role == 'Khách hàng')
+                    <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
+                    <li><a href="{{ route('orders.index') }}">Đơn hàng của tôi</a></li>
+                    <li><a href="{{ route('client.wave-voucher') }}">Kho voucher</a></li>
+                @elseif (auth()->user()->role == 'Quản lý')
+                    <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
+                @endif
+                <li>
+                    <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); 
+                               document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                        </form> --}}
-                    </li>
-                </ul>
-            @endauth
+                        </form>
+                </li>
+            </ul>
+        @endauth
         </li>
         <li class="dropdown menu-shop">
             <a href="{{ route('client.carts.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">

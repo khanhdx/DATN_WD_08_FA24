@@ -109,7 +109,20 @@
                         <div class="voucher-left">
                             <div class="salse"><span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span></div>
                             <div>
-                                <button class="btn btn-save">Lưu</button>
+                                @if (Auth::user())
+                                        @if ($voucher->check)
+                                            <button class="btn btn-save" disabled>Đã lưu</button>  
+                                        @else                              
+                                            <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
+                                                <button class="btn btn-save LuuVoucher">Lưu</button>
+                                            </form>
+                                        @endif
+                                @else
+                                    <button class="btn btn-save saveVoucher">Lưu</button>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -9,9 +9,17 @@
             <div class="image img-cir img-120">
                 <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />
             </div>
-            <h4 class="name">{{ Auth::user()->name }}</h4>
-            <form action="" method="get"></form>
-            <a href="{{ route('logout') }}">Đăng xuất</a>
+            <a href="{{ route('admin.project') }}">
+                <h4 class="name">{{ Auth::user()->name }}</h4>
+            </a>
+            <a href="{{ route('logout') }}"
+                onclick="event.preventDefault(); 
+                               document.getElementById('logout-form').submit();">
+                Đăng xuất
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
         <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">
@@ -94,6 +102,10 @@
                                 <i class="far fa-window-maximize"></i>Banner giới thiệu</a>
                         </li>
                     </ul>
+                </li>
+                <li class="has-sub">
+                    <a href="{{ route('admin.chat') }}">
+                        <i class="far fa-envelope"></i>Chat</a>
                 </li>
             </ul>
         </nav>

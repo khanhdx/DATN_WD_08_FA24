@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Order;
 use App\Models\Review;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -51,4 +52,15 @@ class ReviewController extends Controller
             'review' => $review->load('user')
         ], 200);
     }
+
+    public function getReviews($productId)
+    {
+        $reviews = Review::where('product_id', $productId)
+                        ->with('user') // Đảm bảo có quan hệ với user để lấy thông tin người đánh giá
+                        ->latest()
+                        ->get();
+
+        return response()->json($reviews);
+    }
+
 }

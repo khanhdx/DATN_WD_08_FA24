@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\Admin\StatisticalController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +31,10 @@ Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name
 
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
+
+Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
+Route::get('/order', [StatisticalController::class, 'getOrderData']);
+Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);
+
+Route::get('/chat-rooms', [ChatController::class, 'fetchChatRooms']);
+Route::get('/messages/{chatRoomId}', [ChatController::class, 'fetchMessages'])->name('show.chat');

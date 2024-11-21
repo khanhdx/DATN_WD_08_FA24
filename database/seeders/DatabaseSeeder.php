@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             StatusOrderSeeder::class,
             UserSeeder::class,
+            ChatRoomSeeder::class,
             VoucherSeeder::class,
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\StatusOrder;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -27,4 +28,22 @@ class OrderController extends Controller
         }
         return view('client.checkouts.showOrder', compact('order')); // Truyền cả order và status
     }
+
+    public function update(Request $request, $id)
+    {
+        // Lấy đơn hàng theo ID
+        $order = Order::findOrFail($id);
+        
+        if ($order->statusOrder->contains('name_status', 'pending')) {
+    
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'canceled')->first()->id => [
+                    'name' => 'canceled',
+                    'updated_at' => now(),
+                ]
+            ]);
+        } 
+        return redirect()->route('orders.index');
+    }
+    
 }

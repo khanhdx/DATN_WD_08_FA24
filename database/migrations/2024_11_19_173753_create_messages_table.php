@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ChatRoom;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,10 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wares_list', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vouchers_ware_id')->constrained('vouchers_wares')->onDelete('cascade');
-            $table->enum('status',["Đã sử dụng", "Chưa sử dụng"]);
+            $table->foreignIdFor(ChatRoom::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained();
+            $table->text('content');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wares_list');
+        Schema::dropIfExists('messages');
     }
 };
