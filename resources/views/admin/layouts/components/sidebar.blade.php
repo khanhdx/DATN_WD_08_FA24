@@ -10,7 +10,12 @@
                 <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />
             </div>
             <a href="{{ route('admin.project') }}"><h4 class="name">{{ Auth::user()->name }}</h4></a>
-            <a href="{{ route('logout') }}">Đăng xuất</a>
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button class="btn m-0 p-0" type="submit" style="box-shadow: none;">
+                    <span class="text-secondary">Đăng xuất</span>
+                </button>
+            </form>
         </div>
         <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">

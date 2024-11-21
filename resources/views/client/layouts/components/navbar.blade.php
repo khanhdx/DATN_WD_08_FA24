@@ -1,7 +1,8 @@
 @php
     use App\Models\Category;
-
+    use App\Models\Product;
     $categories = Category::query()->get();
+    $prs = Product::query()->orderBy('created_at','desc')->limit(3)->get();
 @endphp
 
 <nav class="navbar navbar-default navbar-main navbar-main-slide" role="navigation">
@@ -33,65 +34,31 @@
                         <div class="mega-menu-content">
                             <div class="row">
                                 <div class="col-md-4 hidden-sm hidden-xs menu-column">
-                                    <h3>Trends</h3>
+                                    <h3>NEW</h3>
                                     <ul class="list-unstyled sub-menu list-thumbs-pro">
-                                        <li class="product">
-                                            <div class="product-thumb-info">
-                                                <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt=""
-                                                            width="60"
-                                                            src="/assets/client/images/content/products/product-1.jpg"></a>
+                                        @foreach ($prs as $pr)
+                                            <li class="product">
+                                                <div class="product-thumb-info">
+                                                    <div class="product-thumb-info-image">
+                                                        <a href="{{ route('client.product.show', $pr->id) }}"><img alt="" width="60" src="{{ $pr->image }}"></a>
+                                                    </div>
+                                                    <div class="product-thumb-info-content">
+                                                        <h4><a href="{{ route('client.product.show', $pr->id) }}">{{$pr->name}}</a></h4>
+                                                        <span class="item-cat"><small><a
+                                                                    href="#">{{ $pr->category->name }}</a></small></span>
+                                                        <span class="price">{{ number_format($pr->price_regular,0,'','.') }}đ</span>
+                                                    </div>
                                                 </div>
-
-                                                <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Denim shirt</a></h4>
-                                                    <span class="item-cat"><small><a
-                                                                href="#">Jackets</a></small></span>
-                                                    <span class="price">29.99 USD</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="product">
-                                            <div class="product-thumb-info">
-                                                <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt=""
-                                                            width="60"
-                                                            src="/assets/client/images/content/products/product-2.jpg"></a>
-                                                </div>
-
-                                                <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Poplin shirt with fine
-                                                            pleated bands</a></h4>
-                                                    <span class="item-cat"><small><a
-                                                                href="#">Jackets</a></small></span>
-                                                    <span class="price">29.99 USD</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="product">
-                                            <div class="product-thumb-info">
-                                                <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img alt=""
-                                                            width="60"
-                                                            src="/assets/client/images/content/products/product-3.jpg"></a>
-                                                </div>
-
-                                                <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Contrasting shirt</a></h4>
-                                                    <span class="item-cat"><small><a
-                                                                href="#">Jackets</a></small></span>
-                                                    <span class="price">29.99 USD</span>
-                                                </div>
-                                            </div>
-                                        </li>
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                                 <div class="col-md-2 menu-column">
                                     <h3>Man</h3>
                                     <ul class="list-unstyled sub-menu">
-                                        @foreach ($categories as $item)
-                                            @if ($item->type == 'Man')
-                                                <li><a href="#">{{ $item->name }}</a></li>
+                                        @foreach ($categories as $category)
+                                            @if ($category->type == 'Man')
+                                                <li><a href="#" onclick="openCategory({{ $category->id }})">{{ $category->name }}</a></li>
                                             @endif
                                         @endforeach
                                     </ul>
@@ -102,7 +69,7 @@
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $item)
                                             @if ($item->type == 'Woman')
-                                                <li><a href="#">{{ $item->name }}</a></li>
+                                                <li><a href="#" onclick="openCategory({{ $item->id }})">{{ $item->name }}</a></li>
                                             @endif
                                         @endforeach
                                     </ul>
@@ -141,3 +108,16 @@
         </div>
     </div>
 </nav>
+<script>
+    function openCategory (id) {
+        const route = window.location.pathname;
+        if (route !== "/products") {
+            const url = "{{ route('client.product.index')}}"+"?type="+id;
+            console.log(url);
+            window.location.href = url;
+        }
+        else {
+            filterByCategory(id);
+        }
+    }
+</script>
