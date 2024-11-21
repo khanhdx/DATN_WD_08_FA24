@@ -396,6 +396,7 @@
             </div>
         </div>
     </section>
+    @vite('resources/js/app.js')
 @endsection
 
 @section('js')
@@ -403,5 +404,4 @@
     <script src="{{ asset('assets/js/revenue-chart.js') }}"></script>
     <script src="{{ asset('assets/js/order-chart.js') }}"></script>
     <script src="{{ asset('assets/js/product-chart.js') }}"></script>
-
 @endsection
