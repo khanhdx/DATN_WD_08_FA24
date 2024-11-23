@@ -1,8 +1,23 @@
 @php
     use App\Models\Category;
     use App\Models\Product;
+    use App\Models\Voucher;
     $categories = Category::query()->get();
     $prs = Product::query()->orderBy('created_at','desc')->limit(3)->get();
+    $vs = Voucher::query()->where('type_code', '=', 'Công khai')->where('date_start', '=', date('Y-m-d'))->limit(3)->get();
+    if(Auth::user()) {
+            $ware = Auth::user()->vouchers_ware;
+            if($ware) {
+                foreach ($vs as $item) {
+                    if(Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $item->id)) {
+                        $item->check = true;
+                    }
+                    else {
+                        $item->check = false;
+                    }
+                }
+            }
+        }
 @endphp
 
 <nav class="navbar navbar-default navbar-main navbar-main-slide" role="navigation">
@@ -75,25 +90,46 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-4 hidden-sm hidden-xs menu-column">
-                                    <h3>Explore new collection</h3>
+                                    <h3>VOUCHER</h3>
                                     <ul class="list-unstyled sub-menu list-md-pro">
-                                        <li class="product">
-                                            <div class="product-thumb-info">
-                                                <div class="product-thumb-info-image">
-                                                    <a href="shop-product-detail1.html"><img class="img-responsive"
-                                                            width="330" alt=""
-                                                            src="/assets/client/images/content/products/ad-1.png"></a>
+                                        @forelse ($vs as $voucher)
+                                            <li class="product">
+                                                <div class="product-thumb-info" style="border-top: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;display: flex;align-items: center;padding: 10px 0px;gap:10px;">
+                                                    <div class="product-thumb-info-image m-0" style="clip-path: polygon(0% -1%, 100% -1%, 100% 100%, 50% 75%, 0% 100%);background-color: #FFFFFF;color: #000000;">
+                                                        @if ($voucher->value === "Cố định")
+                                                            <h4 class="m-0" style="padding: 15px 2px">{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</h4>
+                                                        @else
+                                                            <h4 class="m-0" style="padding: 15px 2px">{{$voucher->decreased_value}}%</h4>
+                                                        @endif
+                                                    </div>
+                                                    <div class="product-thumb-info-content" style="display: flex;justify-content: space-between;width: 100%;align-items: center;">
+                                                        <div>
+                                                            <h4 class="m-0"><a href="{{ route('client.voucher.show',$voucher->id) }}">{{ $voucher->name }}</a></h4>
+                                                            <p style="color: #FFFFFF;font-size: 12px;margin: 0px;"><strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
+                                                        </div>
+                                                        @if (Auth::user())
+                                                            @if ($voucher->check)
+                                                                <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save" disabled>Đã lưu</button>  
+                                                            @else                              
+                                                                <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
+                                                                    <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save LuuVoucher">Lưu</button>
+                                                                </form>
+                                                            @endif
+                                                        @else
+                                                            <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save saveVoucher">Lưu</button>
+                                                        @endif
+                                                    </div>
                                                 </div>
-
-                                                <div class="product-thumb-info-content">
-                                                    <h4><a href="shop-product-detail2.html">Men’s Fashion and Style</a>
-                                                    </h4>
-                                                    <p>Whatever you’re looking for, be it the latest fashion trends,
-                                                        cool outfit ideas or new ways to wear your favourite pieces,
-                                                        we’ve got all the style inspiration you need.</p>
-                                                </div>
+                                            </li>
+                                        @empty
+                                            <div style="display: flex;align-items: center;">
+                                                <img src="{{ asset('assets/client/bootstrap/fonts/no-data.svg') }}" alt="">
                                             </div>
-                                        </li>
+                                        @endforelse
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -120,4 +156,7 @@
             filterByCategory(id);
         }
     }
+</script>
+<script>
+
 </script>
