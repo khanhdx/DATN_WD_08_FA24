@@ -365,4 +365,10 @@
         });
     }
 </script>
+<script>
+    @if (request('type'))
+        filterByCategory({{ request('type') }});
+        history.pushState(null, null, "{{ route('client.product.index') }}");
+    @endif
+</script>
 @endsection
