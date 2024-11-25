@@ -1,17 +1,19 @@
 <?php
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
-use App\Http\Controllers\GHTKController;
+use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
+
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Admin\BannerController;
-
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
@@ -210,9 +212,10 @@ Route::name('client.')->group(function () {
             Route::post('/add', 'addToCart')->name('add');
             Route::put('/{id}', 'updateCart')->name('update');
             Route::delete('/{id}', 'destroy')->name('delete');
-        });
 
-    //Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
+        }
+    );
+    // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
 // Route cho khách hàng (client)
@@ -228,6 +231,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
+    Route::post('/calculate-shipping', [ShippingController::class, 'calculateShipping'])->name('shipping.calculate');//tính phí vận chuyển
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
@@ -246,5 +250,4 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
-// Route cho vận chuyển GHTK.
-Route::post('/ghtk/create-order', [GHTKController::class, 'createOrder']);
+

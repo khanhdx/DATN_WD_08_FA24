@@ -27,11 +27,48 @@
         <div class="container">
             <div class="row featured-boxes">
                 <div class="col-md-8">
+
+                    <div class="featured-box featured-box-secondary featured-box-cart">
+                        <div class="box-content">
+                            <form method="POST" action="{{ route('shipping.calculate') }}">
+                                @csrf
+                                <h4>Địa Chỉ Nhận Hàng</h4>
+                                <p>Nhập điểm đến của bạn.</p>
+                                <div class="form-group">
+                                    <label for="province">Tỉnh / Thành phố</label>
+                                    <select name="province" id="province" class="form-control" required>
+                                        <option value="">-- Chọn Tỉnh / Thành phố --</option>
+                                        <!-- Các tỉnh/thành phố -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">Quận / Huyện</label>
+                                    <select name="district" id="district" class="form-control" required>
+                                        <option value="">-- Chọn Quận / Huyện --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ward_street">Phường / Xã</label>
+                                    <select name="ward_street" id="ward_street" class="form-control" required>
+                                        <option value="">-- Chọn Phường / Xã --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Nhập số nhà, tên đường</label>
+                                    <input type="text" name="address" id="address" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Xác nhận địa chỉ" class="btn btn-grey btn-sm">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <form action="{{ route('checkout.process') }}" method="POST">
                         @csrf
                         <div class="featured-box featured-box-secondary featured-box-cart">
                             <div class="box-content">
-                                <h4>Địa Chỉ Thanh Toán</h4>
+                                <h4>Thông tin Thanh Toán</h4>
                                 <div class="form-horizontal">
                                     <!-- Thông tin địa chỉ -->
                                     <div class="form-group">
@@ -43,19 +80,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputAdd" class="col-sm-2 control-label">Địa Chỉ <span
-                                                class="required">*</span></label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputAdd" name="address"
-                                                required value="{{ auth()->check() ? auth()->user()->address : old('address') }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="inputEmail" class="col-sm-2 control-label">Địa Chỉ Email <span
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="email" class="form-control" id="inputEmail" name="email"
-                                                required value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
+                                                required
+                                                value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -63,13 +93,13 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="tel" class="form-control" id="inputPhone" name="phone"
-                                                required value="{{ auth()->check() ? auth()->user()->phone_number : old('phone') }}">
+                                                required
+                                                value="{{ auth()->check() ? auth()->user()->phone_number : old('phone') }}">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <h4>Phương Thức Thanh Toán</h4>
                         <div class="panel-group panel-group2" id="accordion">
                             <div class="panel panel-default">
@@ -111,17 +141,15 @@
                             <button type="submit" class="btn btn-primary btn-block btn-sm">Đặt Hàng</button>
                         </p>
                     </form>
-
                 </div>
-
                 <div class="col-md-4">
                     <div class="featured-box featured-box-secondary sidebar">
                         <div class="box-content">
                             <h4>Đơn Hàng Của Bạn</h4>
                             <table cellspacing="0" class="cart-totals" width="100%">
                                 <tbody>
-                                    @php 
-                                        $totalPrice = 0; 
+                                    @php
+                                        $totalPrice = 0;
                                         $discount = session('discount', 0); // Lấy giá trị giảm giá từ session
                                     @endphp
                                     @foreach ($cartItems as $item)
@@ -139,7 +167,7 @@
                                         </tr>
                                         @php $totalPrice += $item->sub_total; @endphp
                                     @endforeach
-                                    
+
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
                                         <td class="product-price">
@@ -148,7 +176,13 @@
                                     </tr>
                                     <tr class="shipping">
                                         <th>Phí Vận Chuyển</th>
-                                        <td>Miễn Phí Vận Chuyển</td>
+                                        {{-- <td>Miễn Phí Vận Chuyển</td> --}}
+                                        {{-- <td>>Phí vận chuyển cho đơn hàng của bạn là: {{ $shippingCost }} VND</td> --}}
+                                        @isset($shippingCost)
+                                            <td>Phí vận chuyển cho đơn hàng của bạn là: {{ $shippingCost }} VND</td>
+                                        @else
+                                            <td>Vui lòng nhập lại địa chỉ để tính phí vận chuyển.</td>
+                                        @endisset
                                     </tr>
                                     <tr class="discount">
                                         <th>Giảm Giá</th>
@@ -159,7 +193,8 @@
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
-                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice - $discount }} ₫</span></strong>
+                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice - $discount }}
+                                                    ₫</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -173,11 +208,14 @@
                             <form action="{{ route('processVoucher') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="voucher_code" id="voucher_code" placeholder="Nhập mã giảm giá">
+                                    <input type="text" class="form-control" name="voucher_code" id="voucher_code"
+                                        placeholder="Nhập mã giảm giá">
                                 </div>
                                 <p>
-                                    <button type="submit" name="action" value="apply" class="btn btn-primary">Áp Dụng</button>
-                                    <button type="submit" name="action" value="cancel" class="btn btn-danger">Hủy Voucher</button>
+                                    <button type="submit" name="action" value="apply" class="btn btn-primary">Áp
+                                        Dụng</button>
+                                    <button type="submit" name="action" value="cancel" class="btn btn-danger">Hủy
+                                        Voucher</button>
                                 </p>
                             </form>
                             <!-- Thông báo mã giảm giá -->
@@ -193,9 +231,30 @@
                             @endif
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
-    <script></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#province').change(function() {
+                var provinceId = $(this).val();
+
+                if (provinceId) {
+                    $.ajax({
+                        url: '/api/get-districts/' + provinceId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#district').empty();
+                            $.each(data, function(key, value) {
+                                $('#district').append('<option value="' + key + '">' +
+                                    value + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 @endsection

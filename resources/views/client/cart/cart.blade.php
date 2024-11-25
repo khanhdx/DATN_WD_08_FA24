@@ -66,7 +66,9 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} đ</span>
+                                            <span
+                                                class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }}
+                                                đ</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -131,7 +133,8 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }} VND</span>
+                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }}
+                                                VND</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -186,47 +189,41 @@
         {{-- <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
-                    <h4>Promotional Code</h4>
-                    <p>Enter promotional code if you have one</p>
-                    <form action="#" id="" type="post">
-                        <div class="form-group">
-                            <label class="sr-only">Promotional code</label>
-                            <input type="text" value="" class="form-control"
-                                placeholder="Enter promotional code here">
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Apply Promotion" class="btn btn-grey btn-sm"
-                                data-loading-text="Loading...">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> --}}
-        <div class="col-xs-4">
-            <div class="featured-box featured-box-secondary">
-                <div class="box-content">
                     <h4>Tính toán vận chuyển</h4>
                     <p>Nhập điểm đến của bạn để có được ước tính vận chuyển.</p>
-                    <form action="#" id="" type="post">
+
+                    <!-- Phản hồi từ server -->
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @elseif (session('shipping_fee'))
+                        <div class="alert alert-success">
+                            Giá vận chuyển: {{ session('shipping_fee') }} VND
+                        </div>
+                    @endif
+
+                    <form action="{{ route('client.carts.calculate-shipping') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label class="sr-only">Thành phố</label>
-                            <div class="list-sort">
-                                <select class="formDropdown">
-                                    <option value="">Chọn thành phố</option>
-                                </select>
-                            </div>
+                            <label class="sr-only">Tỉnh / Thành phố</label>
+                            <input type="text" name="province" class="form-control" placeholder="Nhập Tỉnh / thành phố"
+                                required>
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Nhập Quận/Huyện</label>
-                            <input type="text" value="" class="form-control" placeholder="Nhập Quận/Huyện">
+                            <label class="sr-only">Nhập Quận / Huyện</label>
+                            <input type="text" name="district" class="form-control" placeholder="Nhập Quận / Huyện"
+                                required>
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Nhập Thôn/Phường/Xã</label>
-                            <input type="text" value="" class="form-control" placeholder="Nhập Thôn/Phường/Xã">
+                            <label class="sr-only">Phường / Xã</label>
+                            <input type="text" name="ward" class="form-control" placeholder="Phường / Xã"
+                                required>
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Nhập số nhà/tên đường</label>
-                            <input type="text" value="" class="form-control" placeholder="Nhập số nhà/tên đường">
+                            <label class="sr-only">Nhập số nhà, tên đường</label>
+                            <input type="text" name="address" class="form-control"
+                                placeholder="Nhập số nhà, tên đường" required>
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Xác nhận địa chỉ" class="btn btn-grey btn-sm"
@@ -235,7 +232,9 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
+
+
         <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
@@ -244,29 +243,38 @@
                         <tbody>
                             <tr class="cart-subtotal">
                                 <th>
-                                    Tổng tiền đơn hàng
+                                    Tổng tiền đơn hàng tạm tính
                                 </th>
                                 <td>
                                     <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
                                 </td>
                             </tr>
-                            <tr class="shipping">
+                            {{-- <tr class="shipping">
                                 <th>
                                     Vận chuyển
                                 </th>
                                 <td>
-                                    Miễn phí vận chuyển<input type="hidden" value="free_shipping" id="shipping_method"
-                                        name="shipping_method">
+                                    @if (session('shipping_fee'))
+                                        <p>Cước phí vận chuyển: <strong>{{ session('shipping_fee') }} VND</strong></p>
+                                    @elseif (session('error'))
+                                        <p class="text-danger">{{ session('error') }}</p>
+                                    @else
+                                        <p>Vui lòng nhập thông tin để tính phí vận chuyển.</p>
+                                    @endif
                                 </td>
-                            </tr>
-                            <tr class="total">
-                                <th>    
+                            </tr> --}}
+                            {{-- <tr class="total">
+                                <th>
                                     Tổng giá
                                 </th>
                                 <td>
-                                    <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @if (session('shipping_fee'))
+                                        <span class="amount">{{ number_format($total + str_replace('.', '', session('shipping_fee')), 0, ',', '.') }} VND</span>
+                                    @else
+                                        <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @endif
                                 </td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                     <p>
@@ -275,11 +283,12 @@
                         </a>
                     </p>
                     <a href="{{ route('client.home') }}">
-                        <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm"
-                            data-loading-text="Loading...">
+                        <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm">
                     </a>
                 </div>
             </div>
         </div>
+        
     </div>
+
 @endif
