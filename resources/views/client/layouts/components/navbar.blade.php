@@ -43,7 +43,7 @@
 
                 <li class="dropdown megamenu">
                     <a href="{{ route('client.product.index') }}" class="dropdown-toggle dropdownLink"
-                        data-toggle="dropdown">Shop
+                        data-toggle="dropdown">Cửa hàng
                     </a>
                     <div class="dropdown-menu">
                         <div class="mega-menu-content">
@@ -137,9 +137,9 @@
                     </div>
                 </li>
 
-                <li><a href="{{ route('client.post.index') }}">Blog</a></li>
+                <li><a href="{{ route('client.post.index') }}">Bài viết</a></li>
                 <li><a href="{{ route('client.contact') }}">Liên hệ</a></li>
-                <li><a href="{{ route('client.voucher.index') }}">Voucher</a></li>
+                <li><a href="{{ route('client.voucher.index') }}">Mã giảm giá</a></li>
             </ul>
         </div>
     </div>

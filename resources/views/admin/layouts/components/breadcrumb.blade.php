@@ -16,8 +16,8 @@
                                 <li class="list-inline-item">@yield('title')</li>
                             </ul>
                         </div>
-                        <button class="au-btn au-btn-icon au-btn--green">
-                            <i class="zmdi zmdi-plus"></i>add item</button>
+                        {{-- <button class="au-btn au-btn-icon au-btn--green">
+                            <i class="zmdi zmdi-plus"></i>add item</button> --}}
                     </div>
                 </div>
             </div>
