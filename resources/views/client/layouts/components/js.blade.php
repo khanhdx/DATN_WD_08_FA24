@@ -411,3 +411,13 @@
         });
     })
 </script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+        $('.saveVoucher').on('click', function () {
+            swal({
+                title: "Thông báo !",
+                text: "Bạn cần đăng nhập mới có thể sử dụng mã giảm giá.",
+                icon: "warning",
+            });
+        })
+</script>

@@ -21,14 +21,12 @@
 
     <!-- Main JS-->
     <script src="/assets/admin/js/main.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pusher-js@7.0.3/dist/web/pusher.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.0/dist/echo.iife.js"></script>
-    <script type="module" src="{{ asset('assets/js/app.js') }}"></script>
+    {{-- @vite('resources/js/app.js') --}}
+    <script type="module" src="{{ asset('build/assets/app-aaecec55.js')}}"></script>
 
-    {{-- Biến môi trường  --}}
-    <script>
-        window.PUSHER_APP_KEY = "{{ env('PUSHER_APP_KEY') }}";
-        window.PUSHER_APP_CLUSTER = "{{ env('PUSHER_APP_CLUSTER', 'mt1') }}";
-    </script>
+
+
+
+
+        

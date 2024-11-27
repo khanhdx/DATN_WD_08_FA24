@@ -30,16 +30,32 @@
             background-color: #F0FFF0; 
         }
     </style>
+    <style>
+        .search-form {
+            display: flex;
+            position: relative;
+        }
+        .search-form i {
+            font-size: 24px;
+            font-weight: bold;
+            position: absolute;
+            margin-top: -10px; 
+            margin-left: -30px;
+        }
+    </style>
 @endsection
 @section('content')
     <section class="p-t-20">
-        <div class="container">
+        <div class="">
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Quản lý mã giảm giá</h3>
                     <div class="d-flex justify-content-between mb-3">
                         <form class="" method="GET" style="width: 50%;">
-                            <input class="form-control mb-3" type="text" name="search" value="@if(isset($_GET['search'])) {{$_GET['search']}} @endif" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
+                            <div class="search-form mb-3">
+                                <input class="form-control" type="text" name="search" value="@if(isset($_GET['search']) && $_GET['search'] != "") {{$_GET['search']}} @endif" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
+                                <button style="box-shadow: none;" class="btn m-0 p-0"><i class="zmdi zmdi-search"></i></button>
+                            </div>
                             <div class="row m-0" style="gap: 10px;">
                                 <div class="col p-0">
                                     <label class="m-0 form-label" for="date_start">Từ ngày</label>
@@ -101,4 +117,5 @@
 @endsection
 @section('js')
     {{-- JAVA SCRIPT --}}
+
 @endsection

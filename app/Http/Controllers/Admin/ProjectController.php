@@ -46,7 +46,7 @@ class ProjectController extends Controller
                 'phone_number'=>$request->input('phone_number'),
             ];
             if ($request->file('user_image')) {
-                $data['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
+                $data['user_image'] = $request->file('user_image')->store('uploads/images', 'public');;
                 if (Auth::user()->user_image) {
                     Storage::disk('public')->delete(Auth::user()->user_image);
                 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\NewNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -39,13 +38,6 @@ Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusCh
 
 Route::get('/top10-most-orders', [StatisticalController::class, 'getTop10MostOrderdProucts']);
 Route::get('/inventory', [StatisticalController::class, 'getInventoryData']);
-
-Route::get('/send-notification', function () {
-    broadcast(new NewNotification('hello'));
-    Log::info('Đã nhận được thông báo');
-    return response()->json([ 'message' => "Thành công"], 200);
-});
-
 
 // Route cho giao hàng nhanh
 Route::get('/provinces', [ShippingController::class, 'getProvinces']);

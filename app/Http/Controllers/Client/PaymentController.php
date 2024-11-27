@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Events\OrderPlaced;
+use App\Events\OrderEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -23,7 +23,7 @@ class PaymentController extends Controller
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
         if (!$cartId) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng không tồn tại.');
+            return redirect()->route('client.carts.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
         $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
@@ -115,7 +115,7 @@ class PaymentController extends Controller
 
         $totalPrice = max($totalPrice, 0);
 
-        // try {
+        try {
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'slug' => $this->generateSlug(),
@@ -160,11 +160,11 @@ class PaymentController extends Controller
             ]);
 
             // Thống báo admin
-            event(new OrderPlaced('hello world'));
-        // } catch (\Exception $e) {
-        //     Log::error('Error while creating order: ' . $e->getMessage());
-        //     return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
-        // }
+            broadcast(new OrderEvent($order));
+        } catch (\Exception $e) {
+            Log::error('Error while creating order: ' . $e->getMessage());
+            return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
+        }
 
         $voucherId = session('voucher_id');
         if ($voucherId) {
