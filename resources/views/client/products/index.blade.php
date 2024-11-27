@@ -135,7 +135,7 @@
                         </div>
                         <div class="product product-list animation">
                             @foreach ($products as $product)
-                                <div class="product-thumb-info" data-color-id="{{ $product->color_id }}" data-category-id="{{ $product->category->id }}">
+                                <div class="product-thumb-info"  data-category-id="{{ $product->category->id }}">
                                     <div class="row">
                                         <div class="col-xs-5 col-sm-3">
                                             <div class="product-thumb-info-image">

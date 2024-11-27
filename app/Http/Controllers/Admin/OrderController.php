@@ -21,29 +21,35 @@ class OrderController extends Controller
     }
 
     public function index(Request $request)
-    {
-        // Lấy tham số lọc từ request
-        $status = $request->input('status', 'all');
-        $date = $request->input('date');
-    
-        // Gọi phương thức lấy đơn hàng dựa vào trạng thái và ngày
-        if ($status == 'all') {
+{
+    // Lấy tham số lọc từ request
+    $status = $request->input('status', 'all');
+    $date = $request->input('date');
+    $phone = $request->input('phone');  // Lọc theo số điện thoại
+
+    // Gọi phương thức lấy đơn hàng dựa vào trạng thái, ngày, và số điện thoại
+    if ($status == 'all') {
+        if ($phone) {
+            $data = $this->orderService->getByPhoneNumber($phone);
+        } else {
             $data = $this->orderService->getByDate($date);
+        }
+    } else {
+        if ($phone) {
+            $data = $this->orderService->getByStatusAndPhoneNumber($status, $phone);
         } else {
             $data = $this->orderService->getByStatusAndDate($status, $date);
         }
-
-        // dd($data[0]);
-
-        $orders = $data[0];
-        $countOrderByStatus = $data[1];
-        $totalOrder = $data[2];
-        $statuses = $this->statusService->getAll();
-
-
-        return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
-    
+
+    $orders = $data[0];
+    $countOrderByStatus = $data[1];
+    $totalOrder = $data[2];
+    $statuses = $this->statusService->getAll();
+
+    return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
+}
+
     public function show(string $id)
     {
         $order = Order::with([
