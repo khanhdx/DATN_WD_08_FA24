@@ -17,6 +17,7 @@ class Review extends Model
         'order_id', // ID đơn hàng
         'rating', // Điểm đánh giá
         'review', // Nội dung đánh giá
+        'is_hidden'// ẩn - hiện đánh giá
     ];
 
     // Quan hệ với người dùng

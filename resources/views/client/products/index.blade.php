@@ -16,16 +16,16 @@
                         <div id="price-range">
                             <div class="padding-range">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price1" name="price" value="0-500">
-                                    <label class="form-check-label" for="price1">Dưới 500,000 đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price1" name="price" value="0-5000000">
+                                    <label class="form-check-label" for="price1">Dưới 5,000,000đ</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price2" name="price" value="500-1000">
-                                    <label class="form-check-label" for="price2">500,000 đ - 1,000,000 đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price2" name="price" value="5000000-10000000">
+                                    <label class="form-check-label" for="price2">5,000,000đ-10,000,000đ</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price3" name="price" value="1000-100000">
-                                    <label class="form-check-label" for="price3">Trên 1,000,000 đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price3" name="price" value="10000000-1000000000">
+                                    <label class="form-check-label" for="price3">Trên 10,000,000đ</label>
                                 </div>
                                 <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="filterByPrice()">Apply Filter</a></p>
                             </div>

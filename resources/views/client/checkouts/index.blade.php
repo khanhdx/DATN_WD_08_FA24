@@ -30,7 +30,7 @@
 
                     <div class="featured-box featured-box-secondary featured-box-cart">
                         <div class="box-content">
-                            {{-- <form method="POST" action="">
+                            <form action="">
                                 @csrf
                                 <h4>Địa Chỉ Nhận Hàng</h4>
                                 <p>Nhập điểm đến của bạn.</p>
@@ -60,7 +60,7 @@
                                 <div class="form-group">
                                     <input type="submit" value="Xác nhận địa chỉ" class="btn btn-grey btn-sm">
                                 </div>
-                            </form> --}}
+                            </form>
                         </div>
                     </div>
 
@@ -230,7 +230,5 @@
         </div>
     </div>
 
-    <script>
-        
-    </script>
+    <script></script>
 @endsection

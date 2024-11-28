@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Admin\AdReviewController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
@@ -144,6 +145,13 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             // Route quản lý tồn kho 
             Route::prefix('inventories')->as('inventories.')->group(function () {
                 Route::get('/', [InventoryController::class, 'index'])->name('index');
+            });
+
+            //Route quản lý đánh giá
+            Route::prefix('reviews')->as('reviews.')->group(function () {
+                Route::get('/', [AdReviewController::class, 'index'])->name('index');
+                Route::delete('/{id}', [AdReviewController::class, 'destroy'])->name('destroy');
+                // Route::post('/{review}/toggle', [AdReviewController::class, 'toggleVisibility'])->name('toggle');
             });
         });
 });

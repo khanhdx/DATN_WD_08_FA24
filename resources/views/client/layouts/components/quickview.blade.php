@@ -54,7 +54,7 @@
                                     <div class="star-rating"></div>
                                     <div class="star-bg"></div>
                                 </div>
-                                <span>3 Reviews</span>
+                                <span id="review-count">0 Review</span>
                             </div>
 
                             <p class="price">
