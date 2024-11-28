@@ -17,6 +17,7 @@ class Order extends Model
         'shipper_id',
         'total_price',
         'date',
+        'phone_number',
         'address',
         'note'
     ];

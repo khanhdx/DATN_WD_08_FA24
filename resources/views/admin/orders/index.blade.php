@@ -84,7 +84,7 @@
                                     <td>
                                         ORDER-01
                                     </td>
-                                    <td>{{ $order->user->name }}</td>
+                                    <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td>
                                     <td>{{ $order->total_price }} đ</td>
                                     <td>{{ $order->created_at }}</td>
                                     <td>

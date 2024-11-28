@@ -266,10 +266,10 @@
                         </tbody>
                     </table>
                     <p>
-                        <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
+                        <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}" class="btn btn-primary btn-block btn-sm">
                             Proceed To Checkout
                         </a>
-                    </p>
+                    </p>                    
                     <a href="{{ route('client.home') }}">
                         <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
                             data-loading-text="Loading...">

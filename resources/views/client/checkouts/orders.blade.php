@@ -15,6 +15,7 @@
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
+                    <th>Thanh toán</th>
                     <th>Địa chỉ</th>
                     <th>Ghi chú</th>
                     <th>Hành động</th>
@@ -28,7 +29,7 @@
                         <td>{{ number_format($order->total_price, 0, ',', '.'
                         ) }} VND</td>
                         <td>
-                            <strong>Trạng thái:</strong>
+                            
                             @if ($order->statusOrder->isNotEmpty())
                                 {{-- Kiểm tra xem có trạng thái không --}}
                                 @foreach ($order->statusOrder as $status)
@@ -36,6 +37,32 @@
                                 @endforeach
                             @else
                                 <span>Chưa có trạng thái</span>
+                            @endif
+                        </td>
+                        <td>
+                            
+                            @if ($order->payments->isNotEmpty())
+                                @foreach ($order->payments as $payment)
+                                    <!-- Kiểm tra trạng thái thanh toán -->
+                                    @if ($payment->status == 1)
+                                        Đã hoàn thành
+                                    @elseif ($payment->status == 0)
+                                        Chưa thanh toán
+                                    @else
+                                        Không xác định
+                                    @endif
+                                @endforeach
+                            @else
+                                <span>Chưa có trạng thái</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($order->payments->isNotEmpty())
+                                @foreach ($order->payments as $payment)
+                                    {{ $payment->payment_method }} <!-- Hiển thị phương thức thanh toán -->
+                                @endforeach
+                            @else
+                                <span>Chưa thanh toán</span>
                             @endif
                         </td>
                         <td>{{ $order->address }}</td>
