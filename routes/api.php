@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\StatisticalController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
 use Illuminate\Support\Facades\Log;

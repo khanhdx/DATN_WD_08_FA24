@@ -9,14 +9,16 @@
     <meta name="description" content="Flatize - Shop HTML5 Responsive Template">
     <meta name="author" content="pixelgeeklab.com">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flatize - Shop HTML5 Responsive Template</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>Obito - @yield('title')</title>
 
     @include('client.layouts.components.link')
 
     @yield('css')
 </head>
 
-<body>
+<body data-role="user" data-user-id="{{ auth()->id() }}" >
     <div id="page">
         <header>
             <div id="top" class="header-view">
@@ -40,6 +42,8 @@
     @include('client.layouts.components.quickview')
 
     @include('client.layouts.components.search')
+
+    @include('client.layouts.components.chatbox')
 
     @include('client.layouts.components.js')
 

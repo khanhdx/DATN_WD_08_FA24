@@ -113,14 +113,15 @@ class CartController extends Controller
                     $cart[$key]['sub_total'] += $sub_total;
                 } else {
                     $cart[$key] = [
-                        'id'        => $newId,
-                        'image'     => $productVariant->product->image,
-                        'name'      => $productVariant->product->name,
-                        'color'     => $productVariant->color->name,
-                        'size'      => $productVariant->size->name,
-                        'quantity'  => $request->quantity,
-                        'price'     => $productVariant->price,
-                        'sub_total' => $sub_total,
+                        'id'         => $newId,
+                        'product_id' => $productVariant->product->id,
+                        'image'      => $productVariant->product->image,
+                        'name'       => $productVariant->product->name,
+                        'color'      => $productVariant->color->name,
+                        'size'       => $productVariant->size->name,
+                        'quantity'   => $request->quantity,
+                        'price'      => $productVariant->price,
+                        'sub_total'  => $sub_total,
                     ];
                 }
                 session()->put('cart', $cart);

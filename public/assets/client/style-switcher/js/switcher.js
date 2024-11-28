@@ -50,14 +50,14 @@ jQuery(function(){
 	themes_panel_width = jQuery('#style-switcher-menu').outerWidth();
 	
 	jQuery('#style-switcher').css('right', 0);
-	jQuery('#style-switcher').animate({right: -themes_panel_width}, 400);
+	jQuery('#style-switcher').animate({right: -themes_panel_width}, 300);
 	
 	jQuery('#toggle_button').click(function() {
 
 		var themes_panel = jQuery(this).parent();
 		themes_panel.animate({
 		  right: parseInt(themes_panel.css('right'),0) == 0 ? -themes_panel_width : 0
-		}, 400);
+		}, 300);
 		
 		return false;
 	});
