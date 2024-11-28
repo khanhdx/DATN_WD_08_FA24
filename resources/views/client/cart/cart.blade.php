@@ -12,7 +12,7 @@
 @else
     <div class="row featured-boxes">
         <div class="col-md-12">
-            <h3>Giỏ hàng của bạn ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} sản phẩm)</h3>
+            <h3>Your selection ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} items)</h3>
             <div class="featured-box featured-box-cart">
                 <div class="box-content">
                     <table cellspacing="0" class="shop_table" width="100%">
@@ -66,7 +66,9 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} đ</span>
+                                            <span
+                                                class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }}
+                                                đ</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -131,7 +133,8 @@
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }} VND</span>
+                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }}
+                                                VND</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -186,16 +189,44 @@
         {{-- <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
-                    <h4>Promotional Code</h4>
-                    <p>Enter promotional code if you have one</p>
-                    <form action="#" id="" type="post">
+                    <h4>Tính toán vận chuyển</h4>
+                    <p>Nhập điểm đến của bạn để có được ước tính vận chuyển.</p>
+
+                    <!-- Phản hồi từ server -->
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @elseif (session('shipping_fee'))
+                        <div class="alert alert-success">
+                            Giá vận chuyển: {{ session('shipping_fee') }} VND
+                        </div>
+                    @endif
+
+                    <form action="{{ route('client.carts.calculate-shipping') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label class="sr-only">Promotional code</label>
-                            <input type="text" value="" class="form-control"
-                                placeholder="Enter promotional code here">
+                            <label class="sr-only">Tỉnh / Thành phố</label>
+                            <input type="text" name="province" class="form-control" placeholder="Nhập Tỉnh / thành phố"
+                                required>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Apply Promotion" class="btn btn-grey btn-sm"
+                            <label class="sr-only">Nhập Quận / Huyện</label>
+                            <input type="text" name="district" class="form-control" placeholder="Nhập Quận / Huyện"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only">Phường / Xã</label>
+                            <input type="text" name="ward" class="form-control" placeholder="Phường / Xã"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only">Nhập số nhà, tên đường</label>
+                            <input type="text" name="address" class="form-control"
+                                placeholder="Nhập số nhà, tên đường" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Xác nhận địa chỉ" class="btn btn-grey btn-sm"
                                 data-loading-text="Loading...">
                         </div>
                     </form>
@@ -205,77 +236,53 @@
         <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
-                    <h4>Calculate Shipping</h4>
-                    <p>Enter your destination to get a shipping estimate.</p>
-                    <form action="#" id="" type="post">
-                        <div class="form-group">
-                            <label class="sr-only">Country</label>
-                            <div class="list-sort">
-                                <select class="formDropdown">
-                                    <option value="">Select a country</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only">State/Province</label>
-                            <input type="text" value="" class="form-control" placeholder="State/Province">
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only">Zip/Postal Code</label>
-                            <input type="text" value="" class="form-control" placeholder="Zip/Postal Code">
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Update Totals" class="btn btn-grey btn-sm"
-                                data-loading-text="Loading...">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> --}}
-        <div class="col-xs-12">
-            <div class="featured-box featured-box-secondary">
-                <div class="box-content">
-                    <h4>Tổng giỏ hàng</h4>
+                    <h4>Shopping bag summary</h4>
                     <table cellspacing="0" class="cart-totals" width="100%">
                         <tbody>
                             <tr class="cart-subtotal">
                                 <th>
-                                    Thành tiền
+                                    Cart Subtotal
                                 </th>
                                 <td>
                                     <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
                                 </td>
                             </tr>
-                            <tr class="shipping">
+                            {{-- <tr class="shipping">
                                 <th>
-                                    Phí vận chuyển
+                                    Shipping
                                 </th>
                                 <td>
-                                    Freeship<input type="hidden" value="free_shipping" id="shipping_method"
+                                    Free Shipping<input type="hidden" value="free_shipping" id="shipping_method"
                                         name="shipping_method">
                                 </td>
                             </tr>
                             <tr class="total">
                                 <th>    
-                                    Tổng thanh toán
+                                    Total
                                 </th>
                                 <td>
-                                    <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @if (session('shipping_fee'))
+                                        <span class="amount">{{ number_format($total + str_replace('.', '', session('shipping_fee')), 0, ',', '.') }} VND</span>
+                                    @else
+                                        <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @endif
                                 </td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                     <p>
                         <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
-                            Thanh toán
+                            Proceed To Checkout
                         </a>
                     </p>
                     <a href="{{ route('client.home') }}">
-                        <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm"
+                        <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
                             data-loading-text="Loading...">
                     </a>
                 </div>
             </div>
         </div>
+        
     </div>
+
 @endif

@@ -3,7 +3,7 @@
 @section('title', 'Blog Masonry')
 
 @section('text_page')
-    Blog Masonry
+    Bài viết
 @endsection
 
 @section('content')

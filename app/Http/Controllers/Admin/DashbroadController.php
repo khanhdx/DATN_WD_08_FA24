@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderPlaced;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\User;
@@ -13,6 +14,7 @@ class DashbroadController extends Controller
 
     public function index()
     {
+       
         return view('admin.dashbroad');
     }
 }

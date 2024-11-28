@@ -97,7 +97,7 @@
             <div class="ImttOn">
                 <div class="imgTT">
                     @if (Auth::user()->user_image)
-                        <div class="imgT" id="imgPreview"><img src="{{ Storage::url(Auth::user()->user_image) }}" style="width: 100%;height: 100%;object-fit: cover" alt=""></div>
+                        <div class="imgT" id="imgPreview"><img src="{{ asset('storage/' . Auth::user()->user_image) }}" style="width: 100%;height: 100%;object-fit: cover;border-radius:50%;border: 1px solid silver;" alt=""></div>
                     @else
                         <div class="imgT" id="imgPreview" style="background-image: url({{ asset('assets/admin/images/icon/avatar-01.jpg') }});"></div>
                     @endif

@@ -3,7 +3,7 @@
 @section('title', 'Giỏ hàng')
 
 @section('text_page')
-    Giỏ hàng
+    Túi mua sắm
 @endsection
 
 @section('content')

@@ -24,33 +24,33 @@ class BannerController extends Controller
     }
     
     public function store(Request $request)
-{
-    // Lấy dữ liệu title, image và status từ request
-    $titles = $request->input('title');
-    $images = $request->file('image');
-    $statuses = $request->input('status');
+    {
+        // Lấy dữ liệu title, image và status từ request
+        $titles = $request->input('title');
+        $images = $request->file('image');
+        $statuses = $request->input('status');
 
-    if ($titles && $images && $statuses && count($titles) == count($images) && count($titles) == count($statuses)) {
-        foreach ($titles as $index => $title) {
-            $banner = new Banner();
-            $banner->title = $title;
-            $banner->status = ($statuses[$index] == 'active') ? 1 : 0;
+        if ($titles && $images && $statuses && count($titles) == count($images) && count($titles) == count($statuses)) {
+            foreach ($titles as $index => $title) {
+                $banner = new Banner();
+                $banner->title = $title;
+                $banner->status = ($statuses[$index] == 'active') ? 1 : 0;
 
-            if ($images[$index]->isValid()) {
-                $imagePath = $images[$index]->store('images', 'public');
-                $banner->image = $imagePath;
-            } else {
-                return redirect()->route('admin.slider.index')->with('error', 'File ảnh không hợp lệ cho một hoặc nhiều banner');
+                if ($images[$index]->isValid()) {
+                    $imagePath = $images[$index]->store('images', 'public');
+                    $banner->image = $imagePath;
+                } else {
+                    return redirect()->route('admin.slider.index')->with('error', 'File ảnh không hợp lệ cho một hoặc nhiều banner');
+                }
+
+                $banner->save();
             }
 
-            $banner->save();
+            return redirect()->route('admin.slider.index')->with('success', 'Thêm mới banner thành công');
+        } else {
+            return redirect()->route('admin.slider.index')->with('error', 'Dữ liệu banner không hợp lệ');
         }
-
-        return redirect()->route('admin.slider.index')->with('success', 'Thêm mới banner thành công');
-    } else {
-        return redirect()->route('admin.slider.index')->with('error', 'Dữ liệu banner không hợp lệ');
     }
-}
     
     
     public function edit(string $id)

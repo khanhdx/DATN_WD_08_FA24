@@ -1,12 +1,15 @@
 <?php
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
+
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
@@ -16,7 +19,6 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Admin\LocationController;
-
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\PaymentController;
@@ -140,6 +142,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 
@@ -212,7 +215,10 @@ Route::name('client.')->group(function () {
             Route::post('/add', 'addToCart')->name('add');
             Route::put('/{id}', 'updateCart')->name('update');
             Route::delete('/{id}', 'destroy')->name('delete');
-        });
+
+        }
+    );
+    // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
 // Route cho khách hàng (client)
@@ -223,11 +229,11 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
+    Route::post('/calculate-shipping', [ShippingController::class, 'calculateShipping'])->name('shipping.calculate');//tính phí vận chuyển
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
-
 
 });
 
@@ -261,3 +267,4 @@ Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
 
 Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
 Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
+

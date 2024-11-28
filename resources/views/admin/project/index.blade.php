@@ -15,9 +15,9 @@
     <div id="contentCC" class="col-5">
         <div class="card text-center">
             @if (Auth::user()->user_image)
-                <img src="{{ Storage::url(Auth::user()->user_image) }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+                <img src="{{ asset('storage/' . Auth::user()->user_image) }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;object-fit: cover;">
             @else
-                <img src="/assets/admin/images/icon/avatar-big-01.jpg" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;">
+                <img src="/assets/admin/images/icon/avatar-big-01.jpg" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;object-fit: cover;">
             @endif
             <div class="card-body">
                 <h3 class="card-title">{{Auth::user()->name}}</h3>

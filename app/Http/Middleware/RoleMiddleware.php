@@ -19,7 +19,8 @@ class RoleMiddleware
         $user = Auth::user();
 
         if (!$user) {
-            return redirect()->route('login');
+            //return redirect()->route('login');
+            return $next($request);
         }
 
         if ($user->role === $role) {

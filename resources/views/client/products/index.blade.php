@@ -3,7 +3,7 @@
 @section('title', 'Danh sách sản phẩm')
 
 @section('text_page')
-    Shopping
+    Mua sắm
 @endsection
 
 @section('content')
@@ -17,16 +17,30 @@
                         <h4>Lọc theo giá</h4>
                         <div id="price-range">
                             <div class="padding-range">
-                                <div id="slider-range"></div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price1" name="price"
+                                        value="0-500">
+                                    <label class="form-check-label" for="price1">Dưới 500,000 đ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price2" name="price"
+                                        value="500-1000">
+                                    <label class="form-check-label" for="price2">500,000 đ - 1,000,000 đ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="price3" name="price"
+                                        value="1000-100000">
+                                    <label class="form-check-label" for="price3">Trên 1,000,000 đ</label>
+                                </div>
+                                <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                        onclick="filterByPrice()">Apply Filter</a></p>
                             </div>
-                            <label for="amount">Price:</label>
-                            <input type="text" id="amount">
-                            <p class="clearfix"><a href="#" class="btn btn-primary btn-sm">Apply Filter</a></p>
                         </div>
                     </aside>
                     <aside class="block blk-cat">
                         <h4>Danh mục</h4>
                         <ul class="list-unstyled list-cat">
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Products</a></li>
                             @foreach ($categories as $category)
                                 <li><a href=""
                                         onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
@@ -37,8 +51,10 @@
                     <aside class="block blk-colors">
                         <h4>Màu sắc</h4>
                         <ul class="list-unstyled list-cat">
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Colors</a></li>
                             @foreach ($colors as $color)
-                                <li><a href="#">{{ $color->name }}</a></li>
+                                <li><a href="javascript:void(0);"
+                                        onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -99,22 +115,24 @@
                             <li id="grid-view" class="active"><a href=""><i class="fa fa-th"></i></a></li>
                             <li id="list-view"><a href=""><i class="fa fa-th-list"></i></a></li>
                         </ul>
-                        <p class="pull-left">Showing 1-12 of 50 results</p>
+                        {{-- <p class="pull-left">Showing 1-12 of 50 results</p> --}}
                         <!-- Ordering -->
                         <div class="list-sort pull-right">
                             <select class="formDropdown">
-                                <option>Default Sorting</option>
-                                <option>Sort by Popularity</option>
-                                <option>Sort by Newness</option>
+                                <option>Sắp xếp mặc định</option>
+                                <option>Sắp xếp theo mức độ phổ biến</option>
+                                <option>Sắp xếp theo độ mới</option>
                             </select>
                         </div>
                     </div>
                     <div id="products-grid">
                         <div class="tab-pane active" id="man">
-                            <div class="row">
+                            <div class="row" id="product-container">
                                 @foreach ($products as $product)
                                     <div class="col-xs-6 col-sm-4 animation"
-                                        data-category-id="{{ $product->category->id }}">
+                                        data-category-id="{{ $product->category->id }}"
+                                        data-color-id="{{ $product->color_id }}"
+                                        data-price="{{ $product->price_regular }}">
                                         <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
@@ -172,13 +190,16 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>3 Reviews</span> | <a href="#">Add Your Review</a>
+                                                    <span>({{ $product->reviews->count() }}) Reviews</span> |
+                                                    {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">{{ $product->price_regular }} đ</p>
                                                 <p>{{ $product->description }}</p>
                                                 <p class="btn-group">
                                                     {{-- <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button> --}}
-                                                    <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                        data-target=".quickview-wrapper" class="view-product"
+                                                        data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-eye"></i></span>
                                                     </a>
                                                     <a href="#">
@@ -308,5 +329,68 @@
             document.getElementById('list-view').classList.remove('active');
             this.classList.add('active');
         });
+
+        function filterByCategory(categoryId) {
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByColor(colorId) {
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                if (product.getAttribute('data-color-id') == colorId || colorId == 0) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByPrice() {
+            var selectedPrices = document.querySelectorAll('input[name="price"]:checked');
+            var products = document.querySelectorAll('#product-container .animation');
+            if (selectedPrices.length === 0) {
+                products.forEach(function(product) {
+                    product.style.display = 'block';
+                });
+                return;
+            }
+            products.forEach(function(product) {
+                var productPrice = parseFloat(product.getAttribute('data-price'));
+                var showProduct = false;
+                selectedPrices.forEach(function(price) {
+                    var priceRange = price.value.split('-');
+                    var minPrice = parseFloat(priceRange[0]);
+                    var maxPrice = parseFloat(priceRange[1]);
+                    if (productPrice >= minPrice && productPrice <= maxPrice) {
+                        showProduct = true;
+                    }
+                });
+                if (showProduct) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function showAllProducts() {
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                product.style.display = 'block';
+            });
+        }
+    </script>
+    <script>
+        @if (request('type'))
+            filterByCategory({{ request('type') }});
+            history.pushState(null, null, "{{ route('client.product.index') }}");
+        @endif
     </script>
 @endsection

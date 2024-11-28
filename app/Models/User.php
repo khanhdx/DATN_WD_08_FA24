@@ -4,8 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -48,7 +50,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function locations ()
+    public function locations()
     {
         return $this->hasMany(Locations::class);
     }
@@ -67,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
-    
+
     public function rooms()
     {
         return $this->hasOne(ChatRoom::class);
@@ -82,5 +84,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Message::class)->latest("id");
     }
+    
+    public function notifications()
+    {
+        return $this->HasMany(Notification::class);
+    }
 }
-

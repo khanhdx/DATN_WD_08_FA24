@@ -29,3 +29,7 @@ Broadcast::channel('chat.{chatRoomId}', function (User $user, int $chatRoomId) {
         ];
     }
 });
+
+Broadcast::channel('order-noti', function () {
+    return true;
+});

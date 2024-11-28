@@ -78,55 +78,51 @@
             </div>
             <div class="voucher-list">
                 @foreach ($voucher_new as $key => $voucher)
-                    <div class="card-voucher">
-                        <div class="voucher-right">
-                            <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{number_format($voucher->max_value,0,'','.')}}đ</span>|<span>Đơn tối thiểu {{number_format($voucher->condition,0,'','.')}}đ</span></div>
-                            <div class="voucher-title">
-                                <span>Gift Coupon</span>
+                        <div class="card-voucher">
+                            <div class="voucher-right">
+                                <div class="voucher-name"><span>{{$voucher->name}}</span>|<span>Giảm tối đa {{number_format($voucher->max_value,0,'','.')}}đ</span>|<span>Đơn tối thiểu {{number_format($voucher->condition,0,'','.')}}đ</span></div>
+                                <div class="voucher-title">
+                                    <span>Gift Coupon</span>
+                                </div>
+                                <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$voucher->id) }}">Chi tiết</a></span></div>
                             </div>
-                            <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$voucher->id) }}">Chi tiết</a></span></div>
-                        </div>
-                        <div class="voucher-left">
-                            <div class="salse">
-                                @if ($voucher->value === "Cố định")
-                                    <span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span>
-                                @else
-                                    <span>{{$voucher->decreased_value}}%</span>
-                                @endif
-                            </div>
-                            <div>
-                                @if (Auth::user())
-                                        @if ($voucher->check)
-                                            <button class="btn btn-save" disabled>Đã lưu</button>  
-                                        @else                              
-                                            <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
-                                                <button class="btn btn-save LuuVoucher">Lưu</button>
-                                            </form>
+                            <div class="voucher-left">
+                                <div class="salse">
+                                    @if ($voucher->value === "Cố định")
+                                        <span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span>
+                                    @else
+                                        <span>{{$voucher->decreased_value}}%</span>
+                                    @endif
+                                </div>
+                                <div>
+                                    @if ($voucher->date_start > date('Y-m-d'))
+                                        <button class="btn btn-save" disabled>Chưa bắt đầu</button>
+                                    @elseif ($voucher->date_end < date('Y-m-d'))
+                                        <button class="btn btn-save" disabled>Hết hạn</button>
+                                    @else
+                                        @if (Auth::user())
+                                            @if ($voucher->check)
+                                                <button class="btn btn-save" disabled>Đã lưu</button>  
+                                            @else                              
+                                                <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
+                                                    <button class="btn btn-save LuuVoucher">Lưu</button>
+                                                </form>
+                                            @endif
+                                        @else
+                                            <button class="btn btn-save saveVoucher">Lưu</button>
                                         @endif
-                                @else
-                                    <button class="btn btn-save saveVoucher">Lưu</button>
-                                @endif
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
                 @endforeach
             </div>
         </div>
     </section>
 @endsection
 @section('js')
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-        $('.saveVoucher').on('click', function () {
-            swal({
-                title: "Thông báo !",
-                text: "Bạn cần đăng nhập mới có thể sử dụng mã giảm giá.",
-                icon: "warning",
-            });
-        })
-        
-    </script>
+
 @endsection

@@ -335,3 +335,30 @@
         }
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // e.preventDefault();
+        $(document).on('click', '.login > a', function() {
+            var wrapper = $('.login-wrapper');
+
+            if (wrapper.hasClass('open')) {
+                wrapper.removeClass('open');
+            } else {
+                wrapper.addClass('open');
+            }
+        });
+    })
+</script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+        $('.saveVoucher').on('click', function () {
+            swal({
+                title: "Thông báo !",
+                text: "Bạn cần đăng nhập mới có thể sử dụng mã giảm giá.",
+                icon: "warning",
+            });
+        })
+</script>

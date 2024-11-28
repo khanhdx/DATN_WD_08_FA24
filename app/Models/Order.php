@@ -14,7 +14,7 @@ class Order extends Model
     protected $fillable = [
         'slug',
         'user_id',
-        'shipper_id',
+        'shipping_fee',
         'total_price',
         'date',
         'address',
@@ -68,11 +68,6 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
-
-    // public function statusOrder()
-    // {
-    //     return $this->belongsTo(StatusOrder::class);
-    // }
 
     public function voucherWare()
     {

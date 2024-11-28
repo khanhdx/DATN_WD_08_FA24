@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Events\OrderEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -22,7 +23,7 @@ class PaymentController extends Controller
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
         if (!$cartId) {
-            return redirect()->route('carts.index')->with('error', 'Giỏ hàng không tồn tại.');
+            return redirect()->route('client.carts.index')->with('error', 'Giỏ hàng không tồn tại.');
         }
 
         $cartItems = CartItem::where('cart_id', $cartId)->with('productVariant')->get();
@@ -117,6 +118,7 @@ class PaymentController extends Controller
         try {
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'slug' => $this->generateSlug(),
                 'total_price' => $totalPrice,
                 'voucher_id' => session('voucher_id'),
                 'status_order_id' => 1,
@@ -156,6 +158,9 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 0,
             ]);
+
+            // Thống báo admin
+            broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating order: ' . $e->getMessage());
             return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
@@ -183,6 +188,11 @@ class PaymentController extends Controller
         return redirect()->route('payment.success')->with('success', 'Đặt hàng thành công!');
     }
 
+    protected function generateSlug(){
+        $randomNumber = rand(1000, 9999);
+        $date = now()->format('Ymd');
+        return 'Order-' . $randomNumber . $date;
+    }
     function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -259,4 +269,6 @@ class PaymentController extends Controller
             return view('client.checkouts.success', compact('orders'));
         }
     }
+
+    
 }
