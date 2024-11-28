@@ -7,7 +7,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-4 box-user">
                 <div class="list-user">
 
                 </div>

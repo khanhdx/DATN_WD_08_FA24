@@ -4,7 +4,6 @@
         @csrf
         
         <h4>Đăng nhập</h4>
-        {{-- <p>Nếu bạn là thành viên, đăng nhập tại đây.</p> --}}
         <div class="form-group">
             <label for="inputusername">Email</label>
             <input type="text" name="email" class="form-control input-lg" id="inputusername" placeholder="Email">

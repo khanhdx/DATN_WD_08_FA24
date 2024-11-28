@@ -1,7 +1,7 @@
 #style-switcher {
     right: 0;
     position: fixed;
-    top: 150px;
+    top: 100px;
     z-index: 9999;
     opacity: 0;
 }
@@ -22,7 +22,6 @@
 }
 
 #style-switcher-menu {
-    /* border-radius: 15px; */
     position: relative;
     float: left;
     width: 420px;

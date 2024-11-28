@@ -22,8 +22,8 @@
     <!-- Main JS-->
     <script src="/assets/admin/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
-    {{-- @vite('resources/js/app.js') --}}
-    <script type="module" src="{{ asset('build/assets/app-aaecec55.js')}}"></script>
+    @vite('resources/js/app.js')
+    {{-- <script type="module" src="{{ asset('build/assets/app-aaecec55.js')}}"></script> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
