@@ -17,6 +17,10 @@
 <link href="/assets/admin/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 <link href="/assets/admin/vendor/vector-map/jqvmap.min.css" rel="stylesheet" media="all">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
 <!-- Main CSS-->
 <link href="/assets/admin/css/theme.css" rel="stylesheet" media="all">
 <link href="/assets/admin/css/chat.css" rel="stylesheet" media="all">

@@ -104,7 +104,11 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+                    // const reviewCount = data.reviews.length;
+                    // Hiển thị số lượt đánh giá
                     const reviewCount = data.reviews.length;
+                    $('#review-count').text(`${reviewCount} Review${reviewCount > 1 ? 's' : ''}`);
+
                     $('#reviewCount').text(reviewCount); 
                     
                     data.reviews.forEach(review => {
