@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Danh sách sản phẩm')
+
 @section('text_page')
     Mua sắm
 @endsection
@@ -27,7 +29,8 @@
                                     <input class="form-check-input" type="checkbox" id="price3" name="price" value="10000000-1000000000">
                                     <label class="form-check-label" for="price3">Trên 10,000,000đ</label>
                                 </div>
-                                <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="filterByPrice()">Apply Filter</a></p>
+                                <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm"
+                                        onclick="filterByPrice()">Apply Filter</a></p>
                             </div>
                         </div>
                     </aside>
@@ -36,7 +39,8 @@
                         <ul class="list-unstyled list-cat">
                             <li><a href="javascript:void(0);" onclick="showAllProducts()">All Products</a></li>
                             @foreach ($categories as $category)
-                                <li><a href="javascript:void(0);" onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                                <li><a href=""
+                                        onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -46,7 +50,8 @@
                         <ul class="list-unstyled list-cat">
                             <li><a href="javascript:void(0);" onclick="showAllProducts()">All Colors</a></li>
                             @foreach ($colors as $color)
-                                <li><a href="javascript:void(0);" onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
+                                <li><a href="javascript:void(0);"
+                                        onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
@@ -121,12 +126,17 @@
                         <div class="tab-pane active" id="man">
                             <div class="row" id="product-container">
                                 @foreach ($products as $product)
-                                    <div class="col-xs-6 col-sm-4 animation" data-category-id="{{ $product->category->id }}" data-color-id="{{ $product->color_id }}" data-price="{{ $product->price_regular }}">
+                                    <div class="col-xs-6 col-sm-4 animation"
+                                        data-category-id="{{ $product->category->id }}"
+                                        data-color-id="{{ $product->color_id }}"
+                                        data-price="{{ $product->price_regular }}">
                                         <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
                                                     <span class="product-thumb-info-act">
-                                                        <a href="" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
+                                                        <a href="" data-toggle="modal"
+                                                            data-target=".quickview-wrapper" class="view-product"
+                                                            data-id="{{ $product->id }}">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
                                                         {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
@@ -134,12 +144,15 @@
                                                         </a> --}}
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
-                                                        <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                                        <img alt="" class="img-responsive"
+                                                            src="{{ $product->image }}">
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
                                                     <span class="price pull-right">{{ $product->price_regular }} đ</span>
-                                                    <h4><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h4>
+                                                    <h4><a
+                                                            href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                                    </h4>
                                                     <span class="item-cat">
                                                         <small>
                                                             <a href="#">{{ $product->category->name }}</a>
@@ -159,28 +172,33 @@
                                         <div class="col-xs-5 col-sm-3">
                                             <div class="product-thumb-info-image">
                                                 <a href="{{ route('client.product.show', $product->id) }}">
-                                                    <img alt="" class="img-responsive" src="{{ $product->image }}">
+                                                    <img alt="" class="img-responsive"
+                                                        src="{{ $product->image }}">
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col-xs-7 col-sm-9">
                                             <div class="product-thumb-info-content">
-                                                <h4><a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a></h4>
+                                                <h4><a
+                                                        href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                                </h4>
                                                 <div class="reviews-counter clearfix">
                                                     <div class="rating five-stars pull-left">
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>({{ $product->reviews->count() }}) Reviews</span> | 
+                                                    <span>({{ $product->reviews->count() }}) Reviews</span> |
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">{{ $product->price_regular }} đ</p>
                                                 <p>{{ $product->description }}</p>
                                                 <p class="btn-group">
                                                     {{-- <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button> --}}
-                                                    <a href="javascript:void(0);" data-toggle="modal" data-target=".quickview-wrapper" class="view-product" data-id="{{ $product->id }}">
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                        data-target=".quickview-wrapper" class="view-product"
+                                                        data-id="{{ $product->id }}">
                                                         <span><i class="fa fa-eye"></i></span>
-                                                    </a>                       
+                                                    </a>
                                                     <a href="#">
                                                         <span><i class="fa fa-heart-o"></i></span>
                                                     </a>
@@ -290,85 +308,86 @@
         }
     </style>
 @endsection
+
 @section('js')
-<script>
-    document.getElementById('list-view').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.querySelector('.product-list').style.display = 'block';
-        document.querySelector('.tab-pane').style.display = 'none';
-        document.getElementById('grid-view').classList.remove('active');
-        this.classList.add('active');
-    });
-
-    document.getElementById('grid-view').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.querySelector('.product-list').style.display = 'none';
-        document.querySelector('.tab-pane').style.display = 'block';
-        document.getElementById('list-view').classList.remove('active');
-        this.classList.add('active');
-    }); 
-
-    function filterByCategory(categoryId) {
-        var products = document.querySelectorAll('#product-container .animation');
-        products.forEach(function(product) {
-            if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
+    <script>
+        document.getElementById('list-view').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.product-list').style.display = 'block';
+            document.querySelector('.tab-pane').style.display = 'none';
+            document.getElementById('grid-view').classList.remove('active');
+            this.classList.add('active');
         });
-    }
 
-    function filterByColor(colorId) {
-        var products = document.querySelectorAll('#product-container .animation');
-        products.forEach(function(product) {
-            if (product.getAttribute('data-color-id') == colorId || colorId == 0) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
+        document.getElementById('grid-view').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.product-list').style.display = 'none';
+            document.querySelector('.tab-pane').style.display = 'block';
+            document.getElementById('list-view').classList.remove('active');
+            this.classList.add('active');
         });
-    }
 
-    function filterByPrice() {
-        var selectedPrices = document.querySelectorAll('input[name="price"]:checked');
-        var products = document.querySelectorAll('#product-container .animation');
-        if (selectedPrices.length === 0) {
+        function filterByCategory(categoryId) {
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByColor(colorId) {
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                if (product.getAttribute('data-color-id') == colorId || colorId == 0) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByPrice() {
+            var selectedPrices = document.querySelectorAll('input[name="price"]:checked');
+            var products = document.querySelectorAll('#product-container .animation');
+            if (selectedPrices.length === 0) {
+                products.forEach(function(product) {
+                    product.style.display = 'block';
+                });
+                return;
+            }
+            products.forEach(function(product) {
+                var productPrice = parseFloat(product.getAttribute('data-price'));
+                var showProduct = false;
+                selectedPrices.forEach(function(price) {
+                    var priceRange = price.value.split('-');
+                    var minPrice = parseFloat(priceRange[0]);
+                    var maxPrice = parseFloat(priceRange[1]);
+                    if (productPrice >= minPrice && productPrice <= maxPrice) {
+                        showProduct = true;
+                    }
+                });
+                if (showProduct) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function showAllProducts() {
+            var products = document.querySelectorAll('#product-container .animation');
             products.forEach(function(product) {
                 product.style.display = 'block';
             });
-            return;
         }
-        products.forEach(function(product) {
-            var productPrice = parseFloat(product.getAttribute('data-price'));
-            var showProduct = false;
-            selectedPrices.forEach(function(price) {
-                var priceRange = price.value.split('-');
-                var minPrice = parseFloat(priceRange[0]);
-                var maxPrice = parseFloat(priceRange[1]);
-                if (productPrice >= minPrice && productPrice <= maxPrice) {
-                    showProduct = true;
-                }
-            });
-            if (showProduct) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        });
-    }
-
-    function showAllProducts() {
-        var products = document.querySelectorAll('#product-container .animation');
-        products.forEach(function(product) {
-            product.style.display = 'block';
-        });
-    }
-</script>
-<script>
-    @if (request('type'))
-        filterByCategory({{ request('type') }});
-        history.pushState(null, null, "{{ route('client.product.index') }}");
-    @endif
-</script>
+    </script>
+    <script>
+        @if (request('type'))
+            filterByCategory({{ request('type') }});
+            history.pushState(null, null, "{{ route('client.product.index') }}");
+        @endif
+    </script>
 @endsection

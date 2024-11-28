@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Chỉnh sửa thông tin')
+
 @section('content')
 <div class="container">
     <h2>Chỉnh sửa thông tin cá nhân</h2>

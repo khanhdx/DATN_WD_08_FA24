@@ -58,7 +58,7 @@
                             </div>
 
                             <p class="price">
-                                <span class="amount" id="product-price-regular"></span>đ
+                                <span class="amount" id="product-price-regular"></span>
                             </p>
 
                             <form method="post" class="cart" id="addToCartQuick">

@@ -107,6 +107,10 @@
                         </li>
                     </ul>
                 </li>
+                <li class="has-sub">
+                    <a href="{{ route('admin.chat') }}">
+                        <i class="far fa-envelope"></i>Chat</a>
+                </li>
             </ul>
         </nav>
     </div>

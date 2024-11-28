@@ -8,7 +8,7 @@
     <meta name="description" content="au theme template">
     <meta name="author" content="">
     <meta name="keywords" content="au theme template">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Title Page-->
     <title>Admin Obito</title>
 
@@ -17,7 +17,7 @@
     @yield('css')
 </head>
 
-<body class="animsition">
+<body class="animsition" data-role="admin" data-user-id="{{ auth()->id() }}">
 
     <div class="page-wrapper">
         <!-- MENU SIDEBAR-->
@@ -35,7 +35,7 @@
 
             @include('admin.layouts.components.breadcrumb')
 
-            <section class="pt-5">
+            <section class="pt-4" style="padding-bottom: 2.5rem;">
                 <div class="section__content section__content--p30">
                     @yield('content')
                 </div>
@@ -48,7 +48,6 @@
     </div>
 
     @include('admin.layouts.components.js')
-
     @yield('js')
 </body>
 

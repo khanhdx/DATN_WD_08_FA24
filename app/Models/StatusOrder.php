@@ -47,6 +47,10 @@ class StatusOrder extends Model
                 return 'Đang xử lý';
             case 'shipping':
                 return 'Đang giao hàng';
+            case 'failed':
+                return 'Giao hàng thất bại';
+            case 'success':
+                return 'Giao hàng thành công';
             case 'completed':
                 return 'Hoàn Thành';
             case 'cancel':

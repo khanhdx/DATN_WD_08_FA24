@@ -46,13 +46,20 @@
 
 
                                 @if ($order->statusOrder->contains('name_status', 'pending'))
-                                <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng không')" style="display:inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="name_status" value="canceled">
-                                    <button type="submit" class="btn btn-outline-primary btn-sm">Hủy đơn hàng</button>
-                                </form>
-                            @endif
+                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng không')" style="display:inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="name_status" value="canceled">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Hủy đơn hàng</button>
+                                    </form>
+                                @elseif ($order->statusOrder->contains('name_status', 'success'))
+                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="name_status" value="completed">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Hoàn thành</button>
+                                    </form>
+                                @endif
                             
                         </td>
                     </tr>

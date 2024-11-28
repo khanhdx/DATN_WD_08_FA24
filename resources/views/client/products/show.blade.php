@@ -1,5 +1,9 @@
 @extends('client.layouts.master')
 
+@section('title')
+{{ $product->name }}
+@endsection
+
 @section('css')
     <style>
         span.stock {

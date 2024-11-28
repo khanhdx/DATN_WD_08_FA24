@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -55,11 +56,15 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
+            
+            Route::get('/chat', function () {
+                return view('admin.chat.index');
+            })->name('chat');
+
             Route::get('project', [ProjectController::class, 'index'])->name('project');
             Route::get('project/{id}', [ProjectController::class, 'edit'])->name('project.edit');
             Route::put('project/{id}', [ProjectController::class, 'update'])->name('project.update');
             Route::resource('category', CategorysController::class);
-            // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
             Route::resource('location', LocationController::class);
             Route::get('/export-excel', [UserController::class, 'exportExcel']);
@@ -73,9 +78,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
-
-
-
 
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
@@ -140,6 +142,7 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 
@@ -227,12 +230,7 @@ Route::name('client.')->group(function () {
 
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
-    Route::resource('profile', ProfileController::class)->only([
-        'index',
-        'edit',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('profile', ProfileController::class);
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
@@ -248,12 +246,31 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
+
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
+Route::post('loginAjax', [AuthController::class, 'loginAjax'])->name('loginAjax');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Route api cho vận chuyển.
+Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+Route::get('/districts', [ShippingController::class, 'getDistricts']);
+Route::post('/create-order', [ShippingController::class, 'createOrder']);
+
+// Route api cho chat
+Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
+
+Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
+Route::post('/api/block-user', [ChatController::class, 'blockUser']);
+Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
+
+Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
+Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
 

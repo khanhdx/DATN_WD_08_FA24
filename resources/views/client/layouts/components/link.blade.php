@@ -31,10 +31,15 @@
 
 <!-- Theme Responsive-->
 <link href="{{ asset('assets/client/css/theme-responsive.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,300,0,0" />
 <style>
     .swal2-title {
         font-size: 40px;
+    }
+
+    #form-login input {
+        color: #fff;
     }
 </style>

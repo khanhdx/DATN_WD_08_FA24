@@ -1,7 +1,2 @@
-delete colors , sizes => ảnh hưởng đến các sản phẩm biến thể, 
 
-
-16/10 Sửa destroy bảng products thì bảng product_variants cũng bị destroy
-
-22/10 Search, Filter và Phân trang cho products
 

@@ -24,82 +24,23 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
 
+<script src="/assets/js/increase-decrease.js"></script>
+<script src="/assets/js/login.js"></script>
+
 <script>
-    $(document).ready(function() {
-        // Ngăn dropdown mở ngay khi click nếu đang ở chế độ desktop (hover)
-        $('.dropdownLink').on('click', function(e) {
-            if ($(window).width() > 992) {
-                window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
-            }
-        });
-
-        // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
-        $('.dropdown').on('mouseenter', function() {
-            if ($(window).width() > 992) {
-                $(this).addClass('open');
-            }
-        }).on('mouseleave', function() {
-            $(this).removeClass('open');
-        });
-    });
-</script>
-
-<!-- Xử lý nút tăng giảm -->
-<script>
-    $(document).on('click', '.plus', function() {
-        let input = $(this).siblings('.qty');
-        let quantity = parseInt(input.val()) + 1;
-        input.val(quantity);
-
-        console.log(quantity);
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            updateCart(id, productVariantId, quantity)
+    $(document).on('click', '.dropdownLink', function(e) {
+        if ($(window).width() > 992) {
+            window.location.href = $(this).attr('href'); // Điều hướng ngay khi click.
         }
     });
 
-    $(document).on('click', '.minus', function() {
-        let input = $(this).siblings('.qty');
-        let quantity = parseInt(input.val());
-
-        if (quantity > 1) {
-            input.val(quantity - 1);
-            quantity -= 1
-        } else {
-            return
+    // Đảm bảo dropdown hoạt động tốt trên mobile (dùng click)
+    $(document).on('mouseenter', '.dropdown', function() {
+        if ($(window).width() > 992) {
+            $(this).addClass('open');
         }
-        console.log(quantity);
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            updateCart(id, productVariantId, quantity)
-        }
-    });
-
-    $(document).on('change', '.qty', function() {
-        let value = parseInt($(this).val());
-
-        if (isNaN(value) || value < 1) {
-            $(this).val(1);
-        }
-
-        if (window.location.pathname === '/carts') {
-            let id = $(this).data('id');
-            let productVariantId = $(this).data('variant-id');
-            let quantity = value;
-            updateCart(id, productVariantId, quantity)
-        }
-    });
-
-    $(document).on('keydown', '.qty', function(e) {
-        if ($.inArray(e.key, ["Backspace", "ArrowLeft", "ArrowRight", "Delete"]) !== -1 ||
-            (e.key >= "0" && e.key <= "9")) {
-            return;
-        }
-        e.preventDefault();
+    }).on('mouseleave', '.dropdown', function() {
+        $(this).removeClass('open');
     });
 </script>
 
@@ -119,7 +60,7 @@
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
                     $('#product-content').text(data.content);
-                    $('#product-price-regular').text(data.price_regular);
+                    $('#product-price-regular').text(data.price_regular.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
 
                     $('#category-name').text(data.category.name);
                     $('#category-type').text(data.category.type);
@@ -216,8 +157,6 @@
         });
     });
 </script>
-
-
 
 <!-- Xử lý cập nhật và xóa giỏ hàng qua ajax -->
 <script>
@@ -415,7 +354,9 @@
         });
     })
 </script>
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
         $('.saveVoucher').on('click', function () {
             swal({
