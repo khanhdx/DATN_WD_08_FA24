@@ -230,6 +230,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
+    Route::get('/orders/{id}/status', [ClientOrderController::class, 'getOrderStatus'])->name('orders.getStatus');
 
 
 });

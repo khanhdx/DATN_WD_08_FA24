@@ -45,5 +45,13 @@ class OrderController extends Controller
         } 
         return redirect()->route('orders.index');
     }
+    public function getOrderStatus($id)
+    {
+        $order = Order::with('statusOrder')->findOrFail($id);
+        $currentStatus = $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái';
     
+        return response()->json([
+            'status' => $currentStatus,
+        ]);
+    }
 }
