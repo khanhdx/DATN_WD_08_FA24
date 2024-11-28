@@ -43,6 +43,15 @@ class OrderController extends Controller
                 ]
             ]);
         } 
+        else if ($order->statusOrder->contains('name_status', 'success')) {
+    
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'completed')->first()->id => [
+                    'name' => 'completed',
+                    'updated_at' => now(),
+                ]
+            ]);
+        } 
         return redirect()->route('orders.index');
     }
     
