@@ -72,5 +72,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(ChatRoom::class);
     }
+
+    public function blocked_user()
+    {
+        return $this->hasOne(BlockedUser::class);
+    }
+
+    public function message()
+    {
+        return $this->hasOne(Message::class)->latest("id");
+    }
 }
 

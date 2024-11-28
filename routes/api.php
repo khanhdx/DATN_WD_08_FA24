@@ -36,5 +36,4 @@ Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
 Route::get('/order', [StatisticalController::class, 'getOrderData']);
 Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);
 
-Route::get('/chat-rooms', [ChatController::class, 'fetchChatRooms']);
-Route::get('/messages/{chatRoomId}', [ChatController::class, 'fetchMessages'])->name('show.chat');
+// Route API cho chat

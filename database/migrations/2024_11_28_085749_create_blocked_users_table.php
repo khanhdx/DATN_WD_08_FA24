@@ -12,12 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chat_rooms', function (Blueprint $table) {
+        Schema::create('blocked_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
-            // $table->boolean('is_block')->default(false);
-
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('admin_id');
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chat_rooms');
+        Schema::dropIfExists('blocked_users');
     }
 };

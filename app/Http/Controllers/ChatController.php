@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Models\BlockedUser;
 use App\Models\ChatRoom;
 use App\Models\Message;
 use App\Models\User;
@@ -11,11 +12,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function fetchChatRooms()
+    public function fetchUsers()
     {
-        return User::with(['rooms'])->where('role', 'Khách hàng')->get();
+        $users = User::with(['rooms', 'blocked_user'])->where('role', 'Khách hàng')->get();
+
+        // $message = Message::query()->where('user_id', $users->id)->latest("id")->get();
+        return response()->json($users);
     }
-    
+
     public function fetchMessages($chatRoomId)
     {
         $messages = Message::query()
@@ -25,14 +29,49 @@ class ChatController extends Controller
         return response()->json($messages);
     }
 
-    public function getChatRooms()
+    public function fetchChatRoomId()
     {
-        $chatRooms = ChatRoom::with('customer')
-        ->where('user_id', Auth::user()->id)
-        ->select('id')
-        ->first()?->id;
-        
-        return response()->json($chatRooms);
+        $chatRoomId = ChatRoom::query()->where('user_id', Auth::id())->first()?->id;
+
+        return response()->json($chatRoomId);
+    }
+
+    public function markAsRead($chatRoomId)
+    {
+        Message::where('chat_room_id', $chatRoomId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return response()->json(['success' => true]);
+    }
+
+    // Xử lý chặn user
+    public function blockUser(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        BlockedUser::firstOrCreate([
+            'user_id' => $request->user_id,
+            'admin_id' => auth()->id(),
+        ]);
+
+        return response()->json(['message' => 'User đã bị chặn']);
+    }
+
+    // Xử lý bỏ chặn user
+    public function unblockUser(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        BlockedUser::where('user_id', $request->user_id)
+            ->where('admin_id', auth()->id())
+            ->delete();
+
+        return response()->json(['message' => 'User đã được bỏ chặn']);
     }
 
     public function sendMessage(Request $request)
@@ -41,6 +80,12 @@ class ChatController extends Controller
             'chat_room_id' => 'required|exists:chat_rooms,id',
             'content' => 'required|string',
         ]);
+
+        $isBlocked = BlockedUser::where('user_id', Auth::id())->exists();
+
+        if ($isBlocked) {
+            return response()->json(['error' => 'Bạn đã bị chặn bởi admin'], 403);
+        }
 
         $message = Message::create([
             'chat_room_id' => $request->chat_room_id,

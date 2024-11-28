@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(ChatRoom::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->text('content');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

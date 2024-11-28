@@ -251,4 +251,13 @@ Route::get('/provinces', [ShippingController::class, 'getProvinces']);
 Route::get('/districts', [ShippingController::class, 'getDistricts']);
 Route::post('/create-order', [ShippingController::class, 'createOrder']);
 
+// Route api cho chat
+Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
 Route::post('/send-message', [ChatController::class, 'sendMessage']);
+
+Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
+Route::post('/api/block-user', [ChatController::class, 'blockUser']);
+Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
+
+Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
+Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);

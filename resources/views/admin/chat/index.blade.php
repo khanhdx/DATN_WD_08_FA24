@@ -14,12 +14,15 @@
             </div>
             <div class="col-8">
                 <div class="message-chat">
-                    <header>
+                    <header id="header-chat">
                         <h4 class="chat-title">Chat:</h4>
+                        
                     </header>
+                    
                     <div class="chat-box">
-
+                        <div class="text-welcome">Welcome to Admin Chat</div>
                     </div>
+
                     <div class="chat-input">
                         <textarea name="message" id="message-input" placeholder="Nhập nội dung tin nhắn..." required></textarea>
 
@@ -33,9 +36,6 @@
 @endsection
 
 @section('js')
-    <script>
-        let chatRoomId = 1;
-    </script>
 
     @vite('resources/js/chat.js')
 @endsection
