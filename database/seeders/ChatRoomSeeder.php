@@ -16,7 +16,7 @@ class ChatRoomSeeder extends Seeder
     {
         $users = User::pluck('id', 'id')->toArray();
         foreach ($users as $value) {
-            ChatRoom::create([
+            ChatRoom::firstOrCreate([
                 'user_id' => $value
             ]);
         }

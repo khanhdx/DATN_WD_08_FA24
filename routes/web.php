@@ -259,9 +259,9 @@ Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
 // Route api cho vận chuyển.
-Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-Route::get('/districts', [ShippingController::class, 'getDistricts']);
-Route::post('/create-order', [ShippingController::class, 'createOrder']);
+// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+// Route::get('/districts', [ShippingController::class, 'getDistricts']);
+// Route::post('/create-order', [ShippingController::class, 'createOrder']);
 
 // Route api cho chat
 Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);

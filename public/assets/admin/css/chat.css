@@ -14,6 +14,14 @@
     color: #fff;
     font-size: 1.4rem;
 }
+.box-user {
+    position: relative;
+    height: 509px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 10px 20px 0;
+}
 
 #header-chat {
     display: flex;
@@ -23,10 +31,18 @@
 
 .message-chat .chat-box {
     position: relative;
-
     height: 450px;
     overflow-y: auto;
     padding: 15px 20px 80px;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: lightgrey;
 }
 
 .message-chat .chat-box .text-welcome {
@@ -99,13 +115,12 @@
     position: relative;
     width: 50px;
     height: 50px;
-    margin-left: 15px;
+    margin-left: 20px;
     display: flex;
     flex-direction: column;
     /* flex: 0 0 auto; */
     text-align: left;
     flex-grow: 1;
-
 }
 
 .container-name__text-message {
@@ -119,13 +134,14 @@
     background-color: green;
     border-radius: 50%;
     border: 2px solid white;
+    margin-top: 35px;
 }
 
 .user {
     width: 100%;
     height: auto;
     border-radius: 10px;
-    background: #fff;
+    background: #f2f2f2;
     padding: 10px;
     margin: 0 0 10px 0;
     color: #000;

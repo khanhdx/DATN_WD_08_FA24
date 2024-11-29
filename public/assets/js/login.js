@@ -6,10 +6,11 @@ $(document).ready(function() {
 
     $(document).on('click', '.login > a', function(e) {
         e.preventDefault();
+        
         if (wrapper.hasClass('open')) {
-            wrapper.removeClass('open');
-        } else {
             wrapper.addClass('open');
+        } else {
+            wrapper.removeClass('open');
         }
     });
 

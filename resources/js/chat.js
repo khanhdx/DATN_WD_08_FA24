@@ -12,6 +12,7 @@ const listUser = document.querySelector('.list-user');
 const inputScrollHeight = chatInput.scrollHeight;
 
 let currentRoomId = null;
+let count = 0;
 let message;
 
 if (isAdmin) {
@@ -27,6 +28,7 @@ if (isAdmin) {
 
 // Danh sách user có trong phòng
 function fetchUserInRooms() {
+    listUser.innerHTML = "";
     axios.get('/api/list-users')
         .then((response) => {
             const users = response.data;
@@ -87,67 +89,6 @@ function fetchUserInRooms() {
         });
 }
 
-$(document).on('click', '.user', function () {
-    $('.user').removeClass('active-user');
-
-    $(this).addClass('active-user');
-
-    $(this).find('.new-notification').remove();
-    $(this).find('.new-message').removeClass('new-message');
-});
-
-$(document).on('click', '.is-block', function () {
-    let userID = $(this).data('id');
-
-    Swal.fire({
-        title: "Bạn muốn chặn user này?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Chặn!"
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            axios.post(`/api/block-user`, {
-                user_id: userID
-            }).then(response => {
-                Swal.fire({
-                    title: response.data.message,
-                    icon: "success"
-                });
-
-                $('.chat-input').hide();
-                $('#header-chat').find('.is-block').remove();
-                $('#header-chat').append(`<button data-id="${userID}" class="unblock material-symbols-rounded">do_not_disturb_off</button>`);
-            });
-        }
-    });
-});
-
-$(document).on('click', '.unblock', function () {
-    let userID = $(this).data('id');
-
-    Swal.fire({
-        title: "Bạn muốn bỏ chặn user này?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Bỏ Chặn!"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            axios.post(`/api/unblock-user`, {
-                user_id: userID
-            }).then(response => {
-                $('.chat-input').show();
-                $('#header-chat').find('.unblock').remove();
-                $('#header-chat').append(`<button data-id="${userID}" class="is-block material-symbols-rounded">do_not_disturb_on</button>`);
-            });
-        }
-    });
-});
-
 function lastMessage(chatRoomId) {
     const button = document.querySelector(`[data-room-id="${chatRoomId}"]`);
     return button.querySelector('.container-name__text-message');
@@ -162,6 +103,9 @@ function isRead(chatRoomId) {
 
 // Admin: tham gia nhiều phòng
 function joinMultiRoom(chatRoomId = []) {
+    window.Echo.leave(`chat.${chatRoomId.id}`);
+    console.log("Phòng cũ: " + chatRoomId.id);
+
     window.Echo.join(`chat.${chatRoomId.id}`)
         .here(users => {
             users.forEach((user) => {
@@ -176,6 +120,7 @@ function joinMultiRoom(chatRoomId = []) {
             $(`[data-room-id=${user.chat_room_id}] .img-cir`).append('<span class="status"></span>');
         })
         .leaving(user => {
+            // $(`[data-room-id=${user.chat_room_id}] .img-cir`).find('.status').remove();
         })
         .listen('MessageSent', (e) => {
             if (e.message.chat_room_id === currentRoomId) {
@@ -233,6 +178,7 @@ function fetchMessages(chatRoomId, nameUser = "", userId = "", isBlock = false) 
     axios.get(`/api/messages/${chatRoomId}`)
         .then((response) => {
             const messages = response.data;
+            $('.chat-input').show();
 
             messages.forEach((message) => {
                 currentUserId === message.user_id ?
@@ -240,22 +186,18 @@ function fetchMessages(chatRoomId, nameUser = "", userId = "", isBlock = false) 
                     chatBox.appendChild(createChat(message.content, "incoming"));
 
                 chatBox.scrollTo(0, chatBox.scrollHeight);
-
+                
                 if (isAdmin) {
                     nameUser ? chatTitle.textContent = `Chat: ${nameUser}` : "";
                     isRead(chatRoomId);
-
+            
+                    $('#header-chat').find('.is-block').remove();
+                    $('#header-chat').find('.unblock').remove();
                     if (isBlock) {
                         $('.chat-input').hide();
-
-                        $('#header-chat').find('.is-block').remove();
-                        $('#header-chat').find('.unblock').remove();
                         $('#header-chat').append(`<button data-id="${userId}" class="unblock material-symbols-rounded">do_not_disturb_off</button>`);
                     } else {
                         $('.chat-input').show();
-
-                        $('#header-chat').find('.is-block').remove();
-                        $('#header-chat').find('.unblock').remove();
                         $('#header-chat').append(`<button data-id="${userId}" class="is-block material-symbols-rounded">do_not_disturb_on</button>`);
                     }
                 }
@@ -295,8 +237,12 @@ function handleChat() {
         Swal.fire({
             icon: "error",
             title: "Block!",
-            text: "Bạn đã vi phạm nội quy của chúng tôi!",
-            footer: 'Vui lòng liên hệ để biết thêm chi tiết'
+            html: `
+            <p style="font-size: 1.5rem;line-height: 20px;">
+                Bạn đã vi phạm nội quy của chúng tôi<br>Vui lòng liên hệ để biết thêm chi tiết!!!
+            </p>
+            `,
+            // footer: 'Vui lòng liên hệ để biết thêm chi tiết'
         });
     });
 }
@@ -314,3 +260,67 @@ chatInput.addEventListener("input", () => {
 });
 
 sendChatBtn.addEventListener("click", handleChat);
+
+
+$(document).on('click', '.user', function () {
+    $('.user').removeClass('active-user');
+
+    $(this).addClass('active-user');
+
+    $(this).find('.new-notification').remove();
+    $(this).find('.new-message').removeClass('new-message');
+});
+
+$(document).on('click', '.is-block', function () {
+    let userID = $(this).data('id');
+
+    Swal.fire({
+        title: "Bạn muốn chặn user này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Chặn!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.post(`/api/block-user`, {
+                user_id: userID
+            }).then(response => {
+                Swal.fire({
+                    title: response.data.message,
+                    icon: "success"
+                });
+                fetchUserInRooms();
+
+                $('.chat-input').hide();
+                $('#header-chat').find('.is-block').remove();
+                $('#header-chat').append(`<button data-id="${userID}" class="unblock material-symbols-rounded">do_not_disturb_off</button>`);
+            });
+        }
+    });
+});
+
+$(document).on('click', '.unblock', function () {
+    let userID = $(this).data('id');
+
+    Swal.fire({
+        title: "Bạn muốn bỏ chặn user này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Bỏ Chặn!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.post(`/api/unblock-user`, {
+                user_id: userID
+            }).then(response => {
+                fetchUserInRooms();
+
+                $('.chat-input').show();
+                $('#header-chat').find('.unblock').remove();
+                $('#header-chat').append(`<button data-id="${userID}" class="is-block material-symbols-rounded">do_not_disturb_on</button>`);
+            });
+        }
+    });
+});
