@@ -42,6 +42,10 @@
                             <a href="{{ route('admin.voucher.index') }}">
                                 <i class="fa fa-tags"></i>Mã giảm giá</a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.reviews.index') }}">
+                                <i class="fa fa-tags"></i>Đánh giá</a>
+                        </li>
                     </ul>
                 </li>
 

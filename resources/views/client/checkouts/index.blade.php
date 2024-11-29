@@ -30,7 +30,7 @@
 
                     <div class="featured-box featured-box-secondary featured-box-cart">
                         <div class="box-content">
-                            <form method="POST" action="{{ route('shipping.calculate') }}">
+                            <form action="">
                                 @csrf
                                 <h4>Địa Chỉ Nhận Hàng</h4>
                                 <p>Nhập điểm đến của bạn.</p>
@@ -176,13 +176,7 @@
                                     </tr>
                                     <tr class="shipping">
                                         <th>Phí Vận Chuyển</th>
-                                        {{-- <td>Miễn Phí Vận Chuyển</td> --}}
-                                        {{-- <td>>Phí vận chuyển cho đơn hàng của bạn là: {{ $shippingCost }} VND</td> --}}
-                                        @isset($shippingCost)
-                                            <td>Phí vận chuyển cho đơn hàng của bạn là: {{ $shippingCost }} VND</td>
-                                        @else
-                                            <td>Vui lòng nhập lại địa chỉ để tính phí vận chuyển.</td>
-                                        @endisset
+                                        <td>Miễn Phí Vận Chuyển</td>
                                     </tr>
                                     <tr class="discount">
                                         <th>Giảm Giá</th>
@@ -236,25 +230,5 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#province').change(function() {
-                var provinceId = $(this).val();
-
-                if (provinceId) {
-                    $.ajax({
-                        url: '/api/get-districts/' + provinceId,
-                        type: 'GET',
-                        success: function(data) {
-                            $('#district').empty();
-                            $.each(data, function(key, value) {
-                                $('#district').append('<option value="' + key + '">' +
-                                    value + '</option>');
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+    <script></script>
 @endsection

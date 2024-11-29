@@ -41,10 +41,10 @@ Route::get('/top10-most-orders', [StatisticalController::class, 'getTop10MostOrd
 Route::get('/inventory', [StatisticalController::class, 'getInventoryData']);
 
 // Route cho giao hàng nhanh
-Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-Route::get('/districts', [ShippingController::class, 'getDistricts']);
-Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-Route::post('/create-order', [ShippingController::class, 'createOrder']);
+// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+// Route::get('/districts', [ShippingController::class, 'getDistricts']);
+// Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
+// Route::post('/create-order', [ShippingController::class, 'createOrder']);
 // Route::middleware('auth')->group(function () {
 //     Route::get('/provinces', [ShippingController::class, 'getProvinces']);
 //     Route::get('/districts', [ShippingController::class, 'getDistricts']);

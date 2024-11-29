@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Admin\AdReviewController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
@@ -149,6 +149,13 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             Route::prefix('inventories')->as('inventories.')->group(function () {
                 Route::get('/', [InventoryController::class, 'index'])->name('index');
             });
+
+            //Route quản lý đánh giá
+            Route::prefix('reviews')->as('reviews.')->group(function () {
+                Route::get('/', [AdReviewController::class, 'index'])->name('index');
+                Route::delete('/{id}', [AdReviewController::class, 'destroy'])->name('destroy');
+                // Route::post('/{review}/toggle', [AdReviewController::class, 'toggleVisibility'])->name('toggle');
+            });
         });
 });
 
@@ -175,7 +182,7 @@ Route::name('client.')->group(function () {
         ->controller(ClientPostController::class)
         ->name('post.')
         ->group(function () {
-            Route::get('/',       'index')->name('index');
+            Route::get('/','index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
 
@@ -229,7 +236,6 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
-    Route::post('/calculate-shipping', [ShippingController::class, 'calculateShipping'])->name('shipping.calculate');//tính phí vận chuyển
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
@@ -253,9 +259,9 @@ Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
 // Route api cho vận chuyển.
-Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-Route::get('/districts', [ShippingController::class, 'getDistricts']);
-Route::post('/create-order', [ShippingController::class, 'createOrder']);
+// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+// Route::get('/districts', [ShippingController::class, 'getDistricts']);
+// Route::post('/create-order', [ShippingController::class, 'createOrder']);
 
 // Route api cho chat
 Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
