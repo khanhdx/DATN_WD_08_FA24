@@ -63,27 +63,4 @@ class AdReviewController extends Controller
 
         return redirect()->back()->with('success', 'Đánh giá đã được xóa.');
     }
-
-    // Ẩn/Hiện đánh giá
-    // public function toggleVisibility($reviewId)
-    // {
-    
-    //     $review = Review::findOrFail($reviewId);
-    //     Log::debug('Review found: ', ['review' => $review]);
-    //     // dd($review);
-    //     // Kiểm tra nếu số sao thấp (dưới 3 sao chẳng hạn)
-    //     if ($review->rating < 3) {
-    //         $review->is_hidden = !$review->is_hidden; // Đảo trạng thái ẩn/hiển thị
-    //         $review->save();
-
-    //         return redirect()->back()->with('success', 'Đánh giá sao thấp đã được cập nhật trạng thái.');
-    //     }
-
-    //     // Nếu đánh giá sao không thấp, cập nhật như bình thường
-    //     $review->is_hidden = !$review->is_hidden;
-    //     $review->save();
-    //     Log::debug('Updated review: ', ['review' => $review]);
-
-    //     return response()->json(['success' => true, 'is_hidden' => $review->is_hidden]);
-    // }
 }

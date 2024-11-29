@@ -28,7 +28,7 @@
             <div class="row featured-boxes">
                 <div class="col-md-8">
 
-                    <div class="featured-box featured-box-secondary featured-box-cart">
+                    {{-- <div class="featured-box featured-box-secondary featured-box-cart">
                         <div class="box-content">
                             <form action="">
                                 @csrf
@@ -62,7 +62,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <form action="{{ route('checkout.process') }}" method="POST">
                         @csrf
@@ -86,6 +86,14 @@
                                             <input type="email" class="form-control" id="inputEmail" name="email"
                                                 required
                                                 value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputAdd" class="col-sm-2 control-label">Địa Chỉ <span
+                                                class="required">*</span></label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputAdd" name="address"
+                                                required value="{{ auth()->user() ? auth()->user()->address : '' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
