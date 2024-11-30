@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('slug')->nullable()->unique();
             $table->foreignIdFor(User::class)->nullable()->constrained();
+            $table->double('shipping_fee')->nullable(); //phí vận chuyển 
             $table->foreignIdFor(Shipper::class)->nullable()->constrained();
             $table->foreignIdFor(Voucher::class)->nullable()->constrained();
             $table->dateTime('date');

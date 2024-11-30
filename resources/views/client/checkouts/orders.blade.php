@@ -16,6 +16,7 @@
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
                     <th>Thanh toán</th>
+                    <th>Hình thức thanh toán</th>
                     <th>Địa chỉ</th>
                     <th>Ghi chú</th>
                     <th>Hành động</th>
