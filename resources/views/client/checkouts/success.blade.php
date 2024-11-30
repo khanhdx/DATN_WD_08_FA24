@@ -9,29 +9,46 @@
             @if (isset($statusOrder))
                 <h4>Chi tiết đơn hàng #{{ $statusOrder->id }}</h4>
                 <p><strong>Tổng tiền:</strong> {{ number_format($statusOrder->total_price, 0, ',', '.') }} VND</p>
-                <p><strong>Trạng thái đơn hàng:</strong> 
+                <p><strong>Trạng thái đơn hàng:</strong>
                     @switch($statusOrder->status)
                         @case(1)
                             Đang xử lý
-                            @break
+                        @break
+
                         @case(2)
                             Đang giao hàng
-                            @break
+                        @break
+
                         @case(3)
                             Hoàn thành
-                            @break
+                        @break
+
                         @case(5)
                             Đã hủy
-                            @break
+                        @break
+
                         @case(6)
                             Đang chờ hoàn tiền
-                            @break
+                        @break
+
                         @case(7)
                             Đã hoàn tiền
-                            @break
+                        @break
+
                         @default
                             Không xác định
                     @endswitch
+                </p>
+            @endif
+            @if (isset($payment))
+                <h4>Thông tin thanh toán</h4>
+                <p><strong>Phương thức thanh toán:</strong> {{ $payment->payment_method }}</p>
+                <p><strong>Trạng thái thanh toán:</strong>
+                    @if ($payment->status == 1)
+                        Đã thanh toán
+                    @else
+                        Chưa thanh toán
+                    @endif
                 </p>
             @endif
 

@@ -131,8 +131,25 @@
         </table>
 
         <h2 class="section-title">Thông tin thanh toán</h2>
-        {{-- <p><strong>Phương thức thanh toán:</strong> {{ $order->payment->payment_method }}</p>
-    <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment->status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</p> --}}
+        <p><strong>Phương thức thanh toán:</strong>
+            @if ($order->payments->isNotEmpty())
+                @foreach ($order->payments as $payment)
+                    {{ $payment->payment_method }} <!-- Hiển thị phương thức thanh toán -->
+                @endforeach
+            @else
+                <span>Chưa thanh toán</span>
+            @endif
+        </p>
+        <p><strong>Trạng thái thanh toán:</strong>
+            @if ($order->payments->isNotEmpty())
+                @foreach ($order->payments as $payment)
+                    {{ $payment->status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}
+                @endforeach
+            @else
+                <span>Chưa có trạng thái thanh toán</span>
+            @endif
+        </p>
+        
 
         <a href="{{ route('orders.index') }}" class="btn btn-secondary">Quay lại danh sách đơn hàng</a>
     </div>

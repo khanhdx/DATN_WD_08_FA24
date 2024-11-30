@@ -69,6 +69,29 @@
                     </div>
                     <br />
                 </div>
+                <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                <tr class="tr-shadow">
+                                    <td>{{ $order->id }}</td>
+                                    <td>
+                                        ORDER-01
+                                    </td>
+                                    <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td>
+                                    <td>{{ $order->total_price }} đ</td>
+                                    <td>{{ $order->created_at }}</td>
+                                    <td>
                 <div class="row">
                     <div
                         class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">

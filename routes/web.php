@@ -1,7 +1,5 @@
 <?php
-use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PostController;
@@ -203,13 +201,13 @@ Route::name('client.')->group(function () {
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
-     Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
-         ->name('products.reviews');
+    Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
+        ->name('products.reviews');
 
-     // Route cho trang sản phẩm đã bình luận
+    // Route cho trang sản phẩm đã bình luận
     Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])
         ->name('product.review.page');
-    
+
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
         ->middleware(['convert.cart'])
@@ -234,13 +232,45 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
-    Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
+    Route::get('payment-momo', [PaymentController::class, 'paymentMomo'])->name('payment.momo');
+    Route::get('payment-success', [PaymentController::class, 'paymentSuccessForUser'])->name('payment.success'); // Trang thành công
+    // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
+});
+// Route cho thanh toán khách vãng lai
+Route::prefix('guest')->name('guest.')->group(function () {
+    // Hiển thị form thanh toán cho khách vãng lai
+    Route::get('checkout', [PaymentController::class, 'showGuestPaymentForm'])
+        ->name('checkout')
+        ->middleware('guest');  // Đảm bảo khách chưa đăng nhập
+    Route::get('guest-payment-momo', [PaymentController::class, 'paymentGuestMomo'])->name('payment.momo');
 
+    // Xử lý thanh toán cho khách vãng lai
+    Route::post('checkout', [PaymentController::class, 'guestCheckout'])
+        ->name('checkout.process')
+        ->middleware('guest');  // Middleware dành cho khách chưa đăng nhập
+
+
+    // Trang xác nhận thanh toán thành công cho khách vãng lai
+    Route::get('payment-guest-success', [PaymentController::class, 'paymentSuccessForGuest'])
+        ->name('payment.success');
+
+    // Giỏ hàng của khách vãng lai
+    Route::prefix('carts')
+        ->middleware(['guest', 'convert.cart'])  // Middleware khách vãng lai và chuyển đổi giỏ hàng
+        ->controller(CartController::class)
+        ->name('carts.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');  // Hiển thị giỏ hàng
+            Route::get('/get', 'getCart')->name('get');  // Lấy giỏ hàng
+            Route::post('/add', 'addToCart')->name('add');  // Thêm sản phẩm vào giỏ
+            Route::put('/{id}', 'updateCart')->name('update');  // Cập nhật giỏ hàng
+            Route::delete('/{id}', 'destroy')->name('delete');  // Xóa sản phẩm khỏi giỏ
+        });
 });
 
 // Route cho xác thực
@@ -259,18 +289,6 @@ Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
 // Route api cho vận chuyển.
-// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-// Route::get('/districts', [ShippingController::class, 'getDistricts']);
-// Route::post('/create-order', [ShippingController::class, 'createOrder']);
-
-// Route api cho chat
-Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
-Route::post('/send-message', [ChatController::class, 'sendMessage']);
-
-Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
-Route::post('/api/block-user', [ChatController::class, 'blockUser']);
-Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
-
-Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
-Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
-
+Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+Route::get('/districts', [ShippingController::class, 'getDistricts']);
+Route::post('/create-order', [ShippingController::class, 'createOrder']);
