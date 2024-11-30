@@ -240,6 +240,7 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
+    Route::get('/orders/{id}/status', [ClientOrderController::class, 'getOrderStatus'])->name('orders.getStatus');
 });
 // Route cho thanh toán khách vãng lai
 Route::prefix('guest')->name('guest.')->group(function () {
@@ -288,4 +289,13 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Route api cho chat
+Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
+Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
+Route::post('/api/block-user', [ChatController::class, 'blockUser']);
+Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
+
+Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
+Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
