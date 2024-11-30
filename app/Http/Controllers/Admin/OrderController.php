@@ -69,24 +69,6 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
     }
 
-    // public function updateStatus(Request $request, $id)
-    // {
-    //     $newStatusId = $request->input('status_order');
-    //     $order = $this->orderService->getOneById($id);
-    //     $currentStatusId = $order->statusOrder->last()->id;
-
-
-    //     if ($newStatusId < $currentStatusId) {
-    //         return redirect()->back()->with('error', 'Không thể cập nhật trạng thái ngược lại.');
-    //     }
-
-    //     try {
-    //         $this->orderService->updateStatus($newStatusId, $id);
-    //         return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
-    //     } catch (\Throwable $th) {
-    //         return redirect()->back()->withErrors($th->getMessage());
-    //     }
-    // }
     public function updateStatus(Request $request, $id)
     {
         $newStatusId = $request->input('status_order');
