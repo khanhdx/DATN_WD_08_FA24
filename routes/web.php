@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Admin\AdReviewController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -55,11 +56,15 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
+            
+            Route::get('/chat', function () {
+                return view('admin.chat.index');
+            })->name('chat');
+
             Route::get('project', [ProjectController::class, 'index'])->name('project');
             Route::get('project/{id}', [ProjectController::class, 'edit'])->name('project.edit');
             Route::put('project/{id}', [ProjectController::class, 'update'])->name('project.update');
             Route::resource('category', CategorysController::class);
-            // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
             Route::resource('location', LocationController::class);
             Route::get('/export-excel', [UserController::class, 'exportExcel']);
@@ -73,9 +78,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
-
-
-
 
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
@@ -147,6 +149,13 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
             Route::prefix('inventories')->as('inventories.')->group(function () {
                 Route::get('/', [InventoryController::class, 'index'])->name('index');
             });
+
+            //Route quản lý đánh giá
+            Route::prefix('reviews')->as('reviews.')->group(function () {
+                Route::get('/', [AdReviewController::class, 'index'])->name('index');
+                Route::delete('/{id}', [AdReviewController::class, 'destroy'])->name('destroy');
+                // Route::post('/{review}/toggle', [AdReviewController::class, 'toggleVisibility'])->name('toggle');
+            });
         });
 });
 
@@ -173,7 +182,7 @@ Route::name('client.')->group(function () {
         ->controller(ClientPostController::class)
         ->name('post.')
         ->group(function () {
-            Route::get('/',       'index')->name('index');
+            Route::get('/','index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
 
@@ -221,18 +230,12 @@ Route::name('client.')->group(function () {
 
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
-    Route::resource('profile', ProfileController::class)->only([
-        'index',
-        'edit',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('profile', ProfileController::class);
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
-    Route::post('/calculate-shipping', [ShippingController::class, 'calculateShipping'])->name('shipping.calculate');//tính phí vận chuyển
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
@@ -243,12 +246,31 @@ Route::group(['middleware' => ['role:Khách hàng']], function () {
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
+
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
+Route::post('loginAjax', [AuthController::class, 'loginAjax'])->name('loginAjax');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Route api cho vận chuyển.
+// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+// Route::get('/districts', [ShippingController::class, 'getDistricts']);
+// Route::post('/create-order', [ShippingController::class, 'createOrder']);
+
+// Route api cho chat
+Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
+
+Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
+Route::post('/api/block-user', [ChatController::class, 'blockUser']);
+Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
+
+Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
+Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
 

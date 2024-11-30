@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\GHNService;
 use App\Services\Size\SizeService;
 use App\Services\Size\ISizeService;
 use App\Services\Color\ColorService;

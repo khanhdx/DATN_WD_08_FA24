@@ -240,6 +240,13 @@ section {
     position: relative;
 }
 
+.footer-admin {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+}
+
 .section__content {
     position: relative;
     margin: 0 auto;
@@ -300,6 +307,8 @@ section {
 }
 
 .page-container2 {
+    position: relative;
+    min-height: 100vh;
     background: #f2f2f2;
     padding-left: 300px;
 }

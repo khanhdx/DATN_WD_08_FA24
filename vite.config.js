@@ -5,8 +5,9 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                "resources/css/app.css", 
-                "resources/js/app.js",
+                'resources/css/app.css',
+                'resources/js/app.js',
+                'resources/js/chat.js',
                 "resources/js/bootstrap.js",
                 "resources/js/order-noti.js",
             ],

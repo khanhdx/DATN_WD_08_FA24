@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Voucher')
+
 @section('css')
     <style>
         .voucher-list {

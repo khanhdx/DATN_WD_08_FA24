@@ -198,6 +198,7 @@
   /* line 184, ../sass/theme-responsive.scss */
   .navbar-nav > .megamenu .dropdown-menu {
     margin: 0;
+    /* margin-top: -7px; */
   }
   /* line 187, ../sass/theme-responsive.scss */
   .navbar-nav > .megamenu .mega-menu-content {

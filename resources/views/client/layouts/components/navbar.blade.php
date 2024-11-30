@@ -26,7 +26,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span
                     class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                 <span class="icon-bar"></span> </button>
-            <a class="logo" href="/"><img src="/assets/client/images/logo.png" alt="Flatize"></a>
+            <a class="logo" href="/"><img src="/assets/client/images/logo_obito.png" alt="Flatize"></a>
         </div>
         <ul class="nav navbar-nav navbar-act pull-right">
           

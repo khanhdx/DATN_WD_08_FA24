@@ -31,9 +31,9 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                    </li>
-                </ul>
-            @endauth
+                </li>
+            </ul>
+        @endauth
         </li>
         <li class="dropdown menu-shop">
             <a href="{{ route('client.carts.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->integer('rating');
             $table->text('review')->nullable();
+            $table->boolean('is_hidden')->default(false);
             $table->timestamps();
         });
     }

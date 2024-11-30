@@ -51,6 +51,10 @@
                             <a href="{{ route('admin.voucher.index') }}">
                                 <i class="fa fa-tags"></i>Mã giảm giá</a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.reviews.index') }}">
+                                <i class="fas fa-file-text"></i>Đánh giá</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -102,6 +106,10 @@
                                 <i class="far fa-window-maximize"></i>Banner giới thiệu</a>
                         </li>
                     </ul>
+                </li>
+                <li class="has-sub">
+                    <a href="{{ route('admin.chat') }}">
+                        <i class="far fa-envelope"></i>Chat</a>
                 </li>
             </ul>
         </nav>
