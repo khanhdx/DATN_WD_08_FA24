@@ -64,23 +64,23 @@ class OrderService implements IOrderService
     }
 
     public function getByPhoneNumber($phone)
-{
-    // Filter orders based on the user's phone number
-    $orders = $this->orderRepository->getByPhoneNumber($phone);
-    $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
-    $totalOrder = $this->statistical->totalOrder();
+    {
 
-    return [$orders, $countOrderByStatus, $totalOrder];
-}
+        $orders = $this->orderRepository->getByPhoneNumber($phone);
+        $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
+        $totalOrder = $this->statistical->totalOrder();
 
-public function getByStatusAndPhoneNumber($status, $phone)
-{
-    $orders = $this->orderRepository->getByStatusAndPhoneNumber($status, $phone);
-    $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
-    $totalOrder = $this->statistical->totalOrder();
+        return [$orders, $countOrderByStatus, $totalOrder];
+    }
 
-    return [$orders, $countOrderByStatus, $totalOrder];
-}
+    public function getByStatusAndPhoneNumber($status, $phone)
+    {
+        $orders = $this->orderRepository->getByStatusAndPhoneNumber($status, $phone);
+        $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
+        $totalOrder = $this->statistical->totalOrder();
+
+        return [$orders, $countOrderByStatus, $totalOrder];
+    }
 
 
 
