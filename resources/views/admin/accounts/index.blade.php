@@ -7,7 +7,7 @@
 @endsection
 @section('content')
     <section class="p-t-20">
-        <div class="container">
+        <div class="">
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
