@@ -17,6 +17,8 @@
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+                <h4>Đặt hàng thành công!</h4>
+                <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng.</p>
             </div>
         @endif
 
@@ -25,11 +27,11 @@
         <div class="container">
             <div class="row featured-boxes">
                 <div class="col-md-8">
-                    <form action="{{ route('checkout.process') }}" method="POST">
+                    <form action="{{ auth()->check() ? route('checkout.process') : route('guest.checkout.process') }}" method="POST">
                         @csrf
                         <div class="featured-box featured-box-secondary featured-box-cart">
                             <div class="box-content">
-                                <h4>Địa Chỉ Thanh Toán</h4>
+                                <h4>Thông tin Thanh Toán</h4>
                                 <div class="form-horizontal">
                                     <!-- Thông tin địa chỉ -->
                                     <div class="form-group">
@@ -37,7 +39,16 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputLN" name="last_name"
-                                                required value="{{ auth()->user() ? auth()->user()->name : '' }}">
+                                                required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail" class="col-sm-2 control-label">Địa Chỉ Email <span
+                                                class="required">*</span></label>
+                                        <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="inputEmail" name="email"
+                                                required
+                                                value="{{ auth()->check() ? auth()->user()->email : old('email') }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -49,25 +60,23 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputEmail" class="col-sm-2 control-label">Địa Chỉ Email <span
-                                                class="required">*</span></label>
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="inputEmail" name="email"
-                                                required value="{{ auth()->user() ? auth()->user()->email : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="inputPhone" class="col-sm-2 control-label">Số Điện Thoại <span
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
-                                            <input type="tel" class="form-control" id="inputPhone" name="phone"
+                                            <input type="tel" class="form-control" id="inputPhone" name="phone_number"
                                                 required value="{{ auth()->user() ? auth()->user()->phone_number : '' }}">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="inputNote" class="col-sm-2 control-label">Ghi chú</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" id="inputNote" name="note" rows="3" placeholder="Nhập ghi chú nếu có"></textarea>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
-
                         <h4>Phương Thức Thanh Toán</h4>
                         <div class="panel-group panel-group2" id="accordion">
                             <div class="panel panel-default">
@@ -109,34 +118,35 @@
                             <button type="submit" class="btn btn-primary btn-block btn-sm">Đặt Hàng</button>
                         </p>
                     </form>
-
                 </div>
-
                 <div class="col-md-4">
                     <div class="featured-box featured-box-secondary sidebar">
                         <div class="box-content">
                             <h4>Đơn Hàng Của Bạn</h4>
                             <table cellspacing="0" class="cart-totals" width="100%">
                                 <tbody>
-                                    @php 
-                                        $totalPrice = 0; 
+                                    @php
+                                        $totalPrice = 0;
                                         $discount = session('discount', 0); // Lấy giá trị giảm giá từ session
                                     @endphp
                                     @foreach ($cartItems as $item)
-                                        <tr class="cart_item">
-                                            <th>
-                                                @if ($item->productVariant && $item->productVariant->product)
-                                                    {{ $item->productVariant->product->name }} ({{ $item->quantity }})
-                                                @else
-                                                    Sản phẩm không tìm thấy ({{ $item->quantity }})
-                                                @endif
-                                            </th>
-                                            <td class="product-price">
-                                                <span class="amount">{{ $item->sub_total }}</span>
-                                            </td>
-                                        </tr>
-                                        @php $totalPrice += $item->sub_total; @endphp
-                                    @endforeach
+                                    <tr class="cart_item">
+                                        <th>
+                                            @if (is_object($item) && $item->productVariant && $item->productVariant->product)
+                                                {{ $item->productVariant->product->name }} ({{ $item->quantity }})
+                                            @elseif (is_array($item) && isset($item['productVariant']) && isset($item['productVariant']['product']))
+                                                {{ $item['productVariant']['product']['name'] }} ({{ $item['quantity'] }})
+                                            @else
+                                                Sản phẩm không tìm thấy ({{ isset($item['quantity']) ? $item['quantity'] : '0' }})
+                                            @endif
+                                        </th>
+                                        <td class="product-price">
+                                            <span class="amount">{{ isset($item['sub_total']) ? $item['sub_total'] : '0' }}</span>
+                                        </td>
+                                    </tr>
+                                    @php $totalPrice += isset($item['sub_total']) ? $item['sub_total'] : 0; @endphp
+                                @endforeach
+                                
                                     
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>
@@ -157,7 +167,8 @@
                                     <tr class="total">
                                         <th>Tổng Cộng</th>
                                         <td class="product-price">
-                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice - $discount }} ₫</span></strong>
+                                            <strong><span class="amount" id="totalAmount">{{ $totalPrice - $discount }}
+                                                    ₫</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -171,11 +182,14 @@
                             <form action="{{ route('processVoucher') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="voucher_code" id="voucher_code" placeholder="Nhập mã giảm giá">
+                                    <input type="text" class="form-control" name="voucher_code" id="voucher_code"
+                                        placeholder="Nhập mã giảm giá">
                                 </div>
                                 <p>
-                                    <button type="submit" name="action" value="apply" class="btn btn-primary">Áp Dụng</button>
-                                    <button type="submit" name="action" value="cancel" class="btn btn-danger">Hủy Voucher</button>
+                                    <button type="submit" name="action" value="apply" class="btn btn-primary">Áp
+                                        Dụng</button>
+                                    <button type="submit" name="action" value="cancel" class="btn btn-danger">Hủy
+                                        Voucher</button>
                                 </p>
                             </form>
                             <!-- Thông báo mã giảm giá -->
@@ -191,9 +205,10 @@
                             @endif
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
+
     <script></script>
 @endsection

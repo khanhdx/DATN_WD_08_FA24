@@ -3,6 +3,7 @@
 namespace App\Services\Statistical;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -35,28 +36,20 @@ class StatisticalService
         return $revenues;
     }
 
-
-    // Theo tháng ( theo từng tuần )
-    public function getRevenueByMonth()
+    public function getRevenueInAboutDays($dayStart, $dayEnd)
     {
-        $revenues = Order::selectRaw('DAY(created_at) as day, SUM(total_price) as total')
-            ->whereMonth('created_at', now()->month)
-            ->groupBy('day')
+        DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
+        $revenues = Order::selectRaw('DATE(created_at) as date, SUM(total_price) as total')
+            ->whereBetween('created_at', [$dayStart, $dayEnd])
+            ->groupBy('date')
             ->get();
+        // Bật only_full_group_by
+        DB::statement("SET SESSION sql_mode=CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY')");
 
         return $revenues;
     }
 
-    // Theo năm ( theo từng tháng )
-    public function getRevenueByYear()
-    {
-        $revenues = Order::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->get();
-
-        return $revenues;
-    }
 
 
     // Orders
@@ -78,27 +71,20 @@ class StatisticalService
     }
 
 
-    // Theo tháng ( theo từng tuần )
-    public function getOrderByMonth()
+    public function getOrderInAboutDays($dayStart, $dayEnd)
     {
-        $orders = Order::selectRaw('DAY(created_at) as day, COUNT(*) as count')
-            ->whereMonth('created_at', now()->month)
-            ->groupBy('day')
+        DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
+        $orders = Order::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->whereBetween('created_at', [$dayStart, $dayEnd])
+            ->groupBy('date')
             ->get();
+        // Bật only_full_group_by
+        DB::statement("SET SESSION sql_mode=CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY')");
 
         return $orders;
     }
 
-    // Theo năm ( theo từng tháng )
-    public function getOrderByYear()
-    {
-        $orders = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->get();
-
-        return $orders;
-    }
 
 
     public function countOrderGroupByStatus()
@@ -113,7 +99,7 @@ class StatisticalService
         return $query;
     }
 
- 
+
     public function totalOrder()
     {
         return Order::count('id');
@@ -124,5 +110,46 @@ class StatisticalService
     public function getMaxPrice()
     {
         return Product::max('price_regular');
+    }
+
+    public function getTop10MostOrderdProucts()
+    {
+        $query = DB::table('order_details as od')
+            ->select('pro.name as productName', DB::raw('SUM(od.quantity) as total_quantity'))
+            ->join('products as pro', 'pro.id', '=', 'od.product_id')
+            ->groupBy('od.product_id', 'pro.name')
+            ->orderByDesc('total_quantity')
+            ->limit(10)
+            ->get();
+
+        return $query;
+    }
+
+    // Tồn kho sản phẩm
+    public function getInventoryData()
+    {
+        $products = Product::with(['variants.color', 'variants.size'])
+            ->select('id', 'name', 'base_stock')
+            ->get()
+            ->map(function ($product) {
+                $variantData = $product->variants->map(function ($variant) {
+                    return [
+                        'variant_id' => $variant->id,
+                        'color' => $variant->color->name ?? 'No Color',
+                        'code_color' => $variant->color->code_color ?? 'No Color',
+                        'size' => $variant->size->name ?? 'No Size',
+                        'quantity' => $variant->stock,
+                    ];
+                });
+
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'base_stock' => $product->base_stock,
+                    'variants' => $variantData,
+                ];
+            });
+
+        return $products;
     }
 }

@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Trang Cá Nhân')
+
 @section('css')
     <style>
         .col-md-12 {

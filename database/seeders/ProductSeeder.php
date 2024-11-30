@@ -66,7 +66,6 @@ class ProductSeeder extends Seeder
                     'image'         => '/assets/client/images/content/products/product-' . rand(1, 8) . '.jpg',
                     'name'          => $nam,
                     'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
-                    'base_stock' => 50,
                     'price_regular' => $price,
                     'price_sale'    => $sale,
                     'base_stock'    => rand(0, 500),
@@ -88,7 +87,6 @@ class ProductSeeder extends Seeder
                     'image'         => '/assets/client/images/content/products/product-' . rand(9, 17) . '.jpg',
                     'name'          => $nu,
                     'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
-                    'base_stock' => 50,
                     'price_regular' => $price,
                     'price_sale'    => $sale,
                     'base_stock'    => rand(0, 500),
@@ -98,5 +96,6 @@ class ProductSeeder extends Seeder
                 ]);
             }
         }
+        
     }
 }

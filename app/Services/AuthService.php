@@ -20,7 +20,7 @@ class AuthService
         return $this->userRepository->create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => $data['password'],
             'role' => $data['role'] ?? 'Khách hàng', // Mặc định là Khách hàng
         ]);
     }

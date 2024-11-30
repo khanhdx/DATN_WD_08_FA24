@@ -14,6 +14,10 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
+            // Thêm cột guest_id để hỗ trợ khách vãng lai
+            $table->string('guest_id')->nullable()->unique();
+            // Thêm cột để lưu giỏ hàng (dạng JSON)
+            $table->json('cart_items')->nullable();
             $table->foreignIdFor(User::class)->constrained()->nullable();
             
             $table->timestamps();

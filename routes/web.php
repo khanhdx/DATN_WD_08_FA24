@@ -1,12 +1,12 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
-use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
+
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
@@ -15,8 +15,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Admin\AdReviewController;
 use App\Http\Controllers\Admin\LocationController;
-
 use App\Http\Controllers\Client\CommentController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\PaymentController;
@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -53,11 +54,15 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
+            
+            Route::get('/chat', function () {
+                return view('admin.chat.index');
+            })->name('chat');
+
             Route::get('project', [ProjectController::class, 'index'])->name('project');
             Route::get('project/{id}', [ProjectController::class, 'edit'])->name('project.edit');
             Route::put('project/{id}', [ProjectController::class, 'update'])->name('project.update');
             Route::resource('category', CategorysController::class);
-            // Route::resource('slider', BannerController::class);
             Route::resource('user', UserController::class);
             Route::resource('location', LocationController::class);
             Route::get('/export-excel', [UserController::class, 'exportExcel']);
@@ -71,9 +76,6 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('{id}/edit', [BannerController::class, 'edit'])->name('edit');
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
-
-
-
 
                 Route::prefix('banner1')->as('banner1.')->group(function () {
                     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
@@ -138,11 +140,19 @@ Route::group(['middleware' => ['role:Quản lý']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 
             Route::prefix('inventories')->as('inventories.')->group(function () {
                 Route::get('/', [InventoryController::class, 'index'])->name('index');
+            });
+
+            //Route quản lý đánh giá
+            Route::prefix('reviews')->as('reviews.')->group(function () {
+                Route::get('/', [AdReviewController::class, 'index'])->name('index');
+                Route::delete('/{id}', [AdReviewController::class, 'destroy'])->name('destroy');
+                // Route::post('/{review}/toggle', [AdReviewController::class, 'toggleVisibility'])->name('toggle');
             });
         });
 });
@@ -170,7 +180,7 @@ Route::name('client.')->group(function () {
         ->controller(ClientPostController::class)
         ->name('post.')
         ->group(function () {
-            Route::get('/',       'index')->name('index');
+            Route::get('/','index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
 
@@ -191,13 +201,13 @@ Route::name('client.')->group(function () {
         ->name('orders.product.review')
         ->middleware('auth'); // Chỉ cho phép người dùng đã đăng nhập
 
-     Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
-         ->name('products.reviews');
+    Route::get('/products/{productId}/reviews', [ReviewController::class, 'getReviews'])
+        ->name('products.reviews');
 
-     // Route cho trang sản phẩm đã bình luận
+    // Route cho trang sản phẩm đã bình luận
     Route::get('/products/{productId}', [ReviewController::class, 'showReviewPage'])
         ->name('product.review.page');
-    
+
     // Route cho giỏ hàng (cart)
     Route::prefix('carts')
         ->middleware(['convert.cart'])
@@ -210,39 +220,71 @@ Route::name('client.')->group(function () {
             Route::post('/add', 'addToCart')->name('add');
             Route::put('/{id}', 'updateCart')->name('update');
             Route::delete('/{id}', 'destroy')->name('delete');
-        });
+
+        }
+    );
+    // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
 // Route cho khách hàng (client)
 Route::group(['middleware' => ['role:Khách hàng']], function () {
-    Route::resource('profile', ProfileController::class)->only([
-        'index',
-        'edit',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('profile', ProfileController::class);
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
-    Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success'); // Trang thành công
+    Route::get('payment-momo', [PaymentController::class, 'paymentMomo'])->name('payment.momo');
+    Route::get('payment-success', [PaymentController::class, 'paymentSuccessForUser'])->name('payment.success'); // Trang thành công
+    // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
     // Route hiển thị đơn hàng
     Route::get('/orders', [ClientOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [ClientOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{id}/update', [ClientOrderController::class, 'update'])->name('orders.update');
-    Route::get('/orders/{id}/status', [ClientOrderController::class, 'getOrderStatus'])->name('orders.getStatus');
+});
+// Route cho thanh toán khách vãng lai
+Route::prefix('guest')->name('guest.')->group(function () {
+    // Hiển thị form thanh toán cho khách vãng lai
+    Route::get('checkout', [PaymentController::class, 'showGuestPaymentForm'])
+        ->name('checkout')
+        ->middleware('guest');  // Đảm bảo khách chưa đăng nhập
+    Route::get('guest-payment-momo', [PaymentController::class, 'paymentGuestMomo'])->name('payment.momo');
+
+    // Xử lý thanh toán cho khách vãng lai
+    Route::post('checkout', [PaymentController::class, 'guestCheckout'])
+        ->name('checkout.process')
+        ->middleware('guest');  // Middleware dành cho khách chưa đăng nhập
 
 
+    // Trang xác nhận thanh toán thành công cho khách vãng lai
+    Route::get('payment-guest-success', [PaymentController::class, 'paymentSuccessForGuest'])
+        ->name('payment.success');
+
+    // Giỏ hàng của khách vãng lai
+    Route::prefix('carts')
+        ->middleware(['guest', 'convert.cart'])  // Middleware khách vãng lai và chuyển đổi giỏ hàng
+        ->controller(CartController::class)
+        ->name('carts.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');  // Hiển thị giỏ hàng
+            Route::get('/get', 'getCart')->name('get');  // Lấy giỏ hàng
+            Route::post('/add', 'addToCart')->name('add');  // Thêm sản phẩm vào giỏ
+            Route::put('/{id}', 'updateCart')->name('update');  // Cập nhật giỏ hàng
+            Route::delete('/{id}', 'destroy')->name('delete');  // Xóa sản phẩm khỏi giỏ
+        });
 });
 
 // Route cho xác thực
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
+
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
+Route::post('loginAjax', [AuthController::class, 'loginAjax'])->name('loginAjax');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
 Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 

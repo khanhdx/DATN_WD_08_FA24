@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function index()
-    {
-        // Lấy danh sách đơn hàng của người dùng hiện tại
-        $orders = Order::with('statusOrder')->where('user_id', auth()->id())->get();
+{
+    // Lấy danh sách đơn hàng của người dùng hiện tại, bao gồm trạng thái và phương thức thanh toán
+    $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->get();
 
-        // Trả về view danh sách đơn hàng
-        return view('client.checkouts.orders', compact('orders'));
-    }
+    // Trả về view danh sách đơn hàng
+    return view('client.checkouts.orders', compact('orders'));
+}
 
     public function show($id)
     {
@@ -39,6 +39,15 @@ class OrderController extends Controller
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'canceled')->first()->id => [
                     'name' => 'canceled',
+                    'updated_at' => now(),
+                ]
+            ]);
+        } 
+        else if ($order->statusOrder->contains('name_status', 'success')) {
+    
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'completed')->first()->id => [
+                    'name' => 'completed',
                     'updated_at' => now(),
                 ]
             ]);

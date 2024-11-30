@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Liên hệ')
+
 @section('text_page')
     Get in touch 
 @endsection

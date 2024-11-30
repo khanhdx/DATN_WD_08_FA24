@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\StatusOrderDetail;
 use App\Services\Order\IOrderService;
 use App\Services\Order\Status\StatusService;
 use Illuminate\Http\Request;
@@ -104,4 +105,18 @@ class OrderController extends Controller
         }
     }
 
+
+    public function confirmProcessing($id)
+    {
+        $order = $this->orderService->getOneById($id);
+        if (!$order) {
+            return redirect()->back()->with('error', 'Đơn hàng không tồn tại');
+        }
+        try {
+            StatusOrderDetail::where('order_id', $id)->update(['status_order_id' => 2]);
+            return  redirect()->back()->with('success', "Đơn hàng mã " . $order->slug . " đã xác nhận thành công.");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', "Đơn hàng mã" . $order->slug  . " đã xác nhận thát bại. Hãy thử lại!!");
+        }
+    }
 }

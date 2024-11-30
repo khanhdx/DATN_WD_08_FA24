@@ -49,13 +49,17 @@
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
-                        <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="mr-3" style="color: black">Tất cả <span
+                        <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="mr-3"
+                            style="color: black">Tất cả <span
                                 class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $totalOrder }})</span></a>
                         @foreach ($countOrderByStatus as $item)
                             @if ($item->status_order_id == 5 || $item->status_order_id == 7)
                                 @continue
                             @else
-                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}" class="mr-3 text-capitalize">{{ $item->name_status }}<span
+                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
+                                    class="mr-3 text-capitalize"
+                                    style="color: black">{{ trans('status.' . $item->name_status) }}
+                                    <span
                                         class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
                             @endif
                         @endforeach
@@ -81,10 +85,36 @@
                                     <td>
                                         ORDER-01
                                     </td>
-                                    <td>{{ $order->user->name }}</td>
+                                    <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td>
                                     <td>{{ $order->total_price }} đ</td>
                                     <td>{{ $order->created_at }}</td>
                                     <td>
+                <div class="row">
+                    <div
+                        class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
+                        <div class="table-responsive table-responsive-data2">
+                            <table class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Khách hàng</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($orders as $order)
+                                        <tr class="tr-shadow">
+                                            <td>{{ $order->id }}</td>
+                                            <td>
+                                                ORDER-01
+                                            </td>
+                                            <td>{{ $order->user->name }}</td>
+                                            <td>{{ $order->total_price }} đ</td>
+                                            <td>{{ $order->created_at }}</td>
+                                            <td>
 
                                                 @foreach ($order->statusOrder as $c_status)
                                                     <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
@@ -110,20 +140,57 @@
                                             <td>
                                                 <div class="table-data-feature">
 
-                                            {{-- Xem chi tiết  --}}
-                                            <a href="{{ route('admin.orders.show',$order->id) }}">
-                                                <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                    title="Xem chi tiết đơn hàng">
-                                                    <i class="fas fa-eye"></i>
-                                                </button></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                                    {{-- Xem chi tiết  --}}
+                                                    <a href="{{ route('admin.orders.show', $order->id) }}">
+                                                        <button class="item mr-2" data-toggle="tooltip" data-placement="top"
+                                                            title="Xem chi tiết đơn hàng">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button></a>
+                                                </div>
 
-                        </tbody>
-                    </table>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        @foreach ($orders as $order)
+                            @foreach ($order->statusOrder as $status)
+                                @if ($status['id_status'] == 1)
+                                    <form action="{{ route('admin.orders.confirmProcessing', $order->id) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
+                                            style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
+                                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                                data-bs-autohide="false" id="orderStatusToast">
+                                                <div class="toast-header">
+                                                    <strong class="me-auto">Xác nhận đơn hàng</strong>
+                                                    <small class="text-muted"><span id="order-time-{{ $order->id }}"
+                                                            data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></small>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="toast-body">
+                                                    <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
+                                                    <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
+                                                    <p>
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
+                                                            nhận </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
+                            @endforeach
+                        @endforeach
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

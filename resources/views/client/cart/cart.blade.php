@@ -3,7 +3,7 @@
         <div class="col-xs-5">
             <h4>Không có sản phẩm nào trong giỏ hàng của bạn.</h4>
             <a href="{{ route('client.home') }}">
-                <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
+                <input type="submit" value="Tiếp tục mua sắm" class="btn btn-grey btn-block btn-sm"
                     data-loading-text="Loading...">
             </a>
             <h1></h1>
@@ -18,23 +18,23 @@
                     <table cellspacing="0" class="shop_table" width="100%">
                         <thead>
                             <tr>
-                                <th class="product-thumbnail">
-                                    Item
+                                <th class="product-thumbnail" colspan="2">
+                                    Sản phẩm
                                 </th>
-                                <th class="product-name">
+                                {{-- <th class="product-name">
                                     Product name
-                                </th>
+                                </th> --}}
                                 <th class="product-name">
-                                    Variants
+                                    Phân loại
                                 </th>
                                 <th class="product-price">
-                                    Price
+                                    Đơn giá
                                 </th>
                                 <th class="product-quantity">
-                                    Quantity
+                                    Số lượng
                                 </th>
                                 <th class="product-subtotal">
-                                    SubTotal
+                                    Số tiền
                                 </th>
                                 <th class="product-remove">
                                     &nbsp;
@@ -46,27 +46,29 @@
                                 @if (Auth::check())
                                     <tr class="cart_table_item">
                                         <td class="product-thumbnail">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart->productVariant->product->id) }}">
                                                 <img alt="" width="80"
                                                     src="{{ $cart->productVariant->product->image }}">
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart->productVariant->product->id) }}">
                                                 {{ $cart->productVariant->product->name }}
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="">
                                                 {{ $cart->productVariant->color->name }},
                                                 {{ $cart->productVariant->size->name }}
                                             </a>
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }} đ</span>
+                                            <span
+                                                class="amount">{{ number_format($cart->productVariant->price, 0, ',', '.') }}
+                                                đ</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -112,26 +114,27 @@
                                 @else
                                     <tr class="cart_table_item">
                                         <td class="product-thumbnail">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart['product_id']) }}">
                                                 <img alt="" width="80" src="{{ $cart['image'] }}">
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="{{ route('client.product.show', $cart['product_id']) }}">
                                                 {{ $cart['name'] }}
                                             </a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="shop-product-sidebar.html">
+                                            <a href="">
                                                 {{ $cart['color'] }},
                                                 {{ $cart['size'] }}
                                             </a>
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }} VND</span>
+                                            <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }}
+                                                VND</span>
                                         </td>
 
                                         <td class="product-quantity">
@@ -183,49 +186,47 @@
     </div>
 
     <div class="row featured-boxes">
-        <div class="col-xs-4">
+        {{-- <div class="col-xs-4">
             <div class="featured-box featured-box-secondary">
                 <div class="box-content">
-                    <h4>Promotional Code</h4>
-                    <p>Enter promotional code if you have one</p>
-                    <form action="#" id="" type="post">
+                    <h4>Tính toán vận chuyển</h4>
+                    <p>Nhập điểm đến của bạn để có được ước tính vận chuyển.</p>
+
+                    <!-- Phản hồi từ server -->
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @elseif (session('shipping_fee'))
+                        <div class="alert alert-success">
+                            Giá vận chuyển: {{ session('shipping_fee') }} VND
+                        </div>
+                    @endif
+
+                    <form action="{{ route('client.carts.calculate-shipping') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label class="sr-only">Promotional code</label>
-                            <input type="text" value="" class="form-control"
-                                placeholder="Enter promotional code here">
+                            <label class="sr-only">Tỉnh / Thành phố</label>
+                            <input type="text" name="province" class="form-control" placeholder="Nhập Tỉnh / thành phố"
+                                required>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Apply Promotion" class="btn btn-grey btn-sm"
-                                data-loading-text="Loading...">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-4">
-            <div class="featured-box featured-box-secondary">
-                <div class="box-content">
-                    <h4>Calculate Shipping</h4>
-                    <p>Enter your destination to get a shipping estimate.</p>
-                    <form action="#" id="" type="post">
-                        <div class="form-group">
-                            <label class="sr-only">Country</label>
-                            <div class="list-sort">
-                                <select class="formDropdown">
-                                    <option value="">Select a country</option>
-                                </select>
-                            </div>
+                            <label class="sr-only">Nhập Quận / Huyện</label>
+                            <input type="text" name="district" class="form-control" placeholder="Nhập Quận / Huyện"
+                                required>
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">State/Province</label>
-                            <input type="text" value="" class="form-control" placeholder="State/Province">
+                            <label class="sr-only">Phường / Xã</label>
+                            <input type="text" name="ward" class="form-control" placeholder="Phường / Xã"
+                                required>
                         </div>
                         <div class="form-group">
-                            <label class="sr-only">Zip/Postal Code</label>
-                            <input type="text" value="" class="form-control" placeholder="Zip/Postal Code">
+                            <label class="sr-only">Nhập số nhà, tên đường</label>
+                            <input type="text" name="address" class="form-control"
+                                placeholder="Nhập số nhà, tên đường" required>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Update Totals" class="btn btn-grey btn-sm"
+                            <input type="submit" value="Xác nhận địa chỉ" class="btn btn-grey btn-sm"
                                 data-loading-text="Loading...">
                         </div>
                     </form>
@@ -246,7 +247,7 @@
                                     <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
                                 </td>
                             </tr>
-                            <tr class="shipping">
+                            {{-- <tr class="shipping">
                                 <th>
                                     Shipping
                                 </th>
@@ -260,16 +261,20 @@
                                     Total
                                 </th>
                                 <td>
-                                    <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @if (session('shipping_fee'))
+                                        <span class="amount">{{ number_format($total + str_replace('.', '', session('shipping_fee')), 0, ',', '.') }} VND</span>
+                                    @else
+                                        <span class="amount">{{ number_format($total, 0, ',', '.') }} VND</span>
+                                    @endif
                                 </td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                     <p>
-                        <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
+                        <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}" class="btn btn-primary btn-block btn-sm">
                             Proceed To Checkout
                         </a>
-                    </p>
+                    </p>                    
                     <a href="{{ route('client.home') }}">
                         <input type="submit" value="Continue Shopping" class="btn btn-grey btn-block btn-sm"
                             data-loading-text="Loading...">
@@ -277,5 +282,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
+
 @endif

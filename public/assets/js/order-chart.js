@@ -42,24 +42,30 @@ function initOrderChart(labels, data) {
     });
 }
 
-function updateOrderChart(type) {
-    fetch(`/api/order?type=${type}`)
-        .then((response) => response.json())
-        .then((data) => {
-            let labels = data.map(
-                (item) => item.date || item.month || item.day
-            );
-            let values = data.map((item) => item.count);
+function updateOrderChartByDateRange(startDate = null, endDate = null) {
+    let url = `/api/order`;
+    if (startDate && endDate) {
+        url += `?start_date=${startDate}&end_date=${endDate}`;
+    }
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let labels = data.map(item => item.date);
+            let values = data.map(item => item.count);
             initOrderChart(labels, values);
         })
-        .catch((error) => console.log("Error", error));
+        .catch(error => console.log('Error', error));
 }
 
-document.getElementById("timeSelect").addEventListener("change", function () {
-    updateOrderChart(this.value);
+document.getElementById('updateOrderChartButton').addEventListener('click', function() {
+    const startDate = document.getElementById('startOrderDate').value;
+    const endDate = document.getElementById('endOrderDate').value;
+    updateOrderChartByDateRange(startDate, endDate);
 });
 
-updateOrderChart("day");
+
+updateOrderChartByDateRange();
 
 
 async function fetchOrderStatusData() {

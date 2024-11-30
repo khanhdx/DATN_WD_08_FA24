@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="title-5 m-b-35">Category</h3>
+                <h3 class="title-5 m-b-35">Danh mục</h3>
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
                         <div class="rs-select2--light rs-select2--md">
@@ -38,7 +38,7 @@
                     <div class="table-data__tool-right">
                        <a href="{{route('admin.category.create')}}">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                            <i class="zmdi zmdi-plus"></i>Create</button>
+                            <i class="zmdi zmdi-plus"></i>Thêm danh mục</button>
                        </a>
                        
                     </div>
@@ -48,8 +48,8 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Image</th>
-                                <th>name</th>
+                                <th>Ảnh</th>
+                                <th>Tên</th>
                                 <th></th>
                             </tr>
                         </thead>

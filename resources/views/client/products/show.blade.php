@@ -1,5 +1,9 @@
 @extends('client.layouts.master')
 
+@section('title')
+{{ $product->name }}
+@endsection
+
 @section('css')
     <style>
         span.stock {
@@ -113,9 +117,9 @@
                                 <span><i class="fa fa-heart"></i></span>
                             </a>
 
-                            {{-- <button type="submit" class="btn btn-primary btn-icon">
+                            <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Add to cart
-                            </button> --}}
+                            </button>
                         </form>
                     </div>
 
@@ -167,7 +171,7 @@
                                 <div class="panel-body post-comments">
                                     <ul class="comments">
                                         @foreach ($product->reviews as $review)
-                                            <li>
+                                            <li id="review-{{ $review->id }}">
                                                 <div class="comment">
                                                     <div class="img-circle">
                                                         <img class="avatar" style="width: 60px; height: 60px;" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">

@@ -7,10 +7,19 @@
     <div class="menu-sidebar2__content js-scrollbar1">
         <div class="account2">
             <div class="image img-cir img-120">
-                <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />
+                @if (Auth::user()->user_image)
+                    <img style="border: 1px solid silver; border-radius: 50%;width: 120px;height: 120px;object-fit: cover;" src="{{ asset('storage/' . Auth::user()->user_image) }}" alt="{{ Auth::user()->name }}">
+                @else
+                    <img src="/assets/admin/images/icon/avatar-big-01.jpg" alt="John Doe" />   
+                @endif
             </div>
             <a href="{{ route('admin.project') }}"><h4 class="name">{{ Auth::user()->name }}</h4></a>
-            <a href="{{ route('logout') }}">Đăng xuất</a>
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button class="btn m-0 p-0" type="submit" style="box-shadow: none;">
+                    <span class="text-secondary">Đăng xuất</span>
+                </button>
+            </form>
         </div>
         <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">
@@ -41,6 +50,10 @@
                         <li>
                             <a href="{{ route('admin.voucher.index') }}">
                                 <i class="fa fa-tags"></i>Mã giảm giá</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.reviews.index') }}">
+                                <i class="fas fa-file-text"></i>Đánh giá</a>
                         </li>
                     </ul>
                 </li>
@@ -93,6 +106,10 @@
                                 <i class="far fa-window-maximize"></i>Banner giới thiệu</a>
                         </li>
                     </ul>
+                </li>
+                <li class="has-sub">
+                    <a href="{{ route('admin.chat') }}">
+                        <i class="far fa-envelope"></i>Chat</a>
                 </li>
             </ul>
         </nav>

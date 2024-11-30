@@ -83,10 +83,10 @@
 
                                             
                                             {{-- Xem chi tiết  --}}
-                                            <a href="{{ route('admin.products.variants.detail', $item->id) }}"> <button class="item mr-2"
+                                            {{-- <a href="{{ route('admin.products.variants.detail', $item->id) }}"> <button class="item mr-2"
                                                     data-toggle="tooltip" data-placement="top" title="Xem chi tiết sản phẩm">
                                                     <i class="fas fa-eye"></i>
-                                                </button></a>
+                                                </button></a> --}}
 
                                             {{-- Sửa sản phẩm --}}
                                             <a href="{{ route('admin.products.variants.edit', $item->id) }}"> <button class="item mr-2"

@@ -2,6 +2,13 @@
 @section('title')
     Thuộc tính biến thể
 @endsection
+@section('css')
+    <style>
+        .modal-backdrop {
+            z-index: -1;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container">
         <div class="row">
@@ -28,7 +35,7 @@
                             <i class="zmdi zmdi-filter-list"></i>Lọc</button>
                     </div>
                     <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
+                        <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
                             type="text" placeholder="Tìm kiếm..." />
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>
@@ -183,7 +190,7 @@
                             <i class="zmdi zmdi-filter-list"></i>Lọc</button>
                     </div>
                     <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
+                        <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
                             type="text" placeholder="Tìm kiếm..." />
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>

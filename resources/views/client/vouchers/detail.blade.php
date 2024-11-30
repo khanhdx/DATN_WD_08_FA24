@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Chi tiết voucher')
+
 @section('css')
     <style>
         .voucher-list {
@@ -105,9 +107,20 @@
                             <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
                         </div>
                         <div class="voucher-left">
-                            <div class="salse"><span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span></div>
+                            <div class="salse">
+                                @if ($voucher->value === "Cố định")
+                                    <span>{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</span>
+                                @else
+                                    <span>{{$voucher->decreased_value}}%</span>
+                                @endif
+                            </div>
                             <div>
-                                @if (Auth::user())
+                                @if ($voucher->date_start > date('Y-m-d'))
+                                    <button class="btn btn-save" disabled>Chưa bắt đầu</button>
+                                @elseif ($voucher->date_end < date('Y-m-d'))
+                                    <button class="btn btn-save" disabled>Hết hạn</button>
+                                @else
+                                    @if (Auth::user())
                                         @if ($voucher->check)
                                             <button class="btn btn-save" disabled>Đã lưu</button>  
                                         @else                              
@@ -118,9 +131,11 @@
                                                 <button class="btn btn-save LuuVoucher">Lưu</button>
                                             </form>
                                         @endif
-                                @else
-                                    <button class="btn btn-save saveVoucher">Lưu</button>
+                                    @else
+                                        <button class="btn btn-save saveVoucher">Lưu</button>
+                                    @endif
                                 @endif
+                               
                             </div>
                         </div>
                     </div>
