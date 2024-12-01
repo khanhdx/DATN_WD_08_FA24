@@ -22,28 +22,34 @@ class OrderController extends Controller
     }
 
     public function index(Request $request)
-    {
-        // Lấy tham số lọc từ request
-        $status = $request->input('status', 'all');
-        $date = $request->input('date');
+{
+    // Lấy tham số lọc từ request
+    $status = $request->input('status', 'all');
+    $date = $request->input('date');
+    $phone = $request->input('phone');  // Lọc theo số điện thoại
 
-        // Gọi phương thức lấy đơn hàng dựa vào trạng thái và ngày
-        if ($status == 'all') {
+    // Gọi phương thức lấy đơn hàng dựa vào trạng thái, ngày, và số điện thoại
+    if ($status == 'all') {
+        if ($phone) {
+            $data = $this->orderService->getByPhoneNumber($phone);
+        } else {
             $data = $this->orderService->getByDate($date);
+        }
+    } else {
+        if ($phone) {
+            $data = $this->orderService->getByStatusAndPhoneNumber($status, $phone);
         } else {
             $data = $this->orderService->getByStatusAndDate($status, $date);
         }
-
-        // dd($data[0]);
-
-        $orders = $data[0];
-        $countOrderByStatus = $data[1];
-        $totalOrder = $data[2];
-        $statuses = $this->statusService->getAll();
-
-
-        return view('admin.orders.index', compact('orders', ['statuses', 'countOrderByStatus', 'totalOrder']));
     }
+
+    $orders = $data[0];
+    $countOrderByStatus = $data[1];
+    $totalOrder = $data[2];
+    $statuses = $this->statusService->getAll();
+
+    return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
+}
 
     public function show(string $id)
     {
@@ -68,26 +74,16 @@ class OrderController extends Controller
         $newStatusId = $request->input('status_order');
         $order = $this->orderService->getOneById($id);
         $currentStatusId = $order->statusOrder->last()->id;
-
-        if($currentStatusId == 3 && $newStatusId == 5){
-            return redirect()->back()->with('error', 'Đơn hàng đang giao. Không thể cập nhật trạng thái');
-        }
-
-        if($currentStatusId == 4 && $newStatusId == 5){
-            return redirect()->back()->with('error', 'Đơn hàng đã giao thành công. Không thể cập nhật trạng thái');
-        }
-        
-
+    
         if ($newStatusId < $currentStatusId) {
             return redirect()->back()->with('error', 'Không thể cập nhật trạng thái ngược lại.');
         }
-
-
+    
         try {
             $this->orderService->updateStatus($newStatusId, $id);
-            return redirect()->back()->with('success', 'Cập nhật trạng thái thành công');
+            return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
         } catch (\Throwable $th) {
-            return redirect()->back()->withErrors($th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 

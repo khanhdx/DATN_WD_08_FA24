@@ -56,16 +56,6 @@
                                 <input class="form-control" type="text" name="search" value="@if(isset($_GET['search']) && $_GET['search'] != "") {{$_GET['search']}} @endif" placeholder="Tìm phiếu giảm giá theo tên hoặc mã">
                                 <button style="box-shadow: none;" class="btn m-0 p-0"><i class="zmdi zmdi-search"></i></button>
                             </div>
-                            <div class="row m-0" style="gap: 10px;">
-                                <div class="col p-0">
-                                    <label class="m-0 form-label" for="date_start">Từ ngày</label>
-                                    <input name="date_start" id="date_start" value="@if(isset($_GET['date_start'])) {{$_GET['date_start']}} @endif" type="date" class="form-control">
-                                </div>
-                                <div class="col p-0">
-                                    <label class="m-0 form-label" for="date_end">Đến ngày</label>
-                                    <input name="date_end" id="date_end" value="@if(isset($_GET['date_end'])) {{$_GET['date_end']}} @endif" type="date" class="form-control">
-                                </div>
-                            </div>
                         </form>
                         <a href="{{ route('admin.voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
                     </div>
@@ -95,7 +85,21 @@
                                         <td>{{$voucher->quanlity}}</td>
                                         <td>{{$voucher->date_start}}</td>
                                         <td>{{$voucher->date_end}}</td>
-                                        <td><div class="type-s">{{$voucher->status}}</div></td>
+                                        <td>
+                                                @if (today() <= $voucher->date_start)
+                                                    <div class="type-s">
+                                                        Chưa diễn ra
+                                                    </div>
+                                                @elseif ($voucher->date_end <= today())
+                                                    <div class="type-s" style="border: 1px solid #a72828 !important;color: #a72828 !important;background-color: #fff0f0 !important;">
+                                                        Đã kết thúc
+                                                    </div>
+                                                @else
+                                                    <div class="type-s">
+                                                        Đang diễn ra
+                                                    </div>
+                                                @endif
+                                        </td>
                                         <td>
                                             <div class="table-data-feature">
                                                 <a href="{{ route('admin.voucher.edit',$voucher->id) }}">
@@ -109,6 +113,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $vouchers->links() }}
                     </div>
                 </div>
             </div>

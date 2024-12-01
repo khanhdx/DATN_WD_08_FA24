@@ -53,17 +53,25 @@
             margin: 0px;
         }
     </style>
+    <style>
+        .modal-backdrop {
+            z-index: -1;
+        }
+        .modal-content {
+            margin-top: 80px !important;
+        }
+    </style>
 @endsection
 @section('content')
     <section class="p-t-20">
-        <div class="container">
+        <div class="">
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Sửa mã giảm giá</h3>
                 </div>
             </div>
             <div>
-                <div class="card-body">
+                <div class="">
                     <form action="{{ route('admin.voucher.update',$voucher->id) }}" method="post">
                         @csrf
                         @method('PUT')
@@ -169,9 +177,6 @@
                                         <h5 class="m-0 p-0">Cập nhật</h5>
                                     </div>
                                     <div class="card-body" style="padding: 8px 20px 20px">
-                                        <div class="mb-3" style="text-align: end;">
-                                            <a href="{{ route('admin.voucher.create') }}" class="btn btn-outline-primary">Thêm mới</a>
-                                        </div>
                                         <div class=""><p style="font-size: 14px">
                                             <span class="label">Trạng thái</span>: <span class="text-success"><strong>{{$voucher->status}}</strong></span>
                                             <input type="hidden" name="status" value="{{$voucher->status}}">
@@ -189,10 +194,12 @@
                                     </div>
                                     <div class="card-footer">
                                         <div>
-                                            <a href="" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;" data-bs-toggle="modal" data-bs-target="#exampleModal">Xóa mã này</a>
+                                            @if ($voucher->date_start > today())
+                                                <a href="" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;" data-bs-toggle="modal" data-bs-target="#exampleModal">Xóa mã này</a>
+                                            @endif
                                         </div>
                                         <div>
-                                            <a href="" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;">Hủy thay đổi</a>
+                                            <a href="{{ route('admin.voucher.index') }}" style="font-size: 14px;color:#b02a37 !important;text-decoration:underline;">Hủy thay đổi</a>
                                         </div>
                                         <div style="text-align: end;">
                                             <button class="btn btn-primary">Cập nhập</button>
@@ -209,7 +216,9 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="">
+                <form action="{{ route('admin.voucher.destroy',$voucher->id) }}" method="post">
+                    @csrf
+                    @method('DELETE')
                     <div class="modal-header">
                         <h3 class="modal-title fs-5" id="exampleModalLabel">Thông báo</h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -219,7 +228,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-danger">Xóa</button>
+                        <button type="submit" class="btn btn-danger">Xóa</button>
                     </div>
                 </form>
             </div>
