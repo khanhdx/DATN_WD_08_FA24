@@ -26,42 +26,68 @@ class OrderRepository
         return $orders;
     }
 
+    public function getByPhoneNumber($phone)
+    {
+        $orders = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])->whereHas('user', function ($query) use ($phone) {
+            $query->where('phone_number', 'like', '%' . $phone . '%');
+        })->select('id', 'user_id', 'total_price', 'created_at')->get();
+
+        return $orders;
+    }
+
+    public function getByDate($date = null)
+    {
+        $query = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }]);
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
+    }
+
+    public function getByStatusAndDate($status, $date = null)
+    {
+        $query = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])->whereHas('statusOrder', function ($query) use ($status) {
+            $query->where('name_status', $status);
+        });
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
+    }
+
+    public function getByStatusAndPhoneNumber($status, $phone)
+    {
+        $orders = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])
+        ->whereHas('statusOrder', function ($query) use ($status) {
+            $query->where('name_status', $status);
+        })
+        ->whereHas('user', function ($query) use ($phone) {
+            $query->where('phone_number', 'like', '%' . $phone . '%');
+        })
+        ->select('id', 'user_id', 'total_price', 'created_at')
+        ->get();
+
+        return $orders;
+    }
+
     public function getOneById($id)
     {
         $order = Order::findOrFail($id);
 
         return $order;
     }
-
-    public function getByDate($date = null)
-{
-    $query = Order::with(['statusOrder' => function ($query) {
-        $query->select('status_orders.id as id_status', 'name_status');
-    }]);
-
-    if ($date) {
-        $query->whereDate('created_at', $date);
-    }
-
-    return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
-}
-
-public function getByStatusAndDate($status, $date = null)
-{
-    $query = Order::with(['statusOrder' => function ($query) {
-        $query->select('status_orders.id as id_status', 'name_status');
-    }])->whereHas('statusOrder', function ($query) use ($status) {
-        $query->where('name_status', $status);
-    });
-
-    if ($date) {
-        $query->whereDate('created_at', $date);
-    }
-
-    return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
-}
-
-
 
     public function store($data) {}
 
