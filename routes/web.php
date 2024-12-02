@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Client\BillController;
 use App\Http\Controllers\Client\PostController      as ClientPostController;
 use App\Http\Controllers\Client\OrderController     as ClientOrderController;
 use App\Http\Controllers\Client\ProductController   as ClientProductController;
@@ -299,5 +300,12 @@ Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
 
 Route::get('/api/messages/{chatRoomId}', [ChatController::class, 'fetchMessages']);
 Route::post('/api/messages/{chatRoomId}', [ChatController::class, 'markAsRead']);
+
+// Hiển thị form tìm kiếm hóa đơn
+Route::get('/client/search-bill', [BillController::class, 'showSearchPage'])->name('search.bill');
+
+// Xử lý tìm kiếm hóa đơn
+Route::post('/client/search-bill', [BillController::class, 'searchBill'])->name('search.bill.post');
+Route::get('/search/{orderId}/bill', [BillController::class, 'showBill'])->name('search.showBill');
 
 
