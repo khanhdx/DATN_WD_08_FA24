@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreignIdFor(Shipper::class)->nullable()->constrained();
             $table->foreignIdFor(Voucher::class)->nullable()->constrained();
             $table->dateTime('date');
+            $table->string('user_name');
+            $table->string('email');
             $table->string('phone_number');
             $table->double('total_price');
             $table->string('address', 255);

@@ -151,6 +151,8 @@ class PaymentController extends Controller
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'slug' => $this->generateSlug(),
+                'user_name' => $request->user_name,
+                'email' => $request->email,
                 'total_price' => $totalPrice,
                 'voucher_id' => session('voucher_id'),
                 'status_order_id' => 1,
@@ -197,6 +199,9 @@ class PaymentController extends Controller
             broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating order: ' . $e->getMessage());
+            if (isset($order)) {
+                $order->delete(); // Xóa đơn hàng nếu có lỗi xảy ra
+            }
             return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
@@ -260,12 +265,14 @@ class PaymentController extends Controller
         $voucherDiscount = session('discount', 0);
         $totalPrice -= $voucherDiscount;
         $totalPrice = max($totalPrice, 0);
-
         try {
 
             // Tạo đơn hàng cho khách vãng lai
             $order = Order::create([
-                'user_id' => null, // Gán UUID cho khách vãng lai
+                'user_id' => null,
+                'slug' => $this->generateSlug(),
+                'user_name' => $request->user_name,
+                'email' => $request->email,
                 'total_price' => $totalPrice,
                 'voucher_id' => session('voucher_id'),
                 'status_order_id' => 1, // Trạng thái chờ xử lý
@@ -309,8 +316,13 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 0, // Chờ thanh toán
             ]);
+            // Thông báo admin
+            broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating guest order: ' . $e->getMessage());
+            if (isset($order)) {
+                $order->delete(); // Xóa đơn hàng nếu có lỗi xảy ra
+            }
             return redirect()->route('guest.checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
@@ -635,5 +647,11 @@ class PaymentController extends Controller
                 Session::forget('cart_id');
             }
         }
+    }
+    protected function generateSlug()
+    {
+        $randomNumber = rand(1000, 9999);
+        $date = now()->format('Ymd');
+        return 'Order-' . $randomNumber . $date;
     }
 }

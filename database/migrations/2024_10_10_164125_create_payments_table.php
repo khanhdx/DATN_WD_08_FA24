@@ -16,7 +16,7 @@
             Schema::create('payments', function (Blueprint $table) {
                 $table->id();
                 $table->foreignIdFor(Order::class)->constrained();
-                $table->foreignIdFor(User::class)->constrained();       // Nhân viên xác nhận 
+                $table->foreignIdFor(User::class)->nullable()->constrained();
                 $table->double('amount');                              // Số tiền
                 $table->tinyInteger('transaction_type')->comment(' 0 Loại A, 1 Loại B');
                 $table->enum('payment_method', ['COD', 'VnPAY', 'MOMO']);

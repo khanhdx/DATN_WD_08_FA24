@@ -38,7 +38,7 @@
                                         <label for="inputLN" class="col-sm-2 control-label">Họ và tên <span
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputLN" name="last_name"
+                                            <input type="text" class="form-control" id="inputLN" name="user_name"
                                                 required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
                                         </div>
                                     </div>
