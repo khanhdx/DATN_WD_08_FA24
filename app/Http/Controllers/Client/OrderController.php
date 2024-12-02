@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\StatusOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -33,6 +35,20 @@ class OrderController extends Controller
     {
         // Lấy đơn hàng theo ID
         $order = Order::findOrFail($id);
+
+        $response = Http::withHeaders([
+            'Token' => env('TOKEN_GHN'),
+            'ShopId' => env('SHOP_ID')
+        ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', [
+            'order_codes' => [
+                $order->order_code
+            ],
+        ]);
+
+        if (!$response->successful()) {
+            Log::error('Cancel Order Fail: ' . $response->body());
+            return redirect()->route('orders.index')->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
+        }
         
         if ($order->statusOrder->contains('name_status', 'pending')) {
     
@@ -42,8 +58,9 @@ class OrderController extends Controller
                     'updated_at' => now(),
                 ]
             ]);
-        } 
-        else if ($order->statusOrder->contains('name_status', 'success')) {
+        }
+        
+        if ($order->statusOrder->contains('name_status', 'success')) {
     
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'completed')->first()->id => [
@@ -51,7 +68,8 @@ class OrderController extends Controller
                     'updated_at' => now(),
                 ]
             ]);
-        } 
+        }
+        
         return redirect()->route('orders.index');
     }
     

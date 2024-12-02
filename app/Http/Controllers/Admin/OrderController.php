@@ -90,8 +90,6 @@ class OrderController extends Controller
             return redirect()->back()->withErrors($th->getMessage());
         }
     }
-
-
     public function confirmProcessing($id)
     {
         $order = $this->orderService->getOneById($id);

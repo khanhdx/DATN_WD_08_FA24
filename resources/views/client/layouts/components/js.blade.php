@@ -89,8 +89,6 @@
 
                     $('#size-quick').empty();
                     uniqueSizes.forEach(item => {
-                        // console.log(item);
-
                         $('#size-quick').append(
                             `<button class="btn-size size-quick mr-1"
                                 data-size-id="${item.id}">${item.name}</button>`
@@ -104,6 +102,7 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+
                     // const reviewCount = data.reviews.length;
                     // Hiển thị số lượt đánh giá
                     const reviewCount = data.reviews.length;
@@ -338,21 +337,6 @@
             })
         }
     });
-</script>
-
-<script>
-    $(document).ready(function() {
-        // e.preventDefault();
-        $(document).on('click', '.login > a', function() {
-            var wrapper = $('.login-wrapper');
-
-            if (wrapper.hasClass('open')) {
-                wrapper.removeClass('open');
-            } else {
-                wrapper.addClass('open');
-            }
-        });
-    })
 </script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

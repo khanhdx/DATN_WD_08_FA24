@@ -44,6 +44,7 @@ class AuthController extends Controller
 
             ChatRoom::firstOrCreate([
                 'user_id' => $user->id,
+                'last_message_time' => now(),
             ]);
 
             $this->authService->login($request->validated());

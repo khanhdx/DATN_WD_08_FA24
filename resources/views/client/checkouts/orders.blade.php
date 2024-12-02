@@ -25,8 +25,7 @@
                     <tr class="align-middle text-center">
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->date }}</td>
-                        <td>{{ number_format($order->total_price, 0, ',', '.'
-                        ) }} VND</td>
+                        <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
                         <td>
                             <strong>Trạng thái:</strong>
                             @if ($order->statusOrder->isNotEmpty())
@@ -44,30 +43,27 @@
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order->id) }}">Xem chi
                                 tiết</a>
 
-
-                                @if ($order->statusOrder->contains('name_status', 'pending'))
-                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng không')" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="name_status" value="canceled">
-                                        <button type="submit" class="btn btn-outline-primary btn-sm">Hủy đơn hàng</button>
-                                    </form>
-                                @elseif ($order->statusOrder->contains('name_status', 'success'))
-                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="name_status" value="completed">
-                                        <button type="submit" class="btn btn-outline-primary btn-sm">Hoàn thành</button>
-                                    </form>
-                                @endif
-                            
+                            @if ($order->statusOrder->contains('name_status', 'pending'))
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST"
+                                    onsubmit="return confirm('Bạn có muốn hủy đơn hàng không')" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="canceled">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Hủy đơn hàng</button>
+                                </form>
+                            @elseif ($order->statusOrder->contains('name_status', 'success'))
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST"
+                                    onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="completed">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Hoàn thành</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    </div>
-    </div>
-
 @endsection

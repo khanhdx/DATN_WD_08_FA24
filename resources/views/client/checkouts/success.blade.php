@@ -1,8 +1,13 @@
 @extends('client.layouts.master')
 
+@section('text_page')
+    Cảm ơn bạn đã đặt hàng!
+@endsection
+
 @section('content')
-    <div class="container">
-        <div class="text-center mt-5">
+    @include('client.layouts.components.pagetop')
+    <div class="container mb-6">
+        <div class="text-center">
             <h1 class="text-success">Thanh toán thành công!</h1>
             <p>Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.</p>
 
@@ -35,8 +40,8 @@
                 </p>
             @endif
 
-            <a href="{{ route('client.home') }}" class="btn btn-primary mt-3">Quay về trang chủ</a>
-            <a href="{{ route('orders.index') }}" class="btn btn-secondary mt-3">Xem lịch sử đơn hàng</a>
+            <a href="{{ route('client.home') }}" class="btn btn-grey">Quay về trang chủ</a>
+            <a href="{{ route('orders.index') }}" class="btn btn-primary">Xem lịch sử đơn hàng</a>
         </div>
     </div>
 @endsection

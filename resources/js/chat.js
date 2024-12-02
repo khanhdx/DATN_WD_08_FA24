@@ -29,64 +29,77 @@ if (isAdmin) {
 // Danh sách user có trong phòng
 function fetchUserInRooms() {
     listUser.innerHTML = "";
-    axios.get('/api/list-users')
+    axios.get('/api/chat-room')
         .then((response) => {
-            const users = response.data;
+            const chatRooms = response.data;
 
-            users.forEach((user) => {
-                const btnElement = document.createElement('button');
-                const imgURL = `/storage/${user.user_image}`
+            chatRooms.forEach((room) => {
+                if (room.user.role === "Khách hàng") {
+                    const btnElement = document.createElement('button');
+                    const imgURL = `/storage/${room.user.user_image}`
 
-                btnElement.classList.add('user');
+                    btnElement.classList.add('user');
 
-                btnElement.innerHTML = `
-                <div class="img-cir img-50">
-                    <img src="${user.user_image ? imgURL : ''}" alt="Img" class="profile-image">
-                </div>
-                <div class="container-name">
-                    <span class="name">${user.name}</span>
-                    <span class="container-name__text-message"></span>
-                </div>
-            `;
+                    btnElement.innerHTML = `
+                            <div class="img-cir img-50">
+                                <img src="${room.user.user_image ? imgURL : ''}" alt="Img" class="profile-image">
+                            </div>
+                            <div class="container-name">
+                                <span class="name">${room.user.name}</span>
+                                <span class="container-name__text-message"></span>
+                            </div>
+                        `;
 
-                btnElement.dataset.roomId = user.rooms.id;
+                    btnElement.dataset.roomId = room.id;
 
-                if (user.blocked_user === null) {
-                    btnElement.onclick = () => fetchMessages(user.rooms.id, user.name, user.id);
-                } else {
-                    btnElement.onclick = () => fetchMessages(user.rooms.id, user.name, user.id, true);
-                }
+                    if (room.user.blocked_user === null) {
+                        btnElement.onclick = () => fetchMessages(room.id, room.user.name, room.user.id);
+                    } else {
+                        btnElement.onclick = () => fetchMessages(room.id, room.user.name, room.user.id, true);
+                    }
 
-                joinMultiRoom(user.rooms);
+                    joinMultiRoom(room);
 
-                listUser.appendChild(btnElement);
+                    listUser.appendChild(btnElement);
 
-                // Hiển thị tin nhắn nhỏ trong list user
-                axios.get(`/api/messages/${user.rooms.id}`)
-                    .then((response) => {
-                        const messages = response.data;
+                    // Hiển thị tin nhắn nhỏ trong list user
+                    axios.get(`/api/messages/${room.id}`)
+                        .then((response) => {
+                            const messages = response.data;
 
-                        if (messages.length) {
-                            const lastMess = messages.at(-1);
+                            if (messages.length) {
+                                const lastMess = messages.at(-1);
 
-                            lastMessage(user.rooms.id).innerText = lastMess.user_id === currentUserId ?
-                                `Bạn: ${lastMess.content}` : lastMess.content;
+                                lastMessage(room.id).innerText = lastMess.user_id === currentUserId ?
+                                    `Bạn: ${lastMess.content}` : lastMess.content;
 
-                            if (!lastMess.is_read) {
-                                const button = $(`[data-room-id=${user.rooms.id}]`);
+                                if (!lastMess.is_read) {
+                                    const button = $(`[data-room-id=${room.id}]`);
 
-                                if (!button.hasClass('new-notification')) {
-                                    button.append('<div class="new-notification"></div>');
-                                } else {
-                                    button.find('.new-notification').remove();
+                                    if (!button.hasClass('new-notification')) {
+                                        button.append('<div class="new-notification"></div>');
+                                    } else {
+                                        button.find('.new-notification').remove();
+                                    }
+
+                                    lastMessage(room.id).classList.add('new-message');
                                 }
-
-                                lastMessage(user.rooms.id).classList.add('new-message');
                             }
-                        }
-                    });
+                        });
+
+                }
             });
         });
+}
+
+// Di chuyển user có tin nhắn mới lên đầu
+function updateUserList(chatRoomId) {
+    let userItem = document.querySelector(`[data-room-id="${chatRoomId}"]`);
+
+    if (userItem) {
+        listUser.removeChild(userItem);
+        listUser.prepend(userItem);
+    }
 }
 
 function lastMessage(chatRoomId) {
@@ -116,27 +129,28 @@ function joinMultiRoom(chatRoomId = []) {
             });
         })
         .joining(user => {
-            // console.log(user.chat_room_id);
             $(`[data-room-id=${user.chat_room_id}] .img-cir`).append('<span class="status"></span>');
         })
         .leaving(user => {
-            // $(`[data-room-id=${user.chat_room_id}] .img-cir`).find('.status').remove();
+            $(`[data-room-id=${user.chat_room_id}] .img-cir`).find('.status').remove();
         })
+        // Lắng nghe user gửi chat tin nhắn
         .listen('MessageSent', (e) => {
             if (e.message.chat_room_id === currentRoomId) {
+                updateUserList(currentRoomId);
+
                 isRead(currentRoomId);
                 lastMessage(currentRoomId).innerText = e.message.content;
 
                 chatBox.appendChild(createChat(e.message.content, "incoming"));
                 chatBox.scrollTo(0, chatBox.scrollHeight);
-
             } else {
+                updateUserList(chatRoomId.id);
                 lastMessage(chatRoomId.id).innerText = e.message.content;
 
                 const button = $(`[data-room-id=${chatRoomId.id}]`);
 
                 button.find('.new-notification').remove();
-
                 if (!button.hasClass('new-notification')) {
                     button.append('<div class="new-notification"></div>');
                 }
@@ -158,6 +172,7 @@ function joinRoom(chatRoomId) {
         .leaving(user => {
             console.log('User leaving:', user);
         })
+        // Lắng nghe admin gửi tin nhắn đến
         .listen('MessageSent', (e) => {
             chatBox.appendChild(createChat(e.message.content, "incoming"));
             chatBox.scrollTo(0, chatBox.scrollHeight);
@@ -174,6 +189,11 @@ function joinRoom(chatRoomId) {
 function fetchMessages(chatRoomId, nameUser = "", userId = "", isBlock = false) {
     chatBox.innerHTML = '';
     currentRoomId = chatRoomId;
+    
+    if (isAdmin) {
+        nameUser ? chatTitle.textContent = `Chat: ${nameUser}` : "";
+        isRead(chatRoomId);
+    }
 
     axios.get(`/api/messages/${chatRoomId}`)
         .then((response) => {
@@ -186,22 +206,19 @@ function fetchMessages(chatRoomId, nameUser = "", userId = "", isBlock = false) 
                     chatBox.appendChild(createChat(message.content, "incoming"));
 
                 chatBox.scrollTo(0, chatBox.scrollHeight);
-                
-                if (isAdmin) {
-                    nameUser ? chatTitle.textContent = `Chat: ${nameUser}` : "";
-                    isRead(chatRoomId);
-            
-                    $('#header-chat').find('.is-block').remove();
-                    $('#header-chat').find('.unblock').remove();
-                    if (isBlock) {
-                        $('.chat-input').hide();
-                        $('#header-chat').append(`<button data-id="${userId}" class="unblock material-symbols-rounded">do_not_disturb_off</button>`);
-                    } else {
-                        $('.chat-input').show();
-                        $('#header-chat').append(`<button data-id="${userId}" class="is-block material-symbols-rounded">do_not_disturb_on</button>`);
-                    }
-                }
             });
+
+            if (isAdmin) {
+                $('#header-chat').find('.is-block').remove();
+                $('#header-chat').find('.unblock').remove();
+                if (isBlock) {
+                    $('.chat-input').hide();
+                    $('#header-chat').append(`<button data-id="${userId}" class="unblock material-symbols-rounded">do_not_disturb_off</button>`);
+                } else {
+                    $('.chat-input').show();
+                    $('#header-chat').append(`<button data-id="${userId}" class="is-block material-symbols-rounded">do_not_disturb_on</button>`);
+                }
+            }
         });
 }
 
@@ -231,6 +248,8 @@ function handleChat() {
     }).then(response => {
         if (isAdmin) {
             lastMessage(currentRoomId).innerText = "Bạn: " + response.data.content;
+            isRead(currentRoomId);
+            updateUserList(currentRoomId);
         }
         // console.log('Message sent:', response.data.content);
     }).catch(error => {
@@ -315,6 +334,10 @@ $(document).on('click', '.unblock', function () {
             axios.post(`/api/unblock-user`, {
                 user_id: userID
             }).then(response => {
+                Swal.fire({
+                    title: response.data.message,
+                    icon: "success"
+                });
                 fetchUserInRooms();
 
                 $('.chat-input').show();
