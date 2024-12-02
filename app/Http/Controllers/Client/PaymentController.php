@@ -636,4 +636,9 @@ class PaymentController extends Controller
             }
         }
     }
+    protected function generateSlug(){
+        $randomNumber = rand(1000, 9999);
+        $date = now()->format('Ymd');
+        return 'Order-' . $randomNumber . $date;
+    }
 }
