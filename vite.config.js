@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/chat.js',
                 "resources/js/bootstrap.js",
                 "resources/js/order-noti.js",
+                "resources/js/shipping.js",
             ],
             refresh: true,
         }),

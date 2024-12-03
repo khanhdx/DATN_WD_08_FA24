@@ -89,8 +89,6 @@
 
                     $('#size-quick').empty();
                     uniqueSizes.forEach(item => {
-                        // console.log(item);
-
                         $('#size-quick').append(
                             `<button class="btn-size size-quick mr-1"
                                 data-size-id="${item.id}">${item.name}</button>`
@@ -104,6 +102,7 @@
                                 style="background-color:${item.code_color}"></button>`
                         );
                     });
+
                     // const reviewCount = data.reviews.length;
                     // Hiển thị số lượt đánh giá
                     const reviewCount = data.reviews.length;
@@ -187,7 +186,7 @@
             if (res.status_code == 200) {
                 load_cart();
                 load_header();
-                console.log(res.message);
+                // console.log(res.message);
             } else {
                 $('.qty').val(res.quantity);
                 Swal.fire({
@@ -226,7 +225,7 @@
             $(this).addClass('color-active');
 
             selectedColor = $(this).data('color-id');
-            console.log(selectedColor);
+            // console.log(selectedColor);
             getInStock(selectedSize, selectedColor);
             // fetchAvailableSizes(selectedColor);
         });
@@ -237,7 +236,7 @@
             $(this).addClass('btn-active');
 
             selectedSize = $(this).data('size-id');
-            console.log(selectedSize);
+            // console.log(selectedSize);
             getInStock(selectedSize, selectedColor);
             fetchAvailableColors(selectedSize);
         });
@@ -253,7 +252,7 @@
                 quantity: quantity,
                 _token: '{{ csrf_token() }}',
             }
-            console.log(dataCart);
+            // console.log(dataCart);
 
 
             if (selectedColor && selectedSize) {
@@ -282,7 +281,7 @@
                         $('#productModal').modal('hide');
                         load_header();
                     } else {
-                        console.log(res.errors);
+                        // console.log(res.errors);
 
                         Swal.fire({
                             icon: "error",
@@ -311,7 +310,7 @@
                 $('.color-quick').removeClass('color-active');
                 res.forEach(item => {
                     $(`.color-quick[data-color-id="${item.color_id}"]`).show();
-                    console.log(item.color_id);
+                    // console.log(item.color_id);
                 });
             });
         }
@@ -338,21 +337,6 @@
             })
         }
     });
-</script>
-
-<script>
-    $(document).ready(function() {
-        // e.preventDefault();
-        $(document).on('click', '.login > a', function() {
-            var wrapper = $('.login-wrapper');
-
-            if (wrapper.hasClass('open')) {
-                wrapper.removeClass('open');
-            } else {
-                wrapper.addClass('open');
-            }
-        });
-    })
 </script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

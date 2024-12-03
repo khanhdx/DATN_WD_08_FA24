@@ -5,6 +5,7 @@
             <p>Bạn có 0 thông báo</p>
         </div>
         <div class="notifi__box">
+            
         </div>
         <div class="notifi__footer">
             <a href="#">Tất cả thông báo</a>

@@ -6,6 +6,7 @@ use App\Jobs\CompleteOrderJob;
 use App\Models\Order;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,6 +19,8 @@ class Kernel extends ConsoleKernel
         foreach ($orders as $order) {
             $schedule->job(new CompleteOrderJob($order->id))->daily(); // Chạy sự kiện mỗi ngày
         }
+        // $schedule->command('inspire')->hourly();
+        $schedule->command('app:update-status')->everyMinute();
     }
 
     /**
