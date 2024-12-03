@@ -12,7 +12,6 @@ const listUser = document.querySelector('.list-user');
 const inputScrollHeight = chatInput.scrollHeight;
 
 let currentRoomId = null;
-let count = 0;
 let message;
 
 if (isAdmin) {
@@ -117,7 +116,7 @@ function isRead(chatRoomId) {
 // Admin: tham gia nhiều phòng
 function joinMultiRoom(chatRoomId = []) {
     window.Echo.leave(`chat.${chatRoomId.id}`);
-    console.log("Phòng cũ: " + chatRoomId.id);
+    // console.log("Phòng cũ: " + chatRoomId.id);
 
     window.Echo.join(`chat.${chatRoomId.id}`)
         .here(users => {
@@ -167,10 +166,10 @@ function joinRoom(chatRoomId) {
             console.log('Users in room:', users);
         })
         .joining(user => {
-            console.log('User tham gia:', user);
+            // console.log('User tham gia:', user);
         })
         .leaving(user => {
-            console.log('User leaving:', user);
+            // console.log('User leaving:', user);
         })
         // Lắng nghe admin gửi tin nhắn đến
         .listen('MessageSent', (e) => {
@@ -261,7 +260,6 @@ function handleChat() {
                 Bạn đã vi phạm nội quy của chúng tôi<br>Vui lòng liên hệ để biết thêm chi tiết!!!
             </p>
             `,
-            // footer: 'Vui lòng liên hệ để biết thêm chi tiết'
         });
     });
 }

@@ -17,28 +17,42 @@
                 <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
                 <p><strong>Trạng thái:</strong>
                     @foreach ($order->statusOrder as $status)
-                    @switch($status->id)
-                        @case(1)
-                            Đang xử lý
+                        @switch($status->id)
+                            @case(1)
+                                Chờ xử lý
                             @break
-                        @case(2)
-                            Đang giao hàng
+
+                            @case(2)
+                                Đang xử lý đơn
                             @break
-                        @case(3)
-                            Hoàn thành
+
+                            @case(3)
+                                Đang giao hàng
                             @break
-                        @case(5)
-                            Đã hủy
+
+                            @case(4)
+                                Giao hàng thành công
                             @break
-                        @case(6)
-                            Đang chờ hoàn tiền
+
+                            @case(5)
+                                Hoàn thành
                             @break
-                        @case(7)
-                            Đã hoàn tiền
+
+                            @case(7)
+                                Đã hủy đơn
                             @break
-                        @default
-                            Không xác định
-                    @endswitch
+
+                            @case(8)
+                                Đang chờ hoàn tiền
+                            @break
+
+                            @case(9)
+                                Đã hoàn tiền
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
                         {{-- {{ $status->name_status }} --}}
                     @endforeach
                 </p>
@@ -159,8 +173,25 @@
             </table>
 
             <h2 class="section-title">Thông tin thanh toán</h2>
-            {{-- <p><strong>Phương thức thanh toán:</strong> {{ $order->payment->payment_method }}</p>
-    <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment->status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</p> --}}
+            <p><strong>Phương thức thanh toán:</strong>
+                @if ($order->payments->isNotEmpty())
+                    @foreach ($order->payments as $payment)
+                        {{ $payment->payment_method }} <!-- Hiển thị phương thức thanh toán -->
+                    @endforeach
+                @else
+                    <span>Chưa thanh toán</span>
+                @endif
+            </p>
+            <p><strong>Trạng thái thanh toán:</strong>
+                @if ($order->payments->isNotEmpty())
+                    @foreach ($order->payments as $payment)
+                        {{ $payment->status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}
+                    @endforeach
+                @else
+                    <span>Chưa có trạng thái thanh toán</span>
+                @endif
+            </p>
+
 
             <a href="{{ route('orders.index') }}" class="btn btn-grey">Quay lại danh sách đơn hàng</a>
         </div>

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('chat_rooms', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->unique()->constrained()->cascadeOnDelete();
-            $table->datetime('last_message_time');
+            $table->datetime('last_message_time')->default(now());
 
             $table->timestamps();
         });

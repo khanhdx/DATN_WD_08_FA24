@@ -12,6 +12,8 @@ interface IOrderService
     public function getOneById($id);
     public function getByDate($date);
     public function getByStatusAndDate($status, $date);
+    public function getByPhoneNumber($phone);
+    public function getByStatusAndPhoneNumber($status, $phone);
   
 
     public function store($data, $id,);

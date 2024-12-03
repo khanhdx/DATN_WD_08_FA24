@@ -27,22 +27,23 @@
         <div class="container">
             <div class="row featured-boxes">
                 <div class="col-md-8">
-                    <form action="{{ route('checkout.process') }}" method="POST">
+                    <form action="{{ auth()->check() ? route('checkout.process') : route('guest.checkout.process') }}"
+                        method="POST">
                         @csrf
                         <input type="hidden" name="ship_fee" id="input_ship_fee" value="0">
                         <div class="featured-box featured-box-secondary featured-box-cart">
                             <div class="box-content">
                                 <h4>Thông tin Thanh Toán</h4>
                                 <div class="form-horizontal">
-                                    <!-- Thông tin địa chỉ -->
                                     <div class="form-group">
                                         <label for="inputLN" class="col-sm-2 control-label">Họ và tên <span
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputLN" name="last_name"
+                                            <input type="text" class="form-control" id="inputLN" name="user_name"
                                                 required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
                                         </div>
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="inputEmail" class="col-sm-2 control-label">Địa Chỉ Email <span
                                                 class="required">*</span></label>
@@ -58,16 +59,15 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <input type="tel" class="form-control" id="inputPhone" name="phone"
-                                                required
-                                                value="{{ auth()->check() ? auth()->user()->phone_number : old('phone') }}">
+                                            <input type="tel" class="form-control" id="inputPhone" name="phone_number"
+                                                required value="{{ auth()->user() ? auth()->user()->phone_number : '' }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputAdd" class="col-sm-2 control-label">Ghi chú</label>
+                                        <label for="inputNote" class="col-sm-2 control-label">Ghi chú</label>
                                         <div class="col-sm-10">
-                                            <textarea name="note" class="form-control" id="inputAdd" rows="3"></textarea>
+                                            <textarea class="form-control" id="inputNote" name="note" rows="3" placeholder="Nhập ghi chú nếu có"></textarea>
                                         </div>
                                     </div>
 
@@ -98,6 +98,7 @@
                                         <input type="text" name="address" id="address" class="form-control" required
                                             value="{{ auth()->user() ? auth()->user()->address : '' }}">
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -157,22 +158,27 @@
                                     @foreach ($cartItems as $item)
                                         <tr class="cart_item">
                                             <th>
-                                                @if ($item->productVariant && $item->productVariant->product)
+                                                @if (is_object($item) && $item->productVariant && $item->productVariant->product)
                                                     {{ $item->productVariant->product->name }} ({{ $item->quantity }})
+                                                @elseif (is_array($item) && isset($item['productVariant']) && isset($item['productVariant']['product']))
+                                                    {{ $item['productVariant']['product']['name'] }}
+                                                    ({{ $item['quantity'] }})
                                                 @else
-                                                    Sản phẩm không tìm thấy ({{ $item->quantity }})
+                                                    Sản phẩm không tìm thấy
+                                                    ({{ isset($item['quantity']) ? $item['quantity'] : '0' }})
                                                 @endif
                                             </th>
                                             <td class="product-price">
-                                                <span class="amount">{{ number_format($item->sub_total, 0, ',', '.') }}
-                                                    ₫</span>
+                                                <span
+                                                    class="amount">{{ isset($item['sub_total']) ? $item['sub_total'] : '0' }}</span>
                                             </td>
                                         </tr>
                                         @php
-                                            $totalPrice += $item->sub_total;
+                                            $totalPrice += isset($item['sub_total']) ? $item['sub_total'] : 0;
                                             $quantityCart += $item->quantity;
                                         @endphp
                                     @endforeach
+
 
                                     <tr class="cart_subtotal">
                                         <th>Tổng Giỏ Hàng</th>

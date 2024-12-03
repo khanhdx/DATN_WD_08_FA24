@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
     public function index()
-    {
-        // Lấy danh sách đơn hàng của người dùng hiện tại
-        $orders = Order::with('statusOrder')->where('user_id', auth()->id())->get();
+{
+    // Lấy danh sách đơn hàng của người dùng hiện tại, bao gồm trạng thái và phương thức thanh toán
+    $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->get();
 
-        // Trả về view danh sách đơn hàng
-        return view('client.checkouts.orders', compact('orders'));
-    }
+    // Trả về view danh sách đơn hàng
+    return view('client.checkouts.orders', compact('orders'));
+}
 
     public function show($id)
     {
@@ -35,22 +35,22 @@ class OrderController extends Controller
     {
         // Lấy đơn hàng theo ID
         $order = Order::findOrFail($id);
-
-        $response = Http::withHeaders([
-            'Token' => env('TOKEN_GHN'),
-            'ShopId' => env('SHOP_ID')
-        ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', [
-            'order_codes' => [
-                $order->order_code
-            ],
-        ]);
-
-        if (!$response->successful()) {
-            Log::error('Cancel Order Fail: ' . $response->body());
-            return redirect()->route('orders.index')->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
-        }
         
         if ($order->statusOrder->contains('name_status', 'pending')) {
+
+            $response = Http::withHeaders([
+                'Token' => env('TOKEN_GHN'),
+                'ShopId' => env('SHOP_ID')
+            ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', [
+                'order_codes' => [
+                    $order->order_code
+                ],
+            ]);
+    
+            if (!$response->successful()) {
+                Log::error('Cancel Order Fail: ' . $response->body());
+                return redirect()->route('orders.index')->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
+            }
     
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'canceled')->first()->id => [
@@ -72,5 +72,13 @@ class OrderController extends Controller
         
         return redirect()->route('orders.index');
     }
+    public function getOrderStatus($id)
+    {
+        $order = Order::with('statusOrder')->findOrFail($id);
+        $currentStatus = $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái';
     
+        return response()->json([
+            'status' => $currentStatus,
+        ]);
+    }
 }

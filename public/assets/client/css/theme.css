@@ -10,6 +10,10 @@ body {
   overflow: hidden;
   position: relative;
 }
+th {
+  text-align: center;
+  align-items: center;
+}
 
 /* top */
 /* line 17, ../sass/theme.scss */

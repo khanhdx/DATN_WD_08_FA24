@@ -18,6 +18,9 @@ class Order extends Model
         'shipping_fee',
         'total_price',
         'date',
+        'user_name',
+        'email',
+        'phone_number',
         'address',
         'note'
     ];

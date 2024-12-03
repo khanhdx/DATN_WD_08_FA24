@@ -20,7 +20,6 @@ class ChatRoomSeeder extends Seeder
             ChatRoom::firstOrCreate([
                 'id' => $value,
                 'user_id' => $value,
-                'last_message_time' => now(),
             ]);
         }
     }

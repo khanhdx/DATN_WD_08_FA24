@@ -3,6 +3,7 @@
 @section('title')
     Quản lý đơn hàng
 @endsection
+
 @section('css')
 @endsection
 
@@ -37,18 +38,15 @@
                         </div>
                         <div class="form-group mr-3">
                             <label for="date">Ngày đặt:</label>
-                            <input type="date" class="form-control ml-2" name="date" id="date"
-                                value="{{ request('date') }}">
+                            <input type="date" class="form-control ml-2" name="date" id="date" value="{{ request('date') }}">
+                        </div>
+                        <div class="form-group mr-3">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="text" class="form-control ml-2" name="phone" id="phone" value="{{ request('phone') }}" placeholder="Nhập số điện thoại">
                         </div>
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </form>
-                    <div class="table-data__tool-right">
-                        <a href="{{ route('admin.products.create') }}">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                <i class="zmdi zmdi-plus"></i>Thêm</button>
-                        </a>
-
-                    </div>
+                    
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
@@ -69,6 +67,9 @@
                     </div>
                     <br />
                 </div>
+                <div class="table-responsive table-responsive-data2">
+                    
+                        
                 <div class="row">
                     <div
                         class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
@@ -91,7 +92,7 @@
                                             <td>
                                                 ORDER-01
                                             </td>
-                                            <td>{{ $order->user->name }}</td>
+                                            <td>{{ $order->name }}</td>
                                             <td>{{ $order->total_price }} đ</td>
                                             <td>{{ $order->created_at }}</td>
                                             <td>

@@ -186,7 +186,7 @@
             if (res.status_code == 200) {
                 load_cart();
                 load_header();
-                console.log(res.message);
+                // console.log(res.message);
             } else {
                 $('.qty').val(res.quantity);
                 Swal.fire({
@@ -225,7 +225,7 @@
             $(this).addClass('color-active');
 
             selectedColor = $(this).data('color-id');
-            console.log(selectedColor);
+            // console.log(selectedColor);
             getInStock(selectedSize, selectedColor);
             // fetchAvailableSizes(selectedColor);
         });
@@ -236,7 +236,7 @@
             $(this).addClass('btn-active');
 
             selectedSize = $(this).data('size-id');
-            console.log(selectedSize);
+            // console.log(selectedSize);
             getInStock(selectedSize, selectedColor);
             fetchAvailableColors(selectedSize);
         });
@@ -252,7 +252,7 @@
                 quantity: quantity,
                 _token: '{{ csrf_token() }}',
             }
-            console.log(dataCart);
+            // console.log(dataCart);
 
 
             if (selectedColor && selectedSize) {
@@ -281,7 +281,7 @@
                         $('#productModal').modal('hide');
                         load_header();
                     } else {
-                        console.log(res.errors);
+                        // console.log(res.errors);
 
                         Swal.fire({
                             icon: "error",
@@ -310,7 +310,7 @@
                 $('.color-quick').removeClass('color-active');
                 res.forEach(item => {
                     $(`.color-quick[data-color-id="${item.color_id}"]`).show();
-                    console.log(item.color_id);
+                    // console.log(item.color_id);
                 });
             });
         }

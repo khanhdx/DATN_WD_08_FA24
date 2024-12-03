@@ -12,6 +12,9 @@ const shippingFee = document.getElementById('shipping_fee');
 const inputShipFee = document.getElementById('input_ship_fee');
 const totalAmount = document.getElementById('totalAmount');
 
+const firstDistrict = district.firstElementChild;
+const firstWardStreet = wardStreet.firstElementChild;
+
 let weight = 100;
 let districtId;
 
@@ -41,9 +44,6 @@ province.addEventListener('change', function (e) {
         .then((response) => {
             const dataDistrict = response.data.data;
 
-            const firstDistrict = district.firstElementChild;
-            const firstWardStreet = wardStreet.firstElementChild;
-
             while (district.lastElementChild !== firstDistrict) {
                 district.removeChild(district.lastElementChild);
             }
@@ -72,6 +72,10 @@ district.addEventListener('change', function (e) {
     axios.get(`https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`)
         .then((response) => {
             const dataDistrict = response.data.data;
+
+            while (wardStreet.lastElementChild !== firstWardStreet) {
+                wardStreet.removeChild(wardStreet.lastElementChild);
+            }
 
             dataDistrict.forEach(item => {
                 const optionElement = document.createElement('option');

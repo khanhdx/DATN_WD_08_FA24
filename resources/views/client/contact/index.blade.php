@@ -3,7 +3,7 @@
 @section('title', 'Liên hệ')
 
 @section('text_page')
-    Get in touch 
+    Liên hệ 
 @endsection
 
 @section('content')
