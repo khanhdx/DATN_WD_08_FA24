@@ -2,15 +2,13 @@
 $(document).ready(function() {
     var wrapper = $('.login-wrapper');
 
-    // $('#toggle_button').hide();
-
     $(document).on('click', '.login > a', function(e) {
         e.preventDefault();
         
         if (wrapper.hasClass('open')) {
-            wrapper.addClass('open');
-        } else {
             wrapper.removeClass('open');
+        } else {
+            wrapper.addClass('open');
         }
     });
 
@@ -26,25 +24,7 @@ $(document).ready(function() {
                 if (res.admin) {
                     window.location.href = res.admin;
                 } else {
-                    // const Toast = Swal.mixin({
-                    //     toast: true,
-                    //     position: "top",
-                    //     showConfirmButton: false,
-                    //     timer: 2500,
-                    //     timerProgressBar: true,
-                    //     didOpen: (toast) => {
-                    //         toast.onmouseenter = Swal.stopTimer;
-                    //         toast.onmouseleave = Swal.resumeTimer;
-                    //     }
-                    // });
-                    // Toast.fire({
-                    //     icon: "success",
-                    //     title: `<span style="font-size: 1.5rem">${res.message}</span>`,
-                    //     width: 280
-                    // });
-                    window.location.href = "/";
-                    // wrapper.removeClass('open');
-                    // load_header();
+                    window.location.reload();
                 }
             })
             .fail(function(xhr) {

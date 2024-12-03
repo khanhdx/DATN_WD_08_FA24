@@ -4,7 +4,6 @@ return [
     'pending' => 'Chờ xử lý',
     'processing' => 'Đang xử lý',
     'shipping' => 'Đang giao hàng',
-    'failed'=>'Giao hàng thất bại',
     'success'=>'Giao hàng thành công',
     'completed' => 'Hoàn Thành',
     'cancel' => 'Hủy đơn',

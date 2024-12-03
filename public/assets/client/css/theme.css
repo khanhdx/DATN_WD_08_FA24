@@ -1,7 +1,7 @@
 /* line 5, ../sass/theme.scss */
 body {
   color: #666666;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Montserrat", sans-serif;
   line-height: 1.6;
 }
 
@@ -9,6 +9,10 @@ body {
 #page {
   overflow: hidden;
   position: relative;
+}
+th {
+  text-align: center;
+  align-items: center;
 }
 
 /* top */

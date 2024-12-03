@@ -33,11 +33,21 @@
 #style-switcher-menu .chat-box {
     height: 400px;
     overflow-y: auto;
+    position: relative;
     padding: 15px 20px 70px;
 }
 
 .chat-box .chat {
     display: flex;
+}
+
+.text-welcome {
+    position: absolute;
+    font-size: 1.5rem;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #style-switcher-menu .outgoing {
