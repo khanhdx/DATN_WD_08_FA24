@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CompleteOrderJob;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\StatusOrderDetail;
@@ -81,6 +82,7 @@ class OrderController extends Controller
     
         try {
             $this->orderService->updateStatus($newStatusId, $id);
+            CompleteOrderJob::dispatch($id)->delay(now()->addDays(7));
             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
