@@ -17,14 +17,14 @@ class ProductVariantSeeder extends Seeder
     public function run(): void
     {
         $product_id = Product::pluck('id')->toArray();
-        $product_price = Product::pluck('price_regular', 'id')->toArray();
+        $product_price = Product::pluck('price_sale', 'id')->toArray();
         $color_id = Color::pluck('id')->toArray();
         $size_id = Size::pluck('id')->toArray();
 
         foreach ($product_id as $product) {
             foreach ($color_id as $color) {
                 foreach ($size_id as $size) {
-                    $price = $product_price[$product] * 0.6;
+                    $price = $product_price[$product];
                     ProductVariant::create([
                         'product_id' => $product,
                         'color_id' => $color,

@@ -51,51 +51,44 @@ class ProductSeeder extends Seeder
             'Quần nữ baggy Obito',
         ];
 
-        $categoryIds = Category::pluck('id')->toArray();
+        $categoryMan = Category::query()->where('type', "Man")->pluck('id', 'id')->toArray();
 
-        $categoryType = Category::pluck('type', 'id')->toArray();
+        foreach ($sanPhamNam as $key => $nam) {
+            $price = rand(100, 9000);
+            $sale = round($price * 0.6) * 1000; // Giảm 40%
 
-        foreach ($sanPhamNam as $nam) {
-            $price = rand(100000, 9000000);
-            $sale = round($price * 0.6, 3); // Giảm 40%
-            $category = $categoryIds[array_rand($categoryIds)];
-            $type = $categoryType[$category];
-            if ($type == "Man") {
-                Product::create([
-                    'category_id'   => $category,
-                    'image'         => '/assets/client/images/content/products/product-' . rand(1, 8) . '.jpg',
-                    'name'          => $nam,
-                    'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
-                    'price_regular' => $price,
-                    'price_sale'    => $sale,
-                    'base_stock'    => rand(0, 500),
-                    'description'   => fake()->text(200),
-                    'views'         => rand(1, 100),
-                    'content'       => fake()->text(400),
-                ]);
-            }
+            Product::create([
+                'category_id'   => array_rand($categoryMan),
+                'image'         => '/assets/client/images/content/products/product-' . rand(1, 8) . '.jpg',
+                'name'          => $nam,
+                'SKU'           => "OB" . Str::random(3) . "0000" . $key,
+                'price_regular' => $price * 1000,
+                'price_sale'    => $sale,
+                'base_stock'    => rand(0, 500),
+                'description'   => fake()->text(200),
+                'views'         => rand(1, 100),
+                'content'       => fake()->text(400),
+            ]);
         }
 
-        foreach ($sanPhamNu as $nu) {
-            $price = rand(100000, 9000000);
-            $sale = round($price * 0.5, 3);
-            $category = $categoryIds[array_rand($categoryIds)];
-            $type = $categoryType[$category];
-            if ($type == "Woman") {
-                Product::create([
-                    'category_id'   => $category,
-                    'image'         => '/assets/client/images/content/products/product-' . rand(9, 17) . '.jpg',
-                    'name'          => $nu,
-                    'SKU'           => "OB" . Str::random(3) . rand(10000, 99999),
-                    'price_regular' => $price,
-                    'price_sale'    => $sale,
-                    'base_stock'    => rand(0, 500),
-                    'description'   => fake()->text(200),
-                    'views'         => rand(1, 100),
-                    'content'       => fake()->text(400),
-                ]);
-            }
+        $categoryWoman = Category::query()->where('type', "Woman")->pluck('id', 'id')->toArray();
+
+        foreach ($sanPhamNu as $key => $nu) {
+            $price = rand(100, 9000);
+            $sale = round($price * 0.5) * 1000;
+
+            Product::create([
+                'category_id'   => array_rand($categoryWoman),
+                'image'         => '/assets/client/images/content/products/product-' . rand(9, 17) . '.jpg',
+                'name'          => $nu,
+                'SKU'           => "OB" . Str::random(3) . "0000" . $key,
+                'price_regular' => $price * 1000,
+                'price_sale'    => $sale,
+                'base_stock'    => rand(0, 500),
+                'description'   => fake()->text(200),
+                'views'         => rand(1, 100),
+                'content'       => fake()->text(400),
+            ]);
         }
-        
     }
 }

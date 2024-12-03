@@ -294,7 +294,7 @@ Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('p
 Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
 Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
-Route::get('/api/list-users', [ChatController::class, 'fetchUsers']);
+Route::get('/api/chat-room', [ChatController::class, 'fetchChatRooms']);
 Route::post('/api/block-user', [ChatController::class, 'blockUser']);
 Route::post('/api/unblock-user', [ChatController::class, 'unblockUser']);
 
