@@ -28,10 +28,9 @@
                         <td>{{ $order->date }}</td>
                         <td>{{ number_format($order->total_price, 0, ',', '.'
                         ) }} VND</td>
-                       <td class="order-id" data-order-id="{{ $order->id }}"
-                        id="status-{{ $order->id }}">
-                        {{ $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái' }}
-                    </td>
+                        <td class="order-id" data-order-id="{{ $order->id }}" id="status-{{ $order->id }}">
+                            {{ $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái' }}
+                        </td>
                         <td>
                             
                             @if ($order->payments->isNotEmpty())
@@ -59,10 +58,8 @@
                             @endif </td>
                         <td>{{ $order->address }}</td>
                         <td>{{ $order->note ?: 'Không có ghi chú' }}</td>
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order->id) }}">Xem chi
-                                tiết</a>
-
+                        <td id="action-{{$order->id}}">
+                            <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order->id) }}">Xem chi tiết</a>
 
                                 @if ($order->statusOrder->contains('name_status', 'pending'))
                                                             <form id="cancel-button-{{ $order->id }}"
@@ -77,15 +74,15 @@
                                                                     class="btn btn-outline-primary btn-sm">Hủy đơn
                                                                     hàng</button>
                                                             </form>
-                                @elseif ($order->statusOrder->contains('name_status', 'success'))
-                                    <form action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="name_status" value="completed">
-                                        <button type="submit" class="btn btn-outline-primary btn-sm">Hoàn thành</button>
-                                    </form>
                                 @endif
-                            
+                            @if ($order->statusOrder->contains('name_status', 'success'))
+                                <form id="success-button-{{ $order->id }}" action="{{ route('orders.update', $order->id) }}" method="POST" onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="completed">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Hoàn thành</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -106,7 +103,8 @@
                 const orderId = orderElement.dataset.orderId; // Lấy ID đơn hàng
                 const cancelButton = document.querySelector(
                 `#cancel-button-${orderId}`); // Nút hủy đơn hàng
-
+                const successButton = document.querySelector(
+                `#success-button-${orderId}`); // Nút Hoàn thành đơn hàng
                 // Hàm thực hiện polling trạng thái đơn hàng
                 const fetchOrderStatus = () => {
                     fetch(`/orders/${orderId}/status`)
@@ -124,15 +122,24 @@
                                     if (currentStatus !== 'pending' && cancelButton) {
                                         cancelButton.style.display = 'none';
                                     }
+                                    else {
+                                        if (currentStatus == 'success') {
+                                            successButton.style.display = 'block';
+                                        }
+                                        else {
+                                            successButton.style.display = 'none';
+                                        }
+                                    }
                                 }
+                                
                             }
                         })
                         .catch(error => console.error('Lỗi khi lấy trạng thái đơn hàng:', error));
                 };
-
                 // Thực hiện polling liên tục
                 const pollStatus = () => {
                     fetchOrderStatus();
+
                     setTimeout(pollStatus, 1000); // Gọi lại sau 1 giây
                 };
 
