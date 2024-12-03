@@ -29,8 +29,7 @@
                             <select class="form-control ml-2" name="status" id="status">
                                 <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->name_status }}"
-                                        {{ request('status') == $status->name_status ? 'selected' : '' }}>
+                                    <option value="{{ $status->name_status }}" {{ request('status') == $status->name_status ? 'selected' : '' }}>
                                         {{ $status->status_label }}
                                     </option>
                                 @endforeach
@@ -89,10 +88,8 @@
                                     @foreach ($orders as $order)
                                         <tr class="tr-shadow">
                                             <td>{{ $order->id }}</td>
-                                            <td>
-                                                ORDER-01
-                                            </td>
-                                            <td>{{ $order->name }}</td>
+                                            <td>{{ $order->slug }}</td>
+                                            <td>{{ $order->user->name ?? 'khách vãng lai'}}</td>
                                             <td>{{ $order->total_price }} đ</td>
                                             <td>{{ $order->created_at }}</td>
                                             <td>
