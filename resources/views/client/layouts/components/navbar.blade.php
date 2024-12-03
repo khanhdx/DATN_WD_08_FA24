@@ -3,21 +3,24 @@
     use App\Models\Product;
     use App\Models\Voucher;
     $categories = Category::query()->get();
-    $prs = Product::query()->orderBy('created_at','desc')->limit(3)->get();
-    $vs = Voucher::query()->where('type_code', '=', 'Công khai')->where('date_start', '=', date('Y-m-d'))->limit(3)->get();
-    if(Auth::user()) {
-            $ware = Auth::user()->vouchers_ware;
-            if($ware) {
-                foreach ($vs as $item) {
-                    if(Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $item->id)) {
-                        $item->check = true;
-                    }
-                    else {
-                        $item->check = false;
-                    }
+    $prs = Product::query()->orderBy('created_at', 'desc')->limit(3)->get();
+    $vs = Voucher::query()
+        ->where('type_code', '=', 'Công khai')
+        ->where('date_start', '=', date('Y-m-d'))
+        ->limit(3)
+        ->get();
+    if (Auth::user()) {
+        $ware = Auth::user()->vouchers_ware;
+        if ($ware) {
+            foreach ($vs as $item) {
+                if (Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $item->id)) {
+                    $item->check = true;
+                } else {
+                    $item->check = false;
                 }
             }
         }
+    }
 @endphp
 
 <nav class="navbar navbar-default navbar-main navbar-main-slide" role="navigation">
@@ -29,7 +32,7 @@
             <a class="logo" href="/"><img src="/assets/client/images/logo_obito.png" alt="Flatize"></a>
         </div>
         <ul class="nav navbar-nav navbar-act pull-right">
-          
+
 
             <li class="search">
                 <a href="" data-toggle="modal" data-target=".bs-example-modal-lg">
@@ -55,13 +58,18 @@
                                             <li class="product">
                                                 <div class="product-thumb-info">
                                                     <div class="product-thumb-info-image">
-                                                        <a href="{{ route('client.product.show', $pr->id) }}"><img alt="" width="60" src="{{ $pr->image }}"></a>
+                                                        <a href="{{ route('client.product.show', $pr->id) }}"><img
+                                                                alt="" width="60"
+                                                                src="{{ $pr->image }}"></a>
                                                     </div>
                                                     <div class="product-thumb-info-content">
-                                                        <h4><a href="{{ route('client.product.show', $pr->id) }}">{{$pr->name}}</a></h4>
+                                                        <h4><a
+                                                                href="{{ route('client.product.show', $pr->id) }}">{{ $pr->name }}</a>
+                                                        </h4>
                                                         <span class="item-cat"><small><a
                                                                     href="#">{{ $pr->category->name }}</a></small></span>
-                                                        <span class="price">{{ number_format($pr->price_regular,0,'','.') }}đ</span>
+                                                        <span
+                                                            class="price">{{ number_format($pr->price_regular, 0, '', '.') }}đ</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -73,7 +81,9 @@
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $category)
                                             @if ($category->type == 'Man')
-                                                <li><a href="#" onclick="openCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                                                <li><a href="#"
+                                                        onclick="openCategory({{ $category->id }})">{{ $category->name }}</a>
+                                                </li>
                                             @endif
                                         @endforeach
                                     </ul>
@@ -84,7 +94,9 @@
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $item)
                                             @if ($item->type == 'Woman')
-                                                <li><a href="#" onclick="openCategory({{ $item->id }})">{{ $item->name }}</a></li>
+                                                <li><a href="#"
+                                                        onclick="openCategory({{ $item->id }})">{{ $item->name }}</a>
+                                                </li>
                                             @endif
                                         @endforeach
                                     </ul>
@@ -94,42 +106,63 @@
                                     <ul class="list-unstyled sub-menu list-md-pro">
                                         @forelse ($vs as $voucher)
                                             <li class="product">
-                                                <div class="product-thumb-info" style="border-top: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;display: flex;align-items: center;padding: 10px 0px;gap:10px;">
-                                                    <div class="product-thumb-info-image m-0" style="clip-path: polygon(0% -1%, 100% -1%, 100% 100%, 50% 75%, 0% 100%);background-color: #FFFFFF;color: #000000;">
-                                                        @if ($voucher->value === "Cố định")
-                                                            <h4 class="m-0" style="padding: 15px 2px">{{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}</h4>
+                                                <div class="product-thumb-info"
+                                                    style="border-top: 1px solid #FFFFFF;border-bottom: 1px solid #FFFFFF;display: flex;align-items: center;padding: 10px 0px;gap:10px;">
+                                                    <div class="product-thumb-info-image m-0"
+                                                        style="clip-path: polygon(0% -1%, 100% -1%, 100% 100%, 50% 75%, 0% 100%);background-color: #FFFFFF;color: #000000;">
+                                                        @if ($voucher->value === 'Cố định')
+                                                            <h4 class="m-0" style="padding: 15px 2px">
+                                                                {{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}
+                                                            </h4>
                                                         @else
-                                                            <h4 class="m-0" style="padding: 15px 2px">{{$voucher->decreased_value}}%</h4>
+                                                            <h4 class="m-0" style="padding: 15px 2px">
+                                                                {{ $voucher->decreased_value }}%</h4>
                                                         @endif
                                                     </div>
-                                                    <div class="product-thumb-info-content" style="display: flex;justify-content: space-between;width: 100%;align-items: center;">
+                                                    <div class="product-thumb-info-content"
+                                                        style="display: flex;justify-content: space-between;width: 100%;align-items: center;">
                                                         <div>
-                                                            <h4 class="m-0"><a href="{{ route('client.voucher.show',$voucher->id) }}">{{ $voucher->name }}</a></h4>
-                                                            <p style="color: #FFFFFF;font-size: 12px;margin: 0px;"><strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
+                                                            <h4 class="m-0"><a
+                                                                    href="{{ route('client.voucher.show', $voucher->id) }}">{{ $voucher->name }}</a>
+                                                            </h4>
+                                                            <p style="color: #FFFFFF;font-size: 12px;margin: 0px;">
+                                                                <strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
                                                         </div>
                                                         @if (Auth::user())
                                                             @if ($voucher->check)
-                                                                <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save" disabled>Đã lưu</button>  
-                                                            @else                              
-                                                                <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
+                                                                <button
+                                                                    style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                    class="btn btn-save" disabled>Đã lưu</button>
+                                                            @else
+                                                                <form class="voucher-form"
+                                                                    id="voucherForm{{ $voucher->id }}"
+                                                                    onsubmit="formVoucher({{ $voucher->id }})"
+                                                                    action="{{ route('client.voucher.update', $voucher->id) }}"
+                                                                    method="post">
                                                                     @csrf
                                                                     @method('PUT')
-                                                                    <input type="hidden" name="voucher_id" value="{{$voucher->id}}">
-                                                                    <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save LuuVoucher">Lưu</button>
+                                                                    <input type="hidden" name="voucher_id"
+                                                                        value="{{ $voucher->id }}">
+                                                                    <button
+                                                                        style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                        class="btn btn-save LuuVoucher">Lưu</button>
                                                                 </form>
                                                             @endif
                                                         @else
-                                                            <button style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF" class="btn btn-save saveVoucher">Lưu</button>
+                                                            <button
+                                                                style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                class="btn btn-save saveVoucher">Lưu</button>
                                                         @endif
                                                     </div>
                                                 </div>
                                             </li>
                                         @empty
                                             <div style="display: flex;align-items: center;">
-                                                <img src="{{ asset('assets/client/bootstrap/fonts/no-data.svg') }}" alt="">
+                                                <img src="{{ asset('assets/client/bootstrap/fonts/no-data.svg') }}"
+                                                    alt="">
                                             </div>
                                         @endforelse
-                                        
+
                                     </ul>
                                 </div>
                             </div>
@@ -140,23 +173,27 @@
                 <li><a href="{{ route('client.post.index') }}">Bài viết</a></li>
                 <li><a href="{{ route('client.contact') }}">Liên hệ</a></li>
                 <li><a href="{{ route('client.voucher.index') }}">Mã giảm giá</a></li>
+                {{-- Seaarch bill --}}
+                <li>
+                    <a href="{{ route('search.bill') }}" class="dropdown-toggle dropdownLink"
+                        data-toggle="dropdown">
+                        Tìm kiếm hóa đơn
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 <script>
-    function openCategory (id) {
+    function openCategory(id) {
         const route = window.location.pathname;
         if (route !== "/products") {
-            const url = "{{ route('client.product.index')}}"+"?type="+id;
+            const url = "{{ route('client.product.index') }}" + "?type=" + id;
             console.log(url);
             window.location.href = url;
-        }
-        else {
+        } else {
             filterByCategory(id);
         }
     }
 </script>
-<script>
-
-</script>
+<script></script>

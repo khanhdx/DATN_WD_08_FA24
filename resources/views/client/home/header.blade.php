@@ -93,8 +93,8 @@
                     </li>
                 </ul>
                 <div class="cart-buttons text-right">
-                    <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">View Cart</button></a>
-                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button class="btn btn-primary">Checkout</button></a>
+                    <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">Xem giỏ hàng</button></a>
+                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button class="btn btn-primary">Thanh toán</button></a>
                 </div>
             </div>
         </li>

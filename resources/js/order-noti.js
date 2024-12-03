@@ -46,7 +46,7 @@ function updateNotificationUI() {
                 <div class="content">
                     <h5>${notification.title}</h5>
                     <p>Mã ${notification.orderCode}</p>
-                    <button class="btn btn-primary confirm-order" data-order-code="${notification.orderCode}"><a href="http://127.0.0.1:8000/admin/orders">Kiểm tra</a></button></br>
+                    <button class="btn btn-primary confirm-order" data-order-code="${notification.orderCode}"><a href="/admin/orders">Kiểm tra</a></button></br>
                     <span class="date">${notification.timeOrder}</span>
                 </div>
             </div>

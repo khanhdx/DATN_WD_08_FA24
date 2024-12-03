@@ -14,6 +14,7 @@ use App\Models\StatusOrderDetail;
 use App\Models\Voucher;
 use App\Models\VoucherWare;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -122,8 +123,14 @@ class PaymentController extends Controller
     {
         $request->validate([
             'address' => 'required|string|max:255',
+            'province' => 'required|string',
+            'district' => 'required|string',
+            'ward_street' => 'required|string',
+            'ship_fee' => 'required|integer',
             'payment_method' => 'required|string',
         ]);
+
+        // dd($request->all());
 
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
@@ -144,13 +151,66 @@ class PaymentController extends Controller
 
         $voucherDiscount = session('discount', 0);
         $totalPrice -= $voucherDiscount;
+        // $totalPrice += $request->ship_fee;
 
         $totalPrice = max($totalPrice, 0);
 
+        if ($totalPrice > 50000000) {
+            return redirect()->route('checkout')->with('error', 'Giá trị COD không được vượt quá 50 triệu');
+        }
+
+        $items = [];
+        $weight = 100;
+        $quantityCart = 0;
+
+        foreach ($cartItems as $item) {
+            $items[] = [
+                'name' => $item->productVariant->product->name,
+                'quantity' => $item->quantity,
+                'weight' => $item->quantity * $weight,
+            ];
+            $quantityCart += $item->quantity;
+        }
+
         try {
+            $response = Http::withHeaders([
+                'Token' => env('TOKEN_GHN'),
+                'ShopId' => env('SHOP_ID')
+            ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', [
+                'payment_type_id' => 2,
+                'note' => $request->note,
+                'required_note' => "KHONGCHOXEMHANG",
+                'to_name' => $request->user_name,
+                'to_phone' => $request->phone_number,
+                'to_address' => $request->address,
+                'to_ward_name' => $request->ward_street,
+                'to_district_name' => $request->district,
+                'to_province_name' => $request->province,
+                'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
+                'weight' => $quantityCart * $weight,
+                'service_type_id' => 2,
+                'items' => $items
+            ]);
+
+            $order_code = [];
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
+
+            } else {
+                // Xử lý lỗi API
+                Log::error('API GHN Error: ' . $response->body());
+                return redirect()->route('checkout')->with('error', $response->body());
+            }
+
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'order_code' => $order_code,
+                'shipping_fee' => $request->ship_fee,
                 'slug' => $this->generateSlug(),
+                'user_name' => $request->user_name,
+                'email' => $request->email,
                 'total_price' => $totalPrice,
                 'voucher_id' => session('voucher_id'),
                 'status_order_id' => 1,
@@ -197,6 +257,9 @@ class PaymentController extends Controller
             broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating order: ' . $e->getMessage());
+            if (isset($order)) {
+                $order->delete(); // Xóa đơn hàng nếu có lỗi xảy ra
+            }
             return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
@@ -260,12 +323,14 @@ class PaymentController extends Controller
         $voucherDiscount = session('discount', 0);
         $totalPrice -= $voucherDiscount;
         $totalPrice = max($totalPrice, 0);
-
         try {
 
             // Tạo đơn hàng cho khách vãng lai
             $order = Order::create([
-                'user_id' => null, // Gán UUID cho khách vãng lai
+                'user_id' => null,
+                'slug' => $this->generateSlug(),
+                'user_name' => $request->user_name,
+                'email' => $request->email,
                 'total_price' => $totalPrice,
                 'voucher_id' => session('voucher_id'),
                 'status_order_id' => 1, // Trạng thái chờ xử lý
@@ -309,8 +374,13 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 0, // Chờ thanh toán
             ]);
+            // Thông báo admin
+            broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating guest order: ' . $e->getMessage());
+            if (isset($order)) {
+                $order->delete(); // Xóa đơn hàng nếu có lỗi xảy ra
+            }
             return redirect()->route('guest.checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
 
@@ -636,7 +706,8 @@ class PaymentController extends Controller
             }
         }
     }
-    protected function generateSlug(){
+    protected function generateSlug()
+    {
         $randomNumber = rand(1000, 9999);
         $date = now()->format('Ymd');
         return 'Order-' . $randomNumber . $date;
