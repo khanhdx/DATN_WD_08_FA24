@@ -33,15 +33,19 @@
                         <button class="au-btn-filter" type="submit"><i class="zmdi zmdi-filter-list"></i> Lọc</button>
                     </form>
                 </div>
+                <div class="table-data__tool-left">
+                    <form class="au-form-icon" action="{{route('admin.slider.index')}}" method="GET">
+                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search')}}" type="text"
+                            placeholder="Search for datas &amp; reports..." />
+                        <button class="au-btn--submit2" type="submit">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
+                    </form>
+                </div>
                 <div class="table-data__tool-right">
                     <a href="{{ route('admin.slider.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
                         <i class="zmdi zmdi-plus"></i>Thêm Slider</button></a>
-                    <a href="#"><button id="delete" class="au-btn au-btn-icon btn-danger au-btn--small">
-                        <i class="fa-regular fa-trash-can"></i>Xóa</button></a>
-                    <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                        <a class="au-btn btn-secondary au-btn--small" href="#">Export</a>
-                        <div class="dropDownSelect2"></div>
-                    </div>
+
                 </div>
             </div>
             <div class="table-responsive table-responsive-data2">
@@ -99,6 +103,62 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="pagination-wrapper">
+                    @if ($listBanner->hasPages())
+                        <nav>
+                            <ul class="pagination">
+                                {{-- Previous Page Link --}}
+                                @if ($listBanner->onFirstPage())
+                                    <li class="page-item disabled" aria-disabled="true"
+                                        aria-label="@lang('pagination.previous')">
+                                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $listBanner->previousPageUrl() }}"
+                                            rel="prev" aria-label="@lang('pagination.previous')">&laquo;</a>
+                                    </li>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach ($listBanner->links()->elements as $element)
+                                    {{-- "Three Dots" Separator --}}
+                                    @if (is_string($element))
+                                        <li class="page-item disabled" aria-disabled="true"><span
+                                                class="page-link">{{ $element }}</span></li>
+                                    @endif
+
+                                    {{-- Array Of Links --}}
+                                    @if (is_array($element))
+                                        @foreach ($element as $page => $url)
+                                            @if ($page == $listBanner->currentPage())
+                                                <li class="page-item active" aria-current="page"><span
+                                                        class="page-link">{{ $page }}</span></li>
+                                            @else
+                                                <li class="page-item"><a class="page-link"
+                                                        href="{{ $url }}">{{ $page }}</a></li>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($listBanner->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $listBanner->nextPageUrl() }}" rel="next"
+                                            aria-label="@lang('pagination.next')">&raquo;</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled" aria-disabled="true"
+                                        aria-label="@lang('pagination.next')">
+                                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    @endif
+                </div>
+
             </div>
         </div>
     </div>
