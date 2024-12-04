@@ -26,7 +26,7 @@
 
         <div class="container">
             <div id="loader" style="display: none;">
-                <div class="loading-text">Đang tải dữ liệu
+                <div class="loading-text">Đang xử lý dữ liệu
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,7 +48,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="inputLN" name="user_name"
-                                                required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
+                                                required value="{{ auth()->check() ? auth()->user()->name : old('user_name') }}">
                                         </div>
                                     </div>
 
@@ -68,14 +68,14 @@
                                         </label>
                                         <div class="col-sm-10">
                                             <input type="tel" class="form-control" id="inputPhone" name="phone_number"
-                                                required value="{{ auth()->user() ? auth()->user()->phone_number : '' }}">
+                                                required value="{{ auth()->user() ? auth()->user()->phone_number : old('phone_number') }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="inputNote" class="col-sm-2 control-label">Ghi chú</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" id="inputNote" name="note" rows="3" placeholder="Nhập ghi chú nếu có"></textarea>
+                                            <textarea class="form-control" id="inputNote" name="note" rows="3" placeholder="Nhập ghi chú nếu có">{{ old('note') }}</textarea>
                                         </div>
                                     </div>
 
@@ -104,7 +104,7 @@
                                     <div class="form-group">
                                         <label for="address">Số nhà, tên đường cụ thể</label>
                                         <input type="text" name="address" id="address" class="form-control" required
-                                            value="{{ auth()->user() ? auth()->user()->address : '' }}">
+                                            value="{{ auth()->user() ? auth()->user()->address : old('address') }}">
                                     </div>
 
                                 </div>
@@ -172,7 +172,7 @@
                                                     {{ $item['productVariant']['product']['name'] }}
                                                     ({{ $item['quantity'] }})
                                                 @else
-                                                    Sản phẩm không tìm thấy
+                                                    {{ $item['name'] }}
                                                     ({{ isset($item['quantity']) ? $item['quantity'] : '0' }})
                                                 @endif
                                             </th>
@@ -183,7 +183,8 @@
                                         </tr>
                                         @php
                                             $totalPrice += isset($item['sub_total']) ? $item['sub_total'] : 0;
-                                            $quantityCart += $item->quantity;
+                                            $quantityCart += isset($item['quantity']) ? $item['quantity'] : 0;
+                                            // $quantityCart += $item->quantity;
                                         @endphp
                                     @endforeach
 
@@ -214,7 +215,7 @@
                                             <strong>
                                                 <span class="amount" id="totalAmount"
                                                     data-total="{{ $totalPrice - $discount }}">
-                                                    {{ number_format($totalPrice - $discount, 0, ',', '.') }} VND
+                                                    {{ number_format($totalPrice - $discount, 0, ',', '.') }} ₫
                                                 </span>
                                             </strong>
                                         </td>

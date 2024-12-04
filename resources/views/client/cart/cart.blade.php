@@ -193,7 +193,7 @@
 
         <div class="row featured-boxes">
             <p>
-                <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
+                <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}" class="btn btn-primary btn-block btn-sm">
                     Thanh toán
                 </a>
             </p>

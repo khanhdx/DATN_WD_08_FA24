@@ -210,7 +210,7 @@
                                 <span class="post-info-act">
                                     <a href="{{ route('client.post.show', $post->id) }}"><i class="fa fa-caret-right"></i></a>
                                 </span>
-                                <img loading="lazy" class="img-responsive" src="{{ $post->image }}" alt="Blog" style="width: 170px; height: 200px;">
+                                <img loading="lazy" class="img-responsive" src="{{ $post->image }}" alt="Blog">
                             </div>
                             <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a></h3>
                             <p class="post-meta">{{ $post->publish_date }}</p>
