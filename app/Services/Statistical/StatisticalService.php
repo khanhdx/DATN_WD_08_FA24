@@ -5,6 +5,8 @@ namespace App\Services\Statistical;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\StatusOrder;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToArray;
@@ -16,7 +18,24 @@ class StatisticalService
     // Revenue ( Doanh thu )
 
     // Tổng doanh thu 
-    public function totalRevenue() {}
+    public function totalRevenue($dayStart = null, $dayEnd = null)
+    {
+        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+
+        if ($dayStart == null && $dayEnd == null) {
+            $totalRevenue = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })->sum('total_price');
+        } else {
+            
+            $totalRevenue = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })->whereBetween('created_at', [$dayStart, $dayEnd])
+                ->sum('total_price');
+        }
+
+        return $totalRevenue;
+    }
 
     // Theo 7 ngày gần nhất 
     public function getRevenueByLast7Days()
@@ -53,6 +72,27 @@ class StatisticalService
 
 
     // Orders
+
+ public function countOrder($dayStart = null, $dayEnd = null)
+    {
+        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+
+        if ($dayStart == null && $dayEnd == null) {
+            $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })->count();
+        } else {
+            
+            $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })->whereBetween('created_at', [$dayStart, $dayEnd])
+                ->count();
+
+        }
+
+        return $countOrder;
+    }
+
     public function getOrderByLast7Days()
     {
         // Tắt only_full_group_by
@@ -107,6 +147,30 @@ class StatisticalService
 
 
     // Products
+    public function countProductSold($dayStart = null, $dayEnd = null)
+    {
+        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+
+        if ($dayStart == null && $dayEnd == null) {
+            $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })
+            ->withSum('order_details', 'quantity') 
+            ->get()
+            ->sum('order_details_sum_quantity'); 
+        } else {
+            $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+                $query->where('status_order_id', $completedStatusId);
+            })
+            ->whereBetween('created_at', [$dayStart, $dayEnd])
+            ->withSum('orderDetails', 'quantity') 
+            ->get()
+            ->sum('order_details_sum_quantity'); 
+        }
+        
+        return $totalSoldQuantity;
+    }
+
     public function getMaxPrice()
     {
         return Product::max('price_regular');
@@ -151,5 +215,12 @@ class StatisticalService
             });
 
         return $products;
+    }
+    // User
+    public function countCustomer()
+    {
+        $countCustomer = User::where('role', "Khách hàng")->count();
+
+        return $countCustomer;
     }
 }
