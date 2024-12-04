@@ -8,42 +8,65 @@
 @endsection
 
 @section('content')
+
+    {{--  Filter --}}
+    <section>
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="date-filter">
+                    <label for="startDate">Từ ngày:</label>
+                    <input type="date" id="startDate" name="start_date">
+
+                    <label for="endDate">Đến ngày:</label>
+                    <input type="date" id="endDate" name="end_date">
+
+                    <button id="updateAllChartsButton">Cập nhật tất cả</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- STATISTIC-->
     <section>
         <div class="section__content section__content--p30">
             <div class="container-fluid">
                 <div class="row">
+                    {{-- Khách hàng --}}
                     <div class="col-md-6 col-lg-3">
                         <div class="statistic__item">
-                            <h2 class="number">10,368</h2>
-                            <span class="desc">members online</span>
+                            <h2 class="number" id="countCustomer">...</h2>
+                            <span class="desc">Khách hàng</span>
                             <div class="icon">
                                 <i class="zmdi zmdi-account-o"></i>
                             </div>
                         </div>
                     </div>
+                    {{-- Sản phẩm đã bán --}}
                     <div class="col-md-6 col-lg-3">
                         <div class="statistic__item">
-                            <h2 class="number">388,688</h2>
-                            <span class="desc">items sold</span>
+                            <h2 class="number" id="totalSoldQuantity">...</h2>
+                            <span class="desc">sản phẩm đã bán</span>
                             <div class="icon">
                                 <i class="zmdi zmdi-shopping-cart"></i>
                             </div>
                         </div>
                     </div>
+                    {{-- Đơn hàng --}}
                     <div class="col-md-6 col-lg-3">
                         <div class="statistic__item">
-                            <h2 class="number">1,086</h2>
-                            <span class="desc">this week</span>
+                            <h2 class="number" id="countOrder">...</h2>
+                            <span class="desc">Đơn hàng</span>
                             <div class="icon">
                                 <i class="zmdi zmdi-calendar-note"></i>
                             </div>
                         </div>
                     </div>
+                    {{-- Tổng doanh thu --}}
                     <div class="col-md-6 col-lg-3">
                         <div class="statistic__item">
-                            <h2 class="number">$1,060,386</h2>
-                            <span class="desc">total earnings</span>
+                            <h2 class="number" id="totalRevenue"></h2>
+                            <span class="desc">doanh thu</span>
                             <div class="icon">
                                 <i class="zmdi zmdi-money"></i>
                             </div>
@@ -67,12 +90,12 @@
                                 <div class="date-filter">
                                     <label for="startRevenueDate">Từ ngày:</label>
                                     <input type="date" id="startRevenueDate" name="start_date">
-                                    
+
                                     <label for="endRevenueDate">Đến ngày:</label>
                                     <input type="date" id="endRevenueDate" name="end_date">
-                                    
+
                                     <button id="updateRevenueChartButton">Cập nhật biểu đồ</button>
-                                </div>  
+                                </div>
                             </div>
                             <div class="recent-report__chart">
                                 <canvas id="revenueChart" width="400" height="200"></canvas>
@@ -86,10 +109,10 @@
                                         <div class="date-filter">
                                             <label for="startOrderDate">Từ ngày:</label>
                                             <input type="date" id="startOrderDate" name="start_date">
-                                            
+
                                             <label for="endOrderDate">Đến ngày:</label>
                                             <input type="date" id="endOrderDate" name="end_date">
-                                            
+
                                             <button id="updateOrderChartButton">Cập nhật biểu đồ</button>
                                         </div>
                                     </div>
@@ -106,23 +129,23 @@
                                         <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="recent-report2">
                             <div class="recent-report__chart">
                                 <h3 class="title-3">Top sản phẩm bán chạy nhất</h3>
                                 <div class="recent-report__chart">
-                                <canvas id="mostOrderedProductChart" width="400" height="200"></canvas>
-                            </div>
+                                    <canvas id="mostOrderedProductChart" width="400" height="200"></canvas>
+                                </div>
                             </div>
                         </div>
                         <div class="recent-report2">
                             <div class="recent-report__chart">
                                 <h3 class="title-3">Số lượng tồn kho sản phầm</h3>
                                 <div class="recent-report__chart">
-                                <canvas id="inventoryChart" width="400" height="200"></canvas>
-                            </div>
+                                    <canvas id="inventoryChart" width="400" height="200"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -400,7 +423,9 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('assets/js/revenue-chart.js') }}"></script>
-    <script src="{{ asset('assets/js/order-chart.js') }}"></script>
-    <script src="{{ asset('assets/js/product-chart.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/dashbroad.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/statistic.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/revenue-chart.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/order-chart.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/product-chart.js') }}"></script>
 @endsection
