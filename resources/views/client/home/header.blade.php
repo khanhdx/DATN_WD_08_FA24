@@ -38,7 +38,7 @@
         <li class="dropdown menu-shop">
             <a href="{{ route('client.carts.index') }}" class="dropdown-toggle dropdownLink" data-toggle="dropdown">
                 <i class="fa fa-shopping-cart"></i>
-                <span class="shopping-bag">{{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }}</span>
+                <span class="shopping-bag">{{ Auth::check() ? $count : count($count) }}</span>
             </a>
             <div class="dropdown-menu">
                 <h3>Các sản phẩm được thêm gần đây</h3>

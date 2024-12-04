@@ -15,6 +15,7 @@ use App\Models\Voucher;
 use App\Models\VoucherWare;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -34,7 +35,6 @@ class PaymentController extends Controller
         if ($cartItems->isEmpty()) {
             return redirect()->route('client.home')->with('error', 'Giỏ hàng trống.');
         }
-
         return view('client.checkouts.index', compact('cartItems'));
     }
     public function showGuestPaymentForm()
@@ -122,8 +122,14 @@ class PaymentController extends Controller
     {
         $request->validate([
             'address' => 'required|string|max:255',
+            'province' => 'required|string',
+            'district' => 'required|string',
+            'ward_street' => 'required|string',
+            'ship_fee' => 'required|integer',
             'payment_method' => 'required|string',
         ]);
+
+        // dd($request->all());
 
         $cartId = auth()->check() ? Cart::where('user_id', auth()->id())->value('id') : Session::get('cart_id');
 
@@ -147,9 +153,60 @@ class PaymentController extends Controller
 
         $totalPrice = max($totalPrice, 0);
 
+        if ($totalPrice > 50000000) {
+            return redirect()->route('checkout')->with('error', 'Giá trị COD không được vượt quá 50 triệu');
+        }
+
+        $items = [];
+        $weight = 100;
+        $quantityCart = 0;
+
+        foreach ($cartItems as $item) {
+            $items[] = [
+                'name' => $item->productVariant->product->name,
+                'quantity' => $item->quantity,
+                'weight' => $item->quantity * $weight,
+            ];
+            $quantityCart += $item->quantity;
+        }
+
         try {
+            $response = Http::withHeaders([
+                'Token' => env('TOKEN_GHN'),
+                'ShopId' => env('SHOP_ID')
+            ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', [
+                'payment_type_id' => 2,
+                'note' => $request->note,
+                'required_note' => "KHONGCHOXEMHANG",
+                'to_name' => $request->user_name,
+                'to_phone' => $request->phone_number,
+                'to_address' => $request->address,
+                'to_ward_name' => $request->ward_street,
+                'to_district_name' => $request->district,
+                'to_province_name' => $request->province,
+                'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
+                'weight' => $quantityCart * $weight,
+                'service_type_id' => 2,
+                'items' => $items
+            ]);
+
+            $order_code = [];
+            $data = $response->json();
+
+            if ($response->successful()) {
+                $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
+                Log::info('Tạo Đơn Thành Công: ' . $response->body());
+            } else {
+                // Xử lý lỗi API
+                Log::error('API GHN Error: ' . $response->body());
+                
+                return redirect()->route('checkout')->with('error', $data['code_message_value']);
+            }
+
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'order_code' => $order_code,
+                'shipping_fee' => $request->ship_fee,
                 'slug' => $this->generateSlug(),
                 'user_name' => $request->user_name,
                 'email' => $request->email,
@@ -233,8 +290,13 @@ class PaymentController extends Controller
             'address' => 'required|string|max:255',
             'payment_method' => 'required|string',
             'phone_number' => 'required|string|max:15',
+            'province' => 'required|string',
+            'district' => 'required|string',
+            'ward_street' => 'required|string',
+            'ship_fee' => 'required|integer',
         ]);
 
+        // dd($request->all());
         // Lấy giỏ hàng từ session
         $cart = session()->get('cart', []);
         // dd($cart);
@@ -265,11 +327,62 @@ class PaymentController extends Controller
         $voucherDiscount = session('discount', 0);
         $totalPrice -= $voucherDiscount;
         $totalPrice = max($totalPrice, 0);
+
+        if ($totalPrice > 50000000) {
+            return redirect()->route('guest.checkout')->with('error', 'Giá trị COD không được vượt quá 50 triệu');
+        }
+
+        $items = [];
+        $weight = 100;
+        $quantityCart = 0;
+
+        foreach ($cartItems as $item) {
+            $items[] = [
+                'name' => $item->name,
+                'quantity' => (int) $item->quantity,
+                'weight' => $item->quantity * $weight,
+            ];
+            $quantityCart += $item->quantity;
+        }
+
         try {
+            $response = Http::withHeaders([
+                'Token' => env('TOKEN_GHN'),
+                'ShopId' => env('SHOP_ID')
+            ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', [
+                'payment_type_id' => 2,
+                'note' => $request->note,
+                'required_note' => "KHONGCHOXEMHANG",
+                'to_name' => $request->user_name,
+                'to_phone' => $request->phone_number,
+                'to_address' => $request->address,
+                'to_ward_name' => $request->ward_street,
+                'to_district_name' => $request->district,
+                'to_province_name' => $request->province,
+                'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
+                'weight' => $quantityCart * $weight,
+                'service_type_id' => 2,
+                'items' => $items
+            ]);
+
+            $order_code = [];
+            $data = $response->json();
+
+            if ($response->successful()) {
+                $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
+                Log::info('Tạo đơn thành công cho khách vãng lai: ' . $response->body());
+            } else {
+                // Xử lý lỗi API
+                Log::error('API GHN Error: ' . $response->body());
+                
+                return redirect()->route('guest.checkout')->with('error', $data['code_message_value']);
+            }
 
             // Tạo đơn hàng cho khách vãng lai
             $order = Order::create([
                 'user_id' => null,
+                'order_code' => $order_code,
+                'shipping_fee' => $request->ship_fee,
                 'slug' => $this->generateSlug(),
                 'user_name' => $request->user_name,
                 'email' => $request->email,
@@ -591,7 +704,6 @@ class PaymentController extends Controller
             return view('client.checkouts.success', compact('orders', 'payment'));
         }
     }
-
 
     public function paymentSuccessForGuest()
     {

@@ -84,21 +84,21 @@
                                         
                                     </li>
                                 </ul>
-    
-                                <div class="quantity pull-left">
+
+                                <div>
+                                    <span class="stock"></span> hàng có sẵn
+                                </div>
+                                
+                                <div class="quantity">
                                     <input type="button" class="minus" value="-">
                                     <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
                                         name="quantity" min="1" step="1">
                                     <input type="button" class="plus" value="+">
-                                    <span><span class="stock"></span> hàng có sẵn</span>
                                 </div>
-    
-                                <a href="#" class="btn btn-grey">
-                                    <span><i class="fa fa-heart"></i></span>
-                                </a>
+
     
                                 <button type="submit" class="btn btn-primary btn-icon">
-                                    <i class="fa fa-shopping-cart"></i> Add to cart
+                                    <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </form>
 
