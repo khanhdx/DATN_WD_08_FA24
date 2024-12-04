@@ -109,6 +109,7 @@ wardStreet.addEventListener('change', function (e) {
             const data = response.data.data;
             let sum = 0;
 
+            shippingFee.classList.add("price");
             inputShipFee.value = data.total;
             shippingFee.textContent = data.total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
