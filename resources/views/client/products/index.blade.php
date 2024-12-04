@@ -18,26 +18,29 @@
                         <div id="price-range">
                             <div class="padding-range">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price1" name="price" value="0-5000000">
-                                    <label class="form-check-label" for="price1">Dưới 5,000,000đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price1" name="price"
+                                        value="0-5000000">
+                                    <label class="form-check-label" for="price1">Dưới 5tr</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price2" name="price" value="5000000-10000000">
-                                    <label class="form-check-label" for="price2">5,000,000đ-10,000,000đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price2" name="price"
+                                        value="5000000-10000000">
+                                    <label class="form-check-label" for="price2">Từ 5tr-10tr</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price3" name="price" value="10000000-1000000000">
-                                    <label class="form-check-label" for="price3">Trên 10,000,000đ</label>
+                                    <input class="form-check-input" type="checkbox" id="price3" name="price"
+                                        value="10000000-1000000000">
+                                    <label class="form-check-label" for="price3">Trên 10tr</label>
                                 </div>
                                 <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm"
-                                        onclick="filterByPrice()">Apply Filter</a></p>
+                                        onclick="filterByPrice()">Áp dụng</a></p>
                             </div>
                         </div>
                     </aside>
                     <aside class="block blk-cat">
                         <h4>Danh mục</h4>
                         <ul class="list-unstyled list-cat">
-                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Products</a></li>
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả sản phẩm</a></li>
                             @foreach ($categories as $category)
                                 <li><a href=""
                                         onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
@@ -48,14 +51,14 @@
                     <aside class="block blk-colors">
                         <h4>Màu sắc</h4>
                         <ul class="list-unstyled list-cat">
-                            <li><a href="javascript:void(0);" onclick="showAllProducts()">All Colors</a></li>
+                            <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả màu</a></li>
                             @foreach ($colors as $color)
                                 <li><a href="javascript:void(0);"
                                         onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
                             @endforeach
                         </ul>
                     </aside>
-                    
+
 
                     <aside class="block featured">
                         <h4>Sản phẩm trending</h4>
@@ -65,25 +68,29 @@
                                     <div class="product-thumb-info">
                                         <div class="product-thumb-info-image">
                                             <a href="{{ route('client.product.show', $product->id) }}">
-                                                <img alt="{{ $product->name }}" width="60" src="{{ asset($product->image) }}">
+                                                <img alt="{{ $product->name }}" width="60"
+                                                    src="{{ asset($product->image) }}">
                                             </a>
                                         </div>
-                    
+
                                         <div class="product-thumb-info-content">
                                             <h4>
-                                                <a href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
+                                                <a
+                                                    href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                             </h4>
                                             <span class="item-cat">
                                                 <small><a href="#">{{ $product->category->name }}</a></small>
                                             </span>
-                                            <span class="price">{{ number_format($product->price_sale ?? $product->price_regular, 2) }} đ</span>
+                                            <span
+                                                class="price">{{ number_format($product->price_sale ?? number_format($product->price_regular, 0, ',', '.'), 0, ',', '.') }}
+                                                đ</span>
                                         </div>
                                     </div>
                                 </li>
                             @endforeach
                         </ul>
                     </aside>
-                    
+
                 </aside>
             </div>
             <div class="col-md-9">
@@ -110,7 +117,7 @@
                                     <div class="col-xs-6 col-sm-4 animation"
                                         data-category-id="{{ $product->category->id }}"
                                         data-color-id="{{ $product->color_id }}"
-                                        data-price="{{ $product->price_regular }}">
+                                        data-price="{{ number_format($product->price_regular, 0, ',', '.') }}">
                                         <div class="product" data-category="{{ $product->category->name }}">
                                             <div class="product-thumb-info">
                                                 <div class="product-thumb-info-image">
@@ -130,7 +137,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
-                                                    <span class="price pull-right">{{ $product->price_regular }} đ</span>
+                                                    <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
                                                     <h4><a
                                                             href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                                     </h4>
@@ -148,7 +155,7 @@
                         </div>
                         <div class="product product-list animation">
                             @foreach ($products as $product)
-                                <div class="product-thumb-info"  data-category-id="{{ $product->category->id }}">
+                                <div class="product-thumb-info" data-category-id="{{ $product->category->id }}">
                                     <div class="row">
                                         <div class="col-xs-5 col-sm-3">
                                             <div class="product-thumb-info-image">
@@ -171,7 +178,7 @@
                                                     <span>({{ $product->reviews->count() }}) Reviews</span> |
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
-                                                <p class="price">{{ $product->price_regular }} đ</p>
+                                                <p class="price">{{ number_format($product->price_regular, 0, ',', '.') }} đ</p>
                                                 <p>{{ $product->description }}</p>
                                                 <p class="btn-group">
                                                     {{-- <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button> --}}
@@ -287,7 +294,6 @@
             color: black;
             text-decoration: line-through;
         }
-        
     </style>
 @endsection
 

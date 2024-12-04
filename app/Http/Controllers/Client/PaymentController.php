@@ -193,15 +193,16 @@ class PaymentController extends Controller
             ]);
 
             $order_code = [];
+            $data = $response->json();
 
             if ($response->successful()) {
-                $data = $response->json();
                 $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
 
             } else {
                 // Xử lý lỗi API
                 Log::error('API GHN Error: ' . $response->body());
-                return redirect()->route('checkout')->with('error', $response->body());
+                
+                return redirect()->route('checkout')->with('error', $data['code_message_value']);
             }
 
             $order = Order::create([

@@ -58,9 +58,6 @@
                                                 class="view-product" data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
-                                            {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a> --}}
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
                                             <img loading="lazy" alt="" class="img-responsive"
@@ -70,11 +67,13 @@
 
                                     <div class="product-thumb-info-content">
                                         <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
+                                        
                                         <h4>
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 {{ $product->name }}
                                             </a>
                                         </h4>
+                                        
                                         <span class="item-cat">
                                             <small>
                                                 <a href="#">{{ $product->category->name }}</a>
@@ -116,9 +115,6 @@
                                                 data-id="{{ $product->id }}">
                                                 <span><i class="fa fa-external-link"></i></span>
                                             </a>
-                                            {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                <span><i class="fa fa-shopping-cart"></i></span>
-                                            </a> --}}
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
                                             <img loading="lazy" alt="" class="img-responsive"
@@ -131,8 +127,8 @@
                                             <a
                                                 href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                         </h4>
-                                        <span class="item-cat"><small><a
-                                                    href="#">{{ $product->category->name }}</a></small></span>
+                                        <span class="item-cat">
+                                            <small><a href="#">{{ $product->category->name }}</a></small></span>
                                     </div>
                                 </div>
                             </div>

@@ -103,7 +103,7 @@
 
                                             <td class="product-subtotal">
                                                 <span class="amount sub-total-{{ $cart->id }}">
-                                                    {{ number_format($cart->sub_total, 0, ',', '.') }} VND
+                                                    {{ number_format($cart->sub_total, 0, ',', '.') }} đ
                                                 </span>
                                             </td>
 
@@ -140,7 +140,7 @@
 
                                             <td class="product-price">
                                                 <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }}
-                                                    VND</span>
+                                                    đ</span>
                                             </td>
 
                                             <td class="product-quantity">
@@ -194,12 +194,12 @@
         <div class="row featured-boxes">
             <p>
                 <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
-                    Proceed To Checkout
+                    Thanh toán
                 </a>
             </p>
 
             <a href="{{ route('client.home') }}" class="btn btn-grey btn-block btn-sm">
-                Continue Shopping
+                Tiếp tục mua sắm
             </a>
         </div>
     </div>

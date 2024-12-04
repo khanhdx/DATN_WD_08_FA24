@@ -10,7 +10,7 @@
     <div class="container">
         <table class="table table-hover table-bordered">
             <thead class="table-dark text-center">
-                <tr>
+                <tr id="table-order">
                     <th>ID</th>
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>

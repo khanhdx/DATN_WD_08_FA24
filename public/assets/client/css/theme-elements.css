@@ -647,6 +647,7 @@ label {
 /* line 473, ../sass/theme-elements.scss */
 .price {
     color: #1abc9c;
+    font-size: 20px;
     font-family: Roboto Slab, serif;
 }
 
@@ -658,11 +659,11 @@ label {
 
 /* line 483, ../sass/theme-elements.scss */
 .product-thumb-info-content h4 {
-    font-family: Roboto Slab, serif;
     font-size: 1em;
     line-height: 1.6;
     margin-bottom: 0;
-    padding-right: 85px;
+    text-transform: uppercase;
+    /* padding-right: 85px; */
 }
 /* line 489, ../sass/theme-elements.scss */
 .product-thumb-info-content .item-cat a {
@@ -827,7 +828,7 @@ label {
 .breadcrumb {
     background-color: transparent;
     border-radius: 0;
-    margin: 20px 0 0;
+    margin: 0;
     padding: 0;
 }
 /* line 618, ../sass/theme-elements.scss */

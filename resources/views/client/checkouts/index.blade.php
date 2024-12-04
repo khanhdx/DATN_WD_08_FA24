@@ -25,9 +25,17 @@
         @include('client.layouts.components.pagetop', ['md' => 'md'])
 
         <div class="container">
+            <div id="loader" style="display: none;">
+                <div class="loading-text">Đang tải dữ liệu
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             <div class="row featured-boxes">
                 <div class="col-md-8">
-                    <form action="{{ auth()->check() ? route('checkout.process') : route('guest.checkout.process') }}"
+                    <form id="form-order"
+                        action="{{ auth()->check() ? route('checkout.process') : route('guest.checkout.process') }}"
                         method="POST">
                         @csrf
                         <input type="hidden" name="ship_fee" id="input_ship_fee" value="0">
@@ -43,7 +51,7 @@
                                                 required value="{{ auth()->check() ? auth()->user()->name : old('name') }}">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="inputEmail" class="col-sm-2 control-label">Địa Chỉ Email <span
                                                 class="required">*</span></label>
@@ -170,7 +178,7 @@
                                             </th>
                                             <td class="product-price">
                                                 <span
-                                                    class="amount">{{ isset($item['sub_total']) ? $item['sub_total'] : '0' }}</span>
+                                                    class="amount">{{ isset($item['sub_total']) ? number_format($item['sub_total'], 0, ',', '.') : '0' }} ₫</span>
                                             </td>
                                         </tr>
                                         @php
@@ -256,7 +264,12 @@
 
 @section('js')
     <script>
-        let quantity = {{ $quantityCart }}
+        let quantity = {{ $quantityCart }};
+
+        document.getElementById("form-order").addEventListener("submit", function(event) {
+            document.getElementById("loader").style.display = "flex";
+            document.querySelector("button[type='submit']").disabled = true;
+        });
     </script>
     @vite('resources/js/shipping.js')
 @endsection
