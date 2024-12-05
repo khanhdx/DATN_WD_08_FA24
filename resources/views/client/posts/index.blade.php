@@ -1,6 +1,6 @@
 @extends('client.layouts.master')
 
-@section('title', 'Blog Masonry')
+@section('title', 'Bài đăng')
 
 @section('text_page')
     Bài viết
@@ -38,8 +38,8 @@
                                     <div class="post-content">
                                         <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a></h3>
                                         <div class="post-meta">
-                                            <span>By <a href="#">{{ $post->author }}</a> in <a
-                                                    href="{{ route('client.post.show', $post->id) }}">Blog</a></span>
+                                            <span><a href="#">{{ $post->author }}</a> đã <a
+                                                    href="{{ route('client.post.show', $post->id) }}">đăng bài</a></span>
                                         </div>
 
                                         <p>{{ $post->content }}</p>
