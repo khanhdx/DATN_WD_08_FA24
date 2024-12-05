@@ -64,7 +64,7 @@
                                                 <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label" for="">Loại tài khoản</label>
                                             <select name="role" class="form-control" id="">
                                                 <option value="Khách hàng">Khách hàng</option>
@@ -72,12 +72,23 @@
                                                 <option value="Quản lý">Quản lý</option>
                                             </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="password">Mật khẩu</label>
+                                            <div class="input-group">
+                                                <input class="form-control @error('password') is-invalid @enderror" type="password" max="20" name="password" placeholder="******" id="password">
+                                                <button id="btn_LPass" onclick="togglePassword()" type="button" class="btn btn-secondary">Hiện</button>
+                                            </div>
+
+                                            @error('password')
+                                                <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <div class="row w-100">
                                             <div class="col">
                                                 <label for="user_image">Ảnh</label>
-                                                <input class="form-control p-1 " type="file" name="user_image" id="user_image">
+                                                <input class="form-control p-1 mb-3" type="file" name="user_image" id="user_image">
                                             </div>
                                             <div id="file_I" class="col-3">
                                                 <img class="p-0" id="view_IMG" src="" alt="Ảnh">
@@ -182,5 +193,19 @@
             }
             document.getElementById('form_location').innerHTML = "";
         });
+    </script>
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            const showBtn = document.querySelector('#btn_LPass');
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                showBtn.textContent = "Ẩn";
+            } else {
+                passwordField.type = "password";
+                showBtn.textContent = "Hiển thị";
+            }
+        }
     </script>
 @endsection
