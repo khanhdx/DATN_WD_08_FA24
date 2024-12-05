@@ -16,25 +16,25 @@ class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
     public function index()
-{
-    $products = Product::with(['category'])->latest('id')->paginate(9);
-    $categories = Category::all();
-    $colors = Color::all();
-    $trendingProducts = Product::with('category')
-        ->withCount(['orderDetails as total_sales' => function ($query) {
-            $query->select(DB::raw('SUM(quantity)'));
-        }])
-        ->orderByDesc('total_sales')
-        ->take(3)
-        ->get();
+    {
+        $products = Product::with(['category'])->latest('id')->paginate(9);
+        $categories = Category::all();
+        $colors = Color::all();
+        $trendingProducts = Product::with('category')
+            ->withCount(['orderDetails as total_sales' => function ($query) {
+                $query->select(DB::raw('SUM(quantity)'));
+            }])
+            ->orderByDesc('total_sales')
+            ->take(3)
+            ->get();
 
-    return view(self::PATH_VIEW . __FUNCTION__, compact(
-        'products',
-        'categories',
-        'colors',
-        'trendingProducts'
-    ));
-}
+        return view(self::PATH_VIEW . __FUNCTION__, compact(
+            'products',
+            'categories',
+            'colors',
+            'trendingProducts'
+        ));
+    }
 
     public function show(Product $product)
     {
@@ -54,7 +54,7 @@ class ProductController extends Controller
     public function show_modal(Product $product)
     {
         try {
-            $product->load(['variants', 'category', 'sizes', 'colors', 'reviews.user' ]);
+            $product->load(['variants', 'category', 'sizes', 'colors', 'reviews.user']);
 
             return response()->json($product);
         } catch (\Throwable $th) {
@@ -120,9 +120,32 @@ class ProductController extends Controller
             ], 404);
         }
     }
+    public function search(Request $request)
+    {
+        // Lấy từ khóa tìm kiếm từ query string
+        $query = $request->input('query');
 
+        // Tìm kiếm sản phẩm theo tên hoặc mô tả
+        // $products = Product::where('name', 'LIKE', "%$query%")
+        //     ->orWhere('description', 'LIKE', "%$query%")
+        //     ->get();
+        $products = Product::with(['category'])
+            ->where('name', 'LIKE', "%$query%")
+            ->orwhere('description', 'LIKE', "%$query%")
+            ->latest('id')
+            ->paginate(9);
 
-    
+        $categories = Category::all();
+        $colors = Color::all();
+        $trendingProducts = Product::with('category')
+            ->withCount(['orderDetails as total_sales' => function ($query) {
+                $query->select(DB::raw('SUM(quantity)'));
+            }])
+            ->orderByDesc('total_sales')
+            ->take(3)
+            ->get();
 
-
+        // Trả về view kèm theo danh sách sản phẩm tìm được
+        return view('client.products.SearchPro', compact('products', 'query', 'categories','colors','trendingProducts'));
+    }
 }
