@@ -199,6 +199,7 @@ class PaymentController extends Controller
             } else {
                 // Xử lý lỗi API
                 Log::error('API GHN Error: ' . $response->body());
+
                 return redirect()->route('checkout')->with('error', $data['code_message_value']);
             }
 
@@ -242,7 +243,7 @@ class PaymentController extends Controller
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
-                'name' => '',
+                'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
             ]);
 
             if ($request->payment_method === 'MOMO') {
@@ -381,6 +382,7 @@ class PaymentController extends Controller
                 // Xử lý lỗi API
                 Log::error('API GHN Error: ' . $response->body());
 
+
                 return redirect()->route('guest.checkout')->with('error', $data['code_message_value']);
             }
 
@@ -419,7 +421,7 @@ class PaymentController extends Controller
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
-                'name' => 'Chờ xử lý',
+                'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
             ]);
 
             // Thanh toán
@@ -534,115 +536,15 @@ class PaymentController extends Controller
             return redirect()->route('checkout')->with('error', 'Lỗi khi xử lý thanh toán MoMo.');
         }
     }
-    public function processGuestMoMoPayment($order)
-    {
-        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-        $partnerCode = 'MOMOBKUN20180529';
-        $accessKey = 'klm05TvNBzhg7h7j';
-        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        $orderInfo = "Thanh toán qua MoMo";
-        $amount = $order->total_price;  // Chuyển giá trị thành tiền đồng
-        $orderId = time();
-        $redirectUrl = route('guest.payment.momo');
-        $ipnUrl = route('guest.payment.momo');
-        $extraData = "";
 
-        $requestId = time() . "";
-        $requestType = "payWithATM";
-        //before sign HMAC SHA256 signature
-        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-        $signature = hash_hmac("sha256", $rawHash, $secretKey);
-        $data = array(
-            'partnerCode' => $partnerCode,
-            'partnerName' => "Test",
-            "storeId" => "MomoTestStore",
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $orderId,
-            'orderInfo' => $orderInfo,
-            'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
-            'extraData' => $extraData,
-            'requestType' => $requestType,
-            'signature' => $signature
-        );
-        // dd($data);
-
-        $result = $this->execPostRequest($endpoint, json_encode($data));
-        $jsonResult = json_decode($result, true);
-
-
-        if ($jsonResult['resultCode'] == 0) {
-            return redirect($jsonResult['payUrl']);
-        } else {
-            return redirect()->route('guest.checkout')->with('error', 'Lỗi khi xử lý thanh toán MoMo.');
-        }
-    }
-    public function paymentGuestMomo(Request $request)
-    {
-        try {
-            // Debug payload từ MoMo
-            Log::info('MoMo payload:', $request->all());
-
-            // Lấy đơn hàng gần nhất của người dùng có trạng thái chờ thanh toán
-            $order = Order::where('user_id', Auth::id())
-                ->whereHas('statusOrderDetails', function ($query) {
-                    $query->where('status_order_id', 1); // Đơn hàng đang chờ thanh toán
-                })
-                ->latest()
-                ->first();
-
-            if (!$order) {
-                return redirect()->route('guest.checkout')->with('error', 'Không tìm thấy đơn hàng hợp lệ.');
-            }
-
-            // Kiểm tra trạng thái thanh toán từ MoMo
-            if ($request->resultCode != 0) { // Giao dịch không thành công
-                // Xóa đơn hàng và giỏ hàng
-                $this->deleteOrderAndCart($order);
-
-                return redirect()->route('guest.checkout')->with('error', 'Thanh toán không thành công. Đơn hàng đã được hủy.');
-            }
-
-            // Nếu giao dịch thành công, lưu thông tin thanh toán
-            $amount = intval($request->amount);
-            // Lưu vào bảng payments
-            Payment::create([
-                'order_id' => $order->id,
-                'user_id' => $order->user_id,
-                'amount' => $amount,
-                'transaction_type' => 1, // Thanh toán thành công
-                'payment_method' => 'MoMo',
-                'status' => 1, // Đã thanh toán
-                'note' => 'Thanh toán thành công qua MoMo.',
-            ]);
-
-            // Xóa giỏ hàng sau khi thanh toán thành công
-            $this->clearCart();
-
-            return redirect()->route('payment.success')->with('success', 'Thanh toán thành công!');
-        } catch (\Exception $e) {
-            Log::error('Error in paymentSuccess: ' . $e->getMessage());
-
-            // Xóa đơn hàng và giỏ hàng nếu có lỗi
-            if (isset($order)) {
-                $this->deleteOrderAndCart($order);
-            }
-
-            return redirect()->route('checkout')->with('error', 'Lỗi xảy ra khi xử lý thanh toán. Đơn hàng đã được hủy.');
-        }
-    }
     public function paymentMomo(Request $request)
     {
         try {
-            // Debug payload từ MoMo
             Log::info('MoMo payload:', $request->all());
 
-            // Lấy đơn hàng gần nhất của người dùng có trạng thái chờ thanh toán
             $order = Order::where('user_id', Auth::id())
                 ->whereHas('statusOrderDetails', function ($query) {
-                    $query->where('status_order_id', 1); // Đơn hàng đang chờ thanh toán
+                    $query->where('status_order_id', 1);
                 })
                 ->latest()
                 ->first();
@@ -651,42 +553,42 @@ class PaymentController extends Controller
                 return redirect()->route('checkout')->with('error', 'Không tìm thấy đơn hàng hợp lệ.');
             }
 
-            // Kiểm tra trạng thái thanh toán từ MoMo
-            if ($request->resultCode != 0) { // Giao dịch không thành công
-                // Xóa đơn hàng và giỏ hàng
-                $this->deleteOrderAndCart($order);
+            if ($request->resultCode != 0) { // Giao dịch thất bại
+                // Xóa đơn hàng và các bản ghi liên quan
+                $order->orderDetails()->delete();
+                $order->statusOrderDetails()->delete();
+                $order->delete();
 
                 return redirect()->route('checkout')->with('error', 'Thanh toán không thành công. Đơn hàng đã được hủy.');
             }
 
-            // Nếu giao dịch thành công, lưu thông tin thanh toán
-            $amount = intval($request->amount);
-            // Lưu vào bảng payments
+            // Lưu thông tin thanh toán nếu thành công
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => $order->user_id,
-                'amount' => $amount,
-                'transaction_type' => 1, // Thanh toán thành công
+                'amount' => intval($request->amount),
+                'transaction_type' => 1,
                 'payment_method' => 'MoMo',
-                'status' => 1, // Đã thanh toán
+                'status' => 1,
                 'note' => 'Thanh toán thành công qua MoMo.',
             ]);
 
-            // Xóa giỏ hàng sau khi thanh toán thành công
             $this->clearCart();
 
             return redirect()->route('payment.success')->with('success', 'Thanh toán thành công!');
         } catch (\Exception $e) {
-            Log::error('Error in paymentSuccess: ' . $e->getMessage());
+            Log::error('Error in paymentMomo: ' . $e->getMessage());
 
-            // Xóa đơn hàng và giỏ hàng nếu có lỗi
             if (isset($order)) {
-                $this->deleteOrderAndCart($order);
+                $order->orderDetails()->delete();
+                $order->statusOrderDetails()->delete();
+                $order->delete();
             }
 
             return redirect()->route('checkout')->with('error', 'Lỗi xảy ra khi xử lý thanh toán. Đơn hàng đã được hủy.');
         }
     }
+
     public function paymentSuccessForUser()
     {
         if (auth()->check()) {
@@ -739,20 +641,6 @@ class PaymentController extends Controller
         ]);
     }
 
-    private function deleteOrderAndCart($order)
-    {
-        // Xóa chi tiết đơn hàng
-        OrderDetail::where('order_id', $order->id)->delete();
-
-        // Xóa trạng thái chi tiết đơn hàng
-        StatusOrderDetail::where('order_id', $order->id)->delete();
-
-        // Xóa thông tin thanh toán nếu có
-        Payment::where('order_id', $order->id)->delete();
-
-        // Xóa đơn hàng
-        $order->delete();
-    }
     private function clearCart()
     {
         $cartId = auth()->check()
@@ -775,10 +663,4 @@ class PaymentController extends Controller
         $date = now()->format('Ymd');
         return 'Order-' . $randomNumber . $date;
     }
-
-
-    // public function processQuantityProduct()
-    // {
-
-    // }
 }
