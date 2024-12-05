@@ -49,7 +49,7 @@ class UserController extends Controller
         //Lấy dữ liệu từ form
         if($request->isMethod('POST')) {
             $user = $request->only('name','email', 'phone_number', 'role');
-            $user['password'] = Str::random(8);
+            $user['password'] = $request->input('password');
             if($request->hasFile('user_image')) {
                 $user['user_image'] = $request->file('user_image')->store('uploads/accounts', 'public');
             }else {
@@ -74,7 +74,6 @@ class UserController extends Controller
                     }
                 }
             }
-            Mail::to($user['email'])->send(new UserMailConfirm($user_new));
             return redirect()->route('admin.user.index')->with('success', 'Thàn công');
         }
     }

@@ -64,6 +64,9 @@
         .modal-backdrop {
             z-index: -1;
         }
+        .validate {
+            font-size: 14px;
+        }
     </style>
 @endsection
 @section('content')
@@ -79,7 +82,7 @@
                             @csrf
                             @method('POST')
                             <div class="row">
-                                <div class="col-10">
+                                <div class="col-9">
                                     <div>
                                         <div class="input-form mb-3">
                                             <input class="form-control form-control-sm @error('name') is-invalid @enderror" type="text" value="{{old('name')}}" name="name" id="name" placeholder="Tên mã giảm giá">
@@ -242,7 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-2 p-0">
+                                <div class="col-3 p-0">
                                     <div class="card">
                                         <div class="card-header m-0 p-0">
                                             <div class="card-title m-0" style="height: 37px !important;display: flex;align-items: center;padding: 8px 12px;border: 1px solid silver;font-size: 16px;font-weight: 500;">
@@ -313,7 +316,11 @@
                                                                 <div class="col-6">
                                                                     <label for="user_{{$user->id}}" class="user-item" style="border: 1px solid #e7e7e782; border-radius: 4px;">
                                                                         <div class="user-image">
-                                                                            <img class="img-item" width="50px" height="50px" src="https://i.pinimg.com/736x/51/e8/41/51e841c0193ee856e1a33a14c9f3e5f2.jpg" style="border-radius: 50%;border: 1px solid silver;">
+                                                                            @if ($user->user_image)
+                                                                                <img src="{{ asset('storage/' . $user->user_image) }}" width="50px" height="50px" class="img-item" style="border-radius: 50%;border: 1px solid silver;">
+                                                                            @else
+                                                                                <img class="img-item" width="50px" height="50px" src="{{asset('assets/admin/images/Default_pfp.svg.png')}}" style="border-radius: 50%;border: 1px solid silver;">
+                                                                            @endif
                                                                         </div>
                                                                         <div class="ii-m">
                                                                             <div style="margin: 0px 10px;">
@@ -526,17 +533,23 @@
         }
         function loadSr() {
             const date_start = document.querySelector('#date_start');
-            const date = new Date();
-            const today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate());
-            
-            if(date_start.value < today) {
-                document.querySelector('#valiDate_start').innerText = "Ngày không hợp lệ!";
-                date_start.value = null;
-                setTimeout(() => {
-                    document.querySelector('#valiDate_start').innerText = "";
-                }, 3000);
-            }
-            else if (document.querySelector('#date_end').value < date_start.value) {
+            // const date = new Date();
+            // const st_date = new Date(date_start.value);
+
+            // const start = st_date.getFullYear()+"-"+(st_date.getMonth()+1)+"-"+(st_date.getDate());
+            // const today = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+(date.getDate());
+
+            // console.log(start);
+            // console.log(today);
+
+            // if(start > today) {
+            //     document.querySelector('#valiDate_start').innerText = "Ngày không hợp lệ!";
+            //     date_start.value = null;
+            //     setTimeout(() => {
+            //         document.querySelector('#valiDate_start').innerText = "";
+            //     }, 3000);
+            // }
+            if (document.querySelector('#date_end').value < date_start.value) {
                 document.querySelector('#valiDate_end').innerText = "";
                 date_end.value = document.querySelector('#date_start').value;
                 setTimeout(() => {

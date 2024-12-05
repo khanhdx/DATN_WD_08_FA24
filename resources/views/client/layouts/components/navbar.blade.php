@@ -6,7 +6,8 @@
     $prs = Product::query()->orderBy('created_at', 'desc')->limit(3)->get();
     $vs = Voucher::query()
         ->where('type_code', '=', 'Công khai')
-        ->where('date_start', '=', date('Y-m-d'))
+        ->where('date_start', '>=', date('Y-m-d'))
+        ->where('date_end', '>=', date('Y-m-d'))
         ->limit(3)
         ->get();
     if (Auth::user()) {
@@ -120,7 +121,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="product-thumb-info-content"
-                                                        style="display: flex;justify-content: space-between;width: 100%;align-items: center;">
+                                                        style="display: grid;grid-template-columns: 2fr 1fr;width: 100%;align-items: center;">
                                                         <div>
                                                             <h4 class="m-0"><a
                                                                     href="{{ route('client.voucher.show', $voucher->id) }}">{{ $voucher->name }}</a>

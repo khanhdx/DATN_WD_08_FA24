@@ -25,6 +25,9 @@
             object-fit: cover;
             border-radius: 4px;
         }
+        .modal-backdrop {
+            z-index: -1;
+        }
     </style>
 @endsection
 @section('content')
@@ -93,7 +96,7 @@
                             </div>
                         </div>
                         <div class="modal fade" id="staticBackdrop" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog" style="margin-top: 80px;">
                                 <div class="modal-content">
                                     <form action="{{ route('admin.location.store') }}" method="post">
                                         @csrf
