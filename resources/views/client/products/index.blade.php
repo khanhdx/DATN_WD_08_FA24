@@ -42,7 +42,7 @@
                         <ul class="list-unstyled list-cat">
                             <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả sản phẩm</a></li>
                             @foreach ($categories as $category)
-                                <li><a href=""
+                                <li><a href="javascript:void(0);"
                                         onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
                             @endforeach
                         </ul>
