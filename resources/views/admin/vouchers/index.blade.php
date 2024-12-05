@@ -64,7 +64,6 @@
                         <table class="table table-data2 text-center">
                             <thead>
                                 <th>STT</th>
-                                <th>Mã</th>
                                 <th>Tên</th>
                                 <th>Kiểu</th>
                                 <th>Loại</th>
@@ -78,7 +77,6 @@
                                 @foreach ($vouchers as $key=>$voucher)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>{{$voucher->voucher_code}}</td>
                                         <td>{{$voucher->name}}</td>
                                         <td><div class="type-t">{{$voucher->value}}</div></td>
                                         <td><div class="type-f">{{$voucher->type_code}}</div></td>

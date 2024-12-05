@@ -65,7 +65,7 @@
                     {{-- Tổng doanh thu --}}
                     <div class="col-md-6 col-lg-3">
                         <div class="statistic__item">
-                            <h2 class="number" id="totalRevenue"></h2>
+                            <h2 class="number" id="totalRevenue">...</h2>
                             <span class="desc">doanh thu</span>
                             <div class="icon">
                                 <i class="zmdi zmdi-money"></i>
@@ -88,13 +88,7 @@
                             <h3 class="title-3">Biểu đồ doanh thu</h3>
                             <div class="chart-info">
                                 <div class="date-filter">
-                                    <label for="startRevenueDate">Từ ngày:</label>
-                                    <input type="date" id="startRevenueDate" name="start_date">
-
-                                    <label for="endRevenueDate">Đến ngày:</label>
-                                    <input type="date" id="endRevenueDate" name="end_date">
-
-                                    <button id="updateRevenueChartButton">Cập nhật biểu đồ</button>
+                                    
                                 </div>
                             </div>
                             <div class="recent-report__chart">
@@ -105,17 +99,6 @@
                             <div class="col-lg-8 ">
                                 <div class="recent-report2">
                                     <h3 class="title-3">Biểu đồ Đơn hàng</h3>
-                                    <div class="chart-info">
-                                        <div class="date-filter">
-                                            <label for="startOrderDate">Từ ngày:</label>
-                                            <input type="date" id="startOrderDate" name="start_date">
-
-                                            <label for="endOrderDate">Đến ngày:</label>
-                                            <input type="date" id="endOrderDate" name="end_date">
-
-                                            <button id="updateOrderChartButton">Cập nhật biểu đồ</button>
-                                        </div>
-                                    </div>
                                     <div class="recent-report__chart">
                                         <canvas id="orderChart" width="400" height="200"></canvas>
                                     </div>
@@ -155,7 +138,7 @@
         </div>
     </section>
 
-    <section>
+    {{-- <section>
         <div class="section__content section__content--p30">
             <div class="container-fluid">
                 <div class="row">
@@ -418,7 +401,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
 
 @section('js')

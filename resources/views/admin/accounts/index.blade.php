@@ -54,17 +54,21 @@
                                             {{$acounts->name}}
                                         </td>
                                         <td>
-                                            <img src="{{ Storage::url($acounts->user_image) }}" alt="Ảnh" width="35px" height="35px" style="border-radius: 50%">
+                                            @if ($acounts->user_image)
+                                                <img src="{{ asset('storage/' . $acounts->user_image) }}" width="35px" height="35px" style="border-radius: 50%">
+                                            @else
+                                                <img src="{{asset('assets/admin/images/Default_pfp.svg.png')}}" width="35px" height="35px" style="border-radius: 50%">
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="block-email">{{$acounts->email}}  </span>
                                         </td>
                                         <td class="desc">
-                                            <span class="">{{$acounts->phone_number}}</span>
+                                            <span>{{$acounts->phone_number ? $acounts->phone_number : "Chưa cập nhật"}}</span>
                                         </td>
                                         <td>
                                             @if ($acounts->role=="Khách hàng")
-                                            <span class="role user">
+                                            <span class="role" style="background: #00b5e9">
                                                 {{$acounts->role}}
                                             </span>
                                             @elseif ($acounts->role=="Nhân viên")

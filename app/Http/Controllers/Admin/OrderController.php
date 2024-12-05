@@ -7,19 +7,24 @@ use App\Jobs\CompleteOrderJob;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\StatusOrderDetail;
+use App\Services\Inventory\InventoryService;
 use App\Services\Order\IOrderService;
 use App\Services\Order\Status\StatusService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     protected $orderService;
     protected $statusService;
 
-    public function __construct(IOrderService $iOrderService, StatusService $statusService)
+    protected $inventoryService;
+
+    public function __construct(IOrderService $iOrderService, StatusService $statusService, InventoryService $inventoryService)
     {
         $this->orderService = $iOrderService;
         $this->statusService = $statusService;
+        $this->inventoryService = $inventoryService;
     }
 
     public function index(Request $request)
@@ -72,17 +77,35 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $newStatusId = $request->input('status_order');
         $order = $this->orderService->getOneById($id);
-        $currentStatusId = $order->statusOrder->last()->id;
+        $currentStatusId = $request->status_order;
+        $newStatusId = $currentStatusId + 1;
     
         if ($newStatusId < $currentStatusId) {
             return redirect()->back()->with('error', 'Không thể cập nhật trạng thái ngược lại.');
         }
     
         try {
-            $this->orderService->updateStatus($newStatusId, $id);
-            CompleteOrderJob::dispatch($id)->delay(now()->addDays(7));
+            DB::transaction(function () use ($order, $newStatusId) {
+                     $this->orderService->updateStatus($newStatusId, $order->id);
+                    // Status Shipping
+                     if($newStatusId == 3){
+                        foreach ($order->order_details as $detail) {
+                            $productVariantId = $detail->product_variant_id;
+                            $productId = $detail->product_id;
+                            $this->inventoryService->exportVariantStock($detail->quantity,  $productId , $productVariantId);
+                        }
+                     } else if ($newStatusId == 5 || $newStatusId == 7){ // Status Canceled && Refunded
+                        foreach ($order->orderDetails as $detail) {
+                            $productVariantId = $detail->product_variant_id;
+                            $productId = $detail->product_id;
+                            $this->inventoryService->importVariantStock($detail->quantity,  $productId , $productVariantId);
+                     }}
+
+                     if($newStatusId == 4 ){ // Status Success
+                        CompleteOrderJob::dispatch($order->id)->delay(now()->addDays(7));
+                     }
+            }, 3);
             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());

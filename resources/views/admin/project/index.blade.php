@@ -14,7 +14,7 @@
 <div class="row">
     <div id="contentCC" class="col-5">
         <div class="card text-center">
-            @if (Auth::user()->user_image)
+            @if (Auth::user()->user_image ?? null)
                 <img src="{{ asset('storage/' . Auth::user()->user_image) }}" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;object-fit: cover;">
             @else
                 <img src="/assets/admin/images/icon/avatar-big-01.jpg" class="rounded-circle mx-auto d-block mt-3" alt="Profile Image" style="width: 100px; height: 100px;object-fit: cover;">

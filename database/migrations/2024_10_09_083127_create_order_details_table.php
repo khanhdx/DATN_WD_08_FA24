@@ -16,12 +16,21 @@ return new class extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Order::class)->constrained();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(ProductVariant::class)->constrained();
+            $table->foreignIdFor(Order::class)
+                ->constrained()
+                ->onDelete('cascade'); // Tự động xóa khi Order bị xóa
+
+            $table->foreignIdFor(Product::class)
+                ->constrained()
+                ->onDelete('cascade'); // Tự động xóa khi Product bị xóa
+
+            $table->foreignIdFor(ProductVariant::class)
+                ->constrained()
+                ->onDelete('cascade'); // Tự động xóa khi ProductVariant bị xóa
+
             $table->string('name_product');
-            $table->string('color');
-            $table->string('size');
+            $table->string('color')->nullable(); // Nullable để linh hoạt hơn
+            $table->string('size')->nullable();  // Nullable để linh hoạt hơn
             $table->double('unit_price');
             $table->integer('quantity');
             $table->double('total_price');

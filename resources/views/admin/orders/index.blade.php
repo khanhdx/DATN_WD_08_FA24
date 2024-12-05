@@ -38,15 +38,17 @@
                         </div>
                         <div class="form-group mr-3">
                             <label for="date">Ngày đặt:</label>
-                            <input type="date" class="form-control ml-2" name="date" id="date" value="{{ request('date') }}">
+                            <input type="date" class="form-control ml-2" name="date" id="date"
+                                value="{{ request('date') }}">
                         </div>
                         <div class="form-group mr-3">
                             <label for="phone">Số điện thoại:</label>
-                            <input type="text" class="form-control ml-2" name="phone" id="phone" value="{{ request('phone') }}" placeholder="Nhập số điện thoại">
+                            <input type="text" class="form-control ml-2" name="phone" id="phone"
+                                value="{{ request('phone') }}" placeholder="Nhập số điện thoại">
                         </div>
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </form>
-                    
+
                 </div>
                 <div class="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap gap-x-6 gap-y-4">
@@ -68,164 +70,170 @@
                     <br />
                 </div>
                 <div class="table-responsive table-responsive-data2">
-                    
-                        
-                <div class="row">
-                    <div
-                        class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
-                        <div class="table-responsive table-responsive-data2">
-                            <table class="table table-data2">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Mã đơn hàng</th>
-                                        <th>Khách hàng</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Ngày đặt</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($orders as $order)
-                                        <tr class="tr-shadow">
-                                            <td>{{ $order->id }}</td>
-                                            <td>
-                                                ORDER-01
-                                            </td>
-                                            <td>{{ $order->name }}</td>
-                                            <td>{{ $order->total_price }} đ</td>
-                                            <td>{{ $order->created_at }}</td>
-                                            <td>
-
-                                                @foreach ($order->statusOrder as $c_status)
-                                                    <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <select name="status_order" class="form-select w-75"
-                                                            onchange="confirmSubmit(this)"
-                                                            data-default-value='{{ $c_status['id_status'] }}'>
-                                                            @foreach ($statuses as $status)
-                                                                <option value="{{ $status->id }}"
-                                                                    {{ $c_status['id_status'] == $status->id ? 'selected' : '' }}
-                                                                    {{ $c_status['id_status'] == 6 ? 'disabled' : '' }}
-                                                                    {{ $c_status['id_status'] == 8 ? 'disabled' : '' }}>
-                                                                    {{ $status->status_label }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </form>
-                                                @endforeach
-
-                                            </td>
-                                            <td>
-                                                <div class="table-data-feature">
-
-                                                    {{-- Xem chi tiết  --}}
-                                                    <a href="{{ route('admin.orders.show', $order->id) }}">
-                                                        <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                            title="Xem chi tiết đơn hàng">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button></a>
-                                                </div>
-
-                                            </td>
+                    <div class="row">
+                        <div
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Mã đơn hàng</th>
+                                            <th>Khách hàng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Ngày đặt</th>
+                                            <th>Trạng thái hiện tại</th>
+                                            <th></th>
                                         </tr>
-                                    @endforeach
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($orders as $order)
+                                            <tr class="tr-shadow">
+                                                <td>{{ $order->id }}</td>
+                                                <td>ORDER-{{ $order->id }}</td>
+                                                <td>{{ $order->name }}</td>
+                                                <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
+                                                <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
-                                </tbody>
-                            </table>
+                                                {{-- Hiển thị trạng thái hiện tại --}}
+                                                <td>
+                                                    @foreach ($order->statusOrder as $c_status)
+                                                        <span
+                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}">
+                                                            {{ $c_status['status_label'] }}
+                                                        </span>
+                                                    @endforeach
+                                                </td>
+
+                                                {{-- Nút cập nhật trạng thái --}}
+                                                <td>
+                                                    @php
+                                                    $currentStatus = $order->statusOrder->first()->id_status ?? null;
+                                                
+                                                    // Danh sách các trạng thái hiển thị nút
+                                                    $allowedStatuses = [0, 1, 2];
+                                                
+                                                    // Xác định trạng thái tiếp theo
+                                                    $nextStatus = null;
+                                                    foreach ($statuses as $index => $status) {
+                                                        if ($status->id == $currentStatus && isset($statuses[$index + 1])) {
+                                                            $nextStatus = $statuses[$index + 1]->id;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                
+                                                @if (in_array($currentStatus, $allowedStatuses))
+                                                    @if ($nextStatus)
+                                                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status_order" value="{{ $nextStatus }}">
+                                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-arrow-right"></i> Cập nhật trạng thái
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-2">
-                        @foreach ($orders as $order)
-                            @foreach ($order->statusOrder as $status)
-                                @if ($status['id_status'] == 1)
-                                    <form action="{{ route('admin.orders.confirmProcessing', $order->id) }}"
-                                        method="post">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
-                                            style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
-                                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                                                data-bs-autohide="false" id="orderStatusToast">
-                                                <div class="toast-header">
-                                                    <strong class="me-auto">Xác nhận đơn hàng</strong>
-                                                    <small class="text-muted"><span id="order-time-{{ $order->id }}"
-                                                            data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></small>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="toast"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="toast-body">
-                                                    <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
-                                                    <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
-                                                    <p>
+
+                        {{-- Phần cột hiển thị trạng thái --}}
+                        <div class="col-lg-2">
+                            @foreach ($orders as $order)
+                                @foreach ($order->statusOrder as $status)
+                                    @if ($status['id_status'] == 1)
+                                        <form action="{{ route('admin.orders.confirmProcessing', $order->id) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
+                                                style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
+                                                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                                    data-bs-autohide="false" id="orderStatusToast">
+                                                    <div class="toast-header">
+                                                        <strong class="me-auto">Xác nhận đơn hàng</strong>
+                                                        <small class="text-muted">
+                                                            <span id="order-time-{{ $order->id }}"
+                                                                data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
+                                                        </small>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="toast-body">
+                                                        <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
+                                                        <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
+                                                        </p>
                                                         <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
-                                                            nhận </button>
+                                                            nhận</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                @endif
+                                        </form>
+                                    @endif
+                                @endforeach
                             @endforeach
-                        @endforeach
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
 
-@section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @section('js')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <script>
-        if (event && !event.defaultPrevented) {
-            const toast = new bootstrap.Toast(document.getElementById('orderStatusToast'));
-            toast.show();
+        <script>
+            if (event && !event.defaultPrevented) {
+                const toast = new bootstrap.Toast(document.getElementById('orderStatusToast'));
+                toast.show();
 
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            moment.locale('vi');
-
-            const timeElements = document.querySelectorAll('[id^="order-time-"]');
-
-            if (timeElements) {
-                timeElements.forEach(timeElement => {
-                    const dateTime = timeElement.getAttribute('data-time');
-                    const timeAgo = moment(dateTime).fromNow();
-                    timeElement.innerText = timeAgo;
-                })
             }
-        });
 
-        function confirmSubmit(selectElement) {
-            var form = selectElement.form;
-            var selectedOption = selectElement.options[selectElement.selectedIndex].text;
-            var defaultValue = selectElement.getAttribute('data-default-value');
+            document.addEventListener("DOMContentLoaded", function() {
+                moment.locale('vi');
 
-            if (confirm('Bạn có chắc chắn thay đổi trạng thái đơn hàng thành "' + selectedOption + '" không ?')) {
-                form.submit();
-            } else {
-                selectElement.value = defaultValue;
-            }
-        }
+                const timeElements = document.querySelectorAll('[id^="order-time-"]');
 
-        setTimeout(function() {
-            document.querySelectorAll('.alert').forEach(function(alert) {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-
-                setTimeout(function() {
-                    alert.remove();
-                }, 500);
+                if (timeElements) {
+                    timeElements.forEach(timeElement => {
+                        const dateTime = timeElement.getAttribute('data-time');
+                        const timeAgo = moment(dateTime).fromNow();
+                        timeElement.innerText = timeAgo;
+                    })
+                }
             });
-        }, 3000);
-    </script>
-@endsection
+
+            function confirmSubmit(selectElement) {
+                var form = selectElement.form;
+                var selectedOption = selectElement.options[selectElement.selectedIndex].text;
+                var defaultValue = selectElement.getAttribute('data-default-value');
+
+                if (confirm('Bạn có chắc chắn thay đổi trạng thái đơn hàng thành "' + selectedOption + '" không ?')) {
+                    form.submit();
+                } else {
+                    selectElement.value = defaultValue;
+                }
+            }
+
+            setTimeout(function() {
+                document.querySelectorAll('.alert').forEach(function(alert) {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 3000);
+        </script>
+    @endsection
