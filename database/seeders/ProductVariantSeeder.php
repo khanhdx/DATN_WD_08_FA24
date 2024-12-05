@@ -29,7 +29,7 @@ class ProductVariantSeeder extends Seeder
                         'product_id' => $product,
                         'color_id' => $color,
                         'size_id' => $size,
-                        'stock' => rand(0, 500),
+                        'stock' => rand(0, 50),
                         'price' => $price
                     ]);
                 }

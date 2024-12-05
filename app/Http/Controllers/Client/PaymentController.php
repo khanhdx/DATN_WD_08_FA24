@@ -199,7 +199,6 @@ class PaymentController extends Controller
             } else {
                 // Xử lý lỗi API
                 Log::error('API GHN Error: ' . $response->body());
-                
                 return redirect()->route('checkout')->with('error', $data['code_message_value']);
             }
 
@@ -220,6 +219,13 @@ class PaymentController extends Controller
             ]);
 
             foreach ($cartItems as $item) {
+                // Xu ly ton tren 1 san pham bien the
+                $productVariant = $item->productVariant;
+                if ($productVariant->stock < $item->quantity) {
+                    return redirect()->route('checkout')->with('error', 'Số lượng tồn không đủ');
+                }
+                $productVariant->decrement('stock', $item->quantity);
+
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $item->productVariant->product_id,
@@ -374,7 +380,7 @@ class PaymentController extends Controller
             } else {
                 // Xử lý lỗi API
                 Log::error('API GHN Error: ' . $response->body());
-                
+
                 return redirect()->route('guest.checkout')->with('error', $data['code_message_value']);
             }
 
@@ -429,8 +435,11 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 0, // Chờ thanh toán
             ]);
+
+            // Xu
+
             // Thông báo admin
-            broadcast(new OrderEvent($order));
+            // broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating guest order: ' . $e->getMessage());
             if (isset($order)) {
@@ -766,4 +775,10 @@ class PaymentController extends Controller
         $date = now()->format('Ymd');
         return 'Order-' . $randomNumber . $date;
     }
+
+
+    // public function processQuantityProduct()
+    // {
+
+    // }
 }

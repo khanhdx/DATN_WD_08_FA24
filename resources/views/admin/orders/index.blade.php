@@ -70,75 +70,80 @@
                     <br />
                 </div>
                 <div class="table-responsive table-responsive-data2">
-                    
-                        
-                <div class="row">
-                    <div
-                        class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
-                        <div class="table-responsive table-responsive-data2">
-                            <table class="table table-data2">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Mã đơn hàng</th>
-                                        <th>Khách hàng</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Ngày đặt</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($orders as $order)
-                                        <tr class="tr-shadow">
-                                            <td>{{ $order->id }}</td>
-                                            <td>
-                                                ORDER-01
-                                            </td>
-                                            <td>{{ $order->name }}</td>
-                                            <td>{{ $order->total_price }} đ</td>
-                                            <td>{{ $order->created_at }}</td>
-                                            <td>
+                    <div class="row">
+                        <div
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Mã đơn hàng</th>
+                                            <th>Khách hàng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Ngày đặt</th>
+                                            <th>Trạng thái hiện tại</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($orders as $order)
+                                            <tr class="tr-shadow">
+                                                <td>{{ $order->id }}</td>
+                                                <td>ORDER-{{ $order->id }}</td>
+                                                <td>{{ $order->name }}</td>
+                                                <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
+                                                <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
+                                                {{-- Hiển thị trạng thái hiện tại --}}
+                                                <td>
                                                     @foreach ($order->statusOrder as $c_status)
-                                                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
-                                                            method="post">
+                                                        <span
+                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}">
+                                                            {{ $c_status['status_label'] }}
+                                                        </span>
+                                                    @endforeach
+                                                </td>
+
+                                                {{-- Nút cập nhật trạng thái --}}
+                                                <td>
+                                                    @php
+                                                    $currentStatus = $order->statusOrder->first()->id_status ?? null;
+                                                
+                                                    // Danh sách các trạng thái hiển thị nút
+                                                    $allowedStatuses = [0, 1, 2];
+                                                
+                                                    // Xác định trạng thái tiếp theo
+                                                    $nextStatus = null;
+                                                    foreach ($statuses as $index => $status) {
+                                                        if ($status->id == $currentStatus && isset($statuses[$index + 1])) {
+                                                            $nextStatus = $statuses[$index + 1]->id;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                
+                                                @if (in_array($currentStatus, $allowedStatuses))
+                                                    @if ($nextStatus)
+                                                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="post">
                                                             @csrf
                                                             @method('PUT')
-                                                            <select name="status_order" class="form-select w-75"
-                                                                onchange="confirmSubmit(this)"
-                                                                data-default-value='{{ $c_status['id_status'] }}'>
-                                                                @foreach ($statuses as $status)
-                                                                    <option value="{{ $status->id }}"
-                                                                        {{ $c_status['id_status'] == $status->id ? 'selected' : '' }}
-                                                                        {{ $c_status['id_status'] == 6 ? 'disabled' : '' }}
-                                                                        {{ $c_status['id_status'] == 8 ? 'disabled' : '' }}>
-                                                                        {{ $status->status_label }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="hidden" name="status_order" value="{{ $nextStatus }}">
+                                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-arrow-right"></i> Cập nhật trạng thái
+                                                            </button>
                                                         </form>
-                                                    @endforeach
-
-                                                </td>
-                                                <td>
-                                                    <div class="table-data-feature">
-
-                                                        {{-- Xem chi tiết  --}}
-                                                        <a href="{{ route('admin.orders.show', $order->id) }}">
-                                                            <button class="item mr-2" data-toggle="tooltip"
-                                                                data-placement="top" title="Xem chi tiết đơn hàng">
-                                                                <i class="fas fa-eye"></i>
-                                                            </button></a>
-                                                    </div>
-
+                                                    @endif
+                                                @endif
                                                 </td>
                                             </tr>
                                         @endforeach
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+
+                        {{-- Phần cột hiển thị trạng thái --}}
                         <div class="col-lg-2">
                             @foreach ($orders as $order)
                                 @foreach ($order->statusOrder as $status)
@@ -153,17 +158,19 @@
                                                     data-bs-autohide="false" id="orderStatusToast">
                                                     <div class="toast-header">
                                                         <strong class="me-auto">Xác nhận đơn hàng</strong>
-                                                        <small class="text-muted"><span id="order-time-{{ $order->id }}"
-                                                                data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></small>
+                                                        <small class="text-muted">
+                                                            <span id="order-time-{{ $order->id }}"
+                                                                data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
+                                                        </small>
                                                         <button type="button" class="btn-close" data-bs-dismiss="toast"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
                                                         <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
-                                                        <p>
-                                                            <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
-                                                                nhận </button>
+                                                        </p>
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
+                                                            nhận</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,7 +180,6 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
