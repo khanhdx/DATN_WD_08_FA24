@@ -34,11 +34,19 @@ Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.colo
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
 
 Route::get('/revenue', [StatisticalController::class, 'getRevenueData']);
+
 Route::get('/order', [StatisticalController::class, 'getOrderData']);
+
 Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusChart']);
 
 Route::get('/top10-most-orders', [StatisticalController::class, 'getTop10MostOrderdProucts']);
 Route::get('/inventory', [StatisticalController::class, 'getInventoryData']);
+
+
+Route::get('/total-revenue', [StatisticalController::class, 'totalRevenue']);
+Route::get('/count-order', [StatisticalController::class, 'countOrder']);
+Route::get('/count-customer', [StatisticalController::class, 'countCustomner']);
+Route::get('/count-product-sold', [StatisticalController::class, 'countProductSold']);
 
 // Route cho giao hàng nhanh
 // Route::get('/provinces', [ShippingController::class, 'getProvinces']);
