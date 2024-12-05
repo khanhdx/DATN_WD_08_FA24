@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('status_order_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(StatusOrder::class)->constrained();   
-            $table->foreignIdFor(Order::class)->constrained();
-            $table->string('name');
+            $table->foreignIdFor(StatusOrder::class)
+                ->constrained()
+                ->onDelete('cascade'); // Xóa chi tiết trạng thái khi StatusOrder bị xóa
+
+            $table->foreignIdFor(Order::class)
+                ->constrained()
+                ->onDelete('cascade'); // Xóa chi tiết trạng thái khi Order bị xóa
+
+            $table->string('name')->nullable(); // Có thể nullable nếu không bắt buộc
             $table->timestamps();
         });
     }
