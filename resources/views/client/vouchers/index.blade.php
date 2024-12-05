@@ -1,6 +1,6 @@
 @extends('client.layouts.master')
 
-@section('title', 'Voucher')
+@section('title', 'Mã giảm giá')
 
 @section('css')
     <style>
@@ -67,14 +67,14 @@
     <section class="page-top-lg">
         <div class="container">
             <div class="page-top-in">
-                <h2><span>Voucher</span></h2>
+                <h2><span>Mã giảm giá</span></h2>
             </div>
         </div>
     </section>
     <section id="lookbook">
         <div class="container">
             <div class="title">
-                <span>New voucher</span>
+                <span>Mã giảm giá mới</span>
             </div>
             <div class="voucher-list">
                 @foreach ($voucher_new as $key => $voucher)

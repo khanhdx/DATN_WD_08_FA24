@@ -1,5 +1,5 @@
 <div class="container">
-    <p class="pull-left text-note">MIỄN PHÍ VẬN CHUYỂN CHO TẤT CẢ CÁC ĐƠN HÀNG TRÊN 4999K</p>
+    <p class="pull-left text-note">PHỤC VỤ QUÝ KHÁCH 24/7.</p>
     <ul class="nav nav-pills nav-top navbar-right">
 
         <li class="dropdown my-account">
@@ -93,8 +93,8 @@
                     </li>
                 </ul>
                 <div class="cart-buttons text-right">
-                    <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">View Cart</button></a>
-                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button class="btn btn-primary">Checkout</button></a>
+                    <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">Xem giỏ hàng</button></a>
+                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button class="btn btn-primary">Thanh toán</button></a>
                 </div>
             </div>
         </li>

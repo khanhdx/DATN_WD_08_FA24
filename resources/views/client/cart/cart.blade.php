@@ -16,7 +16,7 @@
     <div class="container mb-6">
         <div class="row featured-boxes">
             <div class="col-md-12">
-                <h3>Your selection ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} items)</h3>
+                <h3>Lựa chọn của bạn ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} mặt hàng)</h3>
                 <div class="featured-box featured-box-cart">
                     <div class="box-content">
                         <table cellspacing="0" class="shop_table" width="100%">
