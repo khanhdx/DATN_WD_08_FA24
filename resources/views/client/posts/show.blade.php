@@ -1,9 +1,9 @@
 @extends('client.layouts.master')
 
-@section('title', 'Blog single')
+@section('title', 'Bài viết')
 
 @section('text_page')
-    Blog single
+    Bài viết
 @endsection
 
 @section('content')
