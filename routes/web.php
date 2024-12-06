@@ -310,3 +310,6 @@ Route::get('/client/search-bill', [BillController::class, 'showSearchPage'])->na
 // Xử lý tìm kiếm hóa đơn
 Route::post('/client/search-bill', [BillController::class, 'searchBill'])->name('search.bill.post');
 Route::get('/search/{orderId}/bill', [BillController::class, 'showBill'])->name('search.showBill');
+
+//Hiển thị form tìm kiếm sản phảm
+Route::get('/SearchPro', [ClientProductController::class, 'search'])->name('products.SearchPro');
