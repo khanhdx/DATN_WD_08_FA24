@@ -15,11 +15,20 @@ use App\Http\Controllers\Admin\ColorController;
 class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category'])->latest('id')->paginate(9);
+        $query = Product::with(['category']);
+    
+        // Lọc theo danh mục nếu có category_id
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+    
+        $products = $query->latest('id')->paginate(9);
+    
         $categories = Category::all();
         $colors = Color::all();
+    
         $trendingProducts = Product::with('category')
             ->withCount(['orderDetails as total_sales' => function ($query) {
                 $query->select(DB::raw('SUM(quantity)'));
@@ -27,7 +36,7 @@ class ProductController extends Controller
             ->orderByDesc('total_sales')
             ->take(3)
             ->get();
-
+    
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'products',
             'categories',
@@ -35,7 +44,7 @@ class ProductController extends Controller
             'trendingProducts'
         ));
     }
-
+    
     public function show(Product $product)
     {
         $product->load(['variants']);
