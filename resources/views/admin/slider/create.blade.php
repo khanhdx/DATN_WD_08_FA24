@@ -32,6 +32,16 @@
                                             <img class="banner-image" src="" alt="Hình ảnh banner" style="width: 150px; display:none">
                                         </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="type" class="form-label">Loại Banner</label>
+                                            <select name="type[]" class="form-control" required>
+                                                <option value="main">Banner Chính</option>
+                                                <option value="intro">Banner Giới Thiệu</option>
+                                                <option value="advertisement">Banner Quảng Cáo</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Trạng thái sử dụng</label>
@@ -88,6 +98,16 @@
                         <label for="image_${index}" class="form-label">Hình Ảnh</label>
                         <input type="file" name="image[]" class="form-control" onchange="showImage(event)" required>
                         <img class="banner-image" src="" alt="Hình ảnh banner" style="width: 150px; display:none">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label for="type_${index}" class="form-label">Loại Banner</label>
+                        <select name="type[]" class="form-control" required>
+                            <option value="main">Banner Chính</option>
+                            <option value="intro">Banner Giới Thiệu</option>
+                            <option value="advertisement">Banner Quảng Cáo</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-12">
