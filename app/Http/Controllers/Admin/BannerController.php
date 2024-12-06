@@ -9,13 +9,18 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-    public function index()
-    {
-        $title = "Danh mục Slider";
-        $listBanner = Banner::all();
-        return view("admin.slider.index", compact("title", "listBanner"));
-        
-    }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+    $title = "Danh mục Slider";
+    $listBanner = Banner::query()
+        ->when($search, function($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })
+        ->paginate(5); // Phân trang với 5 mục mỗi trang
+
+    return view("admin.slider.index", compact("title", "listBanner", "search"));
+}
     
     public function create()
     {

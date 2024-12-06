@@ -49,9 +49,8 @@ function updateChartByDateRange(startDate = null, endDate = null) {
 }
 
 
-document.getElementById('updateRevenueChartButton').addEventListener('click', function() {
-    const startDate = document.getElementById('startRevenueDate').value;
-    const endDate = document.getElementById('endRevenueDate').value;
+document.addEventListener('dateRangeChange', (event) => {
+    const { startDate, endDate } = event.detail;
     updateChartByDateRange(startDate, endDate);
 });
 

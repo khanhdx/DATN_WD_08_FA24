@@ -1,8 +1,9 @@
 @extends('client.layouts.master')
 
-@section('text_page')
+{{-- @section('text_page')
     Tìm kiếm hóa đơn
-@endsection
+@endsection --}}
+@section('title', 'Tìm kiếm hóa đơn')
 
 @section('content')
 @include('client.layouts.components.pagetop', ['md' => 'md'])

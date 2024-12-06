@@ -50,12 +50,12 @@ Route::get('test', function () {
 });
 
 // Route cho quản lý (admin)
-Route::group(['middleware' => ['role:Quản lý']], function () {
+Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
     Route::prefix('admin')
         ->as('admin.')
         ->group(function () {
             Route::get('/', [DashbroadController::class, 'index'])->name('dashboard');
-            
+
             Route::get('/chat', function () {
                 return view('admin.chat.index');
             })->name('chat');
@@ -181,7 +181,7 @@ Route::name('client.')->group(function () {
         ->controller(ClientPostController::class)
         ->name('post.')
         ->group(function () {
-            Route::get('/','index')->name('index');
+            Route::get('/', 'index')->name('index');
             Route::get('/{post_show}', 'show')->name('show');
         });
 
@@ -214,16 +214,16 @@ Route::name('client.')->group(function () {
         ->middleware(['convert.cart'])
         ->controller(CartController::class)
         ->name('carts.')
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/cart', 'cart')->name('cart');
-            Route::get('/get', 'getCart')->name('get');
-            Route::post('/add', 'addToCart')->name('add');
-            Route::put('/{id}', 'updateCart')->name('update');
-            Route::delete('/{id}', 'destroy')->name('delete');
-
-        }
-    );
+        ->group(
+            function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/cart', 'cart')->name('cart');
+                Route::get('/get', 'getCart')->name('get');
+                Route::post('/add', 'addToCart')->name('add');
+                Route::put('/{id}', 'updateCart')->name('update');
+                Route::delete('/{id}', 'destroy')->name('delete');
+            }
+        );
     // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
@@ -231,9 +231,12 @@ Route::name('client.')->group(function () {
 Route::group(['middleware' => ['role:Khách hàng']], function () {
     Route::resource('profile', ProfileController::class);
 
-    Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->name('checkout'); // Hiển thị form thanh toán
+    Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->middleware('checkOrderStatus')->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
     Route::get('payment-momo', [PaymentController::class, 'paymentMomo'])->name('payment.momo');
+    Route::post('/momo/ipn', [PaymentController::class, 'handleMoMoIPN'])->name('payment.momo.notify');
+    Route::get('/momo/return', [PaymentController::class, 'handleMoMoReturn'])->name('payment.momo.return');
+
     Route::get('payment-success', [PaymentController::class, 'paymentSuccessForUser'])->name('payment.success'); // Trang thành công
     // Trang thành công
     Route::post('processVoucher', [PaymentController::class, 'processVoucher'])->name('processVoucher');
@@ -308,4 +311,5 @@ Route::get('/client/search-bill', [BillController::class, 'showSearchPage'])->na
 Route::post('/client/search-bill', [BillController::class, 'searchBill'])->name('search.bill.post');
 Route::get('/search/{orderId}/bill', [BillController::class, 'showBill'])->name('search.showBill');
 
-
+//Hiển thị form tìm kiếm sản phảm
+Route::get('/SearchPro', [ClientProductController::class, 'search'])->name('products.SearchPro');

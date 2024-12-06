@@ -23,10 +23,6 @@
                     <li><a href="#">{{ $product->category->name }}</a></li>
                     <li class="active">{{ $product->name }}</li>
                 </ol>
-                <ul class="pager pull-right">
-                    <li><a href="#">&laquo; Trước</a></li>
-                    <li><a href="#">Sau &raquo;</a></li>
-                </ul>
             </div>
         </div>
     </section>
@@ -41,7 +37,7 @@
                             <li data-thumb="{{ $product->image }}">
                                 <img src="{{ $product->image }}" alt="">
                             </li>
-                            <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
+                            {{-- <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
                                 <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
                             </li>
                             <li data-thumb="/assets/client/images/content/products/product-1-2.jpg">
@@ -52,7 +48,7 @@
                             </li>
                             <li data-thumb="/assets/client/images/content/products/product-1-4.jpg">
                                 <img src="/assets/client/images/content/products/product-1-4.jpg" alt="">
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -118,7 +114,7 @@
                             </a>
 
                             <button type="submit" class="btn btn-primary btn-icon">
-                                <i class="fa fa-shopping-cart"></i> Add to cart
+                                <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                             </button>
                         </form>
                     </div>
@@ -303,7 +299,7 @@
                         if (res.status_code == 200) {
                             const Toast = Swal.mixin({
                                 toast: true,
-                                position: "top",
+                                position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500,
                                 timerProgressBar: true,
@@ -314,18 +310,21 @@
                             });
                             Toast.fire({
                                 icon: "success",
-                                title: `<span style="font-size: 1.5rem">${res.message}</span>`,
-                                width: 450
+                                html: `<span style="font-size: 1.5rem;font-weight: bold;">${res.message}</span>`,
+                                width: 485
                             });
 
-                            load_header();
+                            loadingHeader();
                         } else {
-                        console.log(res.errors);
 
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
-                                text: res.message,
+                                html: `
+                                    <span style="font-size:15px;">
+                                        ${res.message}
+                                    </span>
+                                    `,
                             });
                         }
                     })

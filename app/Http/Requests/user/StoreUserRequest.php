@@ -24,8 +24,9 @@ class StoreUserRequest extends FormRequest
         return [
             //
             'name'=>'required|string|max:255',
-            'email'=>'required|string|max:255|unique:users,email',
+            'email'=>'required|email|max:255|unique:users,email',
             'phone_number'=>'required|numeric',
+            'password'=>'required|min:8',
         ];
     }
     public function messages(): array
@@ -41,6 +42,8 @@ class StoreUserRequest extends FormRequest
             'email.unique'=>'Tài khoản đã tồn tại',
             'phone_number.required'=>'Vui lòng không bỏ trống số điện thoại',
             'phone_number.numeric'=>'Số điện thoại không hợp lệ',
+            'password.required'=>'Vui lòng không bỏ trống mật khẩu',
+            'password.min'=>'Mật khẩu quá ngắn',
         ];
     }
 }

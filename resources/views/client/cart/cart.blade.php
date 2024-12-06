@@ -16,7 +16,7 @@
     <div class="container mb-6">
         <div class="row featured-boxes">
             <div class="col-md-12">
-                <h3>Your selection ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} items)</h3>
+                <h3>Lựa chọn của bạn ({{ Auth::check() ? count($cartItems->toArray()) : count($cartItems) }} mặt hàng)</h3>
                 <div class="featured-box featured-box-cart">
                     <div class="box-content">
                         <table cellspacing="0" class="shop_table" width="100%">
@@ -103,7 +103,7 @@
 
                                             <td class="product-subtotal">
                                                 <span class="amount sub-total-{{ $cart->id }}">
-                                                    {{ number_format($cart->sub_total, 0, ',', '.') }} VND
+                                                    {{ number_format($cart->sub_total, 0, ',', '.') }} đ
                                                 </span>
                                             </td>
 
@@ -140,7 +140,7 @@
 
                                             <td class="product-price">
                                                 <span class="amount">{{ number_format($cart['price'], 0, ',', '.') }}
-                                                    VND</span>
+                                                    đ</span>
                                             </td>
 
                                             <td class="product-quantity">
@@ -193,13 +193,13 @@
 
         <div class="row featured-boxes">
             <p>
-                <a href="{{ route('checkout') }}" class="btn btn-primary btn-block btn-sm">
-                    Proceed To Checkout
+                <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}" class="btn btn-primary btn-block btn-sm">
+                    Thanh toán
                 </a>
             </p>
 
             <a href="{{ route('client.home') }}" class="btn btn-grey btn-block btn-sm">
-                Continue Shopping
+                Tiếp tục mua sắm
             </a>
         </div>
     </div>

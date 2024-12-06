@@ -10,11 +10,15 @@
         @include('client.layouts.components.pagetop', ['md' => 'md'])
         <div class="container">
             <div class="order-info">
+                <p>
+                    <strong>Mã tra cứu:</strong>
+                    <a href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">{{ $order->order_code }}</a>
+                </p>
                 <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
                 <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
                 <p><strong>Trạng thái đơn hàng:</strong>
                     @foreach ($order->statusOrder as $status)
-                        {{ $status->name_status }}
+                        {{ $status->status_label }}
                     @endforeach
                 </p>
                 <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>

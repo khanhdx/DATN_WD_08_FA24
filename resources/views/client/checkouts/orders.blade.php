@@ -10,7 +10,7 @@
     <div class="container">
         <table class="table table-hover table-bordered">
             <thead class="table-dark text-center">
-                <tr>
+                <tr id="table-order">
                     <th>ID</th>
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>
@@ -98,7 +98,9 @@
             orderElements.forEach(function(orderElement) {
                 const orderId = orderElement.dataset.orderId; // Lấy ID đơn hàng
                 const cancelButton = document.querySelector(
-                    `#cancel-button-${orderId}`); // Nút hủy đơn hàng
+                `#cancel-button-${orderId}`); // Nút hủy đơn hàng
+                const successButton = document.querySelector(
+                `#success-button-${orderId}`); // Nút Hoàn thành đơn hàng
 
                 // Hàm thực hiện polling trạng thái đơn hàng
                 const fetchOrderStatus = () => {
@@ -117,15 +119,25 @@
                                     if (currentStatus !== 'pending' && cancelButton) {
                                         cancelButton.style.display = 'none';
                                     }
+                                    else {
+                                        // Nếu trạng thái là success
+                                        if (currentStatus == 'success') {
+                                            successButton.style.display = 'block';
+                                        }
+                                        else {
+                                            successButton.style.display = 'none';
+                                        }
+                                    }
                                 }
+                                
                             }
                         })
                         .catch(error => console.error('Lỗi khi lấy trạng thái đơn hàng:', error));
                 };
-
                 // Thực hiện polling liên tục
                 const pollStatus = () => {
                     fetchOrderStatus();
+
                     setTimeout(pollStatus, 1000); // Gọi lại sau 1 giây
                 };
 
