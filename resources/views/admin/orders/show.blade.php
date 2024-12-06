@@ -16,12 +16,12 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="receiverName" class="form-label">Tên người nhận</label>
-                                <input type="text" class="form-control" id="user_name" value="{{ $order->user->name ?? 'Khách vãng lai' }}" disabled>
+                                <input type="text" class="form-control" id="user_name" value="{{ $order->user_name}}" disabled>
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="orderDate" class="form-label">Ngày đặt hàng</label>
-                                <input type="text" class="form-control" id="date" value="{{ $order->date }}"
+                                <input type="text" class="form-control" id="date" value="{{ $order->created_at->format('d-m-Y') }}"
                                     disabled>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="{{ $order->user->email ?? ''}}"
+                                <input type="email" class="form-control" id="email" value="{{ $order->email }}"
                                     disabled>
                             </div>
                         </div>

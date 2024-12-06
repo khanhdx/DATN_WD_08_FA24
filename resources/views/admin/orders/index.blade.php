@@ -89,8 +89,8 @@
                                         @foreach ($orders as $order)
                                             <tr class="tr-shadow">
                                                 <td>{{ $order->id }}</td>
-                                                <td>ORDER-{{ $order->id }}</td>
-                                                <td>{{ $order->name }}</td>
+                                                <td>{{ $order->slug}}</td>
+                                                <td>{{ $order->user_name}}</td>
                                                 <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
@@ -134,6 +134,18 @@
                                                         </form>
                                                     @endif
                                                 @endif
+                                                </td>
+                                                <td>
+                                                    <div class="table-data-feature">
+    
+                                                        {{-- Xem chi tiết  --}}
+                                                        <a href="{{ route('admin.orders.show', $order->id) }}">
+                                                            <button class="item mr-2" data-toggle="tooltip" data-placement="top"
+                                                                title="Xem chi tiết đơn hàng">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button></a>
+                                                    </div>
+    
                                                 </td>
                                             </tr>
                                         @endforeach
