@@ -10,7 +10,10 @@ class OrderRepository
     {
         $orders = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->select('id', 'user_id', 'slug', 'total_price', 'created_at')->get();
+        }])
+        ->select('id', 'slug', 'user_id', 'slug', 'user_name', 'total_price', 'created_at')
+        ->orderBy('created_at', 'desc') 
+        ->get();
 
         return $orders;
     }
@@ -19,20 +22,13 @@ class OrderRepository
     {
         $orders = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->whereHas('statusOrder', function ($query) use ($status) {
+        }])
+        ->whereHas('statusOrder', function ($query) use ($status) {
             $query->where('name_status', $status);
-        })->select('id', 'user_id', 'total_price', 'created_at')->get();
-
-        return $orders;
-    }
-
-    public function getByPhoneNumber($phone)
-    {
-        $orders = Order::with(['statusOrder' => function ($query) {
-            $query->select('status_orders.id as id_status', 'name_status');
-        }])->whereHas('user', function ($query) use ($phone) {
-            $query->where('phone_number', 'like', '%' . $phone . '%');
-        })->select('id', 'user_id', 'total_price', 'created_at')->get();
+        })
+        ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
+        ->orderBy('created_at', 'desc') 
+        ->get();
 
         return $orders;
     }
@@ -47,14 +43,18 @@ class OrderRepository
             $query->whereDate('created_at', $date);
         }
 
-        return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
+        return $query
+            ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
+            ->orderBy('created_at', 'desc') 
+            ->get();
     }
 
     public function getByStatusAndDate($status, $date = null)
     {
         $query = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
-        }])->whereHas('statusOrder', function ($query) use ($status) {
+        }])
+        ->whereHas('statusOrder', function ($query) use ($status) {
             $query->where('name_status', $status);
         });
 
@@ -62,7 +62,23 @@ class OrderRepository
             $query->whereDate('created_at', $date);
         }
 
-        return $query->select('id', 'user_id', 'total_price', 'created_at')->get();
+        return $query
+            ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
+            ->orderBy('created_at', 'desc') 
+            ->get();
+    }
+
+    public function getByPhoneNumber($phone)
+    {
+        $orders = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])
+            ->where('phone_number', 'like', '%' . $phone . '%')
+            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $orders;
     }
 
     public function getByStatusAndPhoneNumber($status, $phone)
@@ -70,14 +86,13 @@ class OrderRepository
         $orders = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
         }])
-        ->whereHas('statusOrder', function ($query) use ($status) {
-            $query->where('name_status', $status);
-        })
-        ->whereHas('user', function ($query) use ($phone) {
-            $query->where('phone_number', 'like', '%' . $phone . '%');
-        })
-        ->select('id', 'user_id', 'total_price', 'created_at')
-        ->get();
+            ->whereHas('statusOrder', function ($query) use ($status) {
+                $query->where('name_status', $status);
+            })
+            ->where('phone_number', 'like', '%' . $phone . '%')
+            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
+            ->orderBy('created_at', 'desc') 
+            ->get();
 
         return $orders;
     }

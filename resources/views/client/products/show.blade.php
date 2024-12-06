@@ -109,9 +109,7 @@
                                 <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
 
-                            <a href="#" class="btn btn-grey">
-                                <span><i class="fa fa-heart"></i></span>
-                            </a>
+                          
 
                             <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng

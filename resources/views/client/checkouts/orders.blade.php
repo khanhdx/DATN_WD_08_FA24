@@ -54,8 +54,7 @@
                                 @endforeach
                             @else
                                 <span>Chưa thanh toán</span>
-                            @endif
-                        </td>
+                            @endif </td>
                         <td>{{ $order->address }}</td>
                         <td>{{ $order->note ?: 'Không có ghi chú' }}</td>
                         <td>
