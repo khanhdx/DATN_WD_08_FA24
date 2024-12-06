@@ -64,7 +64,7 @@
 <section class="page-top-lg">
     <div class="container">
         <div class="page-top-in">
-            <h2><span>My Voucher</span></h2>
+            <h2><span>Mã giảm giá của tôi</span></h2>
         </div>
     </div>
 </section>
