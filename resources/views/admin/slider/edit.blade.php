@@ -7,7 +7,7 @@
     <div class="container-xxl">
         <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
             <div class="flex-grow-1">
-                <h4 class="fs-18 fw-semibold m-0">Quản lý Silde</h4>
+                <h4 class="fs-18 fw-semibold m-0">Quản lý Slide</h4>
             </div>
         </div>
         <div class="row">
@@ -38,13 +38,26 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label for="type">Loại Banner</label>
+                                        <select id="type" name="type" class="form-control @error('type') is-invalid @enderror" required>
+                                            <option value="main" {{ $banner->type == 'main' ? 'selected' : '' }}>Banner Chính</option>
+                                            <option value="intro" {{ $banner->type == 'intro' ? 'selected' : '' }}>Banner Giới Thiệu</option>
+                                            <option value="advertisement" {{ $banner->type == 'advertisement' ? 'selected' : '' }}>Banner Quảng Cáo</option>
+                                        </select>
+                                        @error('type')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label for="status">Trạng Thái</label>
                                         <div>
-                                            <input type="radio" id="status_show" name="status" value="1" {{ $banner->status == 1 ? 'checked' : '' }}>
+                                            <input type="radio" id="status_show" name="status" value="1" {{ old('status', $banner->status) == 1 ? 'checked' : '' }}>
                                             <label for="status_show">Hiển thị</label>
                                         </div>
                                         <div>
-                                            <input type="radio" id="status_hide" name="status" value="0" {{ $banner->status == 0 ? 'checked' : '' }}>
+                                            <input type="radio" id="status_hide" name="status" value="0" {{ old('status', $banner->status) == 0 ? 'checked' : '' }}>
                                             <label for="status_hide">Ẩn</label>
                                         </div>
                                         @error('status')

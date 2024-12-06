@@ -61,6 +61,7 @@
                             <th>#</th>
                             <th>Tên Banner</th>
                             <th>Hình ảnh</th>
+                            <th>Loại Banner</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -78,6 +79,15 @@
                                 <td>{{$item->title}}</td>
                                 <td>
                                     <img src="{{ \Storage::url($item->image) }}" alt="Banner Image" width="150px">
+                                </td>
+                                <td>
+                                    @if ($item->type == 'main')
+                                        <span class="text-primary">Banner Chính</span>
+                                    @elseif ($item->type == 'intro')
+                                        <span class="text-info">Banner Giới Thiệu</span>
+                                    @else
+                                        <span class="text-warning">Banner Quảng Cáo</span>
+                                    @endif
                                 </td>
                                 <td><span class="{{ $item->status == 'Hiển thị' ? 'text-success' : 'text-danger' }}">
                                     {{$item->status}}

@@ -6,16 +6,21 @@
     <!-- Begin Main Slide -->
     <section class="main-slide">
         <div id="owl-main-demo" class="owl-carousel main-demo">
-            @foreach ($banners as $banner)
+            @foreach ($mainBanners as $banner) {{-- Hiển thị danh sách banner chính --}}
                 <div class="item">
                     <div style="width: 100%; height: 500px;">
-                        <img loading="lazy" src="{{ url('storage/' . $banner->image) }}" style="width: 100%; height: 100%; object-fit:cover"
-                            class="img-responsive" alt="{{ $banner->title }}">
+                        <img loading="lazy" 
+                             src="{{ url('storage/' . $banner->image) }}" 
+                             style="width: 100%; height: 100%; object-fit: cover;" 
+                             class="img-responsive" 
+                             alt="{{ $banner->title }}">
                     </div>
                     <div class="item-caption">
                         <div class="item-caption-inner">
                             <div class="item-caption-wrap">
-                                <p class="item-cat"><a href="#">{{ $banner->title }}</a></p>
+                                <p class="item-cat">
+                                    <a href="#">{{ $banner->title }}</a>
+                                </p>
                                 <a href="#" class="btn btn-white hidden-xs">Shop Now</a>
                             </div>
                         </div>
@@ -24,22 +29,34 @@
             @endforeach
         </div>
     </section>
+    
+    
+    
     <!-- End Main Slide -->
 
     <!-- Begin Ads -->
     <section class="ads">
         <div class="container">
             <div class="row">
-                @foreach($listBanner1 as $banner)
+                @foreach ($advertisementBanners as $banner)
                     <div class="col-xs-4 animation">
                        <div style="width: 100%; height: 250px;">
-                        <a href="#"><img loading="lazy"  style="width: 100%; height: 100%; object-fit:cover" src="{{ asset('storage/' . $banner->image) }}" class="img-responsive" alt="{{ $banner->title }}"></a>
+                        <a href="#">
+                            <img loading="lazy" 
+                                 style="width: 100%; height: 100%; object-fit:cover" 
+                                 src="{{ asset('storage/' . $banner->image) }}" 
+                                 class="img-responsive" 
+                                 alt="{{ $banner->title }}">
+                        </a>
                        </div>
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
+    
+    
+    
     <!-- End Ads -->
 
     <!-- Begin Top Selling -->
@@ -181,21 +198,29 @@
     <!-- End New Products -->
 
     <!-- Begin Parallax -->
-    @foreach($listBanner2 as $banner)
+    @if ($introBanner) {{-- Kiểm tra nếu tồn tại banner giới thiệu --}}
     <div style="width: 100%; height: 500px;">
-        <section class="pi-parallax" data-stellar-background-ratio="0.6" style="background-image: url('{{ asset('storage/' . $banner->image) }}'); background-size: cover; width: 100%; height: 100%; object-fit:cover; background-repeat: no-repeat;">
+        <section class="pi-parallax" 
+                 data-stellar-background-ratio="0.6" 
+                 style="background-image: url('{{ asset('storage/' . $introBanner->image) }}'); 
+                        background-size: cover; 
+                        width: 100%; 
+                        height: 100%; 
+                        object-fit: cover; 
+                        background-repeat: no-repeat;">
             <div class="container">
                 <div id="owl-text-slide" class="owl-carousel">
                     <div class="item">
                         <blockquote>
-                            <p>{{ $banner->title }}</p>
+                            <p>{{ $introBanner->title }}</p>
                         </blockquote>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-    @endforeach
+@endif
+
     <!-- End Parallax -->
 
     <!-- Begin Latest Blogs -->
