@@ -32,30 +32,45 @@ class OrderController extends Controller
     // Lấy tham số lọc từ request
     $status = $request->input('status', 'all');
     $date = $request->input('date');
-    $phone = $request->input('phone');  // Lọc theo số điện thoại
+    $phone = $request->input('phone'); // Lọc theo số điện thoại
 
-    // Gọi phương thức lấy đơn hàng dựa vào trạng thái, ngày, và số điện thoại
+    // Kiểm tra các điều kiện lọc
     if ($status == 'all') {
         if ($phone) {
+            // Lọc chỉ theo số điện thoại
             $data = $this->orderService->getByPhoneNumber($phone);
-        } else {
+        } elseif ($date) {
+            // Lọc chỉ theo ngày đặt
             $data = $this->orderService->getByDate($date);
+        } else {
+            // Lấy tất cả đơn hàng nếu không có bộ lọc
+            $data = $this->orderService->getAll();
         }
     } else {
         if ($phone) {
+            // Lọc theo trạng thái và số điện thoại
             $data = $this->orderService->getByStatusAndPhoneNumber($status, $phone);
-        } else {
+        } elseif ($date) {
+            // Lọc theo trạng thái và ngày đặt
             $data = $this->orderService->getByStatusAndDate($status, $date);
+        } else {
+            // Lọc chỉ theo trạng thái
+            $data = $this->orderService->getByStatus($status);
         }
     }
 
+    // Dữ liệu trả về từ dịch vụ
     $orders = $data[0];
     $countOrderByStatus = $data[1];
     $totalOrder = $data[2];
+
+    // Lấy danh sách trạng thái
     $statuses = $this->statusService->getAll();
 
+    // Trả về view với dữ liệu
     return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
 }
+
 
     public function show(string $id)
     {
@@ -75,6 +90,7 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
     }
 
+   
     public function updateStatus(Request $request, $id)
     {
         $order = $this->orderService->getOneById($id);

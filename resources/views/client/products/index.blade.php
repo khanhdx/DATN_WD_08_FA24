@@ -15,35 +15,38 @@
                 <aside class="sidebar">
                     <aside class="block filter-blk">
                         <h4>Lọc theo giá</h4>
-                        <div id="price-range">
-                            <div class="padding-range">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price1" name="price"
-                                        value="0-5000000">
-                                    <label class="form-check-label" for="price1">Dưới 5tr</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price2" name="price"
-                                        value="5000000-10000000">
-                                    <label class="form-check-label" for="price2">Từ 5tr-10tr</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="price3" name="price"
-                                        value="10000000-1000000000">
-                                    <label class="form-check-label" for="price3">Trên 10tr</label>
-                                </div>
-                                <p class="clearfix mt-2"><a href="javascript:void(0);" class="btn btn-primary btn-sm"
-                                        onclick="filterByPrice()">Áp dụng</a></p>
+                        <form action="{{ route('client.product.index') }}" method="GET">
+                            <div class="form-group">
+                                <label for="price">Chọn giá:</label><br>
+                                <label>
+                                    <input type="checkbox" name="prices[]" value="0-5000000" 
+                                        {{ in_array('0-5000000', request('prices', [])) ? 'checked' : '' }}>
+                                    Dưới 5,000,000đ
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" name="prices[]" value="5000000-10000000" 
+                                        {{ in_array('5000000-10000000', request('prices', [])) ? 'checked' : '' }}>
+                                    5,000,000đ - 10,000,000đ
+                                </label><br>
+                                <label>
+                                    <input type="checkbox" name="prices[]" value="10000000-500000000" 
+                                        {{ in_array('10000000-500000000', request('prices', [])) ? 'checked' : '' }}>
+                                    Trên 10,000,000đ
+                                </label>
                             </div>
-                        </div>
+                            <button type="submit" class="btn btn-primary">Lọc</button>
+                        </form>
                     </aside>
                     <aside class="block blk-cat">
                         <h4>Danh mục</h4>
                         <ul class="list-unstyled list-cat">
-                            <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả sản phẩm</a></li>
+                            <li>
+                                <a href="javascript:void(0);" onclick="showAllProducts()">Tất cả sản phẩm</a>
+                            </li>
                             @foreach ($categories as $category)
-                                <li><a href="javascript:void(0);"
-                                        onclick="filterByCategory({{ $category->id }})">{{ $category->name }}</a></li>
+                                <li>
+                                    <a href="?category_id={{ $category->id }}">{{ $category->name }}</a>
+                                </li>
                             @endforeach
                         </ul>
                     </aside>
@@ -105,12 +108,14 @@
                         <div class="list-sort pull-right">
                             <select class="formDropdown">
                                 <option>Sắp xếp mặc định</option>
-                                <option>Sắp xếp theo mức độ phổ biến</option>
-                                <option>Sắp xếp theo độ mới</option>
+                                <option>Sắp xếp theo giá thấp đến cao</option>
+                                <option>Sắp xếp theo giá cao đến thấp</option>
                             </select>
                         </div>
                     </div>
                     <div id="products-grid">
+                        <p id="no-products-message" class="text-center text-danger" style="display:none;">Không tìm thấy sản phẩm nào.</p>
+
                         <div class="tab-pane active" id="man">
                             <div class="row" id="product-container">
                                 @foreach ($products as $product)
@@ -199,59 +204,7 @@
                         </div>
                     </div>
                     <div class="pagination-wrapper">
-                        @if ($products->hasPages())
-                            <nav>
-                                <ul class="pagination">
-                                    {{-- Previous Page Link --}}
-                                    @if ($products->onFirstPage())
-                                        <li class="page-item disabled" aria-disabled="true"
-                                            aria-label="@lang('pagination.previous')">
-                                            <span class="page-link" aria-hidden="true">&laquo;</span>
-                                        </li>
-                                    @else
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ $products->previousPageUrl() }}"
-                                                rel="prev" aria-label="@lang('pagination.previous')">&laquo;</a>
-                                        </li>
-                                    @endif
-
-                                    {{-- Pagination Elements --}}
-                                    @foreach ($products->links()->elements as $element)
-                                        {{-- "Three Dots" Separator --}}
-                                        @if (is_string($element))
-                                            <li class="page-item disabled" aria-disabled="true"><span
-                                                    class="page-link">{{ $element }}</span></li>
-                                        @endif
-
-                                        {{-- Array Of Links --}}
-                                        @if (is_array($element))
-                                            @foreach ($element as $page => $url)
-                                                @if ($page == $products->currentPage())
-                                                    <li class="page-item active" aria-current="page"><span
-                                                            class="page-link">{{ $page }}</span></li>
-                                                @else
-                                                    <li class="page-item"><a class="page-link"
-                                                            href="{{ $url }}">{{ $page }}</a></li>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-
-                                    {{-- Next Page Link --}}
-                                    @if ($products->hasMorePages())
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next"
-                                                aria-label="@lang('pagination.next')">&raquo;</a>
-                                        </li>
-                                    @else
-                                        <li class="page-item disabled" aria-disabled="true"
-                                            aria-label="@lang('pagination.next')">
-                                            <span class="page-link" aria-hidden="true">&raquo;</span>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </nav>
-                        @endif
+                        {{ $products->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -314,17 +267,39 @@
             document.getElementById('list-view').classList.remove('active');
             this.classList.add('active');
         });
+        function resetFilters() {
+    var products = document.querySelectorAll('#product-container .animation');
+    products.forEach(function (product) {
+        product.style.display = 'block'; // Hiển thị lại tất cả sản phẩm
+    });
 
-        function filterByCategory(categoryId) {
-            var products = document.querySelectorAll('#product-container .animation');
-            products.forEach(function(product) {
-                if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
+    // Bỏ chọn các checkbox lọc giá
+    var priceFilters = document.querySelectorAll('input[name="price"]');
+    priceFilters.forEach(function (checkbox) {
+        checkbox.checked = false;
+    });
+}
+
+function filterByCategory(categoryId) {
+    resetFilters(); // Reset các bộ lọc
+    var products = document.querySelectorAll('#product-container .animation');
+    products.forEach(function (product) {
+        if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
+            product.style.display = 'block'; // Hiển thị sản phẩm phù hợp
+        } else {
+            product.style.display = 'none'; // Ẩn các sản phẩm không khớp
         }
+    });
+
+    // Cập nhật URL mà không tải lại trang
+    var newUrl = new URL(window.location.href);
+    if (categoryId == 0) {
+        newUrl.searchParams.delete('category_id');
+    } else {
+        newUrl.searchParams.set('category_id', categoryId);
+    }
+    history.pushState({}, '', newUrl);
+}
 
         function filterByColor(colorId) {
             var products = document.querySelectorAll('#product-container .animation');
@@ -338,39 +313,70 @@
         }
 
         function filterByPrice() {
-            var selectedPrices = document.querySelectorAll('input[name="price"]:checked');
-            var products = document.querySelectorAll('#product-container .animation');
-            if (selectedPrices.length === 0) {
-                products.forEach(function(product) {
-                    product.style.display = 'block';
-                });
-                return;
-            }
-            products.forEach(function(product) {
-                var productPrice = parseFloat(product.getAttribute('data-price'));
-                var showProduct = false;
-                selectedPrices.forEach(function(price) {
-                    var priceRange = price.value.split('-');
-                    var minPrice = parseFloat(priceRange[0]);
-                    var maxPrice = parseFloat(priceRange[1]);
-                    if (productPrice >= minPrice && productPrice <= maxPrice) {
-                        showProduct = true;
-                    }
-                });
-                if (showProduct) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-        }
+    const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked'));
+    const products = document.querySelectorAll('#product-container .animation');
 
-        function showAllProducts() {
-            var products = document.querySelectorAll('#product-container .animation');
-            products.forEach(function(product) {
-                product.style.display = 'block';
-            });
+    // Nếu không chọn mức giá nào, hiển thị tất cả sản phẩm
+    if (selectedPrices.length === 0) {
+        products.forEach(product => product.style.display = 'block');
+        checkNoProducts();
+        return;
+    }
+
+    // Lọc sản phẩm theo mức giá
+    products.forEach(product => {
+        const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
+        let isMatch = false;
+
+        selectedPrices.forEach(price => {
+            const [min, max] = price.value.split('-').map(Number);
+            if (productPrice >= min && productPrice <= max) {
+                isMatch = true;
+            }
+        });
+
+        product.style.display = isMatch ? 'block' : 'none';
+    });
+
+    checkNoProducts();
+}
+
+function checkNoProducts() {
+    const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
+        .filter(product => product.style.display !== 'none');
+    
+    const noProductsMessage = document.getElementById('no-products-message');
+    
+    if (visibleProducts.length === 0) {
+        if (!noProductsMessage) {
+            const message = document.createElement('p');
+            message.id = 'no-products-message';
+            message.className = 'text-center text-danger';
+            message.textContent = 'Không tìm thấy sản phẩm nào.';
+            document.getElementById('product-container').appendChild(message);
         }
+    } else if (noProductsMessage) {
+        noProductsMessage.remove();
+    }
+}
+
+// Xóa thông báo khi hiển thị tất cả sản phẩm
+function showAllProducts() {
+    document.querySelectorAll('#product-container .animation').forEach(product => {
+        product.style.display = 'block';
+    });
+    checkNoProducts();
+}
+
+function showAllProducts() {
+    // Lấy tất cả các sản phẩm trong #product-container
+    document.querySelectorAll('#product-container .animation').forEach(product => {
+        product.style.display = 'block'; // Hiển thị sản phẩm
+    });
+
+    // Kiểm tra nếu không có sản phẩm nào, hiển thị thông báo không tìm thấy
+}
+
     </script>
     <script>
         @if (request('type'))

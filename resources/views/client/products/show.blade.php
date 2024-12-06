@@ -63,7 +63,7 @@
                             <div class="star-rating"></div>
                             <div class="star-bg"></div>
                         </div>
-                        <span>{{ $product->reviews->count() }} Reviews</span>
+                        <span>{{ $product->reviews->count() }} Đánh giá</span>
                     </div>
 
                     <p class="price">
@@ -109,9 +109,7 @@
                                 <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
 
-                            <a href="#" class="btn btn-grey">
-                                <span><i class="fa fa-heart"></i></span>
-                            </a>
+                          
 
                             <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
@@ -121,7 +119,7 @@
 
                     <ul class="list-unstyled product-meta">
                         <li>SKU: {{ $product->SKU }}</li>
-                        <li>Categories:
+                        <li>Danh mục:
                             <a href="#">{{ $product->category->name }}</a>
                             <a href="#">{{ $product->category->type }}</a>
                         </li>
@@ -131,7 +129,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapseOne">Description</a> </h4>
+                                        href="#collapseOne">Mô tả</a> </h4>
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
@@ -144,7 +142,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapseTwo">Addition Information</a> </h4>
+                                        href="#collapseTwo">Thông tin bổ sung</a> </h4>
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
@@ -159,7 +157,7 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
-                                        Reviews ({{ $product->reviews->count() }})
+                                        Đánh giá ({{ $product->reviews->count() }})
                                     </a>
                                 </h4>
                             </div>
