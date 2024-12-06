@@ -228,7 +228,7 @@ Route::name('client.')->group(function () {
 });
 
 // Route cho khách hàng (client)
-Route::group(['middleware' => ['role:Khách hàng']], function () {
+Route::group(['middleware' => ['role:Khách hàng', 'auth']], function () {
     Route::resource('profile', ProfileController::class);
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->middleware('checkOrderStatus')->name('checkout'); // Hiển thị form thanh toán
@@ -279,19 +279,19 @@ Route::prefix('guest')->name('guest.')->group(function () {
 });
 
 // Route cho xác thực
-Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [AuthController::class, 'register']);
+Route::get('register', [AuthController::class, 'showRegistrationForm'])->middleware('guest')->name('register');
+Route::post('register', [AuthController::class, 'register'])->middleware('guest');
 
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('loginAjax', [AuthController::class, 'loginAjax'])->name('loginAjax');
+Route::get('login', [AuthController::class, 'showLoginForm'])->middleware('guest')->name('login');
+Route::post('login', [AuthController::class, 'login'])->middleware('guest');
+Route::post('loginAjax', [AuthController::class, 'loginAjax'])->name('loginAjax')->middleware('guest');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->name('password.request');
-Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('password/reset', [AuthController::class, 'showResetPasswordForm'])->middleware('guest')->name('password.request');
+Route::post('password/email', [AuthController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
 
-Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
+Route::post('password/reset', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
 // Route api cho chat
 Route::get('/chat-room-id', [ChatController::class, 'fetchChatRoomId']);
