@@ -57,7 +57,7 @@
                         </li>
                         <li>
                             <a href="{{ route('admin.slider.index') }}">
-                                <i class="far fa-window-restore"></i>Slider chính</a>
+                                <i class="far fa-window-restore"></i>Slider</a>
                         </li>
                     </ul>
                 </li>
