@@ -16,34 +16,46 @@ class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
     public function index(Request $request)
-    {
-        $query = Product::with(['category']);
-    
-        // Lọc theo danh mục nếu có category_id
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
-        }
-    
-        $products = $query->latest('id')->paginate(9);
-    
-        $categories = Category::all();
-        $colors = Color::all();
-    
-        $trendingProducts = Product::with('category')
-            ->withCount(['orderDetails as total_sales' => function ($query) {
-                $query->select(DB::raw('SUM(quantity)'));
-            }])
-            ->orderByDesc('total_sales')
-            ->take(3)
-            ->get();
-    
-        return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'products',
-            'categories',
-            'colors',
-            'trendingProducts'
-        ));
+{
+    $query = Product::with(['category']);
+
+    // Lọc theo danh mục nếu có category_id
+    if ($request->has('category_id')) {
+        $query->where('category_id', $request->input('category_id'));
     }
+
+    // Lọc theo giá nếu có prices
+    if ($request->has('prices')) {
+        $prices = $request->input('prices');
+        $query->where(function ($q) use ($prices) {
+            foreach ($prices as $price) {
+                [$min, $max] = explode('-', $price); // Tách giá trị min và max
+                $q->orWhereBetween('price_regular', [(int)$min, (int)$max]); // Lọc theo khoảng giá
+            }
+        });
+    }
+
+    $products = $query->latest('id')->paginate(9); // Gọi paginate sau khi áp dụng tất cả bộ lọc
+
+    $categories = Category::all();
+    $colors = Color::all();
+
+    $trendingProducts = Product::with('category')
+        ->withCount(['orderDetails as total_sales' => function ($query) {
+            $query->select(DB::raw('SUM(quantity)'));
+        }])
+        ->orderByDesc('total_sales')
+        ->take(3)
+        ->get();
+
+    return view(self::PATH_VIEW . __FUNCTION__, compact(
+        'products',
+        'categories',
+        'colors',
+        'trendingProducts'
+    ));
+}
+
     
     public function show(Product $product)
     {

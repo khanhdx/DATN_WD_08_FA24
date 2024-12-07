@@ -313,17 +313,15 @@ function filterByCategory(categoryId) {
         }
 
         function filterByPrice() {
-    const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked'));
+    const selectedPrices = Array.from(document.querySelectorAll('input[name="prices[]"]:checked'));
     const products = document.querySelectorAll('#product-container .animation');
 
-    // Nếu không chọn mức giá nào, hiển thị tất cả sản phẩm
     if (selectedPrices.length === 0) {
         products.forEach(product => product.style.display = 'block');
         checkNoProducts();
         return;
     }
 
-    // Lọc sản phẩm theo mức giá
     products.forEach(product => {
         const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
         let isMatch = false;
@@ -340,6 +338,7 @@ function filterByCategory(categoryId) {
 
     checkNoProducts();
 }
+
 
 function checkNoProducts() {
     const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
