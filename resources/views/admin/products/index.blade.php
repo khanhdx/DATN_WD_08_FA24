@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Quản lý sản phẩm 
+    Quản lý sản phẩm
 @endsection
 
 @section('css')
@@ -50,107 +50,6 @@
                         {{ session('success') }}
                     </div>
                 @endif
-                <div id="filterModal" class="modal" style="display: none;">
-                    <div class="modal-content">
-
-                        <!-- Các bộ lọc thêm -->
-                        <form action="{{ route('admin.products.filter') }}" method="get">
-                            <span class="close" id="closeModalBtn">&times;</span>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <h2>Lọc sản phẩm</h2>
-                                    </div>
-                                    <div class="col-12 py-2 my-2">
-                                        <h5 class="mb-3">Giá sản phẩm</h5>
-                                        <div id="price-slider"></div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-6">
-                                                <label for="price-min" class="form-label">Giá
-                                                    từ:</label>
-                                                <input type="number" name="price_min" id="price-min" class="form-control"
-                                                    value="0" min="0" max="{{ $maxPrice }}" readonly>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="price-max"class="form-label">Đến:</label>
-                                                <input type="number" name="price_max" id="price-max" class="form-control"
-                                                    value="{{ $maxPrice }}" min="0" max="{{ $maxPrice }}"
-                                                    readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 py-2">
-                                        <h5 class="mb-3">Ngày thêm sản phẩm</h5>
-                                        <div id="price-slider"></div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-6">
-                                                <label for="start-date" class="form-label">Ngày bắt đầu:</label>
-                                                <input type="date" id="start-date" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="end-date" class="form-label">Ngày kết thúc:</label>
-                                                <input type="date" id="end-date" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 py-2 flex">
-                                        <h5 class="mb-3">Trạng thái</h5>
-                                        <div class="form-check">
-                                            <input type="radio" id="all" name="status" class="form-check-input"
-                                                value="all" checked>
-                                            <label for="all" class="form-check-label">Tất cả</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="radio" id="active" name="status" class="form-check-input"
-                                                value="active">
-                                            <label for="active" class="form-check-label">Đang hoạt động</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="radio" id="inactive" name="status" class="form-check-input"
-                                                value="inactive">
-                                            <label for="inactive" class="form-check-label">Ngừng hoạt động</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="radio" id="pending" name="status" class="form-check-input"
-                                                value="pending">
-                                            <label for="pending" class="form-check-label">Đang chờ xử lý</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Lọc theo kích thước -->
-                            <label for="size">Kích thước:</label>
-                            <select name="size">
-                                <option value="">Tất cả</option>
-                                <option value="S" {{ request('size') == 'S' ? 'selected' : '' }}>S</option>
-                                <option value="M" {{ request('size') == 'M' ? 'selected' : '' }}>M</option>
-                                <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
-                                <option value="XL" {{ request('size') == 'XL' ? 'selected' : '' }}>XL</option>
-                            </select>
-
-                            <!-- Lọc theo màu sắc -->
-                            <label for="color">Màu sắc:</label>
-                            <select name="color">
-                                <option value="">Tất cả</option>
-                                <option value="Red" {{ request('color') == 'Red' ? 'selected' : '' }}>Đỏ
-                                </option>
-                                <option value="Blue" {{ request('color') == 'Blue' ? 'selected' : '' }}>Xanh
-                                </option>
-                                <option value="Green" {{ request('color') == 'Green' ? 'selected' : '' }}>Xanh lá
-                                </option>
-                                <option value="Black" {{ request('color') == 'Black' ? 'selected' : '' }}>Đen
-                                </option>
-                                <option value="White" {{ request('color') == 'White' ? 'selected' : '' }}>Trắng
-                                </option>
-                            </select>
-                            <button type="submit" id="apply-filter" class="btn btn-primary">Áp dụng</button>
-                        </form>
-                    </div>
-                </div>
-
                 <div class="table-data__tool">
                     <form action="{{ route('admin.products.filter') }}" method="get">
                         <div class="table-data__tool-left">
@@ -264,6 +163,111 @@
                             </tbody>
                         </table>
                     @endif
+                    {{-- <div id="filterModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+
+                            <!-- Các bộ lọc thêm -->
+                            <form action="{{ route('admin.products.filter') }}" method="get">
+                                <span class="close" id="closeModalBtn">&times;</span>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <h2>Lọc sản phẩm</h2>
+                                        </div>
+                                        <div class="col-12 py-2 my-2">
+                                            <h5 class="mb-3">Giá sản phẩm</h5>
+                                            <div id="price-slider"></div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <label for="price-min" class="form-label">Giá
+                                                        từ:</label>
+                                                    <input type="number" name="price_min" id="price-min"
+                                                        class="form-control" value="0" min="0"
+                                                        max="{{ $maxPrice }}" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="price-max"class="form-label">Đến:</label>
+                                                    <input type="number" name="price_max" id="price-max"
+                                                        class="form-control" value="{{ $maxPrice }}" min="0"
+                                                        max="{{ $maxPrice }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 py-2">
+                                            <h5 class="mb-3">Ngày thêm sản phẩm</h5>
+                                            <div id="price-slider"></div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <label for="start-date" class="form-label">Ngày bắt đầu:</label>
+                                                    <input type="date" id="start-date" class="form-control">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="end-date" class="form-label">Ngày kết thúc:</label>
+                                                    <input type="date" id="end-date" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 py-2 flex">
+                                            <h5 class="mb-3">Trạng thái</h5>
+                                            <div class="form-check">
+                                                <input type="radio" id="all" name="status"
+                                                    class="form-check-input" value="all" checked>
+                                                <label for="all" class="form-check-label">Tất cả</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" id="active" name="status"
+                                                    class="form-check-input" value="active">
+                                                <label for="active" class="form-check-label">Đang hoạt động</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" id="inactive" name="status"
+                                                    class="form-check-input" value="inactive">
+                                                <label for="inactive" class="form-check-label">Ngừng hoạt động</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" id="pending" name="status"
+                                                    class="form-check-input" value="pending">
+                                                <label for="pending" class="form-check-label">Đang chờ xử lý</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lọc theo kích thước -->
+                                <label for="size">Kích thước:</label>
+                                <select name="size">
+                                    <option value="">Tất cả</option>
+                                    <option value="S" {{ request('size') == 'S' ? 'selected' : '' }}>S</option>
+                                    <option value="M" {{ request('size') == 'M' ? 'selected' : '' }}>M</option>
+                                    <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
+                                    <option value="XL" {{ request('size') == 'XL' ? 'selected' : '' }}>XL</option>
+                                </select>
+
+                                <!-- Lọc theo màu sắc -->
+                                <label for="color">Màu sắc:</label>
+                                <select name="color">
+                                    <option value="">Tất cả</option>
+                                    <option value="Red" {{ request('color') == 'Red' ? 'selected' : '' }}>Đỏ
+                                    </option>
+                                    <option value="Blue" {{ request('color') == 'Blue' ? 'selected' : '' }}>Xanh
+                                    </option>
+                                    <option value="Green" {{ request('color') == 'Green' ? 'selected' : '' }}>Xanh lá
+                                    </option>
+                                    <option value="Black" {{ request('color') == 'Black' ? 'selected' : '' }}>Đen
+                                    </option>
+                                    <option value="White" {{ request('color') == 'White' ? 'selected' : '' }}>Trắng
+                                    </option>
+                                </select>
+                                <button type="submit" id="apply-filter" class="btn btn-primary">Áp dụng</button>
+                            </form>
+                        </div>
+                    </div> --}}
+
+                    <div class="mt-2">
+                        {{ $products->links()}}
+                    </div>
                 </div>
             </div>
         </div>
