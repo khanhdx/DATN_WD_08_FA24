@@ -17,29 +17,47 @@ class ProductController extends Controller
     const PATH_VIEW = 'client.products.';
     public function index(Request $request)
 {
+    // Khởi tạo query
     $query = Product::with(['category']);
 
-    // Lọc theo danh mục nếu có category_id
-    if ($request->has('category_id')) {
+    // Lọc theo danh mục nếu có `category_id`
+    if ($request->filled('category_id')) {
         $query->where('category_id', $request->input('category_id'));
     }
 
-    // Lọc theo giá nếu có prices
-    if ($request->has('prices')) {
+    // Lọc theo khoảng giá nếu có `prices`
+    if ($request->filled('prices')) {
         $prices = $request->input('prices');
         $query->where(function ($q) use ($prices) {
             foreach ($prices as $price) {
-                [$min, $max] = explode('-', $price); // Tách giá trị min và max
-                $q->orWhereBetween('price_regular', [(int)$min, (int)$max]); // Lọc theo khoảng giá
+                [$min, $max] = explode('-', $price);
+                $q->orWhereBetween('price_regular', [(int)$min, (int)$max]);
             }
         });
     }
 
-    $products = $query->latest('id')->paginate(9); // Gọi paginate sau khi áp dụng tất cả bộ lọc
+    // Sắp xếp sản phẩm nếu có `sort`
+    if ($request->filled('sort')) {
+        switch ($request->input('sort')) {
+            case 'price_asc':
+                $query->orderBy('price_regular', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price_regular', 'desc');
+                break;
+            default:
+                $query->latest('id'); // Mặc định: Sắp xếp theo mới nhất
+        }
+    } else {
+        $query->latest('id'); // Mặc định: Sắp xếp theo mới nhất
+    }
 
+    // Phân trang sau khi áp dụng tất cả bộ lọc
+    $products = $query->paginate(9);
+
+    // Lấy dữ liệu khác để hiển thị
     $categories = Category::all();
     $colors = Color::all();
-
     $trendingProducts = Product::with('category')
         ->withCount(['orderDetails as total_sales' => function ($query) {
             $query->select(DB::raw('SUM(quantity)'));
@@ -48,6 +66,7 @@ class ProductController extends Controller
         ->take(3)
         ->get();
 
+    // Trả về view với dữ liệu
     return view(self::PATH_VIEW . __FUNCTION__, compact(
         'products',
         'categories',
