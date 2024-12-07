@@ -23,24 +23,30 @@
                     <form action="{{ route('admin.slider.index') }}" method="get">
                         @csrf
                         <div class="rs-select2--light rs-select2--md">
-                            <select class="js-select2" name="filter">
-                                <option value="" selected="selected">Tất cả</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                            <div class="dropDownSelect2"></div>
+                            <form action="{{ route('admin.slider.index') }}" method="GET">
+                                <select class="js-select2" name="filter" onchange="this.form.submit()">
+                                    <option value="" {{ request('filter') == '' ? 'selected' : '' }}>Tất cả</option>
+                                    <option value="main" {{ request('filter') == 'main' ? 'selected' : '' }}>Banner chính</option>
+                                    <option value="advertisement" {{ request('filter') == 'advertisement' ? 'selected' : '' }}>Banner quảng cáo</option>
+                                    <option value="intro" {{ request('filter') == 'intro' ? 'selected' : '' }}>Banner giới thiệu</option>
+                                </select>
+                                <div class="dropDownSelect2"></div>
+                            </form>
                         </div>
-                        <button class="au-btn-filter" type="submit"><i class="zmdi zmdi-filter-list"></i> Lọc</button>
+                        
+                       
                     </form>
                 </div>
                 <div class="table-data__tool-left">
-                    <form class="au-form-icon" action="{{route('admin.slider.index')}}" method="GET">
-                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search')}}" type="text"
-                            placeholder="Search for datas &amp; reports..." />
+                    <form class="au-form-icon" action="{{ route('admin.slider.index') }}" method="GET">
+                        <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}" type="text"
+                            placeholder="Tìm kiếm &amp; ..." />
+                        <input type="hidden" name="filter" value="{{ request('filter') }}"> <!-- Giữ trạng thái bộ lọc -->
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>
                         </button>
                     </form>
+                    
                 </div>
                 <div class="table-data__tool-right">
                     <a href="{{ route('admin.slider.create') }}"><button class="au-btn au-btn-icon au-btn--green au-btn--small">
@@ -52,12 +58,6 @@
                 <table class="table table-data2 text-center">
                     <thead>
                         <tr>
-                            <th>
-                                <label class="au-checkbox">
-                                    <input type="checkbox">
-                                    <span class="au-checkmark"></span>
-                                </label>
-                            </th>
                             <th>#</th>
                             <th>Tên Banner</th>
                             <th>Hình ảnh</th>
@@ -68,13 +68,7 @@
                     </thead>
                     <tbody>
                         @foreach ($listBanner as $item)
-                            <tr class="tr-shadow">
-                                <td>
-                                    <label class="au-checkbox">
-                                        <input type="checkbox">
-                                        <span class="au-checkmark"></span>
-                                    </label>
-                                </td>
+                            <tr class="tr-shadow">                          
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->title}}</td>
                                 <td>
@@ -173,4 +167,40 @@
         </div>
     </div>
 </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function () {
+    function fetchBanners() {
+        let filter = $('#filter').val();
+        let search = $('#search').val();
+
+        $.ajax({
+            url: "{{ route('admin.slider.index') }}",
+            method: "GET",
+            data: {
+                filter: filter,
+                search: search
+            },
+            success: function (response) {
+                $('#bannerTable').html(response.html); // Cập nhật nội dung bảng
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi khi tải dữ liệu.");
+            }
+        });
+    }
+
+    // Lọc khi thay đổi bộ lọc
+    $('#filter').change(function () {
+        fetchBanners();
+    });
+
+    // Tìm kiếm khi nhập vào ô tìm kiếm
+    $('#search').on('input', function () {
+        fetchBanners();
+    });
+});
+
+    </script>
 @endsection
