@@ -81,6 +81,13 @@
                                     <input type="hidden" name="name_status" value="completed">
                                     <button type="submit" class="btn btn-outline-primary btn-xs">Hoàn thành</button>
                                 </form>
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST"
+                                    onsubmit="return confirm('Bạn xác nhận hoàn đơn hàng không')" style="display:inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="refunding">
+                                    <button type="submit" class="btn btn-outline-primary btn-xs">Hoàn hàng</button>
+                                </form>
                             @endif
                         </td>
                     </tr>
