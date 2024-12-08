@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    // public function submitReview(Request $request, $orderId, $productId)
     // {
     //     $request->validate([
     //         'rating' => 'required|integer|min:1|max:5',
@@ -64,7 +63,7 @@ class ReviewController extends Controller
             $order = Order::findOrFail($orderId);
             $statusOrder = $order->statusOrder->first();
 
-            if ($statusOrder && $statusOrder->id !== 4) {
+            if ($statusOrder && $statusOrder->id !== 5) {
                 return response()->json(['error' => 'Chỉ những đơn hàng đã hoàn thành mới có thể đánh giá.'], 403);
             }
 

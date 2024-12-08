@@ -19,6 +19,7 @@ class StatusOrderSeeder extends Seeder
             ['name_status' => 'processing'],
             ['name_status' => 'shipping'],
             ['name_status' => 'success'],
+            ['name_status' => 'completed'],
             ['name_status' => 'cancel'],
             ['name_status' => 'canceled'],
             ['name_status' => 'refunding'],

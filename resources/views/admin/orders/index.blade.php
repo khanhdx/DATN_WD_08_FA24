@@ -129,7 +129,7 @@
                                                             @method('PUT')
                                                             <input type="hidden" name="status_order" value="{{ $nextStatus }}">
                                                             <button type="submit" class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-arrow-right"></i> Cập nhật trạng thái
+                                                                <i class="fas fa-arrow-right"></i> Cập nhật đang giao hàng
                                                             </button>
                                                         </form>
                                                     @endif

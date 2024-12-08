@@ -98,7 +98,7 @@
                             <td>{{ number_format($orderDetail->total_price, 0, ',', '.') }} VND</td>
                             <td>
                                 @if (Auth::check())
-                                    @if ($order->statusOrder->first()->id === 4)
+                                    @if ($order->statusOrder->first()->id === 5)
                                         @php
                                             $existingReview = \App\Models\Review::where('order_id', $order->id)
                                                 ->where('product_id', $orderDetail->product_id)
