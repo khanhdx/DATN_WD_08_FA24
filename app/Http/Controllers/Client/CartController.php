@@ -130,7 +130,7 @@ class CartController extends Controller
                     // Nếu chưa có, thêm mới sản phẩm vào giỏ hàng session
                     $cart[$key] = [
                         'id'            => $newId,
-                        'image'         => $productVariant->product->image,
+                        'image'         => $productVariant->product->image->image_url,
                         'name'          => $productVariant->product->name,
                         'color'         => $productVariant->color->name,
                         'size'          => $productVariant->size->name,

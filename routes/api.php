@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -28,7 +29,8 @@ Route::middleware('auth:sanctum')
         });
     });
 
-Route::get('/product/{product}', [ProductController::class, 'show_modal'])->name('product.show');
+Route::get('/product', [ProductController::class, 'apiProduct']);
+Route::get('/product/{product}', [ProductController::class, 'showModal'])->name('product.show');
 
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
 Route::get('/get-stock', [ProductController::class, 'getInStock'])->name('get.stock');
@@ -48,14 +50,5 @@ Route::get('/count-order', [StatisticalController::class, 'countOrder']);
 Route::get('/count-customer', [StatisticalController::class, 'countCustomner']);
 Route::get('/count-product-sold', [StatisticalController::class, 'countProductSold']);
 
-// Route cho giao hàng nhanh
-// Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-// Route::get('/districts', [ShippingController::class, 'getDistricts']);
-// Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-// Route::post('/create-order', [ShippingController::class, 'createOrder']);
-// Route::middleware('auth')->group(function () {
-//     Route::get('/provinces', [ShippingController::class, 'getProvinces']);
-//     Route::get('/districts', [ShippingController::class, 'getDistricts']);
-//     Route::post('/calculate-shipping-fee', [ShippingController::class, 'calculateShippingFee']);
-//     Route::post('/create-order', [ShippingController::class, 'createOrder']);
-// });
+Route::apiResource('images', ImageController::class);
+Route::delete('/delete-image', [ImageController::class, 'deleteImages']);

@@ -49,12 +49,37 @@ class UpdateOrderStatus extends Command
             if ($response->successful()) {
                 $shippingData = $response->json();
 
-                if ($shippingData['data']['status'] === "delivering") {
-                    $this->orderService->updateStatus(3, $order['id']);
-                }
+                // if ($shippingData['data']['status'] === "delivering") {
+                //     $this->orderService->updateStatus(3, $order['id']);
+                // }
 
-                if ($shippingData['data']['status'] === "delivered") {
-                    $this->orderService->updateStatus(4, $order['id']);
+                // if ($shippingData['data']['status'] === "delivered") {
+                //     $this->orderService->updateStatus(4, $order['id']);
+                // }
+
+                switch ($shippingData['data']['status']) {
+                    case 'picked':
+                        // Cập nhật trạng thái sang: picked
+                        $this->orderService->updateStatus(3, $order['id']);
+                        break;
+
+                    case 'delivering':
+                        // Cập nhật trạng thái sang: shipping
+                        $this->orderService->updateStatus(4, $order['id']);
+                        break;
+
+                    case 'delivered':
+                        // Cập nhật trạng thái sang: success
+                        foreach ($order['status_order_details'] as $item) {
+                            if ($item['status_order_id'] === 4) {
+                                $this->orderService->updateStatus(5, $order['id']);
+                            }
+                        }
+                        break;
+
+                    default:
+                        Log::info('Nothing change');
+                        break;
                 }
 
                 Log::info('Order status updated', ['order_id' => $order['id'], 'new_status' => $shippingData['data']['status']]);

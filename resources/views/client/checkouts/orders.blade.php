@@ -19,6 +19,7 @@
                     <th>Hình thức</th>
                     <th>Địa chỉ</th>
                     <th>Ghi chú</th>
+                    <th>Chi tiết đơn</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -27,7 +28,7 @@
                     <tr class="align-middle text-center">
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->date }}</td>
-                        <td>{{ number_format($order->total_price, 0, ',', '.') }} VND</td>
+                        <td>{{ number_format($order->shipping_fee + $order->total_price, 0, ',', '.') }} VND</td>
                         <td class="order-id" data-order-id="{{ $order->id }}" id="status-{{ $order->id }}">
                             {{ $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái' }}
                         </td>
@@ -36,7 +37,7 @@
                                 @foreach ($order->payments as $payment)
                                     <!-- Kiểm tra trạng thái thanh toán -->
                                     @if ($payment->status == 1)
-                                        Đã hoàn thành
+                                        Đã thanh toán
                                     @elseif ($payment->status == 0)
                                         Chưa thanh toán
                                     @else
@@ -54,14 +55,16 @@
                                 @endforeach
                             @else
                                 <span>Chưa thanh toán</span>
-                            @endif </td>
+                            @endif
+                        </td>
                         <td>{{ $order->address }}</td>
                         <td>{{ $order->note ?: 'Không có ghi chú' }}</td>
                         <td>
                             <a class="btn btn-outline-primary btn-xs" href="{{ route('orders.show', $order->id) }}">
                                 Xem chi tiết
                             </a>
-
+                        </td>
+                        <td>
                             @if ($order->statusOrder->contains('name_status', 'pending'))
                                 <form id="cancel-button-{{ $order->id }}"
                                     action="{{ route('orders.update', $order->id) }}" method="POST"
@@ -79,7 +82,7 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="name_status" value="completed">
-                                    <button type="submit" class="btn btn-outline-primary btn-xs">Hoàn thành</button>
+                                    <button type="submit" class="btn btn-primary btn-xs">Hoàn thành</button>
                                 </form>
                                 <form action="{{ route('orders.update', $order->id) }}" method="POST"
                                     onsubmit="return confirm('Bạn xác nhận hoàn đơn hàng không')" style="display:inline;">
@@ -105,9 +108,9 @@
             orderElements.forEach(function(orderElement) {
                 const orderId = orderElement.dataset.orderId; // Lấy ID đơn hàng
                 const cancelButton = document.querySelector(
-                `#cancel-button-${orderId}`); // Nút hủy đơn hàng
+                    `#cancel-button-${orderId}`); // Nút hủy đơn hàng
                 const successButton = document.querySelector(
-                `#success-button-${orderId}`); // Nút Hoàn thành đơn hàng
+                    `#success-button-${orderId}`); // Nút Hoàn thành đơn hàng
 
                 // Hàm thực hiện polling trạng thái đơn hàng
                 const fetchOrderStatus = () => {
@@ -125,18 +128,16 @@
                                     // Ẩn nút hủy nếu trạng thái không còn là "pending"
                                     if (currentStatus !== 'pending' && cancelButton) {
                                         cancelButton.style.display = 'none';
-                                    }
-                                    else {
+                                    } else {
                                         // Nếu trạng thái là success
                                         if (currentStatus == 'success') {
                                             successButton.style.display = 'block';
-                                        }
-                                        else {
+                                        } else {
                                             successButton.style.display = 'none';
                                         }
                                     }
                                 }
-                                
+
                             }
                         })
                         .catch(error => console.error('Lỗi khi lấy trạng thái đơn hàng:', error));

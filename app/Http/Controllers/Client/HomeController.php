@@ -14,50 +14,49 @@ class HomeController extends Controller
 {
     const PATH_VIEW = 'client.home.';
     public function index()
-{
-    $topSeller = Product::with(['category', 'variants.size', 'variants.color'])
-        ->paginate(8);
+    {
+        $topSeller = Product::with(['category', 'image', 'variants.size', 'variants.color'])
+            ->paginate(8);
 
-    $newProductMan = Product::with(['category', 'variants.size', 'variants.color'])
-        ->whereHas('category', function ($query) {
-            $query->where('type', 'Man');
-        })->latest('id')->paginate(8);
+        $newProductMan = Product::with(['category', 'image', 'variants.size', 'variants.color'])
+            ->whereHas('category', function ($query) {
+                $query->where('type', 'Man');
+            })->latest('id')->get();
 
-    $newProductWoman = Product::with(['category', 'variants.size', 'variants.color'])
-        ->whereHas('category', function ($query) {
-            $query->where('type', 'Woman');
-        })->latest('id')->paginate(8);
+        $newProductWoman = Product::with(['category', 'image', 'variants.size', 'variants.color'])
+            ->whereHas('category', function ($query) {
+                $query->where('type', 'Woman');
+            })->latest('id')->get();
 
-    $latestPosts = Post::query()
-        ->latest('id')
-        ->paginate(2);
+        $latestPosts = Post::query()
+            ->latest('id')
+            ->paginate(2);
 
-    $mainBanners = Banner::where('type', 'main')
-        ->where('status', 1)
-        ->get();
+        $mainBanners = Banner::where('type', 'main')
+            ->where('status', 1)
+            ->get();
 
         $advertisementBanners = Banner::where('type', 'advertisement')
-        ->where('status', 1)
-        ->orderBy('created_at', 'desc') // Sắp xếp từ mới nhất
-        ->take(3)
-        ->get();
-    
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc') // Sắp xếp từ mới nhất
+            ->take(3)
+            ->get();
 
-    // Lấy banner giới thiệu đầu tiên
-    $introBanner = Banner::where('type', 'intro')
-        ->where('status', 1)
-        ->first();
+        // Lấy banner giới thiệu đầu tiên
+        $introBanner = Banner::where('type', 'intro')
+            ->where('status', 1)
+            ->first();
 
-    return view(self::PATH_VIEW . __FUNCTION__, compact(
-        'topSeller',
-        'newProductMan',
-        'newProductWoman',
-        'latestPosts',
-        'mainBanners',
-        'advertisementBanners',
-        'introBanner'
-    ));
-}
+        return view(self::PATH_VIEW . __FUNCTION__, compact(
+            'topSeller',
+            'newProductMan',
+            'newProductWoman',
+            'latestPosts',
+            'mainBanners',
+            'advertisementBanners',
+            'introBanner'
+        ));
+    }
 
 
 

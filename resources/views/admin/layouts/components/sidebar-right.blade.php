@@ -50,6 +50,10 @@
                             <a href="{{ route('admin.slider.index') }}">
                                 <i class="far fa-window-restore"></i>Slider</a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.images.index') }}">
+                                <i class="far fa-window-restore"></i>Ảnh trưng bày sản phẩm</a>
+                        </li>
                     </ul>
                 </li>
 
