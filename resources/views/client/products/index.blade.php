@@ -51,16 +51,6 @@
                         </ul>
                     </aside>
 
-                    <aside class="block blk-colors">
-                        <h4>Màu sắc</h4>
-                        <ul class="list-unstyled list-cat">
-                            <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả màu</a></li>
-                            @foreach ($colors as $color)
-                                <li><a href="javascript:void(0);"
-                                        onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
-                            @endforeach
-                        </ul>
-                    </aside>
 
 
                     <aside class="block featured">
@@ -108,10 +98,10 @@
                         {{-- <p class="pull-left">Showing 1-12 of 50 results</p> --}}
                         <!-- Ordering -->
                         <div class="list-sort pull-right">
-                            <select class="formDropdown">
-                                <option>Sắp xếp mặc định</option>
-                                <option>Sắp xếp theo giá thấp đến cao</option>
-                                <option>Sắp xếp theo giá cao đến thấp</option>
+                            <select class="formDropdown" id="sortDropdown">
+                                <option value="">Sắp xếp mặc định</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Sắp xếp theo giá thấp đến cao</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Sắp xếp theo giá cao đến thấp</option>
                             </select>
                         </div>
                     </div>
@@ -316,17 +306,15 @@ function filterByCategory(categoryId) {
         }
 
         function filterByPrice() {
-    const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked'));
+    const selectedPrices = Array.from(document.querySelectorAll('input[name="prices[]"]:checked'));
     const products = document.querySelectorAll('#product-container .animation');
 
-    // Nếu không chọn mức giá nào, hiển thị tất cả sản phẩm
     if (selectedPrices.length === 0) {
         products.forEach(product => product.style.display = 'block');
         checkNoProducts();
         return;
     }
 
-    // Lọc sản phẩm theo mức giá
     products.forEach(product => {
         const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
         let isMatch = false;
@@ -343,6 +331,7 @@ function filterByCategory(categoryId) {
 
     checkNoProducts();
 }
+
 
 function checkNoProducts() {
     const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
@@ -379,6 +368,20 @@ function showAllProducts() {
 
     // Kiểm tra nếu không có sản phẩm nào, hiển thị thông báo không tìm thấy
 }
+document.getElementById('sortDropdown').addEventListener('change', function () {
+        const selectedSort = this.value;
+        const url = new URL(window.location.href);
+        
+        // Update URL with selected sort parameter
+        if (selectedSort) {
+            url.searchParams.set('sort', selectedSort);
+        } else {
+            url.searchParams.delete('sort');
+        }
+
+        // Navigate to updated URL
+        window.location.href = url.toString();
+    });
 
     </script>
     <script>

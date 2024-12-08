@@ -13,15 +13,32 @@ class BannerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $filter = $request->input('filter');
         $title = "Danh mục Slider";
+    
         $listBanner = Banner::query()
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%");
             })
+            ->when($filter, function ($query, $filter) {
+                return $query->where('type', $filter);
+            })
+            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian tạo mới nhất
             ->paginate(5);
-
+    
+        // Trả về dữ liệu HTML nếu là AJAX request
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.slider.index', compact('listBanner'))->render()
+            ]);
+        }
+    
         return view("admin.slider.index", compact("title", "listBanner", "search"));
     }
+    
+
+
+
 
     // Form thêm mới banner
     public function create()
