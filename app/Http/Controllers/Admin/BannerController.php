@@ -9,96 +9,130 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
+    // Danh sách banner
     public function index(Request $request)
-{
-    $search = $request->input('search');
-    $title = "Danh mục Slider";
-    $listBanner = Banner::query()
-        ->when($search, function($query, $search) {
-            return $query->where('title', 'like', "%{$search}%");
-        })
-        ->paginate(5); // Phân trang với 5 mục mỗi trang
-
-    return view("admin.slider.index", compact("title", "listBanner", "search"));
-}
+    {
+        $search = $request->input('search');
+        $filter = $request->input('filter');
+        $title = "Danh mục Slider";
     
+        $listBanner = Banner::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($filter, function ($query, $filter) {
+                return $query->where('type', $filter);
+            })
+            ->orderBy('created_at', 'desc') // Sắp xếp theo thời gian tạo mới nhất
+            ->paginate(5);
+    
+        // Trả về dữ liệu HTML nếu là AJAX request
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.slider.index', compact('listBanner'))->render()
+            ]);
+        }
+    
+        return view("admin.slider.index", compact("title", "listBanner", "search"));
+    }
+    
+
+
+
+
+    // Form thêm mới banner
     public function create()
     {
         $title = "Thêm mới banner";
-        return view('admin.slider.create' , compact('title'));
+        return view('admin.slider.create', compact('title'));
     }
-    
+
+    // Lưu dữ liệu banner mới
     public function store(Request $request)
     {
-        // Lấy dữ liệu title, image và status từ request
+        $request->validate([
+            'title' => 'required|array',
+            'title.*' => 'required|string|max:255',
+            'image' => 'required|array',
+            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'required|array',
+            'status.*' => 'in:active,inactive',
+            'type' => 'required|array',
+            'type.*' => 'in:main,intro,advertisement',
+        ]);
+
         $titles = $request->input('title');
         $images = $request->file('image');
         $statuses = $request->input('status');
+        $types = $request->input('type');
 
-        if ($titles && $images && $statuses && count($titles) == count($images) && count($titles) == count($statuses)) {
-            foreach ($titles as $index => $title) {
-                $banner = new Banner();
-                $banner->title = $title;
-                $banner->status = ($statuses[$index] == 'active') ? 1 : 0;
+        foreach ($titles as $index => $title) {
+            $banner = new Banner();
+            $banner->title = $title;
+            $banner->status = ($statuses[$index] === 'active') ? 1 : 0;
+            $banner->type = $types[$index];
 
-                if ($images[$index]->isValid()) {
-                    $imagePath = $images[$index]->store('images', 'public');
-                    $banner->image = $imagePath;
-                } else {
-                    return redirect()->route('admin.slider.index')->with('error', 'File ảnh không hợp lệ cho một hoặc nhiều banner');
-                }
-
-                $banner->save();
+            if (isset($images[$index]) && $images[$index]->isValid()) {
+                $imagePath = $images[$index]->store('images', 'public');
+                $banner->image = $imagePath;
             }
 
-            return redirect()->route('admin.slider.index')->with('success', 'Thêm mới banner thành công');
-        } else {
-            return redirect()->route('admin.slider.index')->with('error', 'Dữ liệu banner không hợp lệ');
+            $banner->save();
         }
+
+        return redirect()->route('admin.slider.index')->with('success', 'Thêm mới banner thành công');
     }
-    
-    
-    public function edit(string $id)
+
+    // Form chỉnh sửa banner
+    public function edit($id)
     {
-        $title = "Chỉnh sửa mục sản phẩm";
+        $title = "Chỉnh sửa banner";
         $banner = Banner::findOrFail($id);
         return view("admin.slider.edit", compact("title", "banner"));
     }
-    
-    
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'status' => 'required|boolean',
-    ]);
 
-    $banner = Banner::findOrFail($id);
-    $banner->title = $request->input('title');
-    $banner->status = $request->input('status');
+    // Cập nhật banner
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'required|boolean',
+            'type' => 'required|in:main,intro,advertisement',
+        ]);
 
-    if ($request->hasFile('image')) {
-        if ($request->file('image')->isValid()) {
+        $banner = Banner::findOrFail($id);
+        $banner->title = $request->input('title');
+        $banner->status = $request->input('status');
+        $banner->type = $request->input('type');
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Xóa ảnh cũ nếu có
+            if ($banner->image) {
+                Storage::disk('public')->delete($banner->image);
+            }
+
             $imagePath = $request->file('image')->store('images', 'public');
             $banner->image = $imagePath;
-        } else {
-            return redirect()->route('admin.slider.edit', $id)->with('error', 'File ảnh không hợp lệ');
         }
+
+        $banner->save();
+
+        return redirect()->route('admin.slider.index')->with('success', 'Cập nhật banner thành công');
     }
 
-    $banner->save();
-
-    return redirect()->route('admin.slider.index')->with('success', 'Cập nhật banner thành công');
-}
-    
-    public function destroy(string $id)
+    // Xóa banner
+    public function destroy($id)
     {
         $banner = Banner::findOrFail($id);
-        $banner->delete();
+
+        // Xóa ảnh cũ nếu có
         if ($banner->image) {
             Storage::disk('public')->delete($banner->image);
         }
-        return redirect()->route('admin.slider.index')->with('success','Bạn đã xóa thành công');
+
+        $banner->delete();
+
+        return redirect()->route('admin.slider.index')->with('success', 'Xóa banner thành công');
     }
 }

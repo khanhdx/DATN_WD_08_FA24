@@ -70,7 +70,15 @@ class OrderController extends Controller
                 ]
             ]);
         }
-        
+        if ($order->statusOrder->contains('name_status', 'success')) {
+    
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'refunding')->first()->id => [
+                    'name' => 'refunding',
+                    'updated_at' => now(),
+                ]
+            ]);
+        }
         return redirect()->route('orders.index');
     }
     public function getOrderStatus($id)

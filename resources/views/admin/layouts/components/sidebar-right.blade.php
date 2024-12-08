@@ -46,6 +46,14 @@
                             <a href="{{ route('admin.reviews.index') }}">
                                 <i class="fa fa-tags"></i>Đánh giá</a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.slider.index') }}">
+                                <i class="far fa-window-restore"></i>Slider</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.images.index') }}">
+                                <i class="far fa-window-restore"></i>Ảnh trưng bày sản phẩm</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -72,29 +80,6 @@
                         <li>
                             <a href="#">
                                 <i class="fas fa-archive"></i>Tồn kho</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="has-sub">
-                    <a class="js-arrow" href="#">
-                        <i class="fas fa-bullhorn"></i>Quảng cáo
-                        <span class="arrow">
-                            <i class="fas fa-angle-down"></i>
-                        </span>
-                    </a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li>
-                            <a href="{{ route('admin.slider.index') }}">
-                                <i class="far fa-window-restore"></i>Slider chính</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.slider.banner1.index') }}">
-                                <i class="far fa-window-maximize"></i>Banner giảm giá</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.slider.banner2.index') }}">
-                                <i class="far fa-window-maximize"></i>Banner giới thiệu</a>
                         </li>
                     </ul>
                 </li>

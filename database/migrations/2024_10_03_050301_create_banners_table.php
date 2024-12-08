@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);
+            $table->enum('type', ['main', 'intro', 'advertisement'])->default('advertisement'); 
             $table->timestamps();
         });
     }

@@ -168,6 +168,7 @@ class PaymentController extends Controller
                 'weight' => $item->quantity * $weight,
             ];
             $quantityCart += $item->quantity;
+            
         }
 
         try {
@@ -558,7 +559,7 @@ class PaymentController extends Controller
                 $order->orderDetails()->delete();
                 $order->statusOrderDetails()->delete();
                 $order->delete();
-
+                $this->deleteOrderGHN($order->order_code);
                 return redirect()->route('checkout')->with('error', 'Thanh toán không thành công. Đơn hàng đã được hủy.');
             }
 
@@ -662,5 +663,19 @@ class PaymentController extends Controller
         $randomNumber = rand(1000, 9999);
         $date = now()->format('Ymd');
         return 'Order-' . $randomNumber . $date;
+    }
+    public function deleteOrderGHN($order_code) {
+        $response = Http::withHeaders([
+            'Token' => env('TOKEN_GHN'),
+            'ShopId' => env('SHOP_ID')
+        ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', [
+            'order_codes' => [
+                $order_code
+            ],
+        ]);
+
+        if (!$response->successful()) {
+            Log::error('Cancel Order Fail: ' . $response->body());
+        }
     }
 }

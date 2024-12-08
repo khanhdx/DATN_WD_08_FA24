@@ -15,39 +15,86 @@ use App\Http\Controllers\Admin\ColorController;
 class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
-    public function index(Request $request)
-    {
-        $query = Product::with(['category']);
-    
-        // Lọc theo danh mục nếu có category_id
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
+    public function apiProduct() {
+        try {
+            $products = Product::query()->select('id', 'name')->latest('id')->get();
+
+            return response()->json([
+                'data' => $products,
+                'code' => 200,
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage(),
+                'code' => 404,
+            ], 404);
         }
-    
-        $products = $query->latest('id')->paginate(9);
-    
-        $categories = Category::all();
-        $colors = Color::all();
-    
-        $trendingProducts = Product::with('category')
-            ->withCount(['orderDetails as total_sales' => function ($query) {
-                $query->select(DB::raw('SUM(quantity)'));
-            }])
-            ->orderByDesc('total_sales')
-            ->take(3)
-            ->get();
-    
-        return view(self::PATH_VIEW . __FUNCTION__, compact(
-            'products',
-            'categories',
-            'colors',
-            'trendingProducts'
-        ));
     }
+    public function index(Request $request)
+{
+    // Khởi tạo query
+    $query = Product::with(['category']);
+
+    // Lọc theo danh mục nếu có `category_id`
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->input('category_id'));
+    }
+
+    // Lọc theo khoảng giá nếu có `prices`
+    if ($request->filled('prices')) {
+        $prices = $request->input('prices');
+        $query->where(function ($q) use ($prices) {
+            foreach ($prices as $price) {
+                [$min, $max] = explode('-', $price);
+                $q->orWhereBetween('price_regular', [(int)$min, (int)$max]);
+            }
+        });
+    }
+
+    // Sắp xếp sản phẩm nếu có `sort`
+    if ($request->filled('sort')) {
+        switch ($request->input('sort')) {
+            case 'price_asc':
+                $query->orderBy('price_regular', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price_regular', 'desc');
+                break;
+            default:
+                $query->latest('id'); // Mặc định: Sắp xếp theo mới nhất
+        }
+    } else {
+        $query->latest('id'); // Mặc định: Sắp xếp theo mới nhất
+    }
+
+    // Phân trang sau khi áp dụng tất cả bộ lọc
+    $products = $query->paginate(9);
+
+    // Lấy dữ liệu khác để hiển thị
+    $categories = Category::all();
+    $colors = Color::all();
+    $trendingProducts = Product::with('category')
+        ->withCount(['orderDetails as total_sales' => function ($query) {
+            $query->select(DB::raw('SUM(quantity)'));
+        }])
+        ->orderByDesc('total_sales')
+        ->take(3)
+        ->get();
+
+    // Trả về view với dữ liệu
+    return view(self::PATH_VIEW . __FUNCTION__, compact(
+        'products',
+        'categories',
+        'colors',
+        'trendingProducts'
+    ));
+}
+
     
     public function show(Product $product)
     {
-        $product->load(['variants']);
+        $product->load(['variants', 'image']);
 
         $sumStock = Product::find($product->id)->variants->sum('stock');
 
@@ -60,10 +107,10 @@ class ProductController extends Controller
         ));
     }
 
-    public function show_modal(Product $product)
+    public function showModal(Product $product)
     {
         try {
-            $product->load(['variants', 'category', 'sizes', 'colors', 'reviews.user']);
+            $product->load(['variants', 'image', 'category', 'sizes', 'colors', 'reviews.user']);
 
             return response()->json($product);
         } catch (\Throwable $th) {

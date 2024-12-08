@@ -5,32 +5,32 @@
         <li class="dropdown my-account">
             @guest
                 <!-- Hiển thị nếu chưa đăng nhập -->
-                <li class="login">
-                    <a href="#">
-                        <i class="fa fa-user"></i> Login
-                    </a>
-                </li>
-            @endguest
-            @auth
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span
-                        class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    @if (auth()->user()->role == 'Khách hàng')
-                        <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
-                        <li><a href="{{ route('orders.index') }}">Đơn hàng của tôi</a></li>
-                        <li><a href="{{ route('client.wave-voucher') }}">Kho mã giảm giá</a></li>
-                    @elseif (auth()->user()->role == 'Quản lý')
-                        <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
-                    @endif
-                    <li>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); 
+            <li class="login">
+                <a href="#">
+                    <i class="fa fa-user"></i> Login
+                </a>
+            </li>
+        @endguest
+        @auth
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span
+                    class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                @if (auth()->user()->role == 'Khách hàng')
+                    <li><a href="{{ route('profile.index') }}">Trang cá nhân</a></li>
+                    <li><a href="{{ route('orders.index') }}">Đơn hàng của tôi</a></li>
+                    <li><a href="{{ route('client.wave-voucher') }}">Kho mã giảm giá</a></li>
+                @elseif (auth()->user()->role == 'Quản lý')
+                    <li><a href="{{ route('admin.dashboard') }}">Trang Admin</a></li>
+                @endif
+                <li>
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); 
                                document.getElementById('logout-form').submit();">
-                            Đăng xuất
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
+                        Đăng xuất
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </li>
             </ul>
         @endauth
@@ -55,8 +55,8 @@
                                     </a>
                                 </form>
                                 <div class="product-thumb-info-image">
-                                    <a href="shop-product-detail1.html"><img alt="" width="60"
-                                            src="{{ Auth::check() ? $cart->productVariant->product->image : $cart['image'] }}"></a>
+                                    <a href="#"><img alt="" width="60"
+                                        src="{{ Auth::check() ? \Storage::url($cart->productVariant->product->images) : \Storage::url($cart['image']) }}"></a>
                                 </div>
 
                                 <div class="product-thumb-info-content">
@@ -88,13 +88,16 @@
                 </ul>
                 <ul class="list-inline cart-subtotals text-right">
                     <li class="cart-subtotal"><strong>Tổng giá</strong></li>
-                    <li class="price"><span class="amount"><strong>{{ number_format($total, 0, ',', '.') }}
-                                VND</strong></span>
+                    <li class="price">
+                        <span class="amount">
+                            <strong>{{ number_format($total, 0, ',', '.') }}VND</strong>
+                        </span>
                     </li>
                 </ul>
                 <div class="cart-buttons text-right">
                     <a href="{{ route('client.carts.index') }}"><button class="btn btn-white">Xem giỏ hàng</button></a>
-                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button class="btn btn-primary">Thanh toán</button></a>
+                    <a href="{{ auth()->check() ? route('checkout') : route('guest.checkout') }}"><button
+                            class="btn btn-primary">Thanh toán</button></a>
                 </div>
             </div>
         </li>

@@ -17,6 +17,7 @@ class StatusOrderSeeder extends Seeder
         $statuses = [
             ['name_status' => 'pending'],
             ['name_status' => 'processing'],
+            ['name_status' => 'picked'],
             ['name_status' => 'shipping'],
             ['name_status' => 'success'],
             ['name_status' => 'completed'],

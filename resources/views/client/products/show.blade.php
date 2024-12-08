@@ -1,7 +1,7 @@
 @extends('client.layouts.master')
 
 @section('title')
-{{ $product->name }}
+    {{ $product->name }}
 @endsection
 
 @section('css')
@@ -34,21 +34,23 @@
                 <div class="product-preview">
                     <div class="flexslider">
                         <ul class="slides">
-                            <li data-thumb="{{ $product->image }}">
-                                <img src="{{ $product->image }}" alt="">
-                            </li>
-                            {{-- <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
-                                <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
-                            </li>
-                            <li data-thumb="/assets/client/images/content/products/product-1-2.jpg">
-                                <img src="/assets/client/images/content/products/product-1-2.jpg" alt="">
-                            </li>
-                            <li data-thumb="/assets/client/images/content/products/product-1-3.jpg">
-                                <img src="/assets/client/images/content/products/product-1-3.jpg" alt="">
-                            </li>
-                            <li data-thumb="/assets/client/images/content/products/product-1-4.jpg">
-                                <img src="/assets/client/images/content/products/product-1-4.jpg" alt="">
-                            </li> --}}
+                                <li data-thumb="{{ \Storage::url($product->image->image_url) }}">
+                                    <img src="{{ \Storage::url($product->image->image_url) }}" alt="">
+                                </li>
+                            {{-- @foreach ($product->images as $item)
+                                <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
+                                    <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
+                                </li>
+                                <li data-thumb="/assets/client/images/content/products/product-1-2.jpg">
+                                    <img src="/assets/client/images/content/products/product-1-2.jpg" alt="">
+                                </li>
+                                <li data-thumb="/assets/client/images/content/products/product-1-3.jpg">
+                                    <img src="/assets/client/images/content/products/product-1-3.jpg" alt="">
+                                </li>
+                                <li data-thumb="/assets/client/images/content/products/product-1-4.jpg">
+                                    <img src="/assets/client/images/content/products/product-1-4.jpg" alt="">
+                                </li>
+                            @endforeach --}}
                         </ul>
                     </div>
                 </div>
@@ -67,7 +69,7 @@
                     </div>
 
                     <p class="price">
-                        <span class="amount">{{ number_format($product->price_regular, 0, ',', '.') }} VND</span>
+                        <span class="amount price-sale">{{ number_format($product->price_regular, 0, ',', '.') }} ₫</span>
                     </p>
 
                     <div>
@@ -109,7 +111,7 @@
                                 <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
 
-                          
+
 
                             <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
@@ -168,7 +170,9 @@
                                             <li id="review-{{ $review->id }}">
                                                 <div class="comment">
                                                     <div class="img-circle">
-                                                        <img class="avatar" style="width: 60px; height: 60px;" alt="User Avatar" src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
+                                                        <img class="avatar" style="width: 60px; height: 60px;"
+                                                            alt="User Avatar"
+                                                            src="{{ $review->user->user_image ? asset('storage/' . $review->user->user_image) : '/assets/client/images/default-avatar.png' }}">
                                                     </div>
                                                     <div class="comment-block">
                                                         <span class="comment-by">
@@ -222,13 +226,14 @@
                                                 </a>
                                             </span>
                                             <a href="{{ route('client.product.show', $item->id) }}">
-                                                <img alt="" class="img-responsive" src="{{ $item->image }}">
+                                                <img alt="" class="img-responsive" style="height: 300px"
+                                                    src="{{ \Storage::url($item->image->image_url) }}">
                                             </a>
                                         </div>
 
                                         <div class="product-thumb-info-content">
-                                            <span class="price pull-right">{{ number_format($item->price_regular, 0, ',', '.') }}
-                                                VND
+                                            <span class="price pull-right">
+                                                {{ number_format($item->price_regular, 0, ',', '.') }} ₫
                                             </span>
                                             <h4>
                                                 <a
@@ -297,9 +302,9 @@
                         if (res.status_code == 200) {
                             const Toast = Swal.mixin({
                                 toast: true,
-                                position: "top-end",
+                                position: "top",
                                 showConfirmButton: false,
-                                timer: 2500,
+                                timer: 2000,
                                 timerProgressBar: true,
                                 didOpen: (toast) => {
                                     toast.onmouseenter = Swal.stopTimer;
@@ -363,7 +368,7 @@
                     if (Array.isArray(res)) {
                         res.forEach(item => {
                             $('.stock').text(item.stock);
-                            $('.amount').text(item.price + ' VND');
+                            $('.price-sale').text(item.price + ' ₫');
                         });
                     } else {
                         $('.stock').text(res);

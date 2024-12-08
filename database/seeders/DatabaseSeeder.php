@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ChatRoomSeeder::class,
             VoucherSeeder::class,
+            ImageSeeder::class,
         ]);
 
     }

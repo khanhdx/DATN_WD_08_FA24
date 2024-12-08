@@ -16,15 +16,15 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Category::class)->constrained();
 
-            $table->string('name');                         // Tên sản phẩm
-            $table->string('image');                        // Ảnh sản phẩm
-            $table->string('SKU')->unique();                // Mã SKU
-            $table->unsignedBigInteger('base_stock')->default(0);       // Số lượng tồn kho           
+            $table->string('name');                                    // Tên sản phẩm
+            // $table->string('image');                                // Ảnh sản phẩm
+            $table->string('SKU')->unique();                           // Mã SKU
+            $table->unsignedBigInteger('base_stock')->default(0);      // Số lượng tồn kho           
             $table->unsignedBigInteger('price_regular');               // Giá thường
             $table->unsignedBigInteger('price_sale')->nullable();      // Giá sale
-            $table->string('description')->nullable();      // Mô tả
-            $table->integer('views')->default(0);    // Lượt xem
-            $table->text('content')->nullable();            // Nội dung
+            $table->string('description')->nullable();                 // Mô tả
+            $table->integer('views')->default(0);                      // Lượt xem
+            $table->text('content')->nullable();                       // Nội dung
 
             $table->timestamps();
         });

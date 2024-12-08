@@ -9,7 +9,7 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
-    <div class="container">
+    <div class="container mb-6">
         <div class="row">
             <div class="col-md-3">
                 <aside class="sidebar">
@@ -51,16 +51,6 @@
                         </ul>
                     </aside>
 
-                    <aside class="block blk-colors">
-                        <h4>Màu sắc</h4>
-                        <ul class="list-unstyled list-cat">
-                            <li><a href="javascript:void(0);" onclick="showAllProducts()">Tất cả màu</a></li>
-                            @foreach ($colors as $color)
-                                <li><a href="javascript:void(0);"
-                                        onclick="filterByColor({{ $color->id }})">{{ $color->name }}</a></li>
-                            @endforeach
-                        </ul>
-                    </aside>
 
 
                     <aside class="block featured">
@@ -72,7 +62,9 @@
                                         <div class="product-thumb-info-image">
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 <img alt="{{ $product->name }}" width="60"
-                                                    src="{{ asset($product->image) }}">
+                                                @foreach ($product->images as $item)
+                                                    src="{{ \Storage::url($item->image_url) }}">
+                                                @endforeach
                                             </a>
                                         </div>
 
@@ -106,10 +98,10 @@
                         {{-- <p class="pull-left">Showing 1-12 of 50 results</p> --}}
                         <!-- Ordering -->
                         <div class="list-sort pull-right">
-                            <select class="formDropdown">
-                                <option>Sắp xếp mặc định</option>
-                                <option>Sắp xếp theo giá thấp đến cao</option>
-                                <option>Sắp xếp theo giá cao đến thấp</option>
+                            <select class="formDropdown" id="sortDropdown">
+                                <option value="">Sắp xếp mặc định</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Sắp xếp theo giá thấp đến cao</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Sắp xếp theo giá cao đến thấp</option>
                             </select>
                         </div>
                     </div>
@@ -132,13 +124,12 @@
                                                             data-id="{{ $product->id }}">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
-                                                        {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                                        </a> --}}
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
-                                                        <img alt="" class="img-responsive"
-                                                            src="{{ $product->image }}">
+                                                        <img alt="" class="img-responsive" style="height: 300px"
+                                                        @foreach ($product->images as $item)
+                                                            src="{{ \Storage::url($item->image_url) }}">
+                                                        @endforeach
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
@@ -166,7 +157,9 @@
                                             <div class="product-thumb-info-image">
                                                 <a href="{{ route('client.product.show', $product->id) }}">
                                                     <img alt="" class="img-responsive"
-                                                        src="{{ $product->image }}">
+                                                    @foreach ($product->images as $item)
+                                                        src="{{ \Storage::url($item->image_url) }}">
+                                                    @endforeach
                                                 </a>
                                             </div>
                                         </div>
@@ -180,7 +173,7 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>({{ $product->reviews->count() }}) Reviews</span> |
+                                                    <span>({{ $product->reviews->count() }}) Reviews</span>
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">{{ number_format($product->price_regular, 0, ',', '.') }} đ</p>
@@ -313,17 +306,15 @@ function filterByCategory(categoryId) {
         }
 
         function filterByPrice() {
-    const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked'));
+    const selectedPrices = Array.from(document.querySelectorAll('input[name="prices[]"]:checked'));
     const products = document.querySelectorAll('#product-container .animation');
 
-    // Nếu không chọn mức giá nào, hiển thị tất cả sản phẩm
     if (selectedPrices.length === 0) {
         products.forEach(product => product.style.display = 'block');
         checkNoProducts();
         return;
     }
 
-    // Lọc sản phẩm theo mức giá
     products.forEach(product => {
         const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
         let isMatch = false;
@@ -340,6 +331,7 @@ function filterByCategory(categoryId) {
 
     checkNoProducts();
 }
+
 
 function checkNoProducts() {
     const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
@@ -376,6 +368,20 @@ function showAllProducts() {
 
     // Kiểm tra nếu không có sản phẩm nào, hiển thị thông báo không tìm thấy
 }
+document.getElementById('sortDropdown').addEventListener('change', function () {
+        const selectedSort = this.value;
+        const url = new URL(window.location.href);
+        
+        // Update URL with selected sort parameter
+        if (selectedSort) {
+            url.searchParams.set('sort', selectedSort);
+        } else {
+            url.searchParams.delete('sort');
+        }
+
+        // Navigate to updated URL
+        window.location.href = url.toString();
+    });
 
     </script>
     <script>
