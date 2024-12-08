@@ -77,6 +77,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Mã tra cứu</th>
                                             <th>Mã đơn hàng</th>
                                             <th>Khách hàng</th>
                                             <th>Tổng tiền</th>
@@ -89,6 +90,11 @@
                                         @foreach ($orders as $order)
                                             <tr class="tr-shadow">
                                                 <td>{{ $order->id }}</td>
+                                                <td>
+                                                    <a href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">
+                                                        {{ $order->order_code }}
+                                                    </a>
+                                                </td>
                                                 <td>{{ $order->slug}}</td>
                                                 <td>{{ $order->user_name}}</td>
                                                 <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
@@ -105,7 +111,7 @@
                                                 </td>
 
                                                 {{-- Nút cập nhật trạng thái --}}
-                                                <td>
+                                                {{-- <td>
                                                     @php
                                                     $currentStatus = $order->statusOrder->first()->id_status ?? null;
                                                 
@@ -134,7 +140,7 @@
                                                         </form>
                                                     @endif
                                                 @endif
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <div class="table-data-feature">
     

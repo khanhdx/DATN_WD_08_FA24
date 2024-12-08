@@ -11,6 +11,7 @@ export default defineConfig({
                 "resources/js/bootstrap.js",
                 "resources/js/order-noti.js",
                 "resources/js/shipping.js",
+                "resources/js/crud-images.js",
             ],
             refresh: true,
         }),

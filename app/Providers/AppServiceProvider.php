@@ -13,6 +13,7 @@ use App\Services\Product\ProductService;
 use App\Services\Product\VariantService;
 use App\Services\Product\IProductService;
 use App\Services\Product\IVariantService;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +35,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Paginator::useBootstrapFive();
     }
 }

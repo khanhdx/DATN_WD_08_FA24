@@ -39,9 +39,10 @@
                         <th>Màu sắc</th>
                         <th>Kích thước</th>
                         <th>Số lượng</th>
-                        <th>Giá</th>
+                        <th>Giá sản phẩm</th>
+                        <th>Phí ship</th>
                         <th>Tổng giá</th>
-                        <th>đánh giá </th>
+                        <th>Đánh giá </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,8 +59,9 @@
                             <td>{{ $orderDetail->color }}</td>
                             <td>{{ $orderDetail->size }}</td>
                             <td>{{ $orderDetail->quantity }}</td>
-                            <td>{{ number_format($orderDetail->unit_price, 0, ',', '.') }} VND</td>
-                            <td>{{ number_format($orderDetail->total_price, 0, ',', '.') }} VND</td>
+                            <td>{{ number_format($orderDetail->unit_price, 0, ',', '.') }} ₫</td>
+                            <td>{{ number_format($order->shipping_fee, 0, ',', '.') }} ₫</td>
+                            <td>{{ number_format($order->shipping_fee + $orderDetail->total_price, 0, ',', '.') }} ₫</td>
                             <td>
                                 @if (Auth::check())
                                     @if ($order->statusOrder->first()->id === 5)

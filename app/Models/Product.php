@@ -27,6 +27,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function image()
+    {
+       return $this->hasOne(ProductImage::class)->where('type', 'main'); 
+    }
+
     public function variants()
     {
        return $this->hasMany(ProductVariant::class); 

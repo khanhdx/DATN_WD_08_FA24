@@ -16,50 +16,47 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $sanPhamNam = [
-            'Áo nam sơ mi trắng Obito',
-            'Áo nam thun đen Obito',
-            'Áo nam hoodie xám Obito',
-            'Áo nam khoác da Obito',
-            'Áo nam len cổ tròn Obito',
-            'Quần nam jean xanh Obito',
-            'Quần nam tây đen Obito',
-            'Quần nam short kaki Obito',
-            'Quần nam thể thao Obito',
-            'Quần nam jean rách Obito',
-            'Áo nam vest xanh Obito',
-            'Áo nam polo xanh đậm Obito',
-            'Quần nam kaki be Obito',
-            'Áo nam thun cổ trụ Obito',
-            'Quần nam jogger đen Obito',
+            'Áo tanktop Base Jack Lane',
+            'Áo khoác dạ Brook Obito',
+            'Áo khoác dạ Nino Jack Lane',
+            'Áo khoác Varsity Box Obito',
+            'Áo len cộc tay Grand Obito',
+            'Áo len Simon Jack Lane',
+            'Áo Jacket Denim Typo Obito',
+            'Áo jacket len Oak Obito',
+            'Áo Polo Oversize WONDER',
+            'Áo polo cộc tay Knit Jack Lane',
+            'Áo len sweater Ralz Obito',
+            'Quần Jeans Typo Obito',
+            'Quần nỉ oversize Wided Pants Obito',
+            'Quần short Jeans lửng Jort Obito',
+            'Quần short Light Obito',
+            'Quần Short lửng Fiin Obito',
+            'Quần dài Blackey Obito',
+            'Quần Jeans Otis Obito',
+            'Quần dài Noah Obito',
+            'Set bộ Frank Obito',
         ];
 
         $sanPhamNu = [
-            'Áo nữ sơ mi họa tiết Obito',
-            'Áo nữ thun crop top Obito',
-            'Áo nữ khoác gió Obito',
-            'Áo nữ hoodie hồng Obito',
-            'Áo nữ len cổ tim Obito',
-            'Quần nữ jean skinny Obito',
-            'Quần nữ short bò Obito',
-            'Quần nữ váy caro Obito',
-            'Quần nữ tây xám Obito',
-            'Quần nữ legging Obito',
-            'Áo nữ blouse trắng Obito',
-            'Áo polo nữ Obito',
-            'Quần kaki nữ Obito',
-            'Áo nữ sát nách Obito',
-            'Quần nữ baggy Obito',
+            'Áo Cardigan Nỉ Henry Obito',
+            'Áo Khoác Phao Obito - Form boxy',
+            'Áo sơ mi cộc tay original Obito',
+            'Áo sơ mi cộc tay Type Obito',
+            'Áo sơ mi dài tay Original Obito',
+            'Áo thun Blue heart Obito',
+            'Áo thun Striped Flower Obito',
+            'Quần dài kẻ sọc ống rộng Striped Obito',
+            'Quần nỉ dài Relax Pants Obito',
+            'Set bộ Genne Obito',
         ];
-
-        $categoryMan = Category::query()->where('type', "Man")->pluck('id', 'id')->toArray();
 
         foreach ($sanPhamNam as $key => $nam) {
             $price = rand(100, 9000);
             $sale = round($price * 0.6) * 1000; // Giảm 40%
 
             Product::create([
-                'category_id'   => array_rand($categoryMan),
-                'image'         => '/assets/client/images/content/products/product-' . rand(1, 8) . '.jpg',
+                'category_id'   => Str::contains($nam, 'Áo') ? 1 : (Str::contains($nam, 'Quần') ? 2 : 3),
                 'name'          => $nam,
                 'SKU'           => "OB" . Str::random(3) . "0000" . $key,
                 'price_regular' => $price * 1000,
@@ -71,15 +68,14 @@ class ProductSeeder extends Seeder
             ]);
         }
 
-        $categoryWoman = Category::query()->where('type', "Woman")->pluck('id', 'id')->toArray();
+        // $categoryWoman = Category::query()->where('type', "Woman")->pluck('id', 'id')->toArray();
 
         foreach ($sanPhamNu as $key => $nu) {
             $price = rand(100, 9000);
             $sale = round($price * 0.5) * 1000;
 
             Product::create([
-                'category_id'   => array_rand($categoryWoman),
-                'image'         => '/assets/client/images/content/products/product-' . rand(9, 17) . '.jpg',
+                'category_id'   => Str::contains($nu, 'Áo') ? 4 : (Str::contains($nu, 'Quần') ? 5 : 6),
                 'name'          => $nu,
                 'SKU'           => "OB" . Str::random(3) . "0000" . $key,
                 'price_regular' => $price * 1000,

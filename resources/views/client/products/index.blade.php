@@ -9,7 +9,7 @@
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
 
-    <div class="container">
+    <div class="container mb-6">
         <div class="row">
             <div class="col-md-3">
                 <aside class="sidebar">
@@ -72,7 +72,9 @@
                                         <div class="product-thumb-info-image">
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 <img alt="{{ $product->name }}" width="60"
-                                                    src="{{ asset($product->image) }}">
+                                                @foreach ($product->images as $item)
+                                                    src="{{ \Storage::url($item->image_url) }}">
+                                                @endforeach
                                             </a>
                                         </div>
 
@@ -132,13 +134,12 @@
                                                             data-id="{{ $product->id }}">
                                                             <span><i class="fa fa-external-link"></i></span>
                                                         </a>
-                                                        {{-- <a href="shop-cart-full.html" class="add-to-cart-product">
-                                                            <span><i class="fa fa-shopping-cart"></i></span>
-                                                        </a> --}}
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
-                                                        <img alt="" class="img-responsive"
-                                                            src="{{ $product->image }}">
+                                                        <img alt="" class="img-responsive" style="height: 300px"
+                                                        @foreach ($product->images as $item)
+                                                            src="{{ \Storage::url($item->image_url) }}">
+                                                        @endforeach
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
@@ -166,7 +167,9 @@
                                             <div class="product-thumb-info-image">
                                                 <a href="{{ route('client.product.show', $product->id) }}">
                                                     <img alt="" class="img-responsive"
-                                                        src="{{ $product->image }}">
+                                                    @foreach ($product->images as $item)
+                                                        src="{{ \Storage::url($item->image_url) }}">
+                                                    @endforeach
                                                 </a>
                                             </div>
                                         </div>
@@ -180,7 +183,7 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>({{ $product->reviews->count() }}) Reviews</span> |
+                                                    <span>({{ $product->reviews->count() }}) Reviews</span>
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">{{ number_format($product->price_regular, 0, ',', '.') }} đ</p>

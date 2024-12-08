@@ -86,7 +86,7 @@
                                 </ul>
 
                                 <div>
-                                    <span class="stock"></span> hàng có sẵn
+                                    <span class="stock">0</span> hàng có sẵn
                                 </div>
                                 
                                 <div class="quantity">
@@ -149,23 +149,6 @@
                                     <div id="collapseReviews" class="panel-collapse collapse">
                                         <div class="panel-body post-comments">
                                             <ul class="comments" id="reviewsList">
-                                                {{--<li>
-                                                    <div class="comment">
-                                                        <div class="img-circle"> <img class="avatar" width="50"
-                                                                alt=""
-                                                                src="/assets/client/images/content/blog/avatar.png">
-                                                        </div>
-                                                        <div class="comment-block">
-                                                            <span class="comment-by"> <strong>Frank
-                                                                    Reman</strong></span>
-                                                            <span class="date"><small><i class="fa fa-clock-o"></i>
-                                                                    July 11,
-                                                                    2014</small></span>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                                elit.</p>
-                                                        </div>
-                                                    </div>
-                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>

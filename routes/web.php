@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\DashbroadController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\Bannerhome1Controller;
 use App\Http\Controllers\Admin\BannerHome2Controller;
+use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\BillController;
@@ -78,23 +79,23 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
                 Route::put('{id}/update', [BannerController::class, 'update'])->name('update');
                 Route::delete('{id}', [BannerController::class, 'destroy'])->name('destroy');
 
-                Route::prefix('banner1')->as('banner1.')->group(function () {
-                    Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
-                    Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
-                    Route::post('/store', [Bannerhome1Controller::class, 'store'])->name('store');
-                    Route::get('{id}/edit', [Bannerhome1Controller::class, 'edit'])->name('edit');
-                    Route::put('{id}/update', [Bannerhome1Controller::class, 'update'])->name('update');
-                    Route::delete('{id}', [Bannerhome1Controller::class, 'destroy'])->name('destroy');
-                });
+                // Route::prefix('banner1')->as('banner1.')->group(function () {
+                //     Route::get('/', [Bannerhome1Controller::class, 'index'])->name('index');
+                //     Route::get('/create', [Bannerhome1Controller::class, 'create'])->name('create');
+                //     Route::post('/store', [Bannerhome1Controller::class, 'store'])->name('store');
+                //     Route::get('{id}/edit', [Bannerhome1Controller::class, 'edit'])->name('edit');
+                //     Route::put('{id}/update', [Bannerhome1Controller::class, 'update'])->name('update');
+                //     Route::delete('{id}', [Bannerhome1Controller::class, 'destroy'])->name('destroy');
+                // });
 
-                Route::prefix('banner2')->as('banner2.')->group(function () {
-                    Route::get('/', [BannerHome2Controller::class, 'index'])->name('index');
-                    Route::get('/create', [BannerHome2Controller::class, 'create'])->name('create');
-                    Route::post('/store', [BannerHome2Controller::class, 'store'])->name('store');
-                    Route::get('{id}/edit', [BannerHome2Controller::class, 'edit'])->name('edit');
-                    Route::put('{id}/update', [BannerHome2Controller::class, 'update'])->name('update');
-                    Route::delete('{id}', [BannerHome2Controller::class, 'destroy'])->name('destroy');
-                });
+                // Route::prefix('banner2')->as('banner2.')->group(function () {
+                //     Route::get('/', [BannerHome2Controller::class, 'index'])->name('index');
+                //     Route::get('/create', [BannerHome2Controller::class, 'create'])->name('create');
+                //     Route::post('/store', [BannerHome2Controller::class, 'store'])->name('store');
+                //     Route::get('{id}/edit', [BannerHome2Controller::class, 'edit'])->name('edit');
+                //     Route::put('{id}/update', [BannerHome2Controller::class, 'update'])->name('update');
+                //     Route::delete('{id}', [BannerHome2Controller::class, 'destroy'])->name('destroy');
+                // });
             });
 
             // Route cho products
@@ -154,6 +155,11 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
                 Route::get('/', [AdReviewController::class, 'index'])->name('index');
                 Route::delete('/{id}', [AdReviewController::class, 'destroy'])->name('destroy');
                 // Route::post('/{review}/toggle', [AdReviewController::class, 'toggleVisibility'])->name('toggle');
+            });
+
+            //Route quản lý bộ ảnh sản phẩm
+            Route::prefix('images')->as('images.')->group(function () {
+                Route::get('/', [ImageController::class, 'viewIndex'])->name('index');
             });
         });
 });

@@ -48,6 +48,10 @@ Notes:	decreasing heading by 0.4em with every subsequent heading level
     box-sizing: border-box;
 }
 
+a, a:hover {
+    color: white;
+}
+
 ul {
     margin: 0;
 }
@@ -213,6 +217,22 @@ strong {
 }
 
 /* ----- Links ----- */
+.select-img {
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 5px;
+}
+
+.select-img img {
+    display: block;
+    border-radius: 5px;
+}
+
+.select-img:hover, .img-active {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.9); 
+}
+
 a {
     display: inline-block;
 }
@@ -4549,13 +4569,23 @@ section {
     padding-right: 35px;
 }
 
-.table-data2.table tbody td {
+.table-data2.table tbody td
+ {
     font-size: 14px;
     color: #808080;
     vertical-align: middle;
     padding: 25px 40px;
     padding-right: 10px;
     border: none;
+}
+
+.table-data2.table tbody td a {
+    color: #808080;
+}
+
+.table-data2.table tbody td a:hover {
+    color: #808080;
+    text-decoration: underline;
 }
 
 .table-data2.table tbody td.desc {
