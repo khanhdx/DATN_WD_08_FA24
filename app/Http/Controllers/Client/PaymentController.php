@@ -244,19 +244,6 @@ class PaymentController extends Controller
                 'order_id' => $order->id,
                 'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
             ]);
-
-            if ($request->payment_method === 'MOMO') {
-                return $this->processMoMoPayment($order);
-            }
-
-            Payment::create([
-                'order_id' => $order->id,
-                'user_id' => auth()->id(),
-                'amount' => $totalPrice,
-                'transaction_type' => 0,
-                'payment_method' => $request->payment_method,
-                'status' => 0,
-            ]);
             // Cập nhật lại trạng thái voucher trong kho sau khi sử dụng (Sử dụng mã)
             if($voucher_id) {
                 $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho
@@ -274,6 +261,18 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
+            if ($request->payment_method === 'MOMO') {
+                return $this->processMoMoPayment($order);
+            }
+            Payment::create([
+                'order_id' => $order->id,
+                'user_id' => auth()->id(),
+                'amount' => $totalPrice,
+                'transaction_type' => 0,
+                'payment_method' => $request->payment_method,
+                'status' => 0,
+            ]);
+
             // Thống báo admin
             broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
