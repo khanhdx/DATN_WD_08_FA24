@@ -8,12 +8,13 @@ class OrderRepository
 {
     public function getAll()
     {
-        $orders = Order::with(['statusOrder' => function ($query) {
-            $query->select('status_orders.id as id_status', 'name_status');
-        }])
-        ->select('id', 'slug', 'order_code', 'user_id', 'slug', 'user_name', 'total_price', 'created_at')
+        $orders = Order::with([
+            'statusOrder' => function ($query) {
+                $query->select('status_orders.id as id_status', 'name_status');
+            }
+        ])->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
         ->orderBy('created_at', 'desc') 
-        ->get();
+        ->paginate(10);
 
         return $orders;
     }
@@ -25,37 +26,32 @@ class OrderRepository
         }])
         ->whereHas('statusOrder', function ($query) use ($status) {
             $query->where('name_status', $status);
-        })
-        ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
+        })->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
         ->orderBy('created_at', 'desc') 
-        ->get();
+        ->paginate(10);
 
         return $orders;
     }
-
+    
     public function getByDate($date = null)
     {
         $query = Order::with(['statusOrder' => function ($query) {
             $query->select('status_orders.id as id_status', 'name_status');
         }]);
-
         if ($date) {
             $query->whereDate('created_at', $date);
         }
-
-        return $query
-            ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
-            ->orderBy('created_at', 'desc') 
-            ->get();
+        return $query->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+        ->orderBy('created_at', 'desc') 
+        ->paginate(10);
     }
 
     public function getByStatusAndDate($status, $date = null)
     {
         $query = Order::with(['statusOrder' => function ($query) {
-            $query->select('status_orders.id as id_status', 'name_status');
-        }])
-        ->whereHas('statusOrder', function ($query) use ($status) {
-            $query->where('name_status', $status);
+                $query->select('status_orders.id as id_status', 'name_status');}]
+            )->whereHas('statusOrder', function ($query) use ($status) {
+                $query->where('name_status', $status);
         });
 
         if ($date) {
@@ -63,9 +59,9 @@ class OrderRepository
         }
 
         return $query
-            ->select('id', 'slug', 'user_id', 'user_name', 'total_price', 'created_at')
+            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
             ->orderBy('created_at', 'desc') 
-            ->get();
+            ->paginate(10);
     }
 
     public function getByPhoneNumber($phone)
@@ -76,7 +72,7 @@ class OrderRepository
             ->where('phone_number', 'like', '%' . $phone . '%')
             ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return $orders;
     }
@@ -87,12 +83,10 @@ class OrderRepository
             $query->select('status_orders.id as id_status', 'name_status');
         }])
             ->whereHas('statusOrder', function ($query) use ($status) {
-                $query->where('name_status', $status);
-            })
+                $query->where('name_status', $status);})
+            ->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
             ->where('phone_number', 'like', '%' . $phone . '%')
-            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
-            ->orderBy('created_at', 'desc') 
-            ->get();
+            ->paginate(10);
 
         return $orders;
     }

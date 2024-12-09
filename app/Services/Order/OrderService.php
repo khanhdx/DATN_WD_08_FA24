@@ -34,10 +34,8 @@ class OrderService implements IOrderService
     public function getByStatus($status)
     {
         $orders = $this->orderRepository->getByStatus($status);
-        $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
-        $totalOrder = $this->statistical->totalOrder();
 
-        return [$orders, $countOrderByStatus, $totalOrder];
+        return $orders;
     }
 
     public function getOneById($id)
@@ -48,41 +46,63 @@ class OrderService implements IOrderService
     public function getByDate($date)
     {
         $orders = $this->orderRepository->getByDate($date);
-        $countOrderByStatus = $this->statistical->countOrderGroupByStatus($date);
-        $totalOrder = $this->statistical->totalOrder($date);
-
-        return [$orders, $countOrderByStatus, $totalOrder];
+     
+        return $orders;
     }
 
     public function getByStatusAndDate($status, $date)
     {
         $orders = $this->orderRepository->getByStatusAndDate($status, $date);
-        $countOrderByStatus = $this->statistical->countOrderGroupByStatus($date);
-        $totalOrder = $this->statistical->totalOrder($date);
-
-        return [$orders, $countOrderByStatus, $totalOrder];
+      
+        return $orders;
     }
 
     public function getByPhoneNumber($phone)
     {
-
+        // Filter orders based on the user's phone number
         $orders = $this->orderRepository->getByPhoneNumber($phone);
-        $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
-        $totalOrder = $this->statistical->totalOrder();
-
-        return [$orders, $countOrderByStatus, $totalOrder];
+    
+        return $orders;
     }
 
     public function getByStatusAndPhoneNumber($status, $phone)
     {
         $orders = $this->orderRepository->getByStatusAndPhoneNumber($status, $phone);
+        return $orders;
+    }
+
+
+    public function filter($status, $date, $phone) {
+
+        if ($status == 'all') {
+            if ($phone) {
+                // Lọc chỉ theo số điện thoại
+                $orders = $this->getByPhoneNumber($phone);
+            } elseif ($date) {
+     
+                $orders = $this->getByDate($date);
+            } else {
+                // Lấy tất cả đơn hàng nếu không có bộ lọc
+                $orders = $this->getAll();
+            }
+        } else {
+            if ($phone) {
+                // Lọc theo trạng thái và số điện thoại
+                $orders = $this->getByStatusAndPhoneNumber($status, $phone);
+            } elseif ($date) {
+                // Lọc theo trạng thái và ngày đặt
+                $orders = $this->getByStatusAndDate($status, $date);
+            } else {
+                // Lọc chỉ theo trạng thái
+                $orders = $this->getByStatus($status);
+            }
+        }
+
         $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
         $totalOrder = $this->statistical->totalOrder();
 
         return [$orders, $countOrderByStatus, $totalOrder];
     }
-
-
 
     public function store($data, $id,) {}
 

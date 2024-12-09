@@ -142,7 +142,7 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
-                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
+                // Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 

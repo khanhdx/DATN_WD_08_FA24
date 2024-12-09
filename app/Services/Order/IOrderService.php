@@ -6,16 +6,13 @@ interface IOrderService
 {
 
     public function getAll();
-
     public function getByStatus($status);
-
     public function getOneById($id);
     public function getByDate($date);
     public function getByStatusAndDate($status, $date);
     public function getByPhoneNumber($phone);
     public function getByStatusAndPhoneNumber($status, $phone);
-  
-
+    public function filter($status, $date, $phone);
     public function store($data, $id,);
 
     public function update($data, $id);

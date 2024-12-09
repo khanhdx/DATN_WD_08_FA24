@@ -12,6 +12,7 @@ use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\StatusOrderDetail;
 use App\Models\Voucher;
+use App\Models\vouchersWare;
 use App\Models\VoucherWare;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,53 +70,15 @@ class PaymentController extends Controller
 
     public function processVoucher(Request $request)
     {
-        $request->validate([
-            'voucher_code' => 'required|string',
-        ]);
-
-        $voucher = Voucher::where('voucher_code', $request->voucher_code)->first();
-
-        if ($request->action === 'apply') {
-            if ($voucher) {
-                $voucherUsed = VoucherWare::where('user_id', auth()->id())
-                    ->where('voucher_id', $voucher->id)
-                    ->exists();
-
-                if ($voucherUsed) {
-                    return redirect()->route('checkout')->with('error', 'Bạn đã sử dụng mã giảm giá này trước đây.');
-                }
-
-                if ($voucher->status === 'Đang diễn ra' && $voucher->date_start <= now() && $voucher->date_end >= now()) {
-                    session(['voucher_id' => $voucher->id, 'discount' => $voucher->decreased_value]);
-
-                    return redirect()->route('checkout')->with('success', 'Mã giảm giá đã được áp dụng!');
-                }
-                return redirect()->route('checkout')->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn.');
-            }
-
-            return redirect()->route('checkout')->with('error', 'Mã giảm giá không hợp lệ.');
+        $voucher_id = $request->input('voucher_id');
+        $voucher = Voucher::where('id', '=', $voucher_id)->first();
+        $today = date('Y-m-d');
+        if ($voucher->date_start <= $today && $voucher->date_end >= $today && $voucher->remaini > 0) {
+            return response()->json(["status"=>200,"voucher"=>$voucher]);
         }
-
-        if ($request->action === 'cancel') {
-            if (!$voucher) {
-                return redirect()->route('checkout')->with('error', 'Mã giảm giá không hợp lệ.');
-            }
-
-            $isUsed = Order::where('voucher_id', $voucher->id)->exists();
-            if ($isUsed) {
-                return redirect()->route('checkout')->with('error', 'Voucher đã được sử dụng và không thể hủy.');
-            }
-
-            $voucher->quanlity += 1;
-            $voucher->save();
-
-            session()->forget('voucher_id');
-            session()->forget('discount');
-
-            return redirect()->route('checkout')->with('success', 'Voucher đã được hủy thành công!');
+        else {
+            return response()->json(['errors'=>"Mã đã hết hạn hoặc hết lượng sử dụng!","status"=>400]);
         }
-
-        return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra.');
     }
 
     public function checkout(Request $request)
@@ -148,7 +111,42 @@ class PaymentController extends Controller
             $totalPrice += $item->totalPrice();
         }
 
-        $voucherDiscount = session('discount', 0);
+        $voucherDiscount = 0;
+        $today = date('Y-m-d');
+        $voucher_id = $request->input('Vs_code');
+        // Kiểm tra mã giảm giá
+        if ($request->input('Vs_code') != null && Auth::user()) {
+            // Kiểm tra lại mã tồn tại trong kho
+            $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();
+            $wavein = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng')->where('voucher_id', '=', $voucher_id)->first();
+            $voucher = $wavein->voucher;
+            // Kiểm tra điều kiện sử dụng
+            if ($totalPrice >= $voucher->condition) {
+                // Kiểm tra hạn sử dụng và số lượng của mã
+                if ($voucher && $voucher->date_start <= $today && $voucher->date_end >= $today && $voucher->remaini > 0) {
+                    // Kiểm tra hình thức giảm 
+                    if($voucher->value == 'Phần trăm') {
+                        $voucherDiscount =floor($totalPrice * ($voucher->decreased_value/100));
+                        if($voucherDiscount > $voucher->max_value) {
+                            $voucherDiscount = $voucher->max_value;
+                        }
+                    }
+                    else {
+                        $voucherDiscount = $voucher->max_value;
+                    }
+                }
+                else {
+                    $voucher_id = null;
+                    return redirect()->route('checkout')->with('error', 'Voucher đã hết!.');
+                }
+            }
+            else {
+                return redirect()->route('checkout')->with('error', 'Đơn hàng không đủ điều kiện sử dụng voucher này.');
+            }
+        }
+        else {
+            return redirect()->route('checkout')->with('error', 'Sử dụng voucher thất bại!.');
+        }
         $totalPrice -= $voucherDiscount;
 
         $totalPrice = max($totalPrice, 0);
@@ -212,7 +210,7 @@ class PaymentController extends Controller
                 'user_name' => $request->user_name,
                 'email' => $request->email,
                 'total_price' => $totalPrice,
-                'voucher_id' => session('voucher_id'),
+                'voucher_id' => $voucher_id,
                 'status_order_id' => 1,
                 'phone_number' => $request->phone_number,
                 'date' => now(),
@@ -259,7 +257,23 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 0,
             ]);
-
+            // Cập nhật lại trạng thái voucher trong kho sau khi sử dụng (Sử dụng mã)
+            if($voucher_id) {
+                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho
+                $wavein = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng')->where('voucher_id', '=', $voucher_id)->first();//Voucher trong kho
+                $voucher = $wavein->voucher;//Voucher trên hệ thống
+                // Cập nhật trạng thái
+                $wavein->status = "Đã sử dụng";
+                $wavein->save();
+                // Cập nhật số lượng
+                $voucher->remaini = $voucher->remaini - 1;
+                $voucher->save();
+                VoucherWare::create([
+                    'user_id' => auth()->id(),
+                    'voucher_id' => $voucher->id,
+                    'order_id' => $order->id,
+                ]);
+            }
             // Thống báo admin
             broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
@@ -268,21 +282,6 @@ class PaymentController extends Controller
                 $order->delete(); // Xóa đơn hàng nếu có lỗi xảy ra
             }
             return redirect()->route('checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
-        }
-
-        $voucherId = session('voucher_id');
-        if ($voucherId) {
-            $voucher = Voucher::find($voucherId);
-            if ($voucher && $voucher->quanlity > 0) {
-                $voucher->quanlity -= 1;
-                $voucher->save();
-
-                VoucherWare::create([
-                    'user_id' => auth()->id(),
-                    'voucher_id' => $voucher->id,
-                    'order_id' => $order->id,
-                ]);
-            }
         }
 
         CartItem::where('cart_id', $cartId)->delete();
@@ -332,7 +331,7 @@ class PaymentController extends Controller
 
         // Tính tổng giá trị đơn hàng
         $totalPrice = $cartItems->sum('sub_total');
-        $voucherDiscount = session('discount', 0);
+        $voucherDiscount = 0;//Cần đăng nhập để sử dụng voucher.
         $totalPrice -= $voucherDiscount;
         $totalPrice = max($totalPrice, 0);
 
@@ -396,7 +395,7 @@ class PaymentController extends Controller
                 'user_name' => $request->user_name,
                 'email' => $request->email,
                 'total_price' => $totalPrice,
-                'voucher_id' => session('voucher_id'),
+                'voucher_id' => null,
                 'status_order_id' => 1, // Trạng thái chờ xử lý
                 'phone_number' => $request->phone_number,
                 'date' => now(),
@@ -450,16 +449,16 @@ class PaymentController extends Controller
             }
             return redirect()->route('guest.checkout')->with('error', 'Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
         }
-
+        // Người dùng cần đăng nhập để sử dụng voucher.
         // Xử lý voucher nếu có
-        $voucherId = session('voucher_id');
-        if ($voucherId) {
-            $voucher = Voucher::find($voucherId);
-            if ($voucher && $voucher->quanlity > 0) {
-                $voucher->quanlity -= 1;
-                $voucher->save();
-            }
-        }
+        // $voucherId = session('voucher_id');
+        // if ($voucherId) {
+        //     $voucher = Voucher::find($voucherId);
+        //     if ($voucher && $voucher->quanlity > 0) {
+        //         $voucher->quanlity -= 1;
+        //         $voucher->save();
+        //     }
+        // }
 
         // Xóa giỏ hàng
         session()->forget('cart');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\voucher\UpdateVoucherRequest;
+use App\Jobs\CompleteVoucherJob;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\vouchersWare;
@@ -20,6 +21,7 @@ class VoucherController extends Controller
         //
         $search = $request->input('search');
         $data['vouchers'] = Voucher::query()->orderBy('id','DESC')->when($search, function($query,$search) {return $query->where('name', 'like', "%{$search}%")->orWhere('voucher_code', 'like', "%{$search}%");})->paginate(10);
+        $data['today'] = date('Y-m-d');
         return view('admin.vouchers.index',$data);
     }
 
@@ -102,17 +104,19 @@ class VoucherController extends Controller
             );
             $data = $request->except('_token','_method');
         }
-
-        if($data['date_start'] > today()) {
+        $today = date('Y-m-d');
+        $data['remaini'] = $request->input('quanlity');
+        if($data['date_start'] > $today) {
             $data['status'] = "Chưa diễn ra";
         }
-        else if($data['date_start'] = today()){
+        else if($data['date_start'] <= $today && $data['date_end'] >= $today){
             $data['status'] = "Đang diễn ra";
         }
         else {
             $data['status'] = "Đã ngừng";
         }
         $voucher_new = Voucher::query()->create($data);
+        CompleteVoucherJob::dispatch($voucher_new);
         // Voucher cá nhân
         if ($request->input('type_code') == "Cá nhân") {
             $param = [

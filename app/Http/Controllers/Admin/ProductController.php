@@ -17,10 +17,7 @@ class ProductController extends Controller
     protected $productService;
     protected $colorService;
     protected $sizeService;
-
     protected $statisticalService;
-
-
 
     public function __construct(IProductService $productService, IColorService $iColorService, ISizeService $iSizeService, StatisticalService $statisticalService)
     {
@@ -99,7 +96,7 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $categories =  Category::all();
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();

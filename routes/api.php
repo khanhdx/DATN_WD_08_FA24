@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\VoucherController;
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -43,6 +44,7 @@ Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusCh
 
 Route::get('/top10-most-orders', [StatisticalController::class, 'getTop10MostOrderdProucts']);
 Route::get('/inventory', [StatisticalController::class, 'getInventoryData']);
+Route::get('/get-voucher/{id}',[VoucherController::class, 'getVoucherData']);
 
 
 Route::get('/total-revenue', [StatisticalController::class, 'totalRevenue']);

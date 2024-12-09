@@ -93,7 +93,7 @@
                                 <div class="voucher-title">
                                     <span>Gift Coupon</span>
                                 </div>
-                                <div class="time-line"><span>Còn: {{$ware->voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$ware->voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$ware->voucher->id) }}">Chi tiết</a></span></div>
+                                <div class="time-line"><span>Còn: {{ $ware->voucher->remaini }}/{{$ware->voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$ware->voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$ware->voucher->id) }}">Chi tiết</a></span></div>
                             </div>
                             <div class="voucher-left">
                                 <div class="salse">
@@ -104,7 +104,15 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <button class="btn btn-save">{{ $ware->status }}</button>
+                                    @if ($ware->voucher->date_end < date('Y-m-d'))
+                                        <button disabled class="btn btn-save">Hết hạn</button>
+                                    @elseif ($ware->status == "Đã sử dụng")
+                                        <button disabled class="btn btn-save">{{ $ware->status }}</button>
+                                    @elseif ($ware->voucher->remaini == 0)
+                                        <button disabled class="btn btn-save">Đã hết</button>
+                                    @else
+                                        <button class="btn btn-save">{{ $ware->status }}</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

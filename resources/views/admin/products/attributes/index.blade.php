@@ -22,8 +22,8 @@
             <div class="col-md-6">
                 <h3 class="title-5 m-b-35">Màu sắc</h3>
                 <div class="table-data__tool">
-                    <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--sm">
+                    {{-- <div class="table-data__tool-left">
+                       <div class="rs-select2--light rs-select2--sm">
                             <select class="js-select2" name="time">
                                 <option selected="selected">Sắp xếp</option>
                                 <option value="">Mới nhất</option>
@@ -33,7 +33,7 @@
                         </div>
                         <button class="au-btn-filter">
                             <i class="zmdi zmdi-filter-list"></i>Lọc</button>
-                    </div>
+                    </div> --}}
                     <form class="au-form-icon" action="" method="GET">
                         <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
                             type="text" placeholder="Tìm kiếm..." />
@@ -72,8 +72,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="color_code">Mã màu:</label>
-                                            <input type="text" class="form-control" id="color_code" name="code_color"
-                                                placeholder="#ff0000">
+                                            <input type="text" name="form-control" id="color_code_text" name="code_color" placeholder="#000000" maxlength="7" style="width: 120px; margin-right: 10px">
+                                            <input type="color" class="form-control-color" id="color_code_picker"  title="Chọn màu">
                                             <p class="text-danger" id="color_code_error" style="display: none;">Mã màu là
                                                 bắt buộc!</p>
                                         </div>
@@ -141,9 +141,11 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="color_code">Mã màu:</label>
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="text" name="form-control" id="update_color_code_text" name="code_color" placeholder="#000000" maxlength="7" style="width: 120px; margin-right: 10px"  value="{{ $item->code_color }}">
+                                                                        <input type="color" class="form-control-color" id="update_color_code_picker"  title="Chọn màu" value="{{ $item->code_color }}">
+                                                                        {{-- <input type="text" class="form-control"
                                                                             id="color_code" name="code_color"
-                                                                            value="{{ $item->code_color }}">
+                                                                            value="{{ $item->code_color }}"> --}}
                                                                     </div>
                                                                     <button type="submit" class="btn btn-primary">Cập
                                                                         nhật màu</button>
@@ -178,7 +180,7 @@
                 <h3 class="title-5 m-b-35">Size</h3>
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--sm">
+                        {{-- <div class="rs-select2--light rs-select2--sm">
                             <select class="js-select2" name="time">
                                 <option selected="selected">Sắp xếp</option>
                                 <option value="">Mới nhất</option>
@@ -187,7 +189,7 @@
                             <div class="dropDownSelect2"></div>
                         </div>
                         <button class="au-btn-filter">
-                            <i class="zmdi zmdi-filter-list"></i>Lọc</button>
+                            <i class="zmdi zmdi-filter-list"></i>Lọc</button> --}}
                     </div>
                     <form class="au-form-icon" action="" method="GET">
                         <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
@@ -362,6 +364,40 @@
                 if (hasError) {
                     event.preventDefault();
                 }
+            })
+
+            document.addEventListener('DOMContentLoaded', function(){
+                const colorText = document.getElementById('color_code_text');
+                const colorPicker = document.getElementById('color_code_picker');
+                console.log();
+                
+
+                colorPicker.addEventListener('input', function(){
+                    colorText.value = colorPicker.value.toUpperCase();
+                });
+
+                colorText.addEventListener('input', function(){
+                    const color  = colorText.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(color)){
+                        colorPicker.value = color;
+                    }
+                })
+            })
+
+            document.addEventListener('DOMContentLoaded', function(){
+                const updateColorText = document.getElementById('update_color_code_text');
+                const updatecolorPicker = document.getElementById('update_color_code_picker');
+           
+                updatecolorPicker.addEventListener('input', function(){
+                    updateColorText.value = updatecolorPicker.value.toUpperCase();
+                });
+
+                updateColorText.addEventListener('input', function(){
+                    const color  = updateColorText.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(color)){
+                        updatecolorPicker.value = color;
+                    }
+                })
             })
         </script>
     @endsection
