@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\user\StoreUserRequest;
 use App\Http\Requests\user\UpdateRequest;
 use App\Mail\UserMailConfirm;
+use App\Models\Cart;
 use App\Models\Locations;
 use App\Models\User;
+use App\Models\vouchersWare;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -56,6 +58,16 @@ class UserController extends Controller
                 $user['user_image'] = null;
             }
             $user_new = User::query()->create($user);
+            if($user_new->role == "Khách hàng") {
+                // Tạo giỏ hàng
+                Cart::create([
+                    'user_id'=>$user_new->id,
+                ]);
+                // Tạo voucher
+                vouchersWare::create([
+                    'user_id'=>$user_new->id,
+                ]);
+            }
             $locations = $request->input('location');
             if(!empty($locations)) {
                 $status_location = $request->input('status');

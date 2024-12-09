@@ -10,6 +10,7 @@
         ->where('type_code', '=', 'Công khai')
         ->where('date_start', '<=', $today)
         ->where('date_end', '>=', $today)
+        ->orderBy('created_at', 'desc')
         ->limit(3)
         ->get();
 
