@@ -20,17 +20,7 @@ class VoucherController extends Controller
         //
         $data['voucher_new'] = Voucher::query()->orderBy('created_at', 'desc')->where('type_code', '=','Công khai')->get();
         if(Auth::user()) {
-            $ware = Auth::user()->vouchers_ware;
-            if($ware) {
-                foreach ($data['voucher_new'] as $item) {
-                    if(Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $item->id)) {
-                        $item->check = true;
-                    }
-                    else {
-                        $item->check = false;
-                    }
-                }
-            }
+            $data['ware'] = Auth::user()->vouchers_ware;
         }
         return view('client.vouchers.index', $data);
     }
@@ -118,6 +108,15 @@ class VoucherController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function getVoucherData (string $id) {
+            $voucher_wave = vouchersWare::query()->where('user_id', '=', $id)->first();
+            $wave_list = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng');
+            $voucher = [];
+            foreach ($wave_list as $key => $wave) {
+                $voucher[$key] = $wave->voucher;
+            }
+            return response()->json($voucher);
     }
 }
 

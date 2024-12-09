@@ -16,6 +16,7 @@ class Voucher extends Model
         'decreased_value',
         'max_value',
         'quanlity',
+        'remaini',
         'condition',
         'date_start',
         'date_end',

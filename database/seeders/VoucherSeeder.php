@@ -23,6 +23,7 @@ class VoucherSeeder extends Seeder
                 'decreased_value'=>'100000',
                 'max_value'=>'100000',
                 'quanlity'=>'1000',
+                'remaini'=>'1000',
                 'condition'=>'0',
                 'date_start'=>'2024-10-03 00:00:00',
                 'date_end'=>'2024-10-03 23:59:59',
