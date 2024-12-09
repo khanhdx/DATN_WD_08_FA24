@@ -178,13 +178,13 @@
             selectedColor = null;
             selectedSize = null;
 
-            $('.stock').text("");
+            $('.stock').text("0");
 
             $.ajax({
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
-                    // console.log(data.image.image_url);
+                    // console.log(data.image_others);
                     const imgURL = `/storage/${data.image.image_url}`;
                     
                     $('.product_id').val(data.id);
@@ -201,6 +201,24 @@
 
                     $('#category-name').text(data.category.name);
                     $('#category-type').text(data.category.type);
+
+                    data.image_others.forEach(img => {
+                        $('.image-others').append(/*html*/`
+                            <li>
+                                <img class="img-responsive"
+                                    src="/storage/${img.image_url}">
+                            </li>
+                        `);
+
+                        $('.image-slides').append(/*html*/`
+                            <li>
+                                <a data-slide-index="${img.id}" href="#">
+                                    <img alt="" class="img-responsive"
+                                        src="/storage/${img.image_url}">
+                                </a>
+                            </li>
+                        `)
+                    });
 
                     let size = new Set();
                     let uniqueSizes = data.sizes.filter(value => {

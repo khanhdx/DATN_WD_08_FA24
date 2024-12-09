@@ -53,7 +53,7 @@
                                                 <a
                                                     href="{{ route('client.product.show', $cart->productVariant->product->id) }}">
                                                     <img alt="" width="80"
-                                                        src="{{ $cart->productVariant->product->image }}">
+                                                        src="{{ \Storage::url($cart->productVariant->product->image->image_url) }}">
                                                 </a>
                                             </td>
 
@@ -121,7 +121,7 @@
                                         <tr class="cart_table_item">
                                             <td class="product-thumbnail">
                                                 <a href="{{ route('client.product.show', $cart['product_id']) }}">
-                                                    <img alt="" width="80" src="{{ $cart['image'] }}">
+                                                    <img alt="" width="80" src="{{ \Storage::url($cart['image']) }}">
                                                 </a>
                                             </td>
 
