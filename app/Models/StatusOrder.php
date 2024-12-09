@@ -10,7 +10,7 @@ class StatusOrder extends Model
     use HasFactory;
 
     protected $table = 'status_orders';
-    
+
     protected $fillable = [
         'name_status'
     ];
@@ -45,6 +45,8 @@ class StatusOrder extends Model
                 return 'Chờ xử lý';
             case 'processing':
                 return 'Đang xử lý';
+            case 'picked':
+                return 'Bên vận chuyển đã lấy hàng';
             case 'shipping':
                 return 'Đang giao hàng';
             case 'success':
@@ -75,7 +77,7 @@ class StatusOrder extends Model
     //                 ->withPivot('name', 'created_at', 'updated_at')
     //                 ->withTimestamps();
     // }
-    
+
     public function orders()
     {
         return $this->hasMany(Order::class);

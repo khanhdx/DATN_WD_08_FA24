@@ -15,6 +15,22 @@ use App\Http\Controllers\Admin\ColorController;
 class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
+    public function apiProduct() {
+        try {
+            $products = Product::query()->select('id', 'name')->latest('id')->get();
+
+            return response()->json([
+                'data' => $products,
+                'code' => 200,
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'errors' => $th->getMessage(),
+                'code' => 404,
+            ], 404);
+        }
+    }
     public function index(Request $request)
 {
     // Khởi tạo query
@@ -78,7 +94,7 @@ class ProductController extends Controller
     
     public function show(Product $product)
     {
-        $product->load(['variants']);
+        $product->load(['variants', 'image']);
 
         $sumStock = Product::find($product->id)->variants->sum('stock');
 
@@ -91,10 +107,10 @@ class ProductController extends Controller
         ));
     }
 
-    public function show_modal(Product $product)
+    public function showModal(Product $product)
     {
         try {
-            $product->load(['variants', 'category', 'sizes', 'colors', 'reviews.user']);
+            $product->load(['variants', 'image', 'category', 'sizes', 'colors', 'reviews.user']);
 
             return response()->json($product);
         } catch (\Throwable $th) {

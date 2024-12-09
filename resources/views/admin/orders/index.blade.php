@@ -78,6 +78,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Mã tra cứu</th>
                                             <th>Mã đơn hàng</th>
                                             <th>Khách hàng</th>
                                             <th>Tổng tiền</th>
@@ -89,6 +90,11 @@
                                         @foreach ($orders as $order)
                                             <tr class="tr-shadow">
                                                 <td>{{ $order->id }}</td>
+                                                <td>
+                                                    <a href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">
+                                                        {{ $order->order_code }}
+                                                    </a>
+                                                </td>
                                                 <td>{{ $order->slug }}</td>
                                                 <td>
                                                     <ul>
@@ -110,7 +116,17 @@
                                                         </span>
                                                     @endforeach
                                                 </td>
-
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        {{-- Xem chi tiết  --}}
+                                                        <a href="{{ route('admin.orders.show', $order->id) }}">
+                                                            <button class="item mr-2" data-toggle="tooltip" data-placement="top"
+                                                                title="Xem chi tiết đơn hàng">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button></a>
+                                                    </div>
+    
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

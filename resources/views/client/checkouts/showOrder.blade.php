@@ -17,43 +17,7 @@
                 <p><strong>Tổng tiền:</strong> {{ number_format($order->total_price, 0, ',', '.') }} VND</p>
                 <p><strong>Trạng thái:</strong>
                     @foreach ($order->statusOrder as $status)
-                        @switch($status->id)
-                            @case(1)
-                                Chờ xử lý
-                            @break
-
-                            @case(2)
-                                Đang xử lý đơn
-                            @break
-
-                            @case(3)
-                                Đang giao hàng
-                            @break
-
-                            @case(4)
-                                Giao hàng thành công
-                            @break
-
-                            @case(5)
-                                Hoàn thành
-                            @break
-
-                            @case(7)
-                                Đã hủy đơn
-                            @break
-
-                            @case(8)
-                                Đang chờ hoàn tiền
-                            @break
-
-                            @case(9)
-                                Đã hoàn tiền
-                            @break
-
-                            @default
-                                Không xác định
-                        @endswitch
-                        {{-- {{ $status->name_status }} --}}
+                        {{ $status->status_label }}
                     @endforeach
                 </p>
 
@@ -75,9 +39,10 @@
                         <th>Màu sắc</th>
                         <th>Kích thước</th>
                         <th>Số lượng</th>
-                        <th>Giá</th>
+                        <th>Giá sản phẩm</th>
+                        <th>Phí ship</th>
                         <th>Tổng giá</th>
-                        <th>đánh giá </th>
+                        <th>Đánh giá </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -94,11 +59,12 @@
                             <td>{{ $orderDetail->color }}</td>
                             <td>{{ $orderDetail->size }}</td>
                             <td>{{ $orderDetail->quantity }}</td>
-                            <td>{{ number_format($orderDetail->unit_price, 0, ',', '.') }} VND</td>
-                            <td>{{ number_format($orderDetail->total_price, 0, ',', '.') }} VND</td>
+                            <td>{{ number_format($orderDetail->unit_price, 0, ',', '.') }} ₫</td>
+                            <td>{{ number_format($order->shipping_fee, 0, ',', '.') }} ₫</td>
+                            <td>{{ number_format($order->shipping_fee + $orderDetail->total_price, 0, ',', '.') }} ₫</td>
                             <td>
                                 @if (Auth::check())
-                                    @if ($order->statusOrder->first()->id === 4)
+                                    @if ($order->statusOrder->first()->id === 5)
                                         @php
                                             $existingReview = \App\Models\Review::where('order_id', $order->id)
                                                 ->where('product_id', $orderDetail->product_id)

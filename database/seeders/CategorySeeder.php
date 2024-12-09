@@ -14,29 +14,15 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $woman = [
-            'Áo sơ mi',
-            'Áo thun crop top',
-            'Áo hoodie',
-            'Áo khoác gió',
-            'Áo len cổ tim',
-            'Váy và Đầm',
-            'Quần jean skinny',
-            'Quần tây nữ',
-            'Quần legging',
-            'Quần váy',
+            'Áo nữ',
+            'Quần nữ',
+            'Set bộ nữ',
         ];
 
         $man = [
-            'Áo sơ mi',
-            'Áo thun',
-            'Áo khoác',
-            'Áo len',
-            'Áo polo',
-            'Quần jean',
-            'Quần tây',
-            'Quần short',
-            'Quần jogger',
-            'Vest và Blazer',
+            'Áo nam',
+            'Quần nam',
+            'Set bộ nam',
         ];
 
         foreach ($man as $item) {

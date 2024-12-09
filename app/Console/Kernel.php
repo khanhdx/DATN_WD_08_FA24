@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
         }
         $schedule->job(new CompleteVoucherJob)->daily();
         // $schedule->command('inspire')->hourly();
-        $schedule->command('app:update-status')->everyMinute();
+        $schedule->command('app:update-status')->everyThirtySeconds();
     }
 
     /**

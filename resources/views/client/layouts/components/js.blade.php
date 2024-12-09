@@ -88,9 +88,9 @@
                     if (res.status_code == 200) {
                         const Toast = Swal.mixin({
                             toast: true,
-                            position: "top-end",
+                            position: "top",
                             showConfirmButton: false,
-                            timer: 2000,
+                            timer: 1500,
                             timerProgressBar: true,
                             didOpen: (toast) => {
                                 toast.onmouseenter = Swal.stopTimer;
@@ -99,7 +99,8 @@
                         });
                         Toast.fire({
                             icon: "success",
-                            html: `<span style="font-size: 1.5rem;font-weight: bold;">Thêm vào giỏ hàng thành công!</span>`,
+                            html: `
+                            <span style="font-size: 1.5rem;font-weight: bold;">Thêm vào giỏ hàng thành công!</span>`,
                             width: 338,
                         });
 
@@ -157,7 +158,7 @@
                 if (Array.isArray(res)) {
                     res.forEach(item => {
                         $('.stock').text(item.stock);
-                        $('.amount').text(item.price + ' VND');
+                        $('#product-price-regular').text(item.price + ' ₫');
                     });
                 } else {
                     $('.stock').text(res);
@@ -183,6 +184,9 @@
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
+                    // console.log(data.image.image_url);
+                    const imgURL = `/storage/${data.image.image_url}`;
+                    
                     $('.product_id').val(data.id);
                     $('#product-name').text(data.name);
                     $('#product-sku').text(data.SKU);
@@ -193,7 +197,7 @@
                             style: 'currency',
                             currency: 'VND'
                         }));
-                    $('#product-image').attr('src', `${data.image}`);
+                    $('#product-image').attr('src', imgURL);
 
                     $('#category-name').text(data.category.name);
                     $('#category-type').text(data.category.type);
