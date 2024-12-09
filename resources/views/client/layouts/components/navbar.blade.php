@@ -3,7 +3,7 @@
     use App\Models\Product;
     use App\Models\Voucher;
     $categories = Category::query()->get();
-    $prs = Product::query()->orderBy('created_at', 'desc')->limit(3)->get();
+    $prs = Product::with('image')->orderBy('created_at', 'desc')->limit(3)->get();
     $vs = Voucher::query()
         ->where('type_code', '=', 'Công khai')
         ->where('date_start', '>=', date('Y-m-d'))
@@ -61,7 +61,7 @@
                                                     <div class="product-thumb-info-image">
                                                         <a href="{{ route('client.product.show', $pr->id) }}"><img
                                                                 alt="" width="60"
-                                                                src="{{ $pr->image }}"></a>
+                                                                src="{{ \Storage::url($pr->image->image_url) }}"></a>
                                                     </div>
                                                     <div class="product-thumb-info-content">
                                                         <h4><a

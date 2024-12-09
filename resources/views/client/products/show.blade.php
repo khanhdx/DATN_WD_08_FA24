@@ -34,23 +34,14 @@
                 <div class="product-preview">
                     <div class="flexslider">
                         <ul class="slides">
-                                <li data-thumb="{{ \Storage::url($product->image->image_url) }}">
-                                    <img src="{{ \Storage::url($product->image->image_url) }}" alt="">
+                            <li data-thumb="{{ \Storage::url($product->image->image_url) }}">
+                                <img src="{{ \Storage::url($product->image->image_url) }}" alt="">
+                            </li>
+                            @foreach ($product->image_others as $item)
+                                <li data-thumb="{{ \Storage::url($item->image_url) }}">
+                                    <img src="{{ \Storage::url($item->image_url) }}" alt="">
                                 </li>
-                            {{-- @foreach ($product->images as $item)
-                                <li data-thumb="/assets/client/images/content/products/product-1-1.jpg">
-                                    <img src="/assets/client/images/content/products/product-1-1.jpg" alt="">
-                                </li>
-                                <li data-thumb="/assets/client/images/content/products/product-1-2.jpg">
-                                    <img src="/assets/client/images/content/products/product-1-2.jpg" alt="">
-                                </li>
-                                <li data-thumb="/assets/client/images/content/products/product-1-3.jpg">
-                                    <img src="/assets/client/images/content/products/product-1-3.jpg" alt="">
-                                </li>
-                                <li data-thumb="/assets/client/images/content/products/product-1-4.jpg">
-                                    <img src="/assets/client/images/content/products/product-1-4.jpg" alt="">
-                                </li>
-                            @endforeach --}}
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -84,9 +75,9 @@
                                 </li>
 
                                 <li id="size-btn">
-                                    @foreach ($product->variants->unique('size') as $item)
+                                    @foreach ($product->sizes->unique('id') as $item)
                                         <button class="btn-size mr-1"
-                                            data-size-id="{{ $item->size->id }}">{{ $item->size->name }}</button>
+                                            data-size-id="{{ $item->id }}">{{ $item->name }}</button>
                                     @endforeach
                                 </li>
                             </ul>
@@ -96,9 +87,9 @@
                                 </li>
 
                                 <li id="color-btn">
-                                    @foreach ($product->variants->unique('color') as $item)
-                                        <button class="btn-color mr-1" data-color-id="{{ $item->color->id }}"
-                                            style="background-color:{{ $item->color->code_color }}"></button>
+                                    @foreach ($product->colors->unique('id') as $item)
+                                        <button class="btn-color mr-1" data-color-id="{{ $item->id }}"
+                                            style="background-color:{{ $item->code_color }}"></button>
                                     @endforeach
                                 </li>
                             </ul>
@@ -110,8 +101,6 @@
                                 <input type="button" class="plus" value="+">
                                 <span><span class="stock">{{ $sumStock }}</span> hàng có sẵn</span>
                             </div>
-
-
 
                             <button type="submit" class="btn btn-primary btn-icon">
                                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
@@ -226,7 +215,7 @@
                                                 </a>
                                             </span>
                                             <a href="{{ route('client.product.show', $item->id) }}">
-                                                <img alt="" class="img-responsive" style="height: 300px"
+                                                <img alt="" class="img-responsive"
                                                     src="{{ \Storage::url($item->image->image_url) }}">
                                             </a>
                                         </div>
@@ -314,7 +303,7 @@
                             Toast.fire({
                                 icon: "success",
                                 html: `<span style="font-size: 1.5rem;font-weight: bold;">${res.message}</span>`,
-                                width: 485
+                                width: 490
                             });
 
                             loadingHeader();

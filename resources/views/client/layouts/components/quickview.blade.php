@@ -12,35 +12,14 @@
                                 <li>
                                     <img alt="" class="img-responsive" id="product-image" src="">
                                 </li>
-                                <li>
-                                    <img alt="" class="img-responsive"
-                                        src="/assets/client/images/content/products/product-1-1.jpg">
-                                </li>
-                                <li>
-                                    <img alt="" class="img-responsive"
-                                        src="/assets/client/images/content/products/product-1-2.jpg">
-                                </li>
-                                <li>
-                                    <img alt="" class="img-responsive"
-                                        src="/assets/client/images/content/products/product-1-3.jpg">
-                                </li>
-                                <li>
-                                    <img alt="" class="img-responsive"
-                                        src="/assets/client/images/content/products/product-1-4.jpg">
-                                </li>
+
+                                <div class="image-others">
+                                    
+                                </div>
                             </ul>
 
-                            <ul class="list-inline bx-pager">
-                                <li><a data-slide-index="0" href="#"><img alt="" class="img-responsive"
-                                            src="/assets/client/images/content/products/product-thumb.jpg"></a></li>
-                                <li><a data-slide-index="1" href="#"><img alt="" class="img-responsive"
-                                            src="/assets/client/images/content/products/product-thumb-1.jpg"></a></li>
-                                <li><a data-slide-index="2" href="#"><img alt="" class="img-responsive"
-                                            src="/assets/client/images/content/products/product-thumb-2.jpg"></a></li>
-                                <li><a data-slide-index="3" href="#"><img alt="" class="img-responsive"
-                                            src="/assets/client/images/content/products/product-thumb-3.jpg"></a></li>
-                                <li><a data-slide-index="4" href="#"><img alt="" class="img-responsive"
-                                            src="/assets/client/images/content/products/product-thumb-4.jpg"></a></li>
+                            <ul class="list-inline bx-pager image-slides">
+                                
                             </ul>
                         </div>
                     </div>
@@ -64,39 +43,39 @@
                             <form method="post" class="cart" id="addToCartQuick">
                                 @csrf
                                 <input type="hidden" class="product_id" value="">
-    
+
                                 <ul class="list-inline list-select clearfix">
                                     <li>
                                         <h4 class="m-0">Size:</h4>
                                     </li>
-    
+
                                     <li id="size-quick">
-                                        
+
                                     </li>
                                 </ul>
-                                
+
                                 <ul class="list-inline list-select clearfix">
                                     <li>
                                         <h4 class="m-0">Màu sắc:</h4>
                                     </li>
-    
+
                                     <li id="color-quick">
-                                        
+
                                     </li>
                                 </ul>
 
                                 <div>
-                                    <span class="stock">0</span> hàng có sẵn
+                                    <span class="stock"></span> hàng có sẵn
                                 </div>
-                                
+
                                 <div class="quantity">
                                     <input type="button" class="minus" value="-">
-                                    <input type="text" class="input-text qty" title="Qty" value="1" id="quantity"
-                                        name="quantity" min="1" step="1">
+                                    <input type="text" class="input-text qty" title="Qty" value="1"
+                                        id="quantity" name="quantity" min="1" step="1">
                                     <input type="button" class="plus" value="+">
                                 </div>
 
-    
+
                                 <button type="submit" class="btn btn-primary btn-icon">
                                     <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
@@ -140,10 +119,11 @@
                                 {{-- Reviews --}}
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title"> 
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseReviews">
-                                                Reviews (<span id="reviewCount">0</span>) 
-                                            </a> 
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion"
+                                                href="#collapseReviews">
+                                                Reviews (<span id="reviewCount">0</span>)
+                                            </a>
                                         </h4>
                                     </div>
                                     <div id="collapseReviews" class="panel-collapse collapse">

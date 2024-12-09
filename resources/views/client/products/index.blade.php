@@ -62,9 +62,7 @@
                                         <div class="product-thumb-info-image">
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 <img alt="{{ $product->name }}" width="60"
-                                                @foreach ($product->images as $item)
-                                                    src="{{ \Storage::url($item->image_url) }}">
-                                                @endforeach
+                                                    src="{{ \Storage::url($product->image->image_url) }}">
                                             </a>
                                         </div>
 
@@ -126,10 +124,8 @@
                                                         </a>
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
-                                                        <img alt="" class="img-responsive" style="height: 300px"
-                                                        @foreach ($product->images as $item)
-                                                            src="{{ \Storage::url($item->image_url) }}">
-                                                        @endforeach
+                                                        <img alt="" class="img-responsive"
+                                                            src="{{ \Storage::url($product->image->image_url) }}">
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
@@ -157,9 +153,7 @@
                                             <div class="product-thumb-info-image">
                                                 <a href="{{ route('client.product.show', $product->id) }}">
                                                     <img alt="" class="img-responsive"
-                                                    @foreach ($product->images as $item)
-                                                        src="{{ \Storage::url($item->image_url) }}">
-                                                    @endforeach
+                                                        src="{{ \Storage::url($product->image->image_url) }}">
                                                 </a>
                                             </div>
                                         </div>

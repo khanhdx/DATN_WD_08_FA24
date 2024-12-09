@@ -74,7 +74,7 @@
                                             </a>
                                         </span>
                                         <a href="{{ route('client.product.show', $product->id) }}">
-                                            <img loading="lazy" alt="" class="img-responsive" style="height:300px;"
+                                            <img loading="lazy" alt="" class="img-responsive"
                                                 src="{{ \Storage::url($product->image->image_url) }}">
                                         </a>
                                     </div>
@@ -127,7 +127,6 @@
                                             </span>
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 <img loading="lazy" alt="" class="img-responsive"
-                                                    style="height: 300px"
                                                     src="{{ \Storage::url($product->image->image_url) }}">
                                             </a>
                                         </div>
@@ -162,9 +161,8 @@
                                                 </a>
                                             </span>
                                             <a href="{{ route('client.product.show', $product->id) }}">
-                                                <img loading="lazy" alt="" class="img-responsive"
-                                                    style="height: 300px"
-                                                    src="{{ \Storage::url($product->image->image_url) }}">
+                                                <img loading="lazy" alt="Image" class="img-responsive"
+                                                    src="{{ \Storage::url($product->image->image_url ?? "") }}">
                                             </a>
                                         </div>
                                         <div class="product-thumb-info-content">

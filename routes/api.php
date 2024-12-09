@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')
         });
     });
 
-Route::get('/product', [ProductController::class, 'apiProduct']);
+Route::get('/product/image', [ProductController::class, 'getProductImage']);
 Route::get('/product/{product}', [ProductController::class, 'showModal'])->name('product.show');
 
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
@@ -51,4 +51,5 @@ Route::get('/count-customer', [StatisticalController::class, 'countCustomner']);
 Route::get('/count-product-sold', [StatisticalController::class, 'countProductSold']);
 
 Route::apiResource('images', ImageController::class);
-Route::delete('/delete-image', [ImageController::class, 'deleteImages']);
+Route::post('/image-others', [ImageController::class, 'storeImageOther']);
+Route::delete('/image-others', [ImageController::class, 'deleteImageOther']);

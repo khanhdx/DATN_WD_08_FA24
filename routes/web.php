@@ -159,7 +159,7 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
 
             //Route quản lý bộ ảnh sản phẩm
             Route::prefix('images')->as('images.')->group(function () {
-                Route::get('/', [ImageController::class, 'viewIndex'])->name('index');
+                Route::get('/', [ImageController::class, 'viewImage'])->name('index');
             });
         });
 });
