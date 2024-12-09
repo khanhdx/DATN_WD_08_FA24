@@ -80,21 +80,21 @@
                                         <td>{{$voucher->name}}</td>
                                         <td><div class="type-t">{{$voucher->value}}</div></td>
                                         <td><div class="type-f">{{$voucher->type_code}}</div></td>
-                                        <td>{{$voucher->quanlity}}</td>
+                                        <td class="@if($voucher->remaini == 0) text-danger @endif">{{$voucher->remaini}}/{{$voucher->quanlity}}</td>
                                         <td>{{$voucher->date_start}}</td>
                                         <td>{{$voucher->date_end}}</td>
                                         <td>
-                                                @if (today() <= $voucher->date_start)
+                                                @if (date('Y-m-d') < $voucher->date_start)
                                                     <div class="type-s">
                                                         Chưa diễn ra
                                                     </div>
-                                                @elseif ($voucher->date_end <= today())
-                                                    <div class="type-s" style="border: 1px solid #a72828 !important;color: #a72828 !important;background-color: #fff0f0 !important;">
-                                                        Đã kết thúc
-                                                    </div>
-                                                @else
+                                                @elseif ($voucher->date_start <= date('Y-m-d') && $voucher->date_end >= date('Y-m-d'))
                                                     <div class="type-s">
                                                         Đang diễn ra
+                                                    </div>
+                                                @else
+                                                    <div class="type-s" style="border: 1px solid #a72828 !important;color: #a72828 !important;background-color: #fff0f0 !important;">
+                                                        Đã kết thúc
                                                     </div>
                                                 @endif
                                         </td>

@@ -6,6 +6,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\Cart;
 use App\Models\ChatRoom;
+use App\Models\vouchersWare;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,10 @@ class AuthController extends Controller
             Cart::create([
                 'user_id' => $user->id,
                 // Nếu có các trường khác cần thiết, hãy thêm vào đây
+            ]);
+            // Tạo kho voucher cho người dùng mới 
+            vouchersWare::create([
+                'user_id' => $user->id,
             ]);
 
             ChatRoom::firstOrCreate([

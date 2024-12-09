@@ -25,7 +25,21 @@
 
                 @if ($order->voucherWare)
                     <p><strong>Voucher:</strong> {{ $order->voucherWare->voucher->voucher_code }}</p>
-                    <p><strong>Giá giảm:</strong> {{ $order->voucherWare->voucher->decreased_value }}</p>
+                    @if ($order->voucherWare->voucher->value == "Cố định")
+                        <p><strong>Giá giảm:</strong> {{ $order->voucherWare->voucher->decreased_value }}</p>
+                    @else
+                        @php
+                            $totalOld = 0;
+                            foreach ($order->order_details as $value) {
+                                $totalOld += $value->total_price;
+                            }
+                            $discount = $order->voucherWare->voucher->decreased_value/100 * $totalOld;
+                            if ($discount > $order->voucherWare->voucher->max_value) {
+                                $discount = $order->voucherWare->voucher->max_value;
+                            }
+                        @endphp
+                        <p><strong>Giá giảm:</strong> {{ number_format($discount, 0, ',', '.') }} VND</p>
+                    @endif
                 @else
                     <p><strong>Voucher:</strong> Không có</p>
                 @endif
