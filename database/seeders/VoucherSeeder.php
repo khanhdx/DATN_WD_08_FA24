@@ -26,7 +26,7 @@ class VoucherSeeder extends Seeder
                 'remaini'=>'1000',
                 'condition'=>'0',
                 'date_start'=>Date("Y-m-d"),
-                'date_end'=>'2024-10-03',
+                'date_end'=>'2025-10-03',
                 'type_code'=>'Công khai',
                 'status'=>'Đang diên ra',
                 'description'=>'Tri ân khách hàng mới tham gia vào hệ thống.',
