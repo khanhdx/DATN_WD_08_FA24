@@ -16,25 +16,21 @@ class HomeController extends Controller
     public function index()
     {
         $topSeller = Product::with(['category', 'image', 'variants.size', 'variants.color'])
-            ->paginate(8);
+            ->paginate(12);
 
         $newProductMan = Product::with(['category', 'image', 'variants.size', 'variants.color'])
             ->whereHas('category', function ($query) {
                 $query->where('type', 'Man');
-            })->latest('id')->get();
+            })->latest('id')->paginate(8);
 
         $newProductWoman = Product::with(['category', 'image', 'variants.size', 'variants.color'])
             ->whereHas('category', function ($query) {
                 $query->where('type', 'Woman');
-            })->latest('id')->get();
+            })->latest('id')->paginate(8);
 
-        $latestPosts = Post::query()
-            ->latest('id')
-            ->paginate(2);
+        $latestPosts = Post::query()->latest('id')->paginate(2);
 
-        $mainBanners = Banner::where('type', 'main')
-            ->where('status', 1)
-            ->get();
+        $mainBanners = Banner::where('type', 'main')->where('status', 1)->get();
 
         $advertisementBanners = Banner::where('type', 'advertisement')
             ->where('status', 1)
@@ -43,9 +39,7 @@ class HomeController extends Controller
             ->get();
 
         // Lấy banner giới thiệu đầu tiên
-        $introBanner = Banner::where('type', 'intro')
-            ->where('status', 1)
-            ->first();
+        $introBanner = Banner::where('type', 'intro')->where('status', 1)->first();
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'topSeller',
@@ -58,8 +52,6 @@ class HomeController extends Controller
         ));
     }
 
-
-
     public function contact()
     {
         return view(self::PATH_VIEW . __FUNCTION__);
@@ -68,8 +60,6 @@ class HomeController extends Controller
     public function header()
     {
         $cartItems = [];
-
-        // $count = 0;
 
         if (Auth::check()) {
             $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);

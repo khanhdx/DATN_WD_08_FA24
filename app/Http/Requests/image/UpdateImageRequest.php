@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +24,7 @@ class UpdateImageRequest extends FormRequest
         return [
             'product_id'    => 'required',
             'image_main'    => 'nullable|image',
-            'image_others'  => 'nullable|array',
+            'image_others'  => 'nullable',
         ];
     }
     
@@ -32,6 +32,7 @@ class UpdateImageRequest extends FormRequest
     {
         return [
             'product_id.required' => 'Vui lòng chọn sản phẩm!',
+            // 'image_others.required' => 'Vui lòng UPLOAD ảnh phụ cần chỉnh sửa!',
         ];
     }
 }

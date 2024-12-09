@@ -104,7 +104,7 @@
                             <div class="voucher-title">
                                 <span>Gift Coupon</span>
                             </div>
-                            <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
+                            <div class="time-line"><span>Còn:  {{ $voucher->remaini }}/{{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span></div>
                         </div>
                         <div class="voucher-left">
                             <div class="salse">
@@ -141,6 +141,26 @@
                     </div>
             </div>
             <div class="content">
+                @php
+                    use Carbon\Carbon;
+                    $today = Carbon::today();
+                @endphp
+                <div>
+                    <div class="title"><span>Trạng thái</span></div>
+                    <p>
+                        @if ($voucher->date_start > $today)
+                            Chưa diễn ra
+                        @elseif ($voucher->date_start <= $today && $voucher->date_end >= $today)
+                            Đang diễn ra
+                        @else
+                            Đã kết thúc
+                        @endif
+                    </p>
+                </div>
+                <div>
+                    <div class="title"><span>Mã code voucher</span></div>
+                    <p>Mã: <span style="font-weight: 600;">{{$voucher->voucher_code}}</span></p>
+                </div>
                 <div>
                     <div class="title"><span>Hạn sử dụng mã</span></div>
                     <p><span>Từ ngày: {{$voucher->date_start}} - đến hết ngày: {{$voucher->date_end}}</span></p>

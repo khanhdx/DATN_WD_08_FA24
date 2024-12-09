@@ -32,6 +32,11 @@ class Product extends Model
        return $this->hasOne(ProductImage::class)->where('type', 'main'); 
     }
 
+    public function image_others()
+    {
+       return $this->hasMany(ProductImage::class)->where('type', 'other'); 
+    }
+
     public function variants()
     {
        return $this->hasMany(ProductVariant::class); 
@@ -44,7 +49,7 @@ class Product extends Model
 
     public function colors()
     {
-        return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id');
+        return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id')->orderBy('id');
     }
     public function reviews()
     {

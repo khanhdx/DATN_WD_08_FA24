@@ -223,8 +223,10 @@ strong {
     border-radius: 5px;
 }
 
-.select-img img {
-    display: block;
+.select-img img,
+.img-main,
+.img-main img
+{
     border-radius: 5px;
 }
 

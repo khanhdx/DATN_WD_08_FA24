@@ -11,13 +11,18 @@
             <div class="modal-body">
                 <form id="create-images" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="product">Chọn sản phẩm</label>
-                        <select class="form-control" name="product_id" id="product">
-                            <option value="">Chọn sản phẩm cho ảnh</option>
-                            @foreach ($products as $item)
+                        <label for="product-name">Chọn sản phẩm cần ảnh</label>
+                        <select class="form-control" name="product_id" id="product-name">
+                            <option value="">Lựa chọn sản phẩm</option>
+                            {{-- @foreach ($products as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image_main">Chọn ảnh chính:</label>
+                        <input class="form-control" type="file" name="image_main" id="image_main">
                     </div>
 
                     <div class="form-group">

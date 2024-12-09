@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\VoucherController;
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -29,7 +30,7 @@ Route::middleware('auth:sanctum')
         });
     });
 
-Route::get('/product', [ProductController::class, 'apiProduct']);
+Route::get('/product/image', [ProductController::class, 'getProductImage']);
 Route::get('/product/{product}', [ProductController::class, 'showModal'])->name('product.show');
 
 Route::get('/get-color', [ProductController::class, 'getColor'])->name('get.color');
@@ -43,6 +44,7 @@ Route::get('/order-by-status', [StatisticalController::class, 'showOrderStatusCh
 
 Route::get('/top10-most-orders', [StatisticalController::class, 'getTop10MostOrderdProucts']);
 Route::get('/inventory', [StatisticalController::class, 'getInventoryData']);
+Route::get('/get-voucher/{id}',[VoucherController::class, 'getVoucherData']);
 
 
 Route::get('/total-revenue', [StatisticalController::class, 'totalRevenue']);
@@ -51,4 +53,5 @@ Route::get('/count-customer', [StatisticalController::class, 'countCustomner']);
 Route::get('/count-product-sold', [StatisticalController::class, 'countProductSold']);
 
 Route::apiResource('images', ImageController::class);
-Route::delete('/delete-image', [ImageController::class, 'deleteImages']);
+Route::post('/image-others', [ImageController::class, 'storeImageOther']);
+Route::delete('/image-others', [ImageController::class, 'deleteImageOther']);

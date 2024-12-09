@@ -84,7 +84,7 @@
                                 <div class="voucher-title">
                                     <span>Gift Coupon</span>
                                 </div>
-                                <div class="time-line"><span>Còn: {{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$voucher->id) }}">Chi tiết</a></span></div>
+                                <div class="time-line"><span>Còn: {{ $voucher->remaini }}/{{$voucher->quanlity}} lượt sử dụng</span>|<span>Có hiệu lực từ {{$voucher->date_start}}</span> <span><a class="link" href="{{ route('client.voucher.show',$voucher->id) }}">Chi tiết</a></span></div>
                             </div>
                             <div class="voucher-left">
                                 <div class="salse">
@@ -99,9 +99,11 @@
                                         <button class="btn btn-save" disabled>Chưa bắt đầu</button>
                                     @elseif ($voucher->date_end < date('Y-m-d'))
                                         <button class="btn btn-save" disabled>Hết hạn</button>
+                                    @elseif ($voucher->remaini == 0)
+                                        <button class="btn btn-save" disabled>Hết lượt</button>
                                     @else
-                                        @if (Auth::user())
-                                            @if ($voucher->check)
+                                        @if (Auth::user() && $ware->wares_list)
+                                            @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                 <button class="btn btn-save" disabled>Đã lưu</button>  
                                             @else                              
                                                 <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">

@@ -16,6 +16,7 @@ class Order extends Model
         'user_id',
         'order_code',
         'shipping_fee',
+        'voucher_id',
         'total_price',
         'date',
         'user_name',

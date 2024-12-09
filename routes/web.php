@@ -142,7 +142,7 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
                 Route::get('/', [OrderController::class, 'index'])->name('index');
                 Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
                 Route::put('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
-                Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
+                // Route::put('/{id}/confirm-processing', [OrderController::class, 'confirmProcessing'])->name('confirmProcessing');
             });
 
             // Route quản lý tồn kho 
@@ -159,7 +159,7 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
 
             //Route quản lý bộ ảnh sản phẩm
             Route::prefix('images')->as('images.')->group(function () {
-                Route::get('/', [ImageController::class, 'viewIndex'])->name('index');
+                Route::get('/', [ImageController::class, 'viewImage'])->name('index');
             });
         });
 });

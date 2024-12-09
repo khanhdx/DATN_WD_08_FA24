@@ -2,25 +2,19 @@
     use App\Models\Category;
     use App\Models\Product;
     use App\Models\Voucher;
+    use Carbon\Carbon;
     $categories = Category::query()->get();
-    $prs = Product::query()->orderBy('created_at', 'desc')->limit(3)->get();
+    $prs = Product::with('image')->orderBy('created_at', 'desc')->limit(3)->get();
+    $today = Carbon::today();
     $vs = Voucher::query()
         ->where('type_code', '=', 'Công khai')
-        ->where('date_start', '>=', date('Y-m-d'))
-        ->where('date_end', '>=', date('Y-m-d'))
+        ->where('date_start', '<=', $today)
+        ->where('date_end', '>=', $today)
         ->limit(3)
         ->get();
+
     if (Auth::user()) {
         $ware = Auth::user()->vouchers_ware;
-        if ($ware) {
-            foreach ($vs as $item) {
-                if (Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $item->id)) {
-                    $item->check = true;
-                } else {
-                    $item->check = false;
-                }
-            }
-        }
     }
 @endphp
 
@@ -61,7 +55,7 @@
                                                     <div class="product-thumb-info-image">
                                                         <a href="{{ route('client.product.show', $pr->id) }}"><img
                                                                 alt="" width="60"
-                                                                src="{{ $pr->image }}"></a>
+                                                                src="{{ \Storage::url($pr->image->image_url) }}"></a>
                                                     </div>
                                                     <div class="product-thumb-info-content">
                                                         <h4><a
@@ -130,10 +124,14 @@
                                                                 <strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
                                                         </div>
                                                         @if (Auth::user())
-                                                            @if ($voucher->check)
+                                                            @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                                 <button
-                                                                    style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                    style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
                                                                     class="btn btn-save" disabled>Đã lưu</button>
+                                                            @elseif ($voucher->remaini == 0)
+                                                                <button
+                                                                style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
+                                                                class="btn btn-save" disabled>Đã hết</button>
                                                             @else
                                                                 <form class="voucher-form"
                                                                     id="voucherForm{{ $voucher->id }}"
@@ -145,13 +143,17 @@
                                                                     <input type="hidden" name="voucher_id"
                                                                         value="{{ $voucher->id }}">
                                                                     <button
-                                                                        style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                        style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
                                                                         class="btn btn-save LuuVoucher">Lưu</button>
                                                                 </form>
                                                             @endif
+                                                        @elseif ($voucher->remaini == 0)
+                                                            <button
+                                                            style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
+                                                            class="btn btn-save" disabled>Đã hết</button>
                                                         @else
                                                             <button
-                                                                style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF"
+                                                                style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
                                                                 class="btn btn-save saveVoucher">Lưu</button>
                                                         @endif
                                                     </div>
@@ -197,4 +199,3 @@
         }
     }
 </script>
-<script></script>

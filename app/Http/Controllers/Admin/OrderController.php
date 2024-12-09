@@ -17,7 +17,6 @@ class OrderController extends Controller
 {
     protected $orderService;
     protected $statusService;
-
     protected $inventoryService;
 
     public function __construct(IOrderService $iOrderService, StatusService $statusService, InventoryService $inventoryService)
@@ -57,8 +56,13 @@ class OrderController extends Controller
             // Lọc chỉ theo trạng thái
             $data = $this->orderService->getByStatus($status);
         }
-    }
+        $orders = $data[0];
+        $countOrderByStatus = $data[1];
+        $totalOrder = $data[2];
+        $statuses = $this->statusService->getAll();
 
+        return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
+    }
     // Dữ liệu trả về từ dịch vụ
     $orders = $data[0];
     $countOrderByStatus = $data[1];
@@ -70,7 +74,6 @@ class OrderController extends Controller
     // Trả về view với dữ liệu
     return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
 }
-
 
     public function show(string $id)
     {
@@ -85,8 +88,6 @@ class OrderController extends Controller
         ])->findOrFail($id);
 
         $currentStatus = $order->statusOrder->last();
-        $order_details = $order->order_details;
-
         return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
     }
 
@@ -96,31 +97,32 @@ class OrderController extends Controller
         $order = $this->orderService->getOneById($id);
         $currentStatusId = $request->status_order;
         $newStatusId = $currentStatusId + 1;
-    
+
         if ($newStatusId < $currentStatusId) {
             return redirect()->back()->with('error', 'Không thể cập nhật trạng thái ngược lại.');
         }
-    
+
         try {
             DB::transaction(function () use ($order, $newStatusId) {
-                     $this->orderService->updateStatus($newStatusId, $order->id);
-                    // Status Shipping
-                     if($newStatusId == 3){
-                        foreach ($order->order_details as $detail) {
-                            $productVariantId = $detail->product_variant_id;
-                            $productId = $detail->product_id;
-                            $this->inventoryService->exportVariantStock($detail->quantity,  $productId , $productVariantId);
-                        }
-                     } else if ($newStatusId == 5 || $newStatusId == 7){ // Status Canceled && Refunded
-                        foreach ($order->orderDetails as $detail) {
-                            $productVariantId = $detail->product_variant_id;
-                            $productId = $detail->product_id;
-                            $this->inventoryService->importVariantStock($detail->quantity,  $productId , $productVariantId);
-                     }}
+                $this->orderService->updateStatus($newStatusId, $order->id);
+                // Status Shipping
+                if ($newStatusId == 3) {
+                    foreach ($order->order_details as $detail) {
+                        $productVariantId = $detail->product_variant_id;
+                        $productId = $detail->product_id;
+                        $this->inventoryService->exportVariantStock($detail->quantity,  $productId, $productVariantId);
+                    }
+                } else if ($newStatusId == 5 || $newStatusId == 7) { // Status Canceled && Refunded
+                    foreach ($order->orderDetails as $detail) {
+                        $productVariantId = $detail->product_variant_id;
+                        $productId = $detail->product_id;
+                        $this->inventoryService->importVariantStock($detail->quantity,  $productId, $productVariantId);
+                    }
+                }
 
-                     if($newStatusId == 4 ){ // Status Success
-                        CompleteOrderJob::dispatch($order->id)->delay(now()->addDays(7));
-                     }
+                if ($newStatusId == 4) { // Status Success
+                    CompleteOrderJob::dispatch($order->id)->delay(now()->addDays(7));
+                }
             }, 3);
             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
         } catch (\Throwable $th) {

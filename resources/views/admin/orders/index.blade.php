@@ -29,7 +29,8 @@
                             <select class="form-control ml-2" name="status" id="status">
                                 <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->name_status }}" {{ request('status') == $status->name_status ? 'selected' : '' }}>
+                                    <option value="{{ $status->name_status }}"
+                                        {{ request('status') == $status->name_status ? 'selected' : '' }}>
                                         {{ $status->status_label }}
                                     </option>
                                 @endforeach
@@ -71,7 +72,7 @@
                 <div class="table-responsive table-responsive-data2">
                     <div class="row">
                         <div
-                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains('id_status', 1)) ? 'col-lg-10' : 'col-lg-12' }}">
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status)=>in_array($status->id_status, [1, 8, 10]))) ? 'col-lg-10' : 'col-lg-12' }}">
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>
@@ -83,7 +84,6 @@
                                             <th>Tổng tiền</th>
                                             <th>Ngày đặt</th>
                                             <th>Trạng thái hiện tại</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,8 +95,15 @@
                                                         {{ $order->order_code }}
                                                     </a>
                                                 </td>
-                                                <td>{{ $order->slug}}</td>
-                                                <td>{{ $order->user_name}}</td>
+                                                <td>{{ $order->slug }}</td>
+                                                <td>
+                                                    <ul>
+                                                        <li>Tên: {{ $order->user_name }}</li>
+                                                        <li>Email: {{ $order->email }}</li>
+                                                        <li>SĐT: {{ $order->phone_number ?? 'Chưa thiết lập' }}</li>
+                                                        <li>Địa chỉ: {{ $order->address }}</li>
+                                                    </ul>
+                                                </td>
                                                 <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
@@ -109,41 +116,8 @@
                                                         </span>
                                                     @endforeach
                                                 </td>
-
-                                                {{-- Nút cập nhật trạng thái --}}
-                                                {{-- <td>
-                                                    @php
-                                                    $currentStatus = $order->statusOrder->first()->id_status ?? null;
-                                                
-                                                    // Danh sách các trạng thái hiển thị nút
-                                                    $allowedStatuses = [0, 1, 2];
-                                                
-                                                    // Xác định trạng thái tiếp theo
-                                                    $nextStatus = null;
-                                                    foreach ($statuses as $index => $status) {
-                                                        if ($status->id == $currentStatus && isset($statuses[$index + 1])) {
-                                                            $nextStatus = $statuses[$index + 1]->id;
-                                                            break;
-                                                        }
-                                                    }
-                                                @endphp
-                                                
-                                                @if (in_array($currentStatus, $allowedStatuses))
-                                                    @if ($nextStatus)
-                                                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="post">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <input type="hidden" name="status_order" value="{{ $nextStatus }}">
-                                                            <button type="submit" class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-arrow-right"></i> Cập nhật đang giao hàng
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                @endif
-                                                </td> --}}
                                                 <td>
                                                     <div class="table-data-feature">
-    
                                                         {{-- Xem chi tiết  --}}
                                                         <a href="{{ route('admin.orders.show', $order->id) }}">
                                                             <button class="item mr-2" data-toggle="tooltip" data-placement="top"
@@ -164,17 +138,18 @@
                         <div class="col-lg-2">
                             @foreach ($orders as $order)
                                 @foreach ($order->statusOrder as $status)
-                                    @if ($status['id_status'] == 1)
-                                        <form action="{{ route('admin.orders.confirmProcessing', $order->id) }}"
-                                            method="post">
-                                            @csrf
-                                            @method('PUT')
+                                    <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('PUT')
+                                        {{-- Nút xác nhận đơn  --}}
+                                        @if ($status['id_status'] == 1)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
                                                     data-bs-autohide="false" id="orderStatusToast">
                                                     <div class="toast-header">
-                                                        <strong class="me-auto">Xác nhận đơn hàng</strong>
+                                                        <strong class="me-auto">Xác nhận đơn hàng</strong><br>
                                                         <small class="text-muted">
                                                             <span id="order-time-{{ $order->id }}"
                                                                 data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
@@ -191,12 +166,64 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                    @endif
+                                        @endif
+                                        {{-- Nút xác nhận hủy đơn  --}}
+                                        @if ($status['id_status'] == 8)
+                                            <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
+                                                style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
+                                                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                                    data-bs-autohide="false" id="orderStatusToast">
+                                                    <div class="toast-header">
+                                                        <strong class="me-auto">Xác nhận hủy đơn</strong><br>
+                                                        <small class="text-muted">
+                                                            <span id="order-time-{{ $order->id }}"
+                                                                data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
+                                                        </small>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="toast-body">
+                                                        <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
+                                                        </p>
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác nhận hủy</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        {{-- Nút xác nhận hoàn trả đơn  --}}
+                                        {{-- @if ($status['id_status'] == 10)
+                                            <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
+                                                style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
+                                                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                                    data-bs-autohide="false" id="orderStatusToast">
+                                                    <div class="toast-header">
+                                                        <strong class="me-auto">Xác nhận đơn hàng</strong><br>
+                                                        <small class="text-muted">
+                                                            <span id="order-time-{{ $order->id }}"
+                                                                data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
+                                                        </small>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="toast-body">
+                                                        <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
+                                                        <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
+                                                        </p>
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
+                                                            nhận</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif --}}
+                                    </form>
                                 @endforeach
                             @endforeach
                         </div>
+
                     </div>
+                </div>
+                <div>
+                    {{ $orders->links() }}
                 </div>
             </div>
         </div>

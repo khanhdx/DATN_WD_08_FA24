@@ -15,14 +15,14 @@ use App\Http\Controllers\Admin\ColorController;
 class ProductController extends Controller
 {
     const PATH_VIEW = 'client.products.';
-    public function apiProduct() {
+    public function getProductImage() {
         try {
-            $products = Product::query()->select('id', 'name')->latest('id')->get();
+            $products = Product::doesntHave('image')->select('id', 'name')->get();
 
             return response()->json([
                 'data' => $products,
                 'code' => 200,
-            ]);
+            ], 200);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -94,10 +94,10 @@ class ProductController extends Controller
     
     public function show(Product $product)
     {
-        $product->load(['variants', 'image']);
-
+        $product->load(['variants', 'image', 'image_others', 'sizes', 'colors']);
+// dd($product->toArray());
         $sumStock = Product::find($product->id)->variants->sum('stock');
-
+        
         $related_products = Product::with(['category'])->latest('id')->get();
 
         return view(self::PATH_VIEW . __FUNCTION__, compact(
@@ -110,7 +110,7 @@ class ProductController extends Controller
     public function showModal(Product $product)
     {
         try {
-            $product->load(['variants', 'image', 'category', 'sizes', 'colors', 'reviews.user']);
+            $product->load(['variants', 'image', 'image_others', 'category', 'sizes', 'colors', 'reviews.user']);
 
             return response()->json($product);
         } catch (\Throwable $th) {

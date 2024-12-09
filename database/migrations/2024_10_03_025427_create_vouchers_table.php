@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('decreased_value',12,2);//Mức giảm
             $table->float('max_value',12,2)->nullable();//Mức giảm tối đa
             $table->integer('quanlity');//Số lượng mã
+            $table->integer('remaini')->default(0);//Số lượng còn lại
             $table->float('condition',12,2);//Điều kiện sử dụng (cho đơn hàng có mức giá tối thiểu)
             $table->date('date_start');//ngày bắt đầu
             $table->date('date_end');//Ngày kết thúc
