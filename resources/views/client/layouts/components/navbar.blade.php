@@ -108,7 +108,11 @@
                                                         style="clip-path: polygon(0% -1%, 100% -1%, 100% 100%, 50% 75%, 0% 100%);background-color: #FFFFFF;color: #000000;">
                                                         @if ($voucher->value === 'Cố định')
                                                             <h4 class="m-0" style="padding: 15px 2px">
-                                                                {{ preg_replace('/0{3}$/', 'k', $voucher->decreased_value) }}
+                                                                @if ($voucher->max_value>=1000000)
+                                                                    {{number_format($voucher->max_value / 1000000, 1, ',', '.') . 'tr'}}
+                                                                @else
+                                                                    {{number_format($voucher->max_value / 1000, 0, '', '') . 'k';}}
+                                                                @endif
                                                             </h4>
                                                         @else
                                                             <h4 class="m-0" style="padding: 15px 2px">
@@ -124,7 +128,8 @@
                                                             <p style="color: #FFFFFF;font-size: 12px;margin: 0px;">
                                                                 <strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
                                                         </div>
-                                                        @if (Auth::user())
+                                                        
+                                                        @if (Auth::user() && $ware && $ware->wares_list)
                                                             @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                                 <button
                                                                     style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
