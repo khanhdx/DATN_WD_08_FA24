@@ -56,7 +56,7 @@
                                 </form>
                                 <div class="product-thumb-info-image">
                                     <a href="#"><img alt="" width="60"
-                                        src="{{ Auth::check() ? \Storage::url($cart->productVariant->product->images) : \Storage::url($cart['image']) }}"></a>
+                                        src="{{ Auth::check() ? \Storage::url($cart->productVariant->product->image->image_url) : \Storage::url($cart['image']) }}"></a>
                                 </div>
 
                                 <div class="product-thumb-info-content">

@@ -102,7 +102,7 @@
                                     @elseif ($voucher->remaini == 0)
                                         <button class="btn btn-save" disabled>Hết lượt</button>
                                     @else
-                                        @if (Auth::user() && $ware->wares_list)
+                                        @if (Auth::check() && $ware)
                                             @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                 <button class="btn btn-save" disabled>Đã lưu</button>  
                                             @else                              

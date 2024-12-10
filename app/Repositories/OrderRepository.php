@@ -12,7 +12,7 @@ class OrderRepository
             'statusOrder' => function ($query) {
                 $query->select('status_orders.id as id_status', 'name_status');
             }
-        ])->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+        ])->select('id', 'order_code', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
         ->orderBy('created_at', 'desc') 
         ->paginate(10);
 
@@ -26,7 +26,7 @@ class OrderRepository
         }])
         ->whereHas('statusOrder', function ($query) use ($status) {
             $query->where('name_status', $status);
-        })->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+        })->select('id', 'order_code', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
         ->orderBy('created_at', 'desc') 
         ->paginate(10);
 
@@ -41,7 +41,7 @@ class OrderRepository
         if ($date) {
             $query->whereDate('created_at', $date);
         }
-        return $query->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+        return $query->select('id', 'order_code', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
         ->orderBy('created_at', 'desc') 
         ->paginate(10);
     }
@@ -59,7 +59,7 @@ class OrderRepository
         }
 
         return $query
-            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
+            ->select('id', 'order_code', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
             ->orderBy('created_at', 'desc') 
             ->paginate(10);
     }
@@ -70,7 +70,7 @@ class OrderRepository
             $query->select('status_orders.id as id_status', 'name_status');
         }])
             ->where('phone_number', 'like', '%' . $phone . '%')
-            ->select('id', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
+            ->select('id', 'order_code', 'slug', 'user_id', 'user_name', 'phone_number', 'total_price', 'created_at')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -84,7 +84,7 @@ class OrderRepository
         }])
             ->whereHas('statusOrder', function ($query) use ($status) {
                 $query->where('name_status', $status);})
-            ->select('id', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+            ->select('id', 'order_code', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
             ->where('phone_number', 'like', '%' . $phone . '%')
             ->paginate(10);
 
