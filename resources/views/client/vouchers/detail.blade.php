@@ -120,7 +120,7 @@
                                 @elseif ($voucher->date_end < date('Y-m-d'))
                                     <button class="btn btn-save" disabled>Hết hạn</button>
                                 @else
-                                    @if (Auth::user())
+                                    @if (Auth::check())
                                         @if ($voucher->check)
                                             <button class="btn btn-save" disabled>Đã lưu</button>  
                                         @else                              

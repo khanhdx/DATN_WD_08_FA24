@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\StatusOrder;
+use App\Models\Voucher;
+use App\Models\vouchersWare;
+use App\Models\waresList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -58,6 +62,18 @@ class OrderController extends Controller
                     'updated_at' => now(),
                 ]
             ]);
+            // Hủy dùng voucher
+            if($order->voucher_id && Auth::check()) {
+                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho
+                $wavein = waresList::query()->where('vouchers_ware_id', '=', $voucher_wave->id)->where('voucher_id','=',$order->voucher_id)->first();
+                $voucher = Voucher::query()->where('id', '=', $order->voucher_id)->first();//Voucher trên hệ thống
+                // Cập nhật trạng thái
+                $wavein->status = "Chưa sử dụng";
+                $wavein->save();
+                // Cập nhật số lượng
+                $voucher->remaini = $voucher->remaini + 1;
+                $voucher->save();
+            }
         }
         
         if ($order->statusOrder->contains('name_status', 'success')) {

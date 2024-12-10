@@ -129,7 +129,7 @@
                                                                 <strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
                                                         </div>
                                                         
-                                                        @if (Auth::user() && $ware && $ware->wares_list)
+                                                        @if (Auth::check() && $ware)
                                                             @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                                 <button
                                                                     style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"

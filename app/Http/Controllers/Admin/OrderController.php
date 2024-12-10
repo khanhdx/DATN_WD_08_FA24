@@ -86,7 +86,7 @@ class OrderController extends Controller
             'statusOrder',
             'payments'
         ])->findOrFail($id);
-
+        $order_details = $order->order_details;
         $currentStatus = $order->statusOrder->last();
         return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
     }
