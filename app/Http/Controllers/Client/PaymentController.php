@@ -145,7 +145,7 @@ class PaymentController extends Controller
             }
         }
         else {
-            return redirect()->route('checkout')->with('error', 'Sử dụng voucher thất bại!.');
+            $voucher_id = null;
         }
         $totalPrice -= $voucherDiscount;
 
