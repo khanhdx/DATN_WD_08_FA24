@@ -258,8 +258,6 @@ Route::prefix('guest')->name('guest.')->group(function () {
     Route::get('checkout', [PaymentController::class, 'showGuestPaymentForm'])
         ->name('checkout')
         ->middleware('guest');  // Đảm bảo khách chưa đăng nhập
-    Route::get('guest-payment-momo', [PaymentController::class, 'paymentGuestMomo'])->name('payment.momo');
-
     // Xử lý thanh toán cho khách vãng lai
     Route::post('checkout', [PaymentController::class, 'guestCheckout'])
         ->name('checkout.process')
@@ -268,7 +266,8 @@ Route::prefix('guest')->name('guest.')->group(function () {
 
     // Trang xác nhận thanh toán thành công cho khách vãng lai
     Route::get('payment-guest-success', [PaymentController::class, 'paymentSuccessForGuest'])
-        ->name('payment.success');
+        ->name('payment.success')
+        ->middleware('guest');
 
     // Giỏ hàng của khách vãng lai
     Route::prefix('carts')

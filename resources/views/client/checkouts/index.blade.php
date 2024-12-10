@@ -156,6 +156,8 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- Thanh toan momo chi dang nhap moi dung duoc --}}
+                            @if (auth()->check())
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
@@ -173,6 +175,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                         <p>
                             <button type="submit" class="btn btn-primary btn-block btn-sm">Đặt Hàng</button>
