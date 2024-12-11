@@ -216,7 +216,7 @@ class ProductService implements IProductService
         //     $query->where('rating', $request->rating);
         // }
 
-        $products = $query->select('products.*')->get();
+        $products = $query->select('products.*')->paginate(10);
 
         // dd($products);
 

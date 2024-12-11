@@ -27,35 +27,19 @@ class OrderController extends Controller
     }
 
     public function index(Request $request)
-{
-    // Lấy tham số lọc từ request
-    $status = $request->input('status', 'all');
-    $date = $request->input('date');
-    $phone = $request->input('phone'); // Lọc theo số điện thoại
+    {
+        // Lấy tham số lọc từ request
+        $status = $request->input('status', 'all');
+        $date = $request->input('date');
+        $phone = $request->input('phone'); // Lọc theo số điện thoại
 
-    // Kiểm tra các điều kiện lọc
-    if ($status == 'all') {
-        if ($phone) {
-            // Lọc chỉ theo số điện thoại
-            $data = $this->orderService->getByPhoneNumber($phone);
-        } elseif ($date) {
-            // Lọc chỉ theo ngày đặt
-            $data = $this->orderService->getByDate($date);
-        } else {
-            // Lấy tất cả đơn hàng nếu không có bộ lọc
+        // Kiểm tra các điều kiện lọc
+        if ($status == 'all' && $date == null && $phone == null) {
             $data = $this->orderService->getAll();
-        }
-    } else {
-        if ($phone) {
-            // Lọc theo trạng thái và số điện thoại
-            $data = $this->orderService->getByStatusAndPhoneNumber($status, $phone);
-        } elseif ($date) {
-            // Lọc theo trạng thái và ngày đặt
-            $data = $this->orderService->getByStatusAndDate($status, $date);
         } else {
-            // Lọc chỉ theo trạng thái
-            $data = $this->orderService->getByStatus($status);
+            $data = $this->orderService->filter($status, $date, $phone);
         }
+
         $orders = $data[0];
         $countOrderByStatus = $data[1];
         $totalOrder = $data[2];
@@ -63,17 +47,6 @@ class OrderController extends Controller
 
         return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
     }
-    // Dữ liệu trả về từ dịch vụ
-    $orders = $data[0];
-    $countOrderByStatus = $data[1];
-    $totalOrder = $data[2];
-
-    // Lấy danh sách trạng thái
-    $statuses = $this->statusService->getAll();
-
-    // Trả về view với dữ liệu
-    return view('admin.orders.index', compact('orders', 'statuses', 'countOrderByStatus', 'totalOrder'));
-}
 
     public function show(string $id)
     {
@@ -91,7 +64,7 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order', 'order_details', 'currentStatus'));
     }
 
-   
+
     public function updateStatus(Request $request, $id)
     {
         $order = $this->orderService->getOneById($id);
@@ -127,19 +100,6 @@ class OrderController extends Controller
             return redirect()->back()->with('success', 'Cập nhật trạng thái thành công.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
-        }
-    }
-    public function confirmProcessing($id)
-    {
-        $order = $this->orderService->getOneById($id);
-        if (!$order) {
-            return redirect()->back()->with('error', 'Đơn hàng không tồn tại');
-        }
-        try {
-            StatusOrderDetail::where('order_id', $id)->update(['status_order_id' => 2]);
-            return  redirect()->back()->with('success', "Đơn hàng mã " . $order->slug . " đã xác nhận thành công.");
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', "Đơn hàng mã" . $order->slug  . " đã xác nhận thát bại. Hãy thử lại!!");
         }
     }
 }

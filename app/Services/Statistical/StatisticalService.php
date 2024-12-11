@@ -192,27 +192,8 @@ class StatisticalService
     // Tồn kho sản phẩm
     public function getInventoryData()
     {
-        $products = Product::with(['variants.color', 'variants.size'])
-            ->select('id', 'name', 'base_stock')
-            ->get()
-            ->map(function ($product) {
-                $variantData = $product->variants->map(function ($variant) {
-                    return [
-                        'variant_id' => $variant->id,
-                        'color' => $variant->color->name ?? 'No Color',
-                        'code_color' => $variant->color->code_color ?? 'No Color',
-                        'size' => $variant->size->name ?? 'No Size',
-                        'quantity' => $variant->stock,
-                    ];
-                });
-
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'base_stock' => $product->base_stock,
-                    'variants' => $variantData,
-                ];
-            });
+        $products = Product::select('id', 'name', 'base_stock')
+            ->paginate(10);
 
         return $products;
     }

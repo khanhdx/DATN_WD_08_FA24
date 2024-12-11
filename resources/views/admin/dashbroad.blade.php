@@ -8,19 +8,26 @@
 @endsection
 
 @section('content')
-
     {{--  Filter --}}
     <section>
-        <div class="section__content section__content--p30">
-            <div class="container-fluid">
-                <div class="date-filter">
-                    <label for="startDate">Từ ngày:</label>
-                    <input type="date" id="startDate" name="start_date">
+        <div class="section__content section__content--p30" style="margin-bottom: 16px">
+            <div class="date-filter row align-items-center g-3">
+                <div class="container-fluid" style="margin-left: 14px">
+                    <div class="row">
+                        <div class="col">
+                            <label for="startDate" class="form-label">Từ ngày:</label>
+                            <input type="date" id="startDate" name="start_date" class="form-control">
+                        </div>
 
-                    <label for="endDate">Đến ngày:</label>
-                    <input type="date" id="endDate" name="end_date">
+                        <div class="col">
+                            <label for="endDate" class="form-label">Đến ngày:</label>
+                            <input type="date" id="endDate" name="end_date" class="form-control">
+                        </div>
 
-                    <button id="updateAllChartsButton">Cập nhật tất cả</button>
+                        <div class="col d-flex align-items-end" style="max-width: 140px">
+                            <button id="updateAllChartsButton" class="btn btn-primary w-100">Kiểm tra</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,7 +95,7 @@
                             <h3 class="title-3">Biểu đồ doanh thu</h3>
                             <div class="chart-info">
                                 <div class="date-filter">
-                                    
+
                                 </div>
                             </div>
                             <div class="recent-report__chart">
@@ -124,11 +131,21 @@
                             </div>
                         </div>
                         <div class="recent-report2">
-                            <div class="recent-report__chart">
-                                <h3 class="title-3">Số lượng tồn kho sản phầm</h3>
-                                <div class="recent-report__chart">
-                                    <canvas id="inventoryChart" width="400" height="200"></canvas>
-                                </div>
+                            <div class="table-responsive-inventory" >
+                                <table class="table table-bordered table-striped" id="inventoryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Số lượng tồn kho</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inventoryTableBody"></tbody>
+                                </table>
+                                <nav>
+                                    <ul class="pagination justify-content-center mt-2" id="pagination"></ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -137,271 +154,6 @@
             </div>
         </div>
     </section>
-
-    {{-- <section>
-        <div class="section__content section__content--p30">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <!-- USER DATA-->
-                        <div class="user-data m-b-40">
-                            <h3 class="title-3 m-b-30">
-                                <i class="zmdi zmdi-account-calendar"></i>user data
-                            </h3>
-                            <div class="filters m-b-45">
-                                <div class="rs-select2--dark rs-select2--md m-r-10 rs-select2--border">
-                                    <select class="js-select2" name="property">
-                                        <option selected="selected">All Properties</option>
-                                        <option value="">Products</option>
-                                        <option value="">Services</option>
-                                    </select>
-                                    <div class="dropDownSelect2"></div>
-                                </div>
-                                <div class="rs-select2--dark rs-select2--sm rs-select2--border">
-                                    <select class="js-select2 au-select-dark" name="time">
-                                        <option selected="selected">All Time</option>
-                                        <option value="">By Month</option>
-                                        <option value="">By Day</option>
-                                    </select>
-                                    <div class="dropDownSelect2"></div>
-                                </div>
-                            </div>
-                            <div class="table-responsive table-data">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <td>
-                                                <label class="au-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="au-checkmark"></span>
-                                                </label>
-                                            </td>
-                                            <td>name</td>
-                                            <td>role</td>
-                                            <td>type</td>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <label class="au-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="au-checkmark"></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <div class="table-data__info">
-                                                    <h6>lori lynch</h6>
-                                                    <span>
-                                                        <a href="#">johndoe@gmail.com</a>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="role admin">admin</span>
-                                            </td>
-                                            <td>
-                                                <div class="rs-select2--trans rs-select2--sm">
-                                                    <select class="js-select2" name="property">
-                                                        <option selected="selected">Full Control</option>
-                                                        <option value="">Post</option>
-                                                        <option value="">Watch</option>
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="more">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="au-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="au-checkmark"></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <div class="table-data__info">
-                                                    <h6>lori lynch</h6>
-                                                    <span>
-                                                        <a href="#">johndoe@gmail.com</a>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="role user">user</span>
-                                            </td>
-                                            <td>
-                                                <div class="rs-select2--trans rs-select2--sm">
-                                                    <select class="js-select2" name="property">
-                                                        <option value="">Full Control</option>
-                                                        <option value="" selected="selected">Post
-                                                        </option>
-                                                        <option value="">Watch</option>
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="more">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="au-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="au-checkmark"></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <div class="table-data__info">
-                                                    <h6>lori lynch</h6>
-                                                    <span>
-                                                        <a href="#">johndoe@gmail.com</a>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="role user">user</span>
-                                            </td>
-                                            <td>
-                                                <div class="rs-select2--trans rs-select2--sm">
-                                                    <select class="js-select2" name="property">
-                                                        <option value="">Full Control</option>
-                                                        <option value="" selected="selected">Post
-                                                        </option>
-                                                        <option value="">Watch</option>
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="more">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="au-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="au-checkmark"></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <div class="table-data__info">
-                                                    <h6>lori lynch</h6>
-                                                    <span>
-                                                        <a href="#">johndoe@gmail.com</a>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="role member">member</span>
-                                            </td>
-                                            <td>
-                                                <div class="rs-select2--trans rs-select2--sm">
-                                                    <select class="js-select2" name="property">
-                                                        <option selected="selected">Full Control</option>
-                                                        <option value="">Post</option>
-                                                        <option value="">Watch</option>
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="more">
-                                                    <i class="zmdi zmdi-more"></i>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="user-data__footer">
-                                <button class="au-btn au-btn-load">load more</button>
-                            </div>
-                        </div>
-                        <!-- END USER DATA-->
-                    </div>
-                    <div class="col-xl-6">
-                        <!-- MAP DATA-->
-                        <div class="map-data m-b-40">
-                            <h3 class="title-3 m-b-30">
-                                <i class="zmdi zmdi-map"></i>map data
-                            </h3>
-                            <div class="filters">
-                                <div class="rs-select2--dark rs-select2--md m-r-10 rs-select2--border">
-                                    <select class="js-select2" name="property">
-                                        <option selected="selected">All Worldwide</option>
-                                        <option value="">Products</option>
-                                        <option value="">Services</option>
-                                    </select>
-                                    <div class="dropDownSelect2"></div>
-                                </div>
-                                <div class="rs-select2--dark rs-select2--sm rs-select2--border">
-                                    <select class="js-select2 au-select-dark" name="time">
-                                        <option selected="selected">All Time</option>
-                                        <option value="">By Month</option>
-                                        <option value="">By Day</option>
-                                    </select>
-                                    <div class="dropDownSelect2"></div>
-                                </div>
-                            </div>
-                            <div class="map-wrap m-t-45 m-b-80">
-                                <div id="vmap" style="height: 284px;"></div>
-                            </div>
-                            <div class="table-wrap">
-                                <div class="table-responsive table-style1">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>United States</td>
-                                                <td>$119,366.96</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Australia</td>
-                                                <td>$70,261.65</td>
-                                            </tr>
-                                            <tr>
-                                                <td>United Kingdom</td>
-                                                <td>$46,399.22</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="table-responsive table-style1">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>Germany</td>
-                                                <td>$20,366.96</td>
-                                            </tr>
-                                            <tr>
-                                                <td>France</td>
-                                                <td>$10,366.96</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Russian</td>
-                                                <td>$5,366.96</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END MAP DATA-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
 @endsection
 
 @section('js')

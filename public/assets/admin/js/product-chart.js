@@ -53,72 +53,81 @@ function updateMostOrderChart(startDate = null, endDate = null) {
 updateMostOrderChart();
 
 // Số lượng sản phẩn
-var inventoryChart;
-var Ctx = document.getElementById("inventoryChart").getContext("2d");
+let currentPage = 1;
 
-function initInventoryChart(labels, datasets) {
-    if (inventoryChart) {
-        inventoryChart.destroy();
-    }
-
-    inventoryChart = new Chart(Ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: datasets,
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "top",
-                },
-            },
-            scales: {
-                x: {
-                    title: { display: true, text: "Tên sản phẩm" },
-                    stacked: true,
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: "Số lượng tồn kho" },
-                    stacked: true,
-                },
-            },
-        },
-    });
-}
-
-async function fetchInventoryData() {
-    const response = await fetch("/api/inventory");
+async function fetchInventoryData(page = 1) {
+    const response = await fetch(`/api/inventory?page=${page}`);
     return response.json();
 }
 
-function updateInventoryChart() {
-    fetchInventoryData()
+function renderInventoryTable(data) {
+    const tableBody = document.getElementById("inventoryTableBody");
+    tableBody.innerHTML = ""; // Xóa nội dung cũ
+
+    let rowIndex = (data.current_page - 1) * data.per_page;
+
+    data.data.forEach((product) => {
+        rowIndex++;
+        const row = `<tr>
+                <td>${rowIndex}</td>
+                <td>${product.name}</td>
+                <td>${product.base_stock}</td>
+            </tr>`;
+        tableBody.innerHTML += row;
+    });
+}
+
+function renderPagination(data) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    // Nút "Previous"
+    if (data.prev_page_url) {
+        pagination.innerHTML += `<li class="page-item">
+            <a class="page-link" href="#" onclick="updateInventoryTable(${
+                data.current_page - 1
+            }, event)">Trước</a>
+        </li>`;
+    } else {
+        pagination.innerHTML += `<li class="page-item disabled">
+            <span class="page-link">Trước</span>
+        </li>`;
+    }
+
+    // Các số trang
+    for (let i = 1; i <= data.last_page; i++) {
+        pagination.innerHTML += `<li class="page-item ${
+            i === data.current_page ? "active" : ""
+        }">
+            <a class="page-link" href="#" onclick="updateInventoryTable(${i}, event)">${i}</a>
+        </li>`;
+    }
+
+    // Nút "Next"
+    if (data.next_page_url) {
+        pagination.innerHTML += `<li class="page-item">
+            <a class="page-link" href="#" onclick="updateInventoryTable(${
+                data.current_page + 1
+            },event)">Sau</a>
+        </li>`;
+    } else {
+        pagination.innerHTML += `<li class="page-item disabled">
+            <span class="page-link">Sau</span>
+        </li>`;
+    }
+}
+
+function updateInventoryTable(page = 1, event = null) {
+    if (event) {
+        event.preventDefault();
+    }
+
+    fetchInventoryData(page)
         .then((data) => {
-            const labels = data.map((item) => item.name);
-
-            const datasets = [];
-
-
-            // Dữ liệu biến thể của từng sản phẩm
-            data.forEach((product, index) => {
-                product.variants.forEach((variant, variantIndex) => {
-                    datasets.push({
-                        label: `${product.name} - ${variant.color} - ${variant.size}`,
-                        data: data.map((item, i) =>
-                            i === index ? variant.quantity : 0
-                        ),
-                        backgroundColor: `${variant.code_color}`,
-                        datalabels: { display: false },
-                    });
-                });
-            });
-
-            initInventoryChart(labels, datasets);
+            renderInventoryTable(data);
+            renderPagination(data);
         })
         .catch((error) => console.log("Error", error));
 }
 
-updateInventoryChart();
+updateInventoryTable(currentPage);

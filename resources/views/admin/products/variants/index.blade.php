@@ -58,7 +58,7 @@
                                 <th>Các thuộc tính</th>
                                 <th>Số lượng</th>
                                 <th>Giá biến thể</th>
-                                
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +77,7 @@
                                         </ul>
                                     </td>
                                     <td>{{ $item->stock }}</td>
-                                    <td class="desc">{{ $item->price }}</td>
+                                    <td class="desc">{{ number_format($item->price, 0, ',', '.') }}</td>
                                     <td> 
                                         <div class="table-data-feature">
 
@@ -110,6 +110,10 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="mt-2">
+                        {{ $variants->links() }}
+                    </div>
                 </div>
             </div>
         </div>
