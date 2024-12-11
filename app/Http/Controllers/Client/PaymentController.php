@@ -74,10 +74,9 @@ class PaymentController extends Controller
         $voucher = Voucher::where('id', '=', $voucher_id)->first();
         $today = date('Y-m-d');
         if ($voucher->date_start <= $today && $voucher->date_end >= $today && $voucher->remaini > 0) {
-            return response()->json(["status"=>200,"voucher"=>$voucher]);
-        }
-        else {
-            return response()->json(['errors'=>"Mã đã hết hạn hoặc hết lượng sử dụng!","status"=>400]);
+            return response()->json(["status" => 200, "voucher" => $voucher]);
+        } else {
+            return response()->json(['errors' => "Mã đã hết hạn hoặc hết lượng sử dụng!", "status" => 400]);
         }
     }
 
@@ -125,27 +124,23 @@ class PaymentController extends Controller
                 // Kiểm tra hạn sử dụng và số lượng của mã
                 if ($voucher && $voucher->date_start <= $today && $voucher->date_end >= $today && $voucher->remaini > 0) {
                     // Kiểm tra hình thức giảm 
-                    if($voucher->value == 'Phần trăm') {
-                        $voucherDiscount =floor($totalPrice * ($voucher->decreased_value/100));
-                        if($voucherDiscount > $voucher->max_value) {
+                    if ($voucher->value == 'Phần trăm') {
+                        $voucherDiscount = floor($totalPrice * ($voucher->decreased_value / 100));
+                        if ($voucherDiscount > $voucher->max_value) {
                             $voucherDiscount = $voucher->max_value;
                         }
-                    }
-                    else {
+                    } else {
                         $voucherDiscount = $voucher->max_value;
                     }
-                }
-                else {
+                } else {
                     $voucher_id = null;
                     return redirect()->route('checkout')->with('error', 'Voucher đã hết!.');
                 }
-            }
-            else {
+            } else {
                 return redirect()->route('checkout')->with('error', 'Đơn hàng không đủ điều kiện sử dụng voucher này.');
             }
-        }
-        else {
-            return redirect()->route('checkout')->with('error', 'Sử dụng voucher thất bại!.');
+        } else {
+            $voucher_id = null;
         }
         $totalPrice -= $voucherDiscount;
 
@@ -166,7 +161,6 @@ class PaymentController extends Controller
                 'weight' => $item->quantity * $weight,
             ];
             $quantityCart += $item->quantity;
-            
         }
 
         try {
@@ -245,10 +239,10 @@ class PaymentController extends Controller
                 'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
             ]);
             // Cập nhật lại trạng thái voucher trong kho sau khi sử dụng (Sử dụng mã)
-            if($voucher_id) {
-                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho
-                $wavein = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng')->where('voucher_id', '=', $voucher_id)->first();//Voucher trong kho
-                $voucher = $wavein->voucher;//Voucher trên hệ thống
+            if ($voucher_id) {
+                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first(); //Mã kho
+                $wavein = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng')->where('voucher_id', '=', $voucher_id)->first(); //Voucher trong kho
+                $voucher = $wavein->voucher; //Voucher trên hệ thống
                 // Cập nhật trạng thái
                 $wavein->status = "Đã sử dụng";
                 $wavein->save();
@@ -330,7 +324,7 @@ class PaymentController extends Controller
 
         // Tính tổng giá trị đơn hàng
         $totalPrice = $cartItems->sum('sub_total');
-        $voucherDiscount = 0;//Cần đăng nhập để sử dụng voucher.
+        $voucherDiscount = 0; //Cần đăng nhập để sử dụng voucher.
         $totalPrice -= $voucherDiscount;
         $totalPrice = max($totalPrice, 0);
 
@@ -423,11 +417,6 @@ class PaymentController extends Controller
                 'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
             ]);
 
-            // Thanh toán
-            if ($request->payment_method === 'MOMO') {
-                return $this->processGuestMoMoPayment($order);
-            }
-
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => null, // Sử dụng UUID cho thanh toán
@@ -459,6 +448,8 @@ class PaymentController extends Controller
         //     }
         // }
 
+        // Lưu order_id vào session
+        session()->put('order_id', $order->id);
         // Xóa giỏ hàng
         session()->forget('cart');
         session()->forget('voucher_id');
@@ -617,28 +608,25 @@ class PaymentController extends Controller
 
     public function paymentSuccessForGuest()
     {
-        // Đối với khách vãng lai, lấy thông tin đơn hàng từ session
-        if (!session()->has('order_id')) {
+        // Lấy order_id từ session
+        $orderId = session('order_id');
+        if (!$orderId) {
             return redirect()->route('client.home')->with('error', 'Bạn chưa đặt hàng.');
         }
 
-        // Lấy đơn hàng bằng order_id từ session
-        $orderId = session('order_id');
-        $orders = Order::where('id', $orderId)->first();
-
-        if (!$orders) {
+        // Tìm đơn hàng theo order_id
+        $order = Order::find($orderId);
+        if (!$order) {
             return redirect()->route('client.home')->with('error', 'Đơn hàng không tồn tại.');
         }
 
-        // Lấy thông tin thanh toán từ bảng Payment
-        $payment = Payment::where('order_id', $orders->id)->first();
+        // Lấy thông tin thanh toán
+        $payment = Payment::where('order_id', $order->id)->first();
 
-        // Chuyển hướng đến trang thành công và truyền dữ liệu đơn hàng và thanh toán qua with()
-        return redirect()->route('guest.payment.success')->with([
-            'orders' => $orders,
-            'payment' => $payment
-        ]);
+        // Truyền dữ liệu sang view
+        return view('client.checkouts.success', compact('order', 'payment'));
     }
+
 
     private function clearCart()
     {
@@ -662,7 +650,8 @@ class PaymentController extends Controller
         $date = now()->format('Ymd');
         return 'Order-' . $randomNumber . $date;
     }
-    public function deleteOrderGHN($order_code) {
+    public function deleteOrderGHN($order_code)
+    {
         $response = Http::withHeaders([
             'Token' => env('TOKEN_GHN'),
             'ShopId' => env('SHOP_ID')

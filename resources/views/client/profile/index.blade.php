@@ -31,7 +31,7 @@
                         <h2>{{ $user->name }}</h2>
                         <p>{{ $user->email }}</p>
                         <img src="{{ asset('storage/' . $user->user_image) }}" alt="User Image" class="img-circle"
-                            style="width: 150px; height: 150px;">
+                            style="width: 150px; height: 150px; object-fit: cover;">
                     </div>
 
                     <div class="profile-content mt-4">

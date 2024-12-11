@@ -58,7 +58,10 @@
             @endif
 
             <a href="{{ route('client.home') }}" class="btn btn-grey">Quay về trang chủ</a>
-            <a href="{{ route('orders.index') }}" class="btn btn-primary">Xem lịch sử đơn hàng</a>
+            @auth
+                <a href="{{ route('orders.index') }}" class="btn btn-primary">Xem lịch sử đơn hàng</a>
+            @endauth
+            
         </div>
     </div>
 @endsection

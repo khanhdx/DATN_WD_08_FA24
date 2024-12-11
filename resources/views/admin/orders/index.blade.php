@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="">
         <div class="row">
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35 mt-3">Danh sách Đơn hàng</h3>
@@ -89,7 +89,7 @@
                                     <tbody>
                                         @foreach ($orders as $order)
                                             <tr class="tr-shadow">
-                                                <td>{{ $order->id }}</td>
+                                                <td style="vertical-align: middle !important;">{{ $order->id }}</td>
                                                 <td>
                                                     <a href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">
                                                         {{ $order->order_code }}
