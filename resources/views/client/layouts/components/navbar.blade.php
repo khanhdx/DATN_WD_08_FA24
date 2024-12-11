@@ -128,9 +128,8 @@
                                                             <p style="color: #FFFFFF;font-size: 12px;margin: 0px;">
                                                                 <strong>Mã: </strong> {{ $voucher->voucher_code }}</p>
                                                         </div>
-                                                        
-                                                        @if (Auth::check() && $ware)
-                                                            @if ($ware->wares_list->where('voucher_id',$voucher->id)->first())
+                                                        @if (Auth::check())
+                                                            @if ($ware && $ware->wares_list->where('voucher_id',$voucher->id)->first())
                                                                 <button
                                                                     style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
                                                                     class="btn btn-save" disabled>Đã lưu</button>
@@ -160,7 +159,7 @@
                                                         @else
                                                             <button
                                                                 style="border: 2px solid #FFFF;min-width: 50px;padding: 4px 10px;color: #FFF;width: 100%;margin-top: 0px !important;"
-                                                                class="btn btn-save saveVoucher">Lưu</button>
+                                                                class="btn btn-save @if(!Auth::check()) saveVoucher @endif">Lưu</button>
                                                         @endif
                                                     </div>
                                                 </div>

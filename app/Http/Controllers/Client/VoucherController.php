@@ -46,16 +46,11 @@ class VoucherController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // 
         try {
             $data['voucher'] = Voucher::query()->findOrFail($id);
             if(Auth::user()) {
-                if(Auth::user()->vouchers_ware->wares_list->where('voucher_id', '=', $data['voucher']->id)) {
-                    $data['voucher']->check = true;
-                }
-                else {
-                    $data['voucher']->check = false;
-                }
+                $data['ware'] = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();
             }
             return view('client.vouchers.detail', $data);
         } catch (\Throwable $th) {
@@ -111,10 +106,12 @@ class VoucherController extends Controller
     }
     public function getVoucherData (string $id) {
             $voucher_wave = vouchersWare::query()->where('user_id', '=', $id)->first();
-            $wave_list = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng');
             $voucher = [];
-            foreach ($wave_list as $key => $wave) {
-                $voucher[$key] = $wave->voucher;
+            if ($voucher_wave) {
+                $wave_list = $voucher_wave->wares_list->where('status', '=', 'Chưa sử dụng');
+                foreach ($wave_list as $key => $wave) {
+                    $voucher[$key] = $wave->voucher;
+                }
             }
             return response()->json($voucher);
     }

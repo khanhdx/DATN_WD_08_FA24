@@ -119,9 +119,11 @@
                                     <button class="btn btn-save" disabled>Chưa bắt đầu</button>
                                 @elseif ($voucher->date_end < date('Y-m-d'))
                                     <button class="btn btn-save" disabled>Hết hạn</button>
+                                @elseif ($voucher->remaini == 0)
+                                    <button class="btn btn-save" disabled>Hết lượt</button>
                                 @else
                                     @if (Auth::check())
-                                        @if ($voucher->check)
+                                        @if ($ware && $ware->wares_list->where('voucher_id',$voucher->id)->first())
                                             <button class="btn btn-save" disabled>Đã lưu</button>  
                                         @else                              
                                             <form class="voucher-form" id="voucherForm{{$voucher->id}}" onsubmit="formVoucher({{$voucher->id}})" action="{{ route('client.voucher.update',$voucher->id) }}" method="post">
@@ -132,10 +134,9 @@
                                             </form>
                                         @endif
                                     @else
-                                        <button class="btn btn-save saveVoucher">Lưu</button>
+                                        <button class="btn btn-save @if(!Auth::check()) saveVoucher @endif">Lưu</button>
                                     @endif
                                 @endif
-                               
                             </div>
                         </div>
                     </div>
