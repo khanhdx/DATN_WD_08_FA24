@@ -104,14 +104,14 @@
                                                         <li>Địa chỉ: {{ $order->address }}</li>
                                                     </ul>
                                                 </td>
-                                                <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
+                                                <td class="desc">{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
                                                 {{-- Hiển thị trạng thái hiện tại --}}
                                                 <td>
                                                     @foreach ($order->statusOrder as $c_status)
                                                         <span
-                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}">
+                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}" style="font-size: 15px">
                                                             {{ $c_status['status_label'] }}
                                                         </span>
                                                     @endforeach
@@ -142,6 +142,7 @@
                                         method="post">
                                         @csrf
                                         @method('PUT')
+                                        <input type="hidden" name="status_order" value="{{$status['id_status']}}">
                                         {{-- Nút xác nhận đơn  --}}
                                         @if ($status['id_status'] == 1)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
@@ -168,7 +169,7 @@
                                             </div>
                                         @endif
                                         {{-- Nút xác nhận hủy đơn  --}}
-                                        @if ($status['id_status'] == 8)
+                                        {{-- @if ($status['id_status'] == 8)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
@@ -182,6 +183,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="toast"
                                                             aria-label="Close"></button>
                                                     </div>
+                                            
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
                                                         </p>
@@ -189,7 +191,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                         {{-- Nút xác nhận hoàn trả đơn  --}}
                                         {{-- @if ($status['id_status'] == 10)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"

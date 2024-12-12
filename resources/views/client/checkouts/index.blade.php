@@ -307,6 +307,7 @@
                     success: function (res) {
                         const today = new Date();
                         let modalElement = $.map(res, function (value, key) {
+                            console.log(value);
                             if (value.remaini != 0 && value.status == "Đang diễn ra") {
                                 if (value.value == "Phần trăm") {
                                     return `
@@ -321,7 +322,7 @@
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Giảm:</span> <span style="font-size: 18px;">${(value.decreased_value)}</span><span style="font-size: 12px;">%</span> - <span style="font-weight: 600;">Tối đa:</span> <span style="font-size: 18px;">${(value.max_value)}</span><span style="font-size: 12px;">₫</span></div>
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Đơn tối thiểu:</span> <span style="font-size: 18px;">${(value.condition).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <span style="font-size: 12px;">Số lượng: ${value.remaini}/${value.quanlity}</span>
-                                                    <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span>  <a style="font-size: 14px;font-weight: 500;color: #508be3;magin-left:10px;" href="{{ route('client.voucher.show',5) }}">Chi tiết</a></div>
+                                                    <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span></div>
                                                 </div>
                                                 <div class="voucher-check">
                                                     <input style="width: 20px;height: 20px;" type="radio" value="${value.id}" id="voucher_${value.id}" name="voucher_id">
@@ -343,9 +344,9 @@
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Giảm tối đa:</span> <span style="font-size: 18px;">${(value.max_value).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Đơn tối thiểu:</span> <span style="font-size: 18px;">${(value.condition).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <span style="font-size: 12px;">Số lượng: ${value.remaini}/${value.quanlity}</span>
-                                                    <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span>  <a style="font-size: 14px;font-weight: 500;color: #508be3;magin-left:10px;" href="{{ route('client.voucher.show',5) }}">Chi tiết</a></div>
+                                                    <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span></div>
                                                 </div>
-                                                <div class="voucher-check">
+                                                <div class="voucher-check" style="padding: 5px;">
                                                     <input style="width: 20px;height: 20px;" type="radio" value="${value.id}" id="voucher_${value.id}" name="voucher_id">
                                                 </div>
                                             </label>

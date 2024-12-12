@@ -8,7 +8,7 @@ class VariantRepositopy {
 
     public function getAll()
     {
-        return ProductVariant::all();
+        return ProductVariant::paginate(10);
     }
 
     public function getOneById($id)

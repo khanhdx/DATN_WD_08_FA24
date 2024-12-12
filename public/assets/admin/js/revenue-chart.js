@@ -41,7 +41,14 @@ function updateChartByDateRange(startDate = null, endDate = null) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            let labels = data.map(item => item.date);
+            let labels = data.map((item) => {
+                let date = new Date(item.date);
+                return date.toLocaleDateString("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                });
+            });
             let values = data.map(item => item.total);
             initChart(labels, values);
         })

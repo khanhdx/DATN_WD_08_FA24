@@ -48,7 +48,7 @@ class ProductRepository
         $products = Product::where(function ($query) use ($keyword) {
             $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('SKU', 'like', '%' . $keyword . '%');
-        })->get();
+        })->paginate(10);
 
         return $products;
     }

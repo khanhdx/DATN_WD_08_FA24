@@ -369,6 +369,7 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+@if (!Auth::check()){{-- Nếu chưa đăng nhập --}}
 <script>
     $('.saveVoucher').on('click', function() {
         swal({
@@ -378,3 +379,4 @@
         });
     })
 </script>
+@endif

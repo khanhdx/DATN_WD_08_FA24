@@ -99,8 +99,8 @@
                                     <th>Ảnh</th>
                                     <th>Danh mục</th>
                                     <th>SKU</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Số lượng tồn kho</th>
+                                    <th>Tên</th>
+                                    <th>Tồn kho</th>
                                     <th>Giá gốc</th>
                                     <th>Giá khuyến mãi</th>
                                     <th>Lượt xem</th>
@@ -117,8 +117,8 @@
                                         <td>{{ $item->SKU }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->base_stock }}</td>
-                                        <td class="desc">{{ $item->price_regular }}</td>
-                                        <td class="desc">{{ $item->price_sale }}</td>
+                                        <td class="desc">{{ number_format($item->price_regular, 0, ',', '.') }}</td>
+                                        <td class="desc">{{ number_format($item->price_sale, 0, ',', '.') }}</td>
                                         <td>{{ $item->views }}</td>
 
                                         <td>
@@ -266,7 +266,7 @@
                     </div> --}}
 
                     <div class="mt-2">
-                        {{ $products->links()}}
+                        {{ $products->links() }}
                     </div>
                 </div>
             </div>
