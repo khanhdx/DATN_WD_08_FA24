@@ -72,8 +72,8 @@
                                     <li>
                                         <div class="comment">
                                             <div class="img-circle">
-                                                <img class="avatar" width="50" alt=""
-                                                    src="images/content/blog/avatar.png">
+                                                <img class="avatar" width="60" height="60" alt=""
+                                                src="{{ $comment->user->user_image ? asset('storage/' . $comment->user->user_image) : '/assets/client/images/default-avatar.png' }}">
                                             </div>
                                             <div class="comment-block">
                                                 <span class="comment-by"><strong>{{ $comment->user->name }}</strong></span>
@@ -82,7 +82,7 @@
                                                 <p>{{ $comment->content }}</p>
 
                                                 <!-- Nút xóa bình luận -->
-                                                @if (Auth::check() && Auth::id() === $comment->user_id)
+                                                {{-- @if (Auth::check() && Auth::id() === $comment->user_id)
                                                     <form
                                                         action="{{ route('client.comments.destroy', ['post' => $post_show->id, 'comment' => $comment->id]) }}"
                                                         method="POST" style="display:inline;">
@@ -90,7 +90,7 @@
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                                                     </form>
-                                                @endif
+                                                @endif --}}
 
                                                 <!-- Nút "Reply" -->
                                                 <a href="javascript:void(0)" class="reply-link"
@@ -115,8 +115,8 @@
                                                             <li>
                                                                 <div class="comment">
                                                                     <div class="img-circle">
-                                                                        <img class="avatar" width="50" alt=""
-                                                                            src="images/content/blog/avatar.png">
+                                                                        <img class="avatar" width="60" height="60" alt=""
+                                                                        src="{{ $reply->user->user_image ? asset('storage/' . $reply->user->user_image) : '/assets/client/images/default-avatar.png' }}">
                                                                     </div>
                                                                     <div class="comment-block">
                                                                         <span
@@ -129,7 +129,7 @@
                                                                 </div>
                                                             </li>
                                                             <!-- Nút xóa bình luận -->
-                                                            @if (Auth::check() && Auth::id() === $comment->user_id)
+                                                            {{-- @if (Auth::check() && Auth::id() === $comment->user_id)
                                                                 <form
                                                                     action="{{ route('client.comments.destroy', ['post' => $post_show->id, 'comment' => $comment->id]) }}"
                                                                     method="POST" style="display:inline;">
@@ -138,7 +138,7 @@
                                                                     <button type="submit"
                                                                         class="btn btn-danger btn-sm">Xóa</button>
                                                                 </form>
-                                                            @endif
+                                                            @endif --}}
                                                             <!-- Nút "Reply" -->
                                                             <a href="javascript:void(0)" class="reply-link"
                                                                 data-comment-id="{{ $reply->id }}">
@@ -201,8 +201,8 @@
                             </div>
                         @else
                             <div class="post-block post-leave-comment">
-                                <h3>You must be logged in to leave a comment</h3>
-                                <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
+                                <h3>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</h3>
+                                {{-- <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p> --}}
                             </div>
                         @endif
 

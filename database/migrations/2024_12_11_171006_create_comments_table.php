@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Nếu bạn có bảng users
+            $table->unsignedBigInteger('user_id'); // ID người dùng
+            $table->unsignedBigInteger('post_id'); // ID bài viết 
             $table->text('content');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
+            $table->boolean('is_approved')->default(false); // Trạng thái duyệt bình luận
+            $table->string('status')->default('pending'); // Thêm cột 'status' với giá trị mặc định là 'pending'
             $table->timestamps();
+
+            // Ràng buộc khóa ngoại
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

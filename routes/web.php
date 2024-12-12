@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\AdCommentController;
 
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Client\CartController;
@@ -161,6 +162,13 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
             Route::prefix('images')->as('images.')->group(function () {
                 Route::get('/', [ImageController::class, 'viewImage'])->name('index');
             });
+            //Route quản lý bình luận bài đăng
+            Route::prefix('comments')->as('comments.')->group(function () {
+                Route::get('/', [AdCommentController::class, 'index'])->name('index');
+                Route::put('/{id}/update', [AdCommentController::class, 'update'])->name('update');
+                Route::delete('/{id}', [AdCommentController::class, 'destroy'])->name('destroy');
+            });
+
         });
 });
 

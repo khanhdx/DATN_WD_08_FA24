@@ -185,7 +185,7 @@ class ProductController extends Controller
         // $products = Product::where('name', 'LIKE', "%$query%")
         //     ->orWhere('description', 'LIKE', "%$query%")
         //     ->get();
-        $products = Product::with(['category'])
+        $products = Product::with(['category','image'])
             ->where('name', 'LIKE', "%$query%")
             ->orwhere('description', 'LIKE', "%$query%")
             ->latest('id')
