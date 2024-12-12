@@ -31,10 +31,7 @@
                         </span>
                     </a>
                     <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li>
-                            <a href="{{ route('admin.post.index') }}">
-                                <i class="fas fa-file-text"></i>Bài viết</a>
-                        </li>
+                        
                         <li>
                             <a href="{{ route('admin.category.index') }}">
                                 <i class="fas fa-list-ul"></i>Danh mục</a>
@@ -62,6 +59,14 @@
                         <li>
                             <a href="{{ route('admin.images.index') }}">
                                 <i class="far fa-window-restore"></i>Ảnh trưng bày</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.post.index') }}">
+                                <i class="fas fa-file-text"></i>Bài viết</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.comments.index') }}">
+                                <i class="fas fa-file-text"></i>Bình luận bài viết</a>
                         </li>
                     </ul>
                 </li>

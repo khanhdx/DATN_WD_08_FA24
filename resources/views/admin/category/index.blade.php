@@ -11,7 +11,7 @@
 
                     <form class="au-form-icon" action="{{ route('admin.category.index') }}" method="GET">
                         <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Search for datas &amp; reports..." />
+                            type="text" placeholder="Nhập từ khóa tìm kiếm" />
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>
                         </button>
@@ -29,7 +29,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Ảnh</th>
+                                {{-- <th>Ảnh</th> --}}
                                 <th>Tên</th>
                                 <th></th>
                             </tr>
@@ -38,9 +38,9 @@
                             @foreach ($listcategory as $index => $item)
                             <tr class="tr-shadow">
                                 <td>{{ $listcategory->firstItem() + $index }}</td>
-                                <td>
+                                {{-- <td>
                                     <img src="{{ asset('storage/' . $item->image) }}" alt="" width="100px">
-                                </td>
+                                </td> --}}
                                 <td class="desc">{{ $item->name }}</td>
                                 <td>
                                     <div class="table-data-feature">

@@ -77,6 +77,7 @@ class OrderController extends Controller
         }
         
         if ($order->statusOrder->contains('name_status', 'success')) {
+            // dd($order);
     
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'completed')->first()->id => [

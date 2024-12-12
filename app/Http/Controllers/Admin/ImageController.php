@@ -18,7 +18,9 @@ class ImageController extends Controller
      */
     public function viewImage()
     {
-        return view('admin.images.index');
+        $products = Product::query()->select('id', 'name')->latest('id')->get();
+
+        return view('admin.images.index', compact('products'));
     }
     public function index()
     {

@@ -19,17 +19,17 @@
                             <div class="form-group">
                                 <label for="price">Chọn giá:</label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="0-5000000" 
+                                    <input type="checkbox" name="prices[]" value="0-5000000"
                                         {{ in_array('0-5000000', request('prices', [])) ? 'checked' : '' }}>
                                     Dưới 5,000,000đ
                                 </label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="5000000-10000000" 
+                                    <input type="checkbox" name="prices[]" value="5000000-10000000"
                                         {{ in_array('5000000-10000000', request('prices', [])) ? 'checked' : '' }}>
                                     5,000,000đ - 10,000,000đ
                                 </label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="10000000-500000000" 
+                                    <input type="checkbox" name="prices[]" value="10000000-500000000"
                                         {{ in_array('10000000-500000000', request('prices', [])) ? 'checked' : '' }}>
                                     Trên 10,000,000đ
                                 </label>
@@ -50,8 +50,6 @@
                             @endforeach
                         </ul>
                     </aside>
-
-
 
                     <aside class="block featured">
                         <h4>Sản phẩm trending</h4>
@@ -98,13 +96,16 @@
                         <div class="list-sort pull-right">
                             <select class="formDropdown" id="sortDropdown">
                                 <option value="">Sắp xếp mặc định</option>
-                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Sắp xếp theo giá thấp đến cao</option>
-                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Sắp xếp theo giá cao đến thấp</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Sắp xếp
+                                    theo giá thấp đến cao</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Sắp xếp
+                                    theo giá cao đến thấp</option>
                             </select>
                         </div>
                     </div>
                     <div id="products-grid">
-                        <p id="no-products-message" class="text-center text-danger" style="display:none;">Không tìm thấy sản phẩm nào.</p>
+                        <p id="no-products-message" class="text-center text-danger" style="display:none;">Không tìm thấy sản
+                            phẩm nào.</p>
 
                         <div class="tab-pane active" id="man">
                             <div class="row" id="product-container">
@@ -129,7 +130,9 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
-                                                    <span class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }} đ</span>
+                                                    <span
+                                                        class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }}
+                                                        đ</span>
                                                     <h4><a
                                                             href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                                     </h4>
@@ -170,7 +173,8 @@
                                                     <span>({{ $product->reviews->count() }}) Reviews</span>
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
-                                                <p class="price">{{ number_format($product->price_regular, 0, ',', '.') }} đ</p>
+                                                <p class="price">
+                                                    {{ number_format($product->price_regular, 0, ',', '.') }} đ</p>
                                                 <p>{{ $product->description }}</p>
                                                 <p class="btn-group">
                                                     {{-- <button class="btn btn-sm btn-icon" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</button> --}}
@@ -254,39 +258,40 @@
             document.getElementById('list-view').classList.remove('active');
             this.classList.add('active');
         });
+
         function resetFilters() {
-    var products = document.querySelectorAll('#product-container .animation');
-    products.forEach(function (product) {
-        product.style.display = 'block'; // Hiển thị lại tất cả sản phẩm
-    });
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                product.style.display = 'block'; // Hiển thị lại tất cả sản phẩm
+            });
 
-    // Bỏ chọn các checkbox lọc giá
-    var priceFilters = document.querySelectorAll('input[name="price"]');
-    priceFilters.forEach(function (checkbox) {
-        checkbox.checked = false;
-    });
-}
-
-function filterByCategory(categoryId) {
-    resetFilters(); // Reset các bộ lọc
-    var products = document.querySelectorAll('#product-container .animation');
-    products.forEach(function (product) {
-        if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
-            product.style.display = 'block'; // Hiển thị sản phẩm phù hợp
-        } else {
-            product.style.display = 'none'; // Ẩn các sản phẩm không khớp
+            // Bỏ chọn các checkbox lọc giá
+            var priceFilters = document.querySelectorAll('input[name="price"]');
+            priceFilters.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
         }
-    });
 
-    // Cập nhật URL mà không tải lại trang
-    var newUrl = new URL(window.location.href);
-    if (categoryId == 0) {
-        newUrl.searchParams.delete('category_id');
-    } else {
-        newUrl.searchParams.set('category_id', categoryId);
-    }
-    history.pushState({}, '', newUrl);
-}
+        function filterByCategory(categoryId) {
+            resetFilters(); // Reset các bộ lọc
+            var products = document.querySelectorAll('#product-container .animation');
+            products.forEach(function(product) {
+                if (product.getAttribute('data-category-id') == categoryId || categoryId == 0) {
+                    product.style.display = 'block'; // Hiển thị sản phẩm phù hợp
+                } else {
+                    product.style.display = 'none'; // Ẩn các sản phẩm không khớp
+                }
+            });
+
+            // Cập nhật URL mà không tải lại trang
+            var newUrl = new URL(window.location.href);
+            if (categoryId == 0) {
+                newUrl.searchParams.delete('category_id');
+            } else {
+                newUrl.searchParams.set('category_id', categoryId);
+            }
+            history.pushState({}, '', newUrl);
+        }
 
         function filterByColor(colorId) {
             var products = document.querySelectorAll('#product-container .animation');
@@ -300,83 +305,82 @@ function filterByCategory(categoryId) {
         }
 
         function filterByPrice() {
-    const selectedPrices = Array.from(document.querySelectorAll('input[name="prices[]"]:checked'));
-    const products = document.querySelectorAll('#product-container .animation');
+            const selectedPrices = Array.from(document.querySelectorAll('input[name="prices[]"]:checked'));
+            const products = document.querySelectorAll('#product-container .animation');
 
-    if (selectedPrices.length === 0) {
-        products.forEach(product => product.style.display = 'block');
-        checkNoProducts();
-        return;
-    }
-
-    products.forEach(product => {
-        const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
-        let isMatch = false;
-
-        selectedPrices.forEach(price => {
-            const [min, max] = price.value.split('-').map(Number);
-            if (productPrice >= min && productPrice <= max) {
-                isMatch = true;
+            if (selectedPrices.length === 0) {
+                products.forEach(product => product.style.display = 'block');
+                checkNoProducts();
+                return;
             }
+
+            products.forEach(product => {
+                const productPrice = parseInt(product.getAttribute('data-price').replace(/\./g, ''), 10);
+                let isMatch = false;
+
+                selectedPrices.forEach(price => {
+                    const [min, max] = price.value.split('-').map(Number);
+                    if (productPrice >= min && productPrice <= max) {
+                        isMatch = true;
+                    }
+                });
+
+                product.style.display = isMatch ? 'block' : 'none';
+            });
+
+            checkNoProducts();
+        }
+
+
+        function checkNoProducts() {
+            const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
+                .filter(product => product.style.display !== 'none');
+
+            const noProductsMessage = document.getElementById('no-products-message');
+
+            if (visibleProducts.length === 0) {
+                if (!noProductsMessage) {
+                    const message = document.createElement('p');
+                    message.id = 'no-products-message';
+                    message.className = 'text-center text-danger';
+                    message.textContent = 'Không tìm thấy sản phẩm nào.';
+                    document.getElementById('product-container').appendChild(message);
+                }
+            } else if (noProductsMessage) {
+                noProductsMessage.remove();
+            }
+        }
+
+        // Xóa thông báo khi hiển thị tất cả sản phẩm
+        function showAllProducts() {
+            document.querySelectorAll('#product-container .animation').forEach(product => {
+                product.style.display = 'block';
+            });
+            checkNoProducts();
+        }
+
+        function showAllProducts() {
+            // Lấy tất cả các sản phẩm trong #product-container
+            document.querySelectorAll('#product-container .animation').forEach(product => {
+                product.style.display = 'block'; // Hiển thị sản phẩm
+            });
+
+            // Kiểm tra nếu không có sản phẩm nào, hiển thị thông báo không tìm thấy
+        }
+        document.getElementById('sortDropdown').addEventListener('change', function() {
+            const selectedSort = this.value;
+            const url = new URL(window.location.href);
+
+            // Update URL with selected sort parameter
+            if (selectedSort) {
+                url.searchParams.set('sort', selectedSort);
+            } else {
+                url.searchParams.delete('sort');
+            }
+
+            // Navigate to updated URL
+            window.location.href = url.toString();
         });
-
-        product.style.display = isMatch ? 'block' : 'none';
-    });
-
-    checkNoProducts();
-}
-
-
-function checkNoProducts() {
-    const visibleProducts = Array.from(document.querySelectorAll('#product-container .animation'))
-        .filter(product => product.style.display !== 'none');
-    
-    const noProductsMessage = document.getElementById('no-products-message');
-    
-    if (visibleProducts.length === 0) {
-        if (!noProductsMessage) {
-            const message = document.createElement('p');
-            message.id = 'no-products-message';
-            message.className = 'text-center text-danger';
-            message.textContent = 'Không tìm thấy sản phẩm nào.';
-            document.getElementById('product-container').appendChild(message);
-        }
-    } else if (noProductsMessage) {
-        noProductsMessage.remove();
-    }
-}
-
-// Xóa thông báo khi hiển thị tất cả sản phẩm
-function showAllProducts() {
-    document.querySelectorAll('#product-container .animation').forEach(product => {
-        product.style.display = 'block';
-    });
-    checkNoProducts();
-}
-
-function showAllProducts() {
-    // Lấy tất cả các sản phẩm trong #product-container
-    document.querySelectorAll('#product-container .animation').forEach(product => {
-        product.style.display = 'block'; // Hiển thị sản phẩm
-    });
-
-    // Kiểm tra nếu không có sản phẩm nào, hiển thị thông báo không tìm thấy
-}
-document.getElementById('sortDropdown').addEventListener('change', function () {
-        const selectedSort = this.value;
-        const url = new URL(window.location.href);
-        
-        // Update URL with selected sort parameter
-        if (selectedSort) {
-            url.searchParams.set('sort', selectedSort);
-        } else {
-            url.searchParams.delete('sort');
-        }
-
-        // Navigate to updated URL
-        window.location.href = url.toString();
-    });
-
     </script>
     <script>
         @if (request('type'))
