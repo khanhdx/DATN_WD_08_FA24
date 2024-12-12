@@ -183,7 +183,7 @@ $(document).on('click', '.button-delete', function () {
 // Thanh Search tìm theo tên sản phẩm hoặc ID
 $(document).ready(function () {
     $("#mySearch").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
+        var value = $(this).val().toLowerCase();    
         $("#imagesTableTbody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
@@ -191,27 +191,27 @@ $(document).ready(function () {
 });
 
 // Nút thêm dữ liệu product có liên kết đến product_image
-$('#create-form').click(function () {
-    $('#product-name').children(':not(:first-child)').remove();
+// $('#create-form').click(function () {
+//     $('#product-name').children(':not(:first-child)').remove();
 
-    axios.get(API_PRODUCT_IMG)
-        .then((response) => {
-            const data = response.data.data;
-            if (data.length === 0) {
-                $('#product-name').append(`<option selected>Hiện tại không còn sản phẩm</option>`);
-            } else {
-                data.forEach((item) => {
-                    $('#product-name').append(`
-                        <option value="${item.id}">${item.name}</option>
-                    `
-                    );
-                });
-            }
+//     axios.get(API_PRODUCT_IMG)
+//         .then((response) => {
+//             const data = response.data.data;
+//             if (data.length === 0) {
+//                 $('#product-name').append(`<option selected>Hiện tại không còn sản phẩm</option>`);
+//             } else {
+//                 data.forEach((item) => {
+//                     $('#product-name').append(`
+//                         <option value="${item.id}">${item.name}</option>
+//                     `
+//                     );
+//                 });
+//             }
 
-        }).catch((error) => {
-            console.log(error)
-        })
-})
+//         }).catch((error) => {
+//             console.log(error)
+//         })
+// })
 
 // Hàm thông báo thành công
 const alertSuccess = (text) => {

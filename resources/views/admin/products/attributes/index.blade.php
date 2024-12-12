@@ -34,13 +34,13 @@
                         <button class="au-btn-filter">
                             <i class="zmdi zmdi-filter-list"></i>Lọc</button>
                     </div> --}}
-                    <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Tìm kiếm..." />
-                        <button class="au-btn--submit2" type="submit">
+                    <div class="au-form-icon">
+                        <input id="searchColorInput" class="au-input--w200 au-input--style2" type="text"
+                            placeholder="Tìm kiếm..." />
+                        <button class="au-btn--submit2" type="button">
                             <i class="zmdi zmdi-search"></i>
                         </button>
-                    </form>
+                    </div>
                     <div class="table-data__tool-right">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal"
                             data-target="#addColorModal">
@@ -72,8 +72,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="color_code">Mã màu:</label>
-                                            <input type="text" name="form-control" id="color_code_text" name="code_color" placeholder="#000000" maxlength="7" style="width: 120px; margin-right: 10px">
-                                            <input type="color" class="form-control-color" id="color_code_picker"  title="Chọn màu">
+                                            <input type="text" id="color_code_text" name="code_color"
+                                                placeholder="#000000" maxlength="7"
+                                                style="width: 120px; margin-right: 10px">
+                                            <input type="color" class="form-control-color" id="color_code_picker"
+                                                title="Chọn màu">
                                             <p class="text-danger" id="color_code_error" style="display: none;">Mã màu là
                                                 bắt buộc!</p>
                                         </div>
@@ -84,7 +87,7 @@
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
-                        <table class="table table-data2">
+                        <table class="table table-data2" id="colorTable">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -141,8 +144,14 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="color_code">Mã màu:</label>
-                                                                        <input type="text" name="form-control" id="update_color_code_text" name="code_color" placeholder="#000000" maxlength="7" style="width: 120px; margin-right: 10px"  value="{{ $item->code_color }}">
-                                                                        <input type="color" class="form-control-color" id="update_color_code_picker"  title="Chọn màu" value="{{ $item->code_color }}">
+                                                                        <input type="text" name="form-control"
+                                                                            id="update_color_code_text" name="code_color"
+                                                                            placeholder="#000000" maxlength="7"
+                                                                            style="width: 120px; margin-right: 10px"
+                                                                            value="{{ $item->code_color }}">
+                                                                        <input type="color" class="form-control-color"
+                                                                            id="update_color_code_picker" title="Chọn màu"
+                                                                            value="{{ $item->code_color }}">
                                                                         {{-- <input type="text" class="form-control"
                                                                             id="color_code" name="code_color"
                                                                             value="{{ $item->code_color }}"> --}}
@@ -173,6 +182,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div>
+                            {{ $colors->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,14 +202,15 @@
                         </div>
                         <button class="au-btn-filter">
                             <i class="zmdi zmdi-filter-list"></i>Lọc</button> --}}
+                        <div class="au-form-icon">
+                            <input id="searchSizeInput" class="au-input--w200 au-input--style2" type="text"
+                                placeholder="Tìm kiếm..." />
+                            <button class="au-btn--submit2" type="button">
+                                <i class="zmdi zmdi-search"></i>
+                            </button>
+                        </div>
                     </div>
-                    <form class="au-form-icon" action="" method="GET">
-                        <input class="au-input--w200 au-input--style2" name="search" value="{{ request('search') }}"
-                            type="text" placeholder="Tìm kiếm..." />
-                        <button class="au-btn--submit2" type="submit">
-                            <i class="zmdi zmdi-search"></i>
-                        </button>
-                    </form>
+
                     <div class="table-data__tool-right">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal"
                             data-target="#addSizeModal">
@@ -234,7 +247,7 @@
                         </div>
                     </div>
                     <div class="table-responsive table-responsive-data2">
-                        <table class="table table-data2">
+                        <table class="table table-data2" id="sizeTable">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -366,38 +379,64 @@
                 }
             })
 
-            document.addEventListener('DOMContentLoaded', function(){
+            document.addEventListener('DOMContentLoaded', function() {
                 const colorText = document.getElementById('color_code_text');
                 const colorPicker = document.getElementById('color_code_picker');
                 console.log();
-                
 
-                colorPicker.addEventListener('input', function(){
+
+                colorPicker.addEventListener('input', function() {
                     colorText.value = colorPicker.value.toUpperCase();
                 });
 
-                colorText.addEventListener('input', function(){
-                    const color  = colorText.value;
-                    if (/^#[0-9A-Fa-f]{6}$/.test(color)){
+                colorText.addEventListener('input', function() {
+                    const color = colorText.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
                         colorPicker.value = color;
                     }
                 })
             })
 
-            document.addEventListener('DOMContentLoaded', function(){
+            document.addEventListener('DOMContentLoaded', function() {
                 const updateColorText = document.getElementById('update_color_code_text');
                 const updatecolorPicker = document.getElementById('update_color_code_picker');
-           
-                updatecolorPicker.addEventListener('input', function(){
+
+                updatecolorPicker.addEventListener('input', function() {
                     updateColorText.value = updatecolorPicker.value.toUpperCase();
                 });
 
-                updateColorText.addEventListener('input', function(){
-                    const color  = updateColorText.value;
-                    if (/^#[0-9A-Fa-f]{6}$/.test(color)){
+                updateColorText.addEventListener('input', function() {
+                    const color = updateColorText.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
                         updatecolorPicker.value = color;
                     }
                 })
             })
+
+            function search(elementTable, elementSerch) {
+                const searchInput = document.getElementById(elementSerch);
+                const table = document.getElementById(elementTable);
+                const rows = table.querySelectorAll('tbody tr');
+
+                // Lắng nghe sự kiện "input" trên ô tìm kiếm
+                searchInput.addEventListener('input', function() {
+                    const searchText = searchInput.value.toLowerCase();
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        let match = false;
+                        cells.forEach(cell => {
+                            if (cell.textContent.toLowerCase().includes(searchText)) {
+                                match = true;
+                            }
+                        });
+                        row.style.display = match ? '' : 'none';
+                    });
+                });
+            }
+
+            // Tìm kiếm color
+            search('colorTable', 'searchColorInput');
+            // Tìm kiếm size
+            search('sizeTable', 'searchSizeInput');
         </script>
     @endsection

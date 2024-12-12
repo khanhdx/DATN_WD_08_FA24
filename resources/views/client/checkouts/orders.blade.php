@@ -76,6 +76,19 @@
                                         Hủy đơn
                                     </button>
                                 </form>
+                            @elseif ($order->statusOrder->contains('name_status', 'processing'))
+                                <button type="button" class="btn btn-grey btn-xs"
+                                    onclick="showCancelPopup({{ $order->id }})">
+                                    Hủy đơn
+                                </button>
+                                <form id="cancel-form-{{ $order->id }}"
+                                    action="{{ route('orders.update', $order->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="name_status" value="canceling">
+                                    <input type="hidden" name="reason" value="">
+                                </form>
                             @elseif ($order->statusOrder->contains('name_status', 'success'))
                                 <form action="{{ route('orders.update', $order->id) }}" method="POST"
                                     onsubmit="return confirm('Bạn xác nhận hoàn thành đơn hàng')" style="display:inline;">
@@ -101,6 +114,7 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const orderElements = document.querySelectorAll('.order-id');
@@ -129,7 +143,6 @@
                                     if (currentStatus !== 'pending' && cancelButton) {
                                         cancelButton.style.display = 'none';
                                     } else {
-                                        // Nếu trạng thái là success
                                         if (currentStatus == 'success') {
                                             successButton.style.display = 'block';
                                         } else {
@@ -152,5 +165,75 @@
                 pollStatus(); // Bắt đầu polling
             });
         });
+
+        function showCancelPopup(orderId) {
+            Swal.fire({
+                title: '<h3 style="color:#444; font-size: 35px;">Lý do hủy đơn</h3>',
+                html: `
+            <div style="text-align: left; font-size: 16px;">
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="cancel_reason" value="Không cần nữa" style="margin-right: 10px;"> 
+                    <span style="margin-left: 5px;">Không cần nữa</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="cancel_reason" value="Tìm được giá tốt hơn" style="margin-right: 10px;"> 
+                    <span style="margin-left: 5px;">Tìm được giá tốt hơn</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="cancel_reason" value="Đổi ý" style="margin-right: 10px;"> 
+                    <span style="margin-left: 5px;">Đổi ý</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="cancel_reason" value="Khác" style="margin-right: 10px;" 
+                        onclick="document.getElementById('other-reason').style.display = 'block';"> 
+                    <span style="margin-left: 5px;">Khác</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="other-reason" 
+                    placeholder="Nhập lý do khác..." 
+                    style="display: none; width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    onfocus="this.style.borderColor='#007bff';"
+                    onblur="this.style.borderColor='#ccc';"
+                >
+            </div>
+        `,
+                showCancelButton: true,
+                confirmButtonText: '<span style="font-weight: bold; color: white;">Xác nhận</span>',
+                cancelButtonText: '<span style="font-weight: bold; color: black;">Hủy</span>',
+                width: '500px',
+                background: '#f9f9f9',
+                customClass: {
+                    popup: 'custom-popup',
+                    title: 'custom-title',
+                    confirmButton: 'custom-confirm-btn',
+                    cancelButton: 'custom-cancel-btn',
+                },
+                preConfirm: () => {
+                    const selectedReason = document.querySelector('input[name="cancel_reason"]:checked');
+                    if (!selectedReason) {
+                        Swal.showValidationMessage('Vui lòng chọn một lý do!');
+                        return null;
+                    }
+                    if (selectedReason.value === 'Khác') {
+                        const otherReason = document.getElementById('other-reason').value.trim();
+                        if (!otherReason) {
+                            Swal.showValidationMessage('Vui lòng nhập lý do khác!');
+                            return null;
+                        }
+                        return otherReason;
+                    }
+                    return selectedReason.value;
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    const reason = result.value;
+                    console.log(reason);
+
+                    document.querySelector(`#cancel-form-${orderId} input[name="reason"]`).value = reason;
+                    document.querySelector(`#cancel-form-${orderId}`).submit();
+                }
+            });
+        }
     </script>
 @endsection

@@ -10,6 +10,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\StatusOrderDetail;
 use App\Models\Voucher;
 use App\Models\vouchersWare;
@@ -212,14 +213,13 @@ class PaymentController extends Controller
                 'note' => $request->note,
             ]);
 
+            $totalQuantity = 0;
+            $product_id = null;
             foreach ($cartItems as $item) {
                 // Xu ly ton tren 1 san pham bien the
                 $productVariant = $item->productVariant;
-                if ($productVariant->stock < $item->quantity) {
-                    return redirect()->route('checkout')->with('error', 'Số lượng tồn không đủ');
-                }
                 $productVariant->decrement('stock', $item->quantity);
-
+                $product_id = $item->productVariant->product_id;
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $item->productVariant->product_id,
@@ -231,8 +231,12 @@ class PaymentController extends Controller
                     'quantity' => $item->quantity,
                     'total_price' => $item->totalPrice(),
                 ]);
+                $totalQuantity += $item->quantity;
             }
 
+            // Trừ tổng tồn kho
+            Product::where('id', $product_id)->decrement('base_stock', $totalQuantity);
+            
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
@@ -367,6 +371,7 @@ class PaymentController extends Controller
 
             $order_code = [];
             $data = $response->json();
+          
 
             if ($response->successful()) {
                 $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
@@ -411,6 +416,31 @@ class PaymentController extends Controller
                 ]);
             }
 
+            $totalQuantity = 0;
+            $product_id = null;
+            foreach ($cartItems as $item) {
+                // Xu ly ton tren 1 san pham bien the
+                $productVariant = $item->productVariant;
+                $productVariant->decrement('stock', $item->quantity);
+                $product_id = $item->productVariant->product_id;
+                OrderDetail::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->productVariant->product_id,
+                    'product_variant_id' => $item->productVariant->id,
+                    'name_product' => $item->productVariant->product->name,
+                    'color' => $item->productVariant->color->name ?? null,
+                    'size' => $item->productVariant->size->name ?? null,
+                    'unit_price' => $item->productVariant->price,
+                    'quantity' => $item->quantity,
+                    'total_price' => $item->totalPrice(),
+                ]);
+                $totalQuantity += $item->quantity;
+            }
+
+            // Trừ tổng tồn kho
+            Product::where('id', $product_id)->decrement('base_stock', $totalQuantity);
+
+
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
@@ -426,10 +456,9 @@ class PaymentController extends Controller
                 'status' => 0, // Chờ thanh toán
             ]);
 
-            // Xu
 
             // Thông báo admin
-            // broadcast(new OrderEvent($order));
+            broadcast(new OrderEvent($order));
         } catch (\Exception $e) {
             Log::error('Error while creating guest order: ' . $e->getMessage());
             if (isset($order)) {

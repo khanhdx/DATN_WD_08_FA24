@@ -48,7 +48,14 @@ function updateOrderChart(startDate, endDate) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const labels = data.map(item => item.date);
+            let labels = data.map((item) => {
+                let date = new Date(item.date);
+                return date.toLocaleDateString("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                });
+            });
             const values = data.map(item => item.count);
             initOrderChart(labels, values);
         })
@@ -78,7 +85,9 @@ async function fetchOrderStatusData(startDate = null, endDate = null) {
         const response = await fetch(url);
         const data = await response.json();
 
-        const labels = data.map(item => item.name_status);
+        const labels = data.map(item => translateStatus(item.name_status));
+        console.log(labels);
+        
         const values = data.map(item => item.total);
 
         if (orderStatusPieChart) {
@@ -122,5 +131,33 @@ document.addEventListener('dateRangeChange', (event) => {
     fetchOrderStatusData(startDate, endDate);
 });
 
+function translateStatus(name_status) {
+    switch (name_status) {
+        case 'pending':
+            return 'Chờ xử lý';
+        case 'processing':
+            return 'Đang xử lý';
+        case 'picked':
+            return 'Bên vận chuyển đã lấy hàng';
+        case 'shipping':
+            return 'Đang giao hàng';
+        case 'success':
+            return 'Giao hàng thành công';
+        case 'failed':
+                return 'Giao hàng thất bại';
+        case 'completed':
+            return 'Hoàn Thành';
+        case 'cancel':
+            return 'Hủy đơn';
+        case 'canceled':
+            return 'Đã hủy';
+        case 'refunding':
+            return 'Đang hoàn trả';
+        case 'refunded':
+            return 'Đã hoàn trả';
+        default:
+            return name_status; 
+    }
+}
 
 fetchOrderStatusData();
