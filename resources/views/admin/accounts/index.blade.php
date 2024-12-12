@@ -13,14 +13,15 @@
                     <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
                     <div class="table-data__tool">
                         <div class="table-data__tool-left">
+                            
                             <form action="{{ route('admin.user.index') }}" method="get">
                                 @csrf
                                 <div class="rs-select2--light rs-select2--md">
                                     <select class="js-select2" name="fillter">
                                         <option value="" selected="selected">Tât cả</option>
-                                        <option value="Khách hàng">Khách hàng</option>
-                                        <option value="Nhân viên">Nhân viên</option>
-                                        <option value="Quản lý">Quản lý</option>
+                                        <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Khách hàng") selected  @endif value="Khách hàng">Khách hàng</option>
+                                        <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Nhân viên") selected  @endif value="Nhân viên">Nhân viên</option>
+                                        <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Quản lý") selected  @endif value="Quản lý">Quản lý</option>
                                     </select>
                                     <div class="dropDownSelect2"></div>
                                 </div>
@@ -48,6 +49,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($accounts as $key => $acounts)
+                                    @if ($acounts->id !== Auth::user()->id)
                                     <tr class="tr-shadow">
                                         <td>{{$key+1}}</td>
                                         <td>
@@ -55,9 +57,9 @@
                                         </td>
                                         <td>
                                             @if ($acounts->user_image)
-                                                <img src="{{ asset('storage/' . $acounts->user_image) }}" width="35px" height="35px" style="border-radius: 50%">
+                                                <img src="{{ asset('storage/' . $acounts->user_image) }}" width="35px" height="35px" style="border-radius: 50%; width: 35px; height: 35px;object-fit: cover;">
                                             @else
-                                                <img src="{{asset('assets/admin/images/Default_pfp.svg.png')}}" width="35px" height="35px" style="border-radius: 50%">
+                                                <img src="{{asset('assets/admin/images/Default_pfp.svg.png')}}" width="35px" height="35px" style="border-radius: 50%; width: 35px; height: 35px;object-fit: cover;">
                                             @endif
                                         </td>
                                         <td>
@@ -100,6 +102,7 @@
                                         </td>
                                     </tr>
                                     <tr class="spacer"></tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

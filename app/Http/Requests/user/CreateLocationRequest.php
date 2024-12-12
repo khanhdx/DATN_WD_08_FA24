@@ -26,7 +26,10 @@ class CreateLocationRequest extends FormRequest
             'location_name'=>'required|string|max:255',
             'user_name'=>'required|string|max:255',
             'phone_number'=>'required|numeric',
-            'location_detail'=>'required|string|max:255',
+            'city'=>'required',
+            'district'=>'required',
+            'ward'=>'required',
+            'detail'=>'required',
         ];
     }
     public function messages(): array
@@ -42,9 +45,10 @@ class CreateLocationRequest extends FormRequest
             'user_name.unique'=>'Tài khoản đã tồn tại',
             'phone_number.required'=>'Vui lòng không bỏ trống số điện thoại',
             'phone_number.numeric'=>'Số điện thoại không hợp lệ',
-            'location_detail.required'=>'Vui lòng không bỏ trống địa chỉ',
-            'location_detail.string'=>'địa chỉ phải là một chuỗi',
-            'location_detail.max'=>'địa chỉ quá dài',
+            'city.required'=>"Không bỏ trống!",
+            'district.required'=>"Không bỏ trống!",
+            'ward.required'=>"Không bỏ trống!",
+            "detail.required"=>"Không bỏ trống!",
         ];
     }
 }
