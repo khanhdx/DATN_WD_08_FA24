@@ -120,8 +120,7 @@ class ProductVariantController extends Controller
             ->when($size_id, function ($query, $size_id) {
                 return $query->where('size_id', $size_id);
             })
-            ->paginate(10)
-            ->appends(['controller' => 'filter']);;
+            ->paginate(10);
 
         return $filtedVariants;
     }

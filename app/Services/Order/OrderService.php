@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Models\Order;
 use App\Models\StatusOrderDetail;
 use App\Repositories\OrderRepository;
 use App\Services\Statistical\StatisticalService;
@@ -46,14 +47,14 @@ class OrderService implements IOrderService
     public function getByDate($date)
     {
         $orders = $this->orderRepository->getByDate($date);
-     
+
         return $orders;
     }
 
     public function getByStatusAndDate($status, $date)
     {
         $orders = $this->orderRepository->getByStatusAndDate($status, $date);
-      
+
         return $orders;
     }
 
@@ -61,7 +62,7 @@ class OrderService implements IOrderService
     {
         // Filter orders based on the user's phone number
         $orders = $this->orderRepository->getByPhoneNumber($phone);
-    
+
         return $orders;
     }
 
@@ -72,31 +73,29 @@ class OrderService implements IOrderService
     }
 
 
-    public function filter($status, $date, $phone) {
-
-        if ($status == 'all') {
-            if ($phone) {
-                // Lọc chỉ theo số điện thoại
-                $orders = $this->getByPhoneNumber($phone);
-            } elseif ($date) {
-     
-                $orders = $this->getByDate($date);
-            } else {
-                // Lấy tất cả đơn hàng nếu không có bộ lọc
-                $orders = $this->getAll();
-            }
-        } else {
-            if ($phone) {
-                // Lọc theo trạng thái và số điện thoại
-                $orders = $this->getByStatusAndPhoneNumber($status, $phone);
-            } elseif ($date) {
-                // Lọc theo trạng thái và ngày đặt
-                $orders = $this->getByStatusAndDate($status, $date);
-            } else {
-                // Lọc chỉ theo trạng thái
-                $orders = $this->getByStatus($status);
-            }
-        }
+    public function filter($status, $date, $phone)
+    {
+        $orders = Order::with(['statusOrder' => function ($query) {
+            $query->select('status_orders.id as id_status', 'name_status');
+        }])
+            ->when($status, function ($query, $status) {
+                return $query->whereHas('statusOrder', function ($query) use ($status) {
+                    $query->where('name_status', $status);
+                });
+            })
+            ->when($date, function ($query, $date) {
+                return $query->whereDate('created_at', $date);
+            })
+            ->when($phone, function ($query, $phone) {
+                return $query->where('phone_number', 'like', '%' . $phone . '%');
+            })
+            ->select('id', 'order_code', 'user_id', 'slug', 'total_price', 'user_name', 'email', 'phone_number', 'address', 'created_at')
+            ->orderByDesc('created_at')
+            ->paginate(10)->appends([
+                'status' => $status,
+                'date' => $date,
+                'phone' => $phone,
+            ]);
 
         $countOrderByStatus = $this->statistical->countOrderGroupByStatus();
         $totalOrder = $this->statistical->totalOrder();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\StatusOrder;
 use App\Models\Voucher;
 use App\Models\vouchersWare;
@@ -62,6 +64,14 @@ class OrderController extends Controller
                     'updated_at' => now(),
                 ]
             ]);
+
+            foreach ($order->orderDetails as $detail) {
+                $productVariantId = $detail->product_variant_id;
+                $productId = $detail->product_id;
+                ProductVariant::where('id', $productVariantId)->increment('stock', $detail->quantity);
+                Product::where('id', $productId)->increment('base_stock', $detail->quantity);
+
+            }
             // Hủy dùng voucher
             if($order->voucher_id && Auth::check()) {
                 $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho

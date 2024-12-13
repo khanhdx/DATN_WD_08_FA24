@@ -140,7 +140,7 @@
                                     statusCell.textContent = currentStatus;
 
                                     // Ẩn nút hủy nếu trạng thái không còn là "pending"
-                                    if (currentStatus !== 'pending' && cancelButton) {
+                                    if (currentStatus !== 'pending' && currentStatus !== 'processing' && cancelButton) {
                                         cancelButton.style.display = 'none';
                                     } else {
                                         if (currentStatus == 'success') {
