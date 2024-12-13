@@ -9,6 +9,17 @@
     <section class="p-t-20">
         <div class="">
             <div class="row">
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="col-md-12">
                     <h3 class="title-5 m-b-35">Quản lý tài khoản</h3>
                     <div class="table-data__tool">

@@ -139,10 +139,23 @@ class UserController extends Controller
     public function destroy(Request $request, string $id)
     {
         //
-        if($request->isMethod('DELETE')) {
-            $user = User::query()->findOrFail($id);
+        // if($request->isMethod('DELETE')) {
+        //     $user = User::query()->findOrFail($id);
+        //     $user->delete();
+        //     return redirect()->route('admin.user.index')->with('success', 'Xóa thành công');
+        // }
+        try {
+            // Tìm người dùng theo ID
+            $user = User::findOrFail($id);
+    
+            // Xóa người dùng
             $user->delete();
-            return redirect()->route('admin.user.index')->with('success', 'Xóa thành công');
+    
+            // Nếu xóa thành công, chuyển đến trang danh sách người dùng và hiển thị thông báo thành công
+            return redirect()->route('admin.user.index')->with('success', 'Xóa tài khoản thành công');
+        } catch (\Exception $e) {
+            // Nếu có lỗi xảy ra trong quá trình xóa, chuyển đến trang danh sách và hiển thị thông báo lỗi
+            return redirect()->route('admin.user.index')->with('error', 'Không thể xóa tài khoản. Vui lòng thử lại!');
         }
     }
 }
