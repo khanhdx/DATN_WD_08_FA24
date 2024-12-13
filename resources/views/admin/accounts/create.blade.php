@@ -68,7 +68,6 @@
                                             <label class="form-label" for="">Loại tài khoản</label>
                                             <select name="role" class="form-control" id="">
                                                 <option value="Khách hàng">Khách hàng</option>
-                                                <option value="Nhân viên">Nhân viên</option>
                                                 <option value="Quản lý">Quản lý</option>
                                             </select>
                                         </div>

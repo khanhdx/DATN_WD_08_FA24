@@ -65,7 +65,6 @@
                                         <label class="form-label" for="">Loại tài khoản</label>
                                         <select name="role" class="form-control" id="">
                                             <option {{$user->role == "Khách hàng"?"selected":""}} value="Khách hàng">Khách hàng</option>
-                                            <option {{$user->role == "Nhân viên"?"selected":""}} value="Nhân viên">Nhân viên</option>
                                             <option {{$user->role == "Quản lý"?"selected":""}} value="Quản lý">Quản lý</option>
                                         </select>
                                     </div>
@@ -188,6 +187,30 @@
                         @foreach ($locations as $key => $location)
                             @php
                                 $local = explode("-", $location->location_detail);//Chia địa chỉ làm các phần
+                                if ($local[0]) {
+                                    $city = $local[0];
+                                }
+                                else {
+                                    $city = "";
+                                }
+                                if ($local[1]) {
+                                    $district = $local[1];
+                                }
+                                else {
+                                    $district = "";
+                                }
+                                if ($local[2]) {
+                                    $ward = $local[2];
+                                }
+                                else {
+                                    $ward = "";
+                                }
+                                if ($local[3]) {
+                                    $detail = $local[3];
+                                }
+                                else {
+                                    $detail = "";
+                                }
                             @endphp
                             <div class="">
                                 <div class="d-flex justify-content-between" style="align-items: center;">
@@ -243,7 +266,7 @@
                                                                 <div class="row">
                                                                     <div class="col mb-3">
                                                                         <label for="city_edit_{{$key}}">Tỉnh/Thành phố</label>
-                                                                        <select data-city="{{ $local[0] }}" onchange="city_change('{{$key}}')" class="form-control form-control-sm" id="city_edit_{{$key}}" name="city_edit" aria-label=".form-select-sm">
+                                                                        <select data-city="{{ $city }}" onchange="city_change('{{$key}}')" class="form-control form-control-sm" id="city_edit_{{$key}}" name="city_edit" aria-label=".form-select-sm">
                                                                             <option value="" selected>Chọn tỉnh thành</option>           
                                                                         </select>
                                                                         @error('city_edit')
@@ -252,7 +275,7 @@
                                                                     </div>
                                                                     <div class="col mb-3">
                                                                         <label for="district_edit_{{$key}}">Quận/Huyện</label>
-                                                                        <select data-district="{{ $local[1] }}" onchange="district_change('{{$key}}')" class="form-control form-control-sm" id="district_edit_{{$key}}" name="district_edit" aria-label=".form-select-sm">
+                                                                        <select data-district="{{ $district }}" onchange="district_change('{{$key}}')" class="form-control form-control-sm" id="district_edit_{{$key}}" name="district_edit" aria-label=".form-select-sm">
                                                                             <option value="" selected>Chọn quận huyện</option>
                                                                         </select>
                                                                         @error('district_edit')
@@ -262,7 +285,7 @@
                                                                 </div>
                                                                 <div class="col mb-3 p-0">
                                                                     <label for="ward_edit_{{$key}}">Xã/Phường</label>
-                                                                    <select data-ward="{{ $local[2] }}" class="form-control form-control-sm" id="ward_edit_{{$key}}" name="ward_edit" aria-label=".form-select-sm">
+                                                                    <select data-ward="{{ $ward }}" class="form-control form-control-sm" id="ward_edit_{{$key}}" name="ward_edit" aria-label=".form-select-sm">
                                                                         <option value="" selected>Chọn phường xã</option>
                                                                     </select>
                                                                     @error('ward_edit')
@@ -271,7 +294,7 @@
                                                                 </div>
                                                                 <div class="col mb-3 p-0">
                                                                     <label for="detail_edit_{{$key}}">Đại chỉ chi tiết</label>
-                                                                    <textarea class="form-control form-control-sm" name="detail_edit" id="detail_edit_{{$key}}" cols="5" rows="3">{{ $local[3] }}</textarea>
+                                                                    <textarea class="form-control form-control-sm" name="detail_edit" id="detail_edit_{{$key}}" cols="5" rows="3">{{ $detail }}</textarea>
                                                                     @error('detail_edit')
                                                                         <p class="text-danger">{{$message}}</p>
                                                                     @enderror
