@@ -68,7 +68,7 @@
                 <div class="table-responsive table-responsive-data2">
                     <div class="row">
                         <div
-                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status) => in_array($status->id_status, [1, 8, 10]))) ? 'col-lg-10' : 'col-lg-12' }}">
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status) => in_array($status->id_status, [1, 8, 11]))) ? 'col-lg-10' : 'col-lg-12' }}">
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>

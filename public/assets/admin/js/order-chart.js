@@ -134,27 +134,27 @@ document.addEventListener('dateRangeChange', (event) => {
 function translateStatus(name_status) {
     switch (name_status) {
         case 'pending':
-            return 'Chờ xử lý';
-        case 'processing':
-            return 'Đang xử lý';
-        case 'picked':
-            return 'Bên vận chuyển đã lấy hàng';
-        case 'shipping':
-            return 'Đang giao hàng';
-        case 'success':
-            return 'Giao hàng thành công';
-        case 'failed':
+                return 'Chờ xử lý';
+            case 'processing':
+                return 'Đang lấy hàng';
+            case 'picked':
+                return 'Đã lấy hàng';
+            case 'delivering':
+                return 'Đang giao hàng';
+            case 'success':
+                return 'Giao hàng thành công';
+            case 'failed':
                 return 'Giao hàng thất bại';
-        case 'completed':
-            return 'Hoàn Thành';
-        case 'cancel':
-            return 'Hủy đơn';
-        case 'canceled':
-            return 'Đã hủy';
-        case 'refunding':
-            return 'Đang hoàn trả';
-        case 'refunded':
-            return 'Đã hoàn trả';
+            case 'cancel':
+                return 'Hủy đơn';
+            case 'canceling':
+                return 'Đang chờ xác nhận hủy đơn';
+            case 'canceled':
+                return 'Đã hủy';
+            case 'refunding':
+                return 'Đang hoàn trả';
+            case 'refunded':
+                return 'Đã hoàn trả';
         default:
             return name_status; 
     }

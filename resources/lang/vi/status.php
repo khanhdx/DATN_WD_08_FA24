@@ -2,11 +2,11 @@
 
 return [
     'pending' => 'Chờ xử lý',
-    'processing' => 'Đang xử lý',
-    'shipping' => 'Đang giao hàng',
-    'picked' => 'Đã lấy hàng',
-    'success'=>'Giao hàng thành công',
-    'completed' => 'Hoàn Thành',
+    'processing' => 'Đang lấy hàng',        // Chọn picking trên GHN 
+    'picked' => 'Đã lấy hàng',              // Chọn picked trên GHN 
+    'delivering' => 'Đang giao hàng',       // Chọn delivering trên GHN     
+    'success'=>'Giao thành công',           // Chọn delivered trên GHN
+    'failed'=>'Giao thất bại',
     'cancel' => 'Hủy đơn',
     'canceling' => 'Chờ xác nhận hủy',
     'canceled' => 'Đã hủy',
