@@ -14,12 +14,19 @@ class ColorService implements IColorService
     {
         $this->colorRepository = $colorRepository;
     }
-
     public function getAll()
     {
         // Xử lý nhiệp vụ 
 
         $colors = $this->colorRepository->getAll();
+
+        return $colors;
+    }
+    public function getAllPaginate()
+    {
+        // Xử lý nhiệp vụ 
+
+        $colors = $this->colorRepository->getAllPaginate();
 
         return $colors;
     }

@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Category::class)->constrained();
-
             $table->string('name');                                    // Tên sản phẩm
             // $table->string('image');                                // Ảnh sản phẩm
             $table->string('SKU')->unique();                           // Mã SKU

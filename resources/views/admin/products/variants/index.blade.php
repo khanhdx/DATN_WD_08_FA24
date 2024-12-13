@@ -8,32 +8,36 @@
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35 mt-3">Sản phẩm biến thể</h3>
                 @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--md">
-                            <select class="js-select2" name="color">
-                                <option selected="selected">Màu sắc</option>
-                                @foreach ($colors as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="dropDownSelect2"></div>
-                        </div>
-                        <div class="rs-select2--light rs-select2--sm">
-                            <select class="js-select2" name="size">
-                                <option selected="selected">Size</option>
-                                @foreach ($sizes as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="dropDownSelect2"></div>
-                        </div>
-                        <button class="au-btn-filter">
-                            <i class="zmdi zmdi-filter-list"></i>Lọc</button>
+                        <form action="{{ route('admin.products.variants.index')}}" method="get">
+                            <div class="rs-select2--light rs-select2--md">
+                                <select class="js-select2" name="color">
+                                    <option selected="selected" value="">Màu sắc</option>
+                                    @foreach ($colors as $item)
+                                        <option value="{{ $item->id }}" {{ request('color') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="dropDownSelect2"></div>
+                            </div>
+                            <div class="rs-select2--light rs-select2--sm">
+                                <select class="js-select2" name="size">
+                                    <option selected="selected" value="">Size</option>
+                                    @foreach ($sizes as $item)
+                                        <option value="{{ $item->id }}" {{ request('size') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="dropDownSelect2"></div>
+                            </div>
+                            <button class="au-btn-filter">
+                                <i class="zmdi zmdi-filter-list"></i>Lọc</button>
+
+                        </form>
+
                     </div>
                     <form class="au-form-icon" action="" method="GET">
                         <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
@@ -78,10 +82,10 @@
                                     </td>
                                     <td>{{ $item->stock }}</td>
                                     <td class="desc">{{ number_format($item->price, 0, ',', '.') }}</td>
-                                    <td> 
+                                    <td>
                                         <div class="table-data-feature">
 
-                                            
+
                                             {{-- Xem chi tiết  --}}
                                             {{-- <a href="{{ route('admin.products.variants.detail', $item->id) }}"> <button class="item mr-2"
                                                     data-toggle="tooltip" data-placement="top" title="Xem chi tiết sản phẩm">
@@ -89,13 +93,14 @@
                                                 </button></a> --}}
 
                                             {{-- Sửa sản phẩm --}}
-                                            <a href="{{ route('admin.products.variants.edit', $item->id) }}"> <button class="item mr-2"
-                                                    data-toggle="tooltip" data-placement="top" title="Edit">
+                                            <a href="{{ route('admin.products.variants.edit', $item->id) }}"> <button
+                                                    class="item mr-2" data-toggle="tooltip" data-placement="top"
+                                                    title="Edit">
                                                     <i class="zmdi zmdi-edit"></i>
                                                 </button></a>
 
                                             {{-- Xóa sản phẩm  --}}
-                                            <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST"
+                                            <form action="{{ route('admin.products.variants.edit', $item->id) }}" method="POST"
                                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 @csrf
                                                 @method('DELETE')

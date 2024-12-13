@@ -9,6 +9,10 @@ class ColorRepository
 {
     public function getAll()
     {
+        return Color::all();
+    }
+    public function getAllPaginate()
+    {
         return Color::paginate(5);
     }
 
