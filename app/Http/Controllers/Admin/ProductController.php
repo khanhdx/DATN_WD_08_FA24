@@ -104,6 +104,10 @@ class ProductController extends Controller
 
         $products = $this->productService->filter($request);
 
+        $variants = $products->appends([
+            'category_id' => $request->category_id ?? "",
+        ]);
+
 
         return view('admin.products.index', compact('products', ['categories', 'colors', 'sizes', 'maxPrice']));
     }

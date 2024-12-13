@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Jobs\CompleteOrderJob;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\StatusOrderDetail;
+use App\Models\Voucher;
+use App\Models\vouchersWare;
+use App\Models\waresList;
 use App\Services\Inventory\InventoryService;
 use App\Services\Order\IOrderService;
 use App\Services\Order\Status\StatusService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -29,12 +37,12 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         // Lấy tham số lọc từ request
-        $status = $request->input('status', 'all');
+        $status = $request->input('status');
         $date = $request->input('date');
-        $phone = $request->input('phone'); // Lọc theo số điện thoại
+        $phone = $request->input('phone');
 
         // Kiểm tra các điều kiện lọc
-        if ($status == 'all' && $date == null && $phone == null) {
+        if ($status == null && $date == null && $phone == null) {
             $data = $this->orderService->getAll();
         } else {
             $data = $this->orderService->filter($status, $date, $phone);
@@ -83,16 +91,44 @@ class OrderController extends Controller
                 //     foreach ($order->order_details as $detail) {
                 //         $productVariantId = $detail->product_variant_id;
                 //         $productId = $detail->product_id;
-                //         $this->inventoryService->exportVariantStock($detail->quantity,  $productId, $productVariantId);
+                //         $this->inventoryService->ex portVariantStock($detail->quantity,  $productId, $productVariantId);
                 //     }
                 // } else 
-                if ($newStatusId == 5 || $newStatusId == 7) { // Status Canceled && Refunded
+                if ($newStatusId == 9) { // Status Canceled && Refunded
                     foreach ($order->orderDetails as $detail) {
-                        // $productVariantId = $detail->product_variant_id;
-                        // $productId = $detail->product_id;
-                        // $this->inventoryService->importVariantStock($detail->quantity,  $productId, $productVariantId);
+                        $productVariantId = $detail->product_variant_id;
+                        $productId = $detail->product_id;
+                        ProductVariant::where('id', $productVariantId)->increment('stock', $detail->quantity);
+                        Product::where('id', $productId)->increment('base_stock', $detail->quantity);
 
-                        
+                    }
+                    
+
+                    $response = Http::withHeaders([
+                        'Token' => env('TOKEN_GHN'),
+                        'ShopId' => env('SHOP_ID')
+                    ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', [
+                        'order_codes' => [
+                            $order->order_code
+                        ],
+                    ]);
+
+                    if (!$response->successful()) {
+                        Log::error('Cancel Order Fail: ' . $response->body());
+                        return redirect()->back()->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
+                    }
+
+                    // Hủy dùng voucher
+                    if ($order->voucher_id && $order->user_id) {
+                        $voucher_wave = vouchersWare::query()->where('user_id', '=', $order->user_id)->first(); //Mã kho
+                        $wavein = waresList::query()->where('vouchers_ware_id', '=', $voucher_wave->id)->where('voucher_id', '=', $order->voucher_id)->first();
+                        $voucher = Voucher::query()->where('id', '=', $order->voucher_id)->first(); //Voucher trên hệ thống
+                        // Cập nhật trạng thái
+                        $wavein->status = "Chưa sử dụng";
+                        $wavein->save();
+                        // Cập nhật số lượng
+                        $voucher->remaini = $voucher->remaini + 1;
+                        $voucher->save();
                     }
                 }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\product\variant\StoreVariantRequest;
 use App\Http\Requests\product\variant\UpdateVariantRequest;
+use App\Models\ProductVariant;
 use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
 use App\Services\Product\IVariantService;
@@ -28,12 +29,24 @@ class ProductVariantController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         $colors = $this->colorService->getAll();
         $sizes = $this->sizeService->getAll();
 
-        $variants =  $this->variantService->getAll();
+        $color_id = $request->query('color');
+        $size_id = $request->query('size');
+
+        if ( $color_id == null && $size_id == null){
+            $variants =  $this->variantService->getAll();
+        } else {
+            $variants = $this->filter($color_id, $size_id);
+        }
+
+        $variants = $variants->appends([
+            'color' => $color_id,
+            'size' => $size_id,
+        ]);
 
         return view('admin.products.variants.index', compact('variants', ['colors', 'sizes']));
     }
@@ -88,12 +101,27 @@ class ProductVariantController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    
+
     public function getAllAttribute()
     {
-        $colors = $this->colorService->getAll();
+        $colors = $this->colorService->getAllPaginate();
         $sizes = $this->sizeService->getAll();
 
         return view('admin.products.attributes.index', compact('colors', 'sizes'));
+    }
+
+
+    public function filter($color_id, $size_id)
+    {
+        $filtedVariants = ProductVariant::query()
+            ->when($color_id, function ($query, $color_id) {
+                return $query->where('color_id', $color_id);
+            })
+            ->when($size_id, function ($query, $size_id) {
+                return $query->where('size_id', $size_id);
+            })
+            ->paginate(10);
+
+        return $filtedVariants;
     }
 }

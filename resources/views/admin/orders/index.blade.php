@@ -27,7 +27,7 @@
                         <div class="form-group mr-3">
                             <label for="status">Trạng thái:</label>
                             <select class="form-control ml-2" name="status" id="status">
-                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
+                                <option value="" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả</option>
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status->name_status }}"
                                         {{ request('status') == $status->name_status ? 'selected' : '' }}>
@@ -56,15 +56,11 @@
                             style="color: black">Tất cả <span
                                 class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $totalOrder }})</span></a>
                         @foreach ($countOrderByStatus as $item)
-                            @if ($item->status_order_id == 5 || $item->status_order_id == 7)
-                                @continue
-                            @else
-                                <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
-                                    class="mr-3 text-capitalize"
-                                    style="color: black">{{ trans('status.' . $item->name_status) }}
-                                    <span
-                                        class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
-                            @endif
+                            <a href="{{ route('admin.orders.index', ['status' => $item->name_status]) }}"
+                                class="mr-3 text-capitalize"
+                                style="color: black">{{ trans('status.' . $item->name_status) }}
+                                <span
+                                    class="small border border-2 rounded bg-body-secondary p-2 ml-1">({{ $item->total }})</span></a>
                         @endforeach
                     </div>
                     <br />
@@ -72,7 +68,7 @@
                 <div class="table-responsive table-responsive-data2">
                     <div class="row">
                         <div
-                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status)=>in_array($status->id_status, [1, 9, 11]))) ? 'col-lg-10' : 'col-lg-12' }}">
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status) => in_array($status->id_status, [1, 8, 10]))) ? 'col-lg-10' : 'col-lg-12' }}">
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>
@@ -91,7 +87,8 @@
                                             <tr class="tr-shadow">
                                                 <td style="vertical-align: middle !important;">{{ $order->id }}</td>
                                                 <td>
-                                                    <a href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">
+                                                    <a
+                                                        href="https://tracking.ghn.dev/?order_code={{ $order->order_code }}">
                                                         {{ $order->order_code }}
                                                     </a>
                                                 </td>
@@ -104,7 +101,8 @@
                                                         <li>Địa chỉ: {{ $order->address }}</li>
                                                     </ul>
                                                 </td>
-                                                <td class="desc">{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
+                                                <td class="desc">{{ number_format($order->total_price, 0, ',', '.') }} đ
+                                                </td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
 
                                                 {{-- Hiển thị trạng thái hiện tại --}}
@@ -120,12 +118,12 @@
                                                     <div class="table-data-feature">
                                                         {{-- Xem chi tiết  --}}
                                                         <a href="{{ route('admin.orders.show', $order->id) }}">
-                                                            <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                                title="Xem chi tiết đơn hàng">
+                                                            <button class="item mr-2" data-toggle="tooltip"
+                                                                data-placement="top" title="Xem chi tiết đơn hàng">
                                                                 <i class="fas fa-eye"></i>
                                                             </button></a>
                                                     </div>
-    
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -138,11 +136,10 @@
                         <div class="col-lg-2">
                             @foreach ($orders as $order)
                                 @foreach ($order->statusOrder as $status)
-                                    <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
-                                        method="post">
+                                    <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="post">
                                         @csrf
                                         @method('PUT')
-                                        <input type="hidden" name="status_order" value="{{$status['id_status']}}">
+                                        <input type="hidden" name="status_order" value="{{ $status['id_status'] }}">
                                         {{-- Nút xác nhận đơn  --}}
                                         @if ($status['id_status'] == 1)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
@@ -169,7 +166,7 @@
                                             </div>
                                         @endif
                                         {{-- Nút xác nhận hủy đơn  --}}
-                                        @if ($status['id_status'] == 9)
+                                        @if ($status['id_status'] == 8)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
@@ -183,11 +180,12 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="toast"
                                                             aria-label="Close"></button>
                                                     </div>
-                                            
+
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
                                                         </p>
-                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác nhận hủy</button>
+                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
+                                                            nhận hủy</button>
                                                     </div>
                                                 </div>
                                             </div>

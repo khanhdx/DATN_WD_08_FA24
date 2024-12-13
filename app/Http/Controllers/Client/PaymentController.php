@@ -213,8 +213,7 @@ class PaymentController extends Controller
                 'note' => $request->note,
             ]);
 
-            $totalQuantity = 0;
-            $product_id = null;
+
             foreach ($cartItems as $item) {
                 // Xu ly ton tren 1 san pham bien the
                 $productVariant = $item->productVariant;
@@ -231,11 +230,11 @@ class PaymentController extends Controller
                     'quantity' => $item->quantity,
                     'total_price' => $item->totalPrice(),
                 ]);
-                $totalQuantity += $item->quantity;
+    
+                Product::where('id', $item->productVariant->product_id)->decrement('base_stock', $item->quantity);
             }
 
-            // Trừ tổng tồn kho
-            Product::where('id', $product_id)->decrement('base_stock', $totalQuantity);
+           
             
             StatusOrderDetail::create([
                 'status_order_id' => 1,

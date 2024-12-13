@@ -8,7 +8,7 @@ class ProductRepository
 {
     public function getAll()
     {
-        return Product::paginate(10);
+        return Product::orderByDesc('id')->paginate(10);
     }
 
     public function getOneById($id)

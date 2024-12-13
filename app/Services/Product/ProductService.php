@@ -51,13 +51,6 @@ class ProductService implements IProductService
         // Khởi tạo tồn kho tổng = 0
         $productInput['base_stock'] = 0;
      
-        // Upload Image
-        if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
-            $productInput['image'] = $productInput['image']->store('uploads/products', 'public');
-        } else {
-            $productInput['image'] = null;
-        }
-
         //Insert lên DB
         $product = $this->productRepository->insert($productInput);
 

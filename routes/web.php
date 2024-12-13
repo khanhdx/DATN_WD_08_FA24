@@ -119,8 +119,9 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
                     Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
-
+                    
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
+                
 
                     // Route cho colors
                     Route::prefix('colors')->as('colors.')->group(function () {

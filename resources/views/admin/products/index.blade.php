@@ -96,7 +96,6 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Ảnh</th>
                                     <th>Danh mục</th>
                                     <th>SKU</th>
                                     <th>Tên</th>
@@ -110,9 +109,6 @@
                                 @foreach ($products as $item)
                                     <tr class="tr-shadow">
                                         <td>{{ $item['id'] }}</td>
-                                        <td>
-                                            <img src="{{ Storage::url($item->image) }}" alt="" width="100px">
-                                        </td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ $item->SKU }}</td>
                                         <td>{{ $item->name }}</td>
