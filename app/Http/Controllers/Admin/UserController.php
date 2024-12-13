@@ -68,24 +68,6 @@ class UserController extends Controller
                     'user_id'=>$user_new->id,
                 ]);
             }
-            $locations = $request->input('location');
-            if(!empty($locations)) {
-                $status_location = $request->input('status');
-                if($status_location == null) {
-                    $status_location = 0;
-                }
-                foreach ($locations as $key => $location) {
-                    $location['user_id'] = $user_new->id;
-                    if($status_location == $key) {
-                        $location['status'] = "Mặc định";
-                    }else {
-                        $location['status'] = "Phụ";
-                    }
-                    if($location['location_name']!=null || $location['user_name']!=null || $location['phone_number']!=null || $location['location_detail']!=null) {
-                        Locations::query()->create($location);
-                    }
-                }
-            }
             return redirect()->route('admin.user.index')->with('success', 'Thàn công');
         }
     }
