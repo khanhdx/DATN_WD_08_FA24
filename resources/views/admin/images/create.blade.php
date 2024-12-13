@@ -14,9 +14,9 @@
                         <label for="product-name">Chọn sản phẩm cần ảnh</label>
                         <select class="form-control" name="product_id" id="product-name">
                             <option value="">Lựa chọn sản phẩm</option>
-                            {{-- @foreach ($products as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach --}}
+                           @foreach ($products as $item)
+                               <option value="{{$item->id}}">{{ $item->name }}</option>
+                           @endforeach
                         </select>
                     </div>
 

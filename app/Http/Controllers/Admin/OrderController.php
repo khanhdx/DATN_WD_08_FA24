@@ -79,17 +79,20 @@ class OrderController extends Controller
             DB::transaction(function () use ($order, $newStatusId) {
                 $this->orderService->updateStatus($newStatusId, $order->id);
                 // Status Shipping
-                if ($newStatusId == 3) {
-                    foreach ($order->order_details as $detail) {
-                        $productVariantId = $detail->product_variant_id;
-                        $productId = $detail->product_id;
-                        $this->inventoryService->exportVariantStock($detail->quantity,  $productId, $productVariantId);
-                    }
-                } else if ($newStatusId == 5 || $newStatusId == 7) { // Status Canceled && Refunded
+                // if ($newStatusId == 3) {
+                //     foreach ($order->order_details as $detail) {
+                //         $productVariantId = $detail->product_variant_id;
+                //         $productId = $detail->product_id;
+                //         $this->inventoryService->exportVariantStock($detail->quantity,  $productId, $productVariantId);
+                //     }
+                // } else 
+                if ($newStatusId == 5 || $newStatusId == 7) { // Status Canceled && Refunded
                     foreach ($order->orderDetails as $detail) {
-                        $productVariantId = $detail->product_variant_id;
-                        $productId = $detail->product_id;
-                        $this->inventoryService->importVariantStock($detail->quantity,  $productId, $productVariantId);
+                        // $productVariantId = $detail->product_variant_id;
+                        // $productId = $detail->product_id;
+                        // $this->inventoryService->importVariantStock($detail->quantity,  $productId, $productVariantId);
+
+                        
                     }
                 }
 

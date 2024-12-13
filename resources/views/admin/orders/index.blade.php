@@ -72,7 +72,7 @@
                 <div class="table-responsive table-responsive-data2">
                     <div class="row">
                         <div
-                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status)=>in_array($status->id_status, [1, 8, 10]))) ? 'col-lg-10' : 'col-lg-12' }}">
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status)=>in_array($status->id_status, [1, 9, 11]))) ? 'col-lg-10' : 'col-lg-12' }}">
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>
@@ -111,7 +111,7 @@
                                                 <td>
                                                     @foreach ($order->statusOrder as $c_status)
                                                         <span
-                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}" style="font-size: 15px">
+                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}">
                                                             {{ $c_status['status_label'] }}
                                                         </span>
                                                     @endforeach
@@ -169,7 +169,7 @@
                                             </div>
                                         @endif
                                         {{-- Nút xác nhận hủy đơn  --}}
-                                        {{-- @if ($status['id_status'] == 8)
+                                        @if ($status['id_status'] == 9)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
@@ -191,7 +191,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif --}}
+                                        @endif
                                         {{-- Nút xác nhận hoàn trả đơn  --}}
                                         {{-- @if ($status['id_status'] == 10)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"

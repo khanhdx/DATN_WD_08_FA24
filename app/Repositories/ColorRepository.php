@@ -9,7 +9,7 @@ class ColorRepository
 {
     public function getAll()
     {
-        return Color::all();
+        return Color::paginate(5);
     }
 
     public function getOne($id)
@@ -43,4 +43,6 @@ class ColorRepository
         Color::query()->where('id', $id)->delete();
         return true;
     }
+
+    
 }

@@ -41,6 +41,7 @@ class ImageController extends Controller
     public function store(StoreImageRequest $request)
     {
         try {
+            
             DB::transaction(function () use ($request) {
                 if ($request->hasFile('image_main')) {
                     ProductImage::create([

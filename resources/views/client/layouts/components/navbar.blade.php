@@ -75,23 +75,23 @@
                                 <div class="col-md-2 menu-column">
                                     <h3>Man</h3>
                                     <ul class="list-unstyled sub-menu">
-                                        @foreach ($categories as $category)
-                                            @if ($category->type == 'Man')
-                                                <li><a href="#"
-                                                        onclick="openCategory({{ $category->id }})">{{ $category->name }}</a>
-                                                </li>
-                                            @endif
-                                        @endforeach
+                                            @foreach ($categories as $category)
+                                                @if ($category->type == 'Man')
+                                                    <li>
+                                                        <a href="{{route('client.product.index')}}?category_id={{ $category->id }}">{{ $category->name }}</a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
                                     </ul>
                                 </div>
 
                                 <div class="col-md-2 menu-column">
                                     <h3>Woman</h3>
                                     <ul class="list-unstyled sub-menu">
-                                        @foreach ($categories as $item)
-                                            @if ($item->type == 'Woman')
-                                                <li><a href="#"
-                                                        onclick="openCategory({{ $item->id }})">{{ $item->name }}</a>
+                                        @foreach ($categories as $category)
+                                            @if ($category->type == 'Woman')
+                                                <li>
+                                                    <a href="{{route('client.product.index')}}?category_id={{ $category->id }}">{{ $category->name }}</a>
                                                 </li>
                                             @endif
                                         @endforeach

@@ -39,7 +39,7 @@ class OrderController extends Controller
     {
         // Lấy đơn hàng theo ID
         $order = Order::findOrFail($id);
-        
+        $reason = $request->reason;
         if ($order->statusOrder->contains('name_status', 'pending')) {
 
             $response = Http::withHeaders([
@@ -75,10 +75,17 @@ class OrderController extends Controller
                 $voucher->save();
             }
         }
+
+        if ($order->statusOrder->contains('name_status', 'processing')) {
+            $order->statusOrder()->sync([
+                StatusOrder::where('name_status', 'canceling')->first()->id => [
+                    'name' => $reason,
+                    'updated_at' => now(),
+                ]
+            ]);
+        }
         
         if ($order->statusOrder->contains('name_status', 'success')) {
-            // dd($order);
-    
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'completed')->first()->id => [
                     'name' => 'completed',

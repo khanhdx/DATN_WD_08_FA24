@@ -21,8 +21,8 @@
             <div class="col-md-8">
                 <h3 class="title-5 m-b-35">ảnh trưng bày sản phẩm</h3>
                 <div class="table-data__tool">
-                    <input class="au-input--w300 au-input--style2" name="keyword" id="mySearch"
-                            value="" type="text" placeholder="Tìm kiếm..." />
+                    <input class="au-input--w300 au-input--style2" name="keyword" id="mySearch" value="" type="text"
+                        placeholder="Tìm kiếm..." />
 
                     <div class="table-data__tool-right">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" type="button" data-toggle="modal"
@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody id="imagesTableTbody">
-                            
+
                         </tbody>
                     </table>
                 </div>

@@ -96,15 +96,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="location">
-                                    <div>
-                                        <a id="add_location" class="text-light au-btn au-btn-icon au-btn--blue au-btn--small mb-3">Thêm địa chỉ +</a>
-                                        <a id="delete_location" style="display: none;" class="text-light au-btn au-btn-icon btn-danger au-btn--small mb-3">Xóa -</a>
-                                    </div>
-                                    <div class="" id="form_location">
-
-                                    </div>
-                                </div>
                                 <div>
                                     <button type="reset" class="au-btn au-btn-icon btn-danger au-btn--small mr-3">Xóa</button>
                                     <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small mr-3">Thêm tài khoản</button>
@@ -141,59 +132,6 @@
         });
     </script>
     {{-- form địa chỉ --}}
-    <script>
-        const btn_Add_Location = document.getElementById('add_location');
-        const btn_Delete_Location = document.getElementById('delete_location');
-        let count = 0;
-        btn_Add_Location.addEventListener('click', function() {
-            if (count <= 4 && count>=0) {
-                count++;
-                var form_Element = "";
-                btn_Delete_Location.style.display = "inline-block";
-                for (let i = 0; i < count; i++) {
-                    form_Element = form_Element + `
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="name">Tên địa chỉ</label>
-                                <input class="form-control" type="text" name="location[${i}][location_name]" value="Địa chỉ ${i+1}" id="location_name">
-                                
-                            </div>
-                        </div>
-                           <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="name">Tên người nhận</label>
-                                <input class="form-control" type="text" name="location[${i}][user_name]" placeholder="Tên người nhận" id="user_name">
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="name">Số điện thoại người nhận</label>
-                                <input class="form-control" type="text" name="location[${i}][phone_number]" placeholder="Số điện thoại" id="phone_number">
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="name">Địa chỉ người nhận</label>
-                                <textarea class="form-control" name="location[${i}][location_detail]" id="" cols="20" rows="5"></textarea>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="name">Đặt làm mặc định</label>
-                                <input type="radio" name="status" id="status" value="${i}">
-                            </div>
-                        </div>
-                    `;
-                document.getElementById('form_location').innerHTML = form_Element;
-                }
-            }
-            else{
-                alert("Tối đa 5 địa chỉ");
-            }
-            console.log(count);
-        });
-        btn_Delete_Location.addEventListener('click', function() {
-            count = 0;
-            if(count == 0){
-                btn_Delete_Location.style.display = "none";
-            }
-            document.getElementById('form_location').innerHTML = "";
-        });
-    </script>
     <script>
         function togglePassword() {
             const passwordField = document.getElementById("password");
