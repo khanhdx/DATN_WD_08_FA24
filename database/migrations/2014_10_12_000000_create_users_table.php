@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('user_image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['Khách hàng', 'Nhân viên', 'Quản lý']);
+            $table->enum('role', ['Khách hàng', 'Quản lý']);
             $table->rememberToken();
             $table->timestamps();
         });
