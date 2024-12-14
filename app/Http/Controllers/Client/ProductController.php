@@ -70,6 +70,7 @@ class ProductController extends Controller
 
     // Phân trang sau khi áp dụng tất cả bộ lọc
     $products = $query->simplePaginate(9);
+    // $products = $query->paginate(9)->appends($request->all());
 
     // Lấy dữ liệu khác để hiển thị
     $categories = Category::all();

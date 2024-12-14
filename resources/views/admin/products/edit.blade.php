@@ -106,7 +106,7 @@
                                                         <td class="d-flex align-item-center">
                                                             <div>
                                                                 <img id="preview_0"
-                                                                    @if ($product['image']) src="{{ Storage::url($product['image']) }}"
+                                                                    @if ($product['image']) src="{{ Storage::url($product->image->image_url) }}"
                                                                 @else
                                                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrVLGzO55RQXipmjnUPh09YUtP-BW3ZTUeAA&s" @endif
                                                                     class="preview-image mr-3">

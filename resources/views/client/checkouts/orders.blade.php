@@ -5,6 +5,29 @@
     Danh sách đơn hàng
 @endsection
 
+@section('css')
+    <style>
+        .custom-return-btn {
+            display: inline-block;
+            font-size: 12px;
+            padding: 5px 10px;
+            color: #fff;
+            background-color: #86d2c4;
+            border: 1px solid #86d2c4;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-return-btn:hover {
+            background-color: #5e9087;
+            border-color: #5e9087;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+@endsection
+
 @section('content')
     @include('client.layouts.components.pagetop', ['md' => 'md'])
     <div class="container">
@@ -95,14 +118,20 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="name_status" value="completed">
-                                    <button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 6px;">Hoàn thành</button>
+                                    <button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 6px;">Hoàn
+                                        thành</button>
                                 </form>
-                                <form action="{{ route('orders.update', $order->id) }}" method="POST"
-                                    onsubmit="return confirm('Bạn xác nhận hoàn đơn hàng không')" style="display:inline;">
+                                <button type="button" class="btn btn-xs custom-return-btn"
+                                    onclick="showReturnPopup({{ $order->id }})" style="display:inline;"">
+                                    Hoàn hàng
+                                </button>
+                                <form id="return-form-{{ $order->id }}"
+                                    action="{{ route('orders.update', $order->id) }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="name_status" value="refunding">
-                                    <button type="submit" class="btn btn-outline-primary btn-xs">Hoàn hàng</button>
+                                    <input type="hidden" name="reason" value="">
                                 </form>
                             @endif
                         </td>
@@ -140,7 +169,8 @@
                                     statusCell.textContent = currentStatus;
 
                                     // Ẩn nút hủy nếu trạng thái không còn là "pending"
-                                    if (currentStatus !== 'pending' && currentStatus !== 'processing' && cancelButton) {
+                                    if (currentStatus !== 'pending' && currentStatus !==
+                                        'processing' && cancelButton) {
                                         cancelButton.style.display = 'none';
                                     } else {
                                         if (currentStatus == 'success') {
@@ -199,8 +229,8 @@
             </div>
         `,
                 showCancelButton: true,
-                confirmButtonText: '<span style="font-weight: bold; color: white;">Xác nhận</span>',
-                cancelButtonText: '<span style="font-weight: bold; color: black;">Hủy</span>',
+                confirmButtonText: '<span style="font-weight: bold; color: white; font-size: 15px">Xác nhận</span>',
+                cancelButtonText: '<span style="font-weight: bold; color: white; font-size: 15px;">Hủy</span>',
                 width: '500px',
                 background: '#f9f9f9',
                 customClass: {
@@ -234,6 +264,106 @@
                     document.querySelector(`#cancel-form-${orderId}`).submit();
                 }
             });
+        }
+
+
+        function showReturnPopup(orderId) {
+            Swal.fire({
+                title: '<h3 style="color:#444; font-size: 35px;">Lý do hoàn hàng</h3>',
+                html: `
+            <div style="text-align: left; font-size: 16px;">
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="return_reason" value="Sản phẩm bị lỗi hoặc hư hỏng" style="margin-right: 10px;" onclick="hideOtherReason()"> 
+                    <span style="margin-left: 5px;">Sản phẩm bị lỗi hoặc hư hỏng</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="return_reason" value="Giao sai sản phẩm" style="margin-right: 10px;" onclick="hideOtherReason()"> 
+                    <span style="margin-left: 5px;">Giao sai sản phẩm</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="return_reason" value="Sản phẩm không như mong đợi" style="margin-right: 10px;" onclick="hideOtherReason()"> 
+                    <span style="margin-left: 5px;">Sản phẩm không như mong đợi</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="return_reason" value="Hết nhu cầu sử dụng" style="margin-right: 10px;" onclick="hideOtherReason()"> 
+                    <span style="margin-left: 5px;">Hết nhu cầu sử dụng</span>
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                    <input type="radio" name="return_reason" value="Khác" style="margin-right: 10px;" onclick="showOtherReason()"> 
+                    <span style="margin-left: 5px;">Khác</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="other-reason" 
+                    placeholder="Nhập lý do khác..." 
+                    style="display: none; width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    onfocus="this.style.borderColor='#007bff';"
+                    onblur="this.style.borderColor='#ccc';"
+                >
+            </div>
+        `,
+                showCancelButton: true,
+                confirmButtonText: '<span style="font-weight: bold; color: white; font-size: 15px">Xác nhận</span>',
+                cancelButtonText: '<span style="font-weight: bold; color: white; font-size: 15px;">Hủy</span>',
+                width: '500px',
+                background: '#f9f9f9',
+                customClass: {
+                    popup: 'custom-popup',
+                    title: 'custom-title',
+                    confirmButton: 'custom-confirm-btn',
+                    cancelButton: 'custom-return-btn',
+                },
+                preConfirm: () => {
+                    const selectedReason = document.querySelector('input[name="return_reason"]:checked');
+                    if (!selectedReason) {
+                        Swal.showValidationMessage('Vui lòng chọn một lý do!');
+                        return null;
+                    }
+                    if (selectedReason.value === 'Khác') {
+                        const otherReason = document.getElementById('other-reason').value.trim();
+                        if (!otherReason) {
+                            Swal.showValidationMessage('Vui lòng nhập lý do khác!');
+                            return null;
+                        }
+                        return otherReason;
+                    }
+                    return selectedReason.value;
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    const reason = result.value;
+                    Swal.fire({
+                        title: '<h3 style="color: #d33; font-size: 25px; font-weight: bold;">Xác nhận hoàn hàng?</h3>',
+                        html: `<p style="color: #555; font-size: 16px;">Bạn có chắc chắn muốn hoàn hàng với lý do: <b>"${reason}"</b>?</p>`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: '<span style="font-size: 15px; font-weight: bold; color: white;">Đồng ý</span>',
+                        cancelButtonText: '<span style="font-size: 15px; font-weight: bold; color: white;">Hủy</span>',
+                        customClass: {
+                            popup: 'custom-popup',
+                            title: 'custom-title',
+                            confirmButton: 'custom-confirm-btn',
+                            cancelButton: 'custom-cancel-btn',
+                        },
+                    }).then((confirmation) => {
+                        if (confirmation.isConfirmed) {
+                            const form = document.querySelector(`#return-form-${orderId}`);
+                            if (form) {
+                                form.querySelector('input[name="reason"]').value = reason;
+                                form.submit();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        
+        function showOtherReason() {
+            document.getElementById('other-reason').style.display = 'block';
+        }
+
+        function hideOtherReason() {
+            document.getElementById('other-reason').style.display = 'none';
         }
     </script>
 @endsection

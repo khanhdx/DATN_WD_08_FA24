@@ -195,6 +195,7 @@
                         </div>
                     </div>
                     <div class="pagination-wrapper">
+                        {{-- {{ $products->links() }} --}}
                         {{ $products->appends(request()->query())->links() }}
                     </div>
                 </div>
