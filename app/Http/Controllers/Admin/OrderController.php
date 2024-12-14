@@ -86,15 +86,8 @@ class OrderController extends Controller
         try {
             DB::transaction(function () use ($order, $newStatusId) {
                 $this->orderService->updateStatus($newStatusId, $order->id);
-                // Status Shipping
-                // if ($newStatusId == 3) {
-                //     foreach ($order->order_details as $detail) {
-                //         $productVariantId = $detail->product_variant_id;
-                //         $productId = $detail->product_id;
-                //         $this->inventoryService->ex portVariantStock($detail->quantity,  $productId, $productVariantId);
-                //     }
-                // } else 
-                if ($newStatusId == 9) { // Status Canceled && Refunded
+            
+                if ($newStatusId == 9) { // Status Canceled 
                     foreach ($order->orderDetails as $detail) {
                         $productVariantId = $detail->product_variant_id;
                         $productId = $detail->product_id;
@@ -102,8 +95,6 @@ class OrderController extends Controller
                         Product::where('id', $productId)->increment('base_stock', $detail->quantity);
 
                     }
-                    
-
                     $response = Http::withHeaders([
                         'Token' => env('TOKEN_GHN'),
                         'ShopId' => env('SHOP_ID')
@@ -129,6 +120,29 @@ class OrderController extends Controller
                         // Cập nhật số lượng
                         $voucher->remaini = $voucher->remaini + 1;
                         $voucher->save();
+                    }
+                }
+
+                if ($newStatusId == 11) { // Refunded
+                    foreach ($order->orderDetails as $detail) {
+                        $productVariantId = $detail->product_variant_id;
+                        $productId = $detail->product_id;
+                        ProductVariant::where('id', $productVariantId)->increment('stock', $detail->quantity);
+                        Product::where('id', $productId)->increment('base_stock', $detail->quantity);
+
+                    }
+                    $response = Http::withHeaders([
+                        'Token' => env('TOKEN_GHN'),
+                        'ShopId' => env('SHOP_ID')
+                    ])->post('https://online-gateway.ghn.vn/shiip/public-api/v2/switch-status/return', [
+                        'order_codes' => [
+                            $order->order_code
+                        ],
+                    ]);
+
+                    if (!$response->successful()) {
+                        Log::error('Cancel Order Fail: ' . $response->body());
+                        return redirect()->back()->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
                     }
                 }
 

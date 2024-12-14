@@ -172,11 +172,79 @@ class VoucherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVoucherRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         //
         $voucher = Voucher::findOrFail($id);
-        $data = $request->only('name','voucher_code','value','decreased_value','max_value','quanlity','condition','date_start','date_end','type_code','status','description',);
+        // Đã dùng mất
+        $used = 0;
+        if($voucher->quanlity > $voucher->remaini) {
+            $used = $voucher->quanlity - $voucher->remaini;
+        }
+        if ($request->input('value') == "Cố định") {
+            $request->validate(
+                [
+                    'name'=>'required|string|max:255',
+                    'voucher_code'=>'required|string|max:255',
+                    'description'=>'string|max:255',
+                    'quanlity'=>'required',
+                    'decreased_value'=>'required',
+                    'condition'=>'required',
+                    'date_start'=>'required',
+                    'date_end'=>'required',
+                ],
+                [
+                    'name.required'=>'Tên mã giảm giá không thể bỏ trống!',
+                    'name.string'=>'Tên mã giảm giá không hợp lệ!',
+                    'name.max'=>'Tên mã giảm giá quá dài!',
+                    'voucher_code.required'=>'Mã code không thể bỏ trống!',
+                    'voucher_code.string'=>'Mã code không hợp lệ!',
+                    'voucher_code.max'=>'Mã code quá dài!',
+                    'description.string'=>'Mô tả không hợp lệ!',
+                    'description.max'=>'Mô tả quá dài!',
+                    'quanlity.required'=>'Số lượng không thể bỏ trống!',
+                    'decreased_value.required'=>'Giá trị giảm không thể bỏ trống!',
+                    'condition.required'=>'Điều kiện không thể bỏ trống!',
+                    'date_start.required'=>'Ngày bắt đầu không thể bỏ trống!',
+                    'date_end.required'=>'Ngày kết thúc không thể bỏ trống!',
+                ]
+            );
+            $data = $request->except('_token','_method');
+            $data['max_value'] = $request->input('decreased_value');
+        }
+        else {
+            $data = $request->validate(
+                [
+                    'name'=>'required|string|max:255',
+                    'voucher_code'=>'required|string|max:255',
+                    'description'=>'string|max:255',
+                    'quanlity'=>'required',
+                    'decreased_value'=>'required',
+                    'max_value'=>'required',
+                    'condition'=>'required',
+                    'date_start'=>'required',
+                    'date_end'=>'required',
+                ],
+                [
+                    'name.required'=>'Tên mã giảm giá không thể bỏ trống!',
+                    'name.string'=>'Tên mã giảm giá không hợp lệ!',
+                    'name.max'=>'Tên mã giảm giá quá dài!',
+                    'voucher_code.required'=>'Mã code không thể bỏ trống!',
+                    'voucher_code.string'=>'Mã code không hợp lệ!',
+                    'voucher_code.max'=>'Mã code quá dài!',
+                    'description.string'=>'Mô tả không hợp lệ!',
+                    'description.max'=>'Mô tả quá dài!',
+                    'quanlity.required'=>'Số lượng không thể bỏ trống!',
+                    'decreased_value.required'=>'Giá trị giảm không thể bỏ trống!',
+                    'max_value.required'=>'Giá trị giảm tôi đa không thể bỏ trống!',
+                    'condition.required'=>'Điều kiện không thể bỏ trống!',
+                    'date_start.required'=>'Ngày bắt đầu không thể bỏ trống!',
+                    'date_end.required'=>'Ngày kết thúc không thể bỏ trống!',
+                ]
+            );
+            $data = $request->except('_token','_method');
+        }
+        $data['remaini'] = $request->input('quanlity') - $used;
         $voucher->update($data);
         return redirect()->route('admin.voucher.index')->with('success','Sửa thành công mã giảm giá');
     }

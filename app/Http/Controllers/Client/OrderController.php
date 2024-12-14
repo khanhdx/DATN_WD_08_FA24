@@ -18,13 +18,13 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
     public function index()
-{
-    // Lấy danh sách đơn hàng của người dùng hiện tại, bao gồm trạng thái và phương thức thanh toán
-    $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->get();
+    {
+        // Lấy danh sách đơn hàng của người dùng hiện tại, bao gồm trạng thái và phương thức thanh toán
+        $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->get();
 
-    // Trả về view danh sách đơn hàng
-    return view('client.checkouts.orders', compact('orders'));
-}
+        // Trả về view danh sách đơn hàng
+        return view('client.checkouts.orders', compact('orders'));
+    }
 
     public function show($id)
     {
@@ -42,6 +42,7 @@ class OrderController extends Controller
         // Lấy đơn hàng theo ID
         $order = Order::findOrFail($id);
         $reason = $request->reason;
+        $name_status = $request->name_status;
         if ($order->statusOrder->contains('name_status', 'pending')) {
 
             $response = Http::withHeaders([
@@ -52,12 +53,12 @@ class OrderController extends Controller
                     $order->order_code
                 ],
             ]);
-    
+
             if (!$response->successful()) {
                 Log::error('Cancel Order Fail: ' . $response->body());
                 return redirect()->route('orders.index')->with('error', 'Có lỗi trong quá trình hủy đơn, quá khách vui lòng thử lại sau!');
             }
-    
+
             $order->statusOrder()->sync([
                 StatusOrder::where('name_status', 'canceled')->first()->id => [
                     'name' => 'canceled',
@@ -70,13 +71,12 @@ class OrderController extends Controller
                 $productId = $detail->product_id;
                 ProductVariant::where('id', $productVariantId)->increment('stock', $detail->quantity);
                 Product::where('id', $productId)->increment('base_stock', $detail->quantity);
-
             }
             // Hủy dùng voucher
-            if($order->voucher_id && Auth::check()) {
-                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first();//Mã kho
-                $wavein = waresList::query()->where('vouchers_ware_id', '=', $voucher_wave->id)->where('voucher_id','=',$order->voucher_id)->first();
-                $voucher = Voucher::query()->where('id', '=', $order->voucher_id)->first();//Voucher trên hệ thống
+            if ($order->voucher_id && Auth::check()) {
+                $voucher_wave = vouchersWare::query()->where('user_id', '=', Auth::user()->id)->first(); //Mã kho
+                $wavein = waresList::query()->where('vouchers_ware_id', '=', $voucher_wave->id)->where('voucher_id', '=', $order->voucher_id)->first();
+                $voucher = Voucher::query()->where('id', '=', $order->voucher_id)->first(); //Voucher trên hệ thống
                 // Cập nhật trạng thái
                 $wavein->status = "Chưa sử dụng";
                 $wavein->save();
@@ -94,23 +94,24 @@ class OrderController extends Controller
                 ]
             ]);
         }
-        
+
         if ($order->statusOrder->contains('name_status', 'success')) {
-            $order->statusOrder()->sync([
-                StatusOrder::where('name_status', 'completed')->first()->id => [
-                    'name' => 'completed',
-                    'updated_at' => now(),
-                ]
-            ]);
-        }
-        if ($order->statusOrder->contains('name_status', 'success')) {
-    
-            $order->statusOrder()->sync([
-                StatusOrder::where('name_status', 'refunding')->first()->id => [
-                    'name' => 'refunding',
-                    'updated_at' => now(),
-                ]
-            ]);
+
+            if ($name_status == "completed") {
+                $order->statusOrder()->sync([
+                    StatusOrder::where('name_status', 'completed')->first()->id => [
+                        'name' => 'completed',
+                        'updated_at' => now(),
+                    ]
+                ]);
+            } else {
+                $order->statusOrder()->sync([
+                    StatusOrder::where('name_status', 'refunding')->first()->id => [
+                        'name' => 'refunding',
+                        'updated_at' => now(),
+                    ]
+                ]);
+            }
         }
         return redirect()->route('orders.index');
     }
@@ -118,7 +119,7 @@ class OrderController extends Controller
     {
         $order = Order::with('statusOrder')->findOrFail($id);
         $currentStatus = $order->statusOrder->last()->status_label ?? 'Chưa có trạng thái';
-    
+
         return response()->json([
             'status' => $currentStatus,
         ]);

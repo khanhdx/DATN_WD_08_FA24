@@ -58,6 +58,10 @@ class UpdateOrderStatus extends Command
                 // }
 
                 switch ($shippingData['data']['status']) {
+                    case 'picking':
+                        // Cập nhật trạng thái sang: picking
+                        $this->orderService->updateStatus(2, $order['id']);
+                        break;
                     case 'picked':
                         // Cập nhật trạng thái sang: picked
                         $this->orderService->updateStatus(3, $order['id']);

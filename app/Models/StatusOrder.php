@@ -44,19 +44,21 @@ class StatusOrder extends Model
             case 'pending':
                 return 'Chờ xử lý';
             case 'processing':
-                return 'Đang xử lý';
+                return 'Đang lấy hàng';
             case 'picked':
-                return 'Bên vận chuyển đã lấy hàng';
-            case 'shipping':
-                return 'Đang giao hàng';
+                return 'Đã lấy hàng';
+            case 'delivering':
+                return 'Đang giao';
             case 'success':
-                return 'Giao hàng thành công';
+                return 'Giao thành công';
+            case 'failed':
+                return 'Giao thất bại';
             case 'completed':
-                return 'Hoàn Thành';
+                    return 'Hoàn thành';
             case 'cancel':
                 return 'Hủy đơn';
             case 'canceling':
-                return 'Đang chờ xác nhận hủy đơn';
+                return 'Chờ xác nhận hủy';
             case 'canceled':
                 return 'Đã hủy';
             case 'refunding':

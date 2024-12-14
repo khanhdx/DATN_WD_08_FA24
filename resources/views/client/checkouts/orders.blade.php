@@ -95,7 +95,7 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="name_status" value="completed">
-                                    <button type="submit" class="btn btn-primary btn-xs">Hoàn thành</button>
+                                    <button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 6px;">Hoàn thành</button>
                                 </form>
                                 <form action="{{ route('orders.update', $order->id) }}" method="POST"
                                     onsubmit="return confirm('Bạn xác nhận hoàn đơn hàng không')" style="display:inline;">

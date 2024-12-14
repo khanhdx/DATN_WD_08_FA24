@@ -31,7 +31,6 @@
                                     <select class="js-select2" name="fillter">
                                         <option value="" selected="selected">Tât cả</option>
                                         <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Khách hàng") selected  @endif value="Khách hàng">Khách hàng</option>
-                                        <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Nhân viên") selected  @endif value="Nhân viên">Nhân viên</option>
                                         <option @if($_GET && $_GET["fillter"] && $_GET["fillter"] == "Quản lý") selected  @endif value="Quản lý">Quản lý</option>
                                     </select>
                                     <div class="dropDownSelect2"></div>
@@ -82,10 +81,6 @@
                                         <td>
                                             @if ($acounts->role=="Khách hàng")
                                             <span class="role" style="background: #00b5e9">
-                                                {{$acounts->role}}
-                                            </span>
-                                            @elseif ($acounts->role=="Nhân viên")
-                                            <span class="role member">
                                                 {{$acounts->role}}
                                             </span>
                                             @else
