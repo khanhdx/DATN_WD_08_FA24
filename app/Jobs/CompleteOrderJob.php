@@ -32,8 +32,8 @@ class CompleteOrderJob implements ShouldQueue
         $order = Order::findOrFail($this->orderId);
         if ($order->statusOrder->last()->status_label === "Giao hàng thành công" && now()->diffInDays($order->statusOrder->last()->updated_at) >= 7) {
             $order->statusOrder()->sync([
-                StatusOrder::where('name_status', 'success')->first()->id => [
-                    'name' => 'success',
+                StatusOrder::where('name_status', 'completed')->first()->id => [
+                    'name' => 'completed',
                     'updated_at' => now(),
                 ]
             ]);

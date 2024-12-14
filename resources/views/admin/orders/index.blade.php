@@ -68,7 +68,7 @@
                 <div class="table-responsive table-responsive-data2">
                     <div class="row">
                         <div
-                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status) => in_array($status->id_status, [1, 8, 11]))) ? 'col-lg-10' : 'col-lg-12' }}">
+                            class="{{ $orders->contains(fn($order) => $order->statusOrder->contains(fn($status) => in_array($status->id_status, [1, 9, 11]))) ? 'col-lg-10' : 'col-lg-12' }}">
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>
@@ -166,7 +166,7 @@
                                             </div>
                                         @endif
                                         {{-- Nút xác nhận hủy đơn  --}}
-                                        @if ($status['id_status'] == 8)
+                                        @if ($status['id_status'] == 9)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
@@ -191,13 +191,13 @@
                                             </div>
                                         @endif
                                         {{-- Nút xác nhận hoàn trả đơn  --}}
-                                        {{-- @if ($status['id_status'] == 10)
+                                        @if ($status['id_status'] == 11)
                                             <div class="bottom-0 end-0 p-3 border border-1 rounded shadow-sm p-3 mb-3 bg-body rounded"
                                                 style="z-index: 11; background-color: #f0f0f0; font-size: 12px">
                                                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"
                                                     data-bs-autohide="false" id="orderStatusToast">
                                                     <div class="toast-header">
-                                                        <strong class="me-auto">Xác nhận đơn hàng</strong><br>
+                                                        <strong class="me-auto">Xác nhận hoàn trả đơn</strong><br>
                                                         <small class="text-muted">
                                                             <span id="order-time-{{ $order->id }}"
                                                                 data-time="{{ $status->pivot['created_at']->toIso8601String() }}"></span>
@@ -207,14 +207,14 @@
                                                     </div>
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
-                                                        <p><strong>Trạng thái:</strong> {{ $status['status_label'] }}
+                                                        {{-- <p><strong>Trạng thái:</strong> {{ $status['status_label'] }} --}}
                                                         </p>
                                                         <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
-                                                            nhận</button>
+                                                            nhận hoàn trả</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif --}}
+                                        @endif
                                     </form>
                                 @endforeach
                             @endforeach
