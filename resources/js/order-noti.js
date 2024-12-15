@@ -1,58 +1,65 @@
+let notifications = [];
 
-async function loadNotificationsFromDB() {
-    const response = await fetch('/api/notifications');
-    const data = await response.json();
-    notifications = data;
+function loadNotificationsFromLocal() {
+    const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    notifications = storedNotifications.slice(-5);
     updateNotificationUI();
 }
 
-async function saveNotificationToDB(notification) {
-    await fetch('/api/notifications', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(notification),
-    });
+function saveNotificationsToLocal(notification) {
+    let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    storedNotifications.push(notification);
+    localStorage.setItem('notifications', JSON.stringify(storedNotifications));
 }
 
-
-async function deleteNotificationFromDB(orderCode) {
-    await fetch(`/api/notifications/${orderCode}`, {
-        method: 'DELETE',
-    });
+function deleteNotificationFromLocal(orderCode) {
+    let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    storedNotifications = storedNotifications.filter(notification => notification.orderCode !== orderCode);
+    localStorage.setItem('notifications', JSON.stringify(storedNotifications));
 }
 
+function toggleNotificationShake() {
+    const notificationIcon = document.querySelector('.notification-icon');
+
+    if (notifications.length > 0) {
+        notificationIcon.classList.add('shake'); // Thêm hiệu ứng rung
+    } else {
+        notificationIcon.classList.remove('shake'); // Xóa hiệu ứng rung
+    }
+}
 
 function updateNotificationUI() {
     const maxNotifications = 3;
     const notifiBox = document.querySelector('.notifi-dropdown .notifi__box');
     const notifiTitle = document.querySelector('.notifi__title p');
 
-    // Giới hạn số lượng thông báo hiển thị
     if (notifications.length > maxNotifications) {
         notifications = notifications.slice(-maxNotifications);
     }
 
     notifiTitle.textContent = `Bạn có ${notifications.length} thông báo`;
 
-    notifiBox.innerHTML = ""; //
+    notifiBox.innerHTML = ""; 
 
     notifications.forEach(notification => {
         const itemHTML = `
-            <div class="notifi__item" data-order-code="${notification.order_code}">
+            <div class="notifi__item" data-order-code="${notification.orderCode}">
                 <div class="bg-c1 img-cir img-40">
                     <i class="zmdi zmdi-file-text"></i>
                 </div>
                 <div class="content">
                     <h5>${notification.title}</h5>
-                    <p>Mã ${notification.order_code}</p>
-                    <button class="btn btn-primary confirm-order" data-order-code="${notification.order_code}"><a href="/admin/orders">Kiểm tra</a></button></br>
-                    <span class="date">${new Date(notification.created_at).toLocaleString()}</span>
+                    <p>Mã ${notification.orderCode}</p>
+                    <button class="btn btn-primary confirm-order" data-order-code="${notification.orderCode}">
+                       <a href="/admin/orders">Kiểm tra</a>
+                    </button><br>
+                    <span class="date">${notification.timeOrder}</span>
                 </div>
             </div>
         `;
         notifiBox.insertAdjacentHTML('beforeend', itemHTML);
+
+        toggleNotificationShake();
     });
 }
 
@@ -60,23 +67,38 @@ window.Echo.channel('order-noti')
     .listen('OrderEvent', function (event) {
         const newNotification = {
             title: 'Đơn hàng mới',
-            order_code: `${event.slug}`,
-            created_at: `${event.created_at}`,
+            orderCode: `${event.slug}`,
+            timeOrder: `${event.created_at}`, 
         };
 
         notifications.push(newNotification);
-        updateNotificationUI();
-        saveNotificationToDB(newNotification);
+
+        updateNotificationUI(); 
+        saveNotificationsToLocal(newNotification);
     });
 
-document.querySelector('.notifi-dropdown .notifi__box').addEventListener('click', function (e) {
-    if (e.target.classList.contains('confirm-order')) {
-        const orderCode = e.target.dataset.orderCode;
-        notifications = notifications.filter(notification => notification.order_code !== orderCode);
-        deleteNotificationFromDB(orderCode);
-        updateNotificationUI();
+
+document.addEventListener('click', function (e) {
+    if (e.target.matches('.notifi__item, .notifi__item *')) {
+        const notifiItem = e.target.closest('.notifi__item');
+        const orderCode = notifiItem.getAttribute('data-order-code');
+        console.log(orderCode);
+        
+        deleteNotificationFromLocal(orderCode);
     }
 });
 
-// Tải thông báo khi trang được load
-document.addEventListener('DOMContentLoaded', loadNotificationsFromDB)
+
+document.querySelector('.notifi-dropdown .notifi__box').addEventListener('click', function (e) {
+    if (e.target.closest('.confirm-order')) {
+        const orderCode = e.target.closest('.confirm-order').dataset.orderCode;
+        console.log(orderCode);
+        
+        notifications = notifications.filter(notification => notification.orderCode !== orderCode);
+        deleteNotificationFromLocal(orderCode);
+        updateNotificationUI();
+        // window.location.href = '/admin/orders';
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadNotificationsFromLocal)

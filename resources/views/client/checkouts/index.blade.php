@@ -319,7 +319,7 @@
                                                     </div>
                                                 </div>
                                                 <div style="width: 100%;" class="content-voucher">
-                                                    <div style="font-size: 16px"><span style="font-weight: 600;">Giảm:</span> <span style="font-size: 18px;">${(value.decreased_value)}</span><span style="font-size: 12px;">%</span> - <span style="font-weight: 600;">Tối đa:</span> <span style="font-size: 18px;">${(value.max_value)}</span><span style="font-size: 12px;">₫</span></div>
+                                                    <div style="font-size: 16px"><span style="font-size: 18px;">${value.name}</span> <span style="font-weight: 600;">Giảm:</span> <span style="font-size: 18px;">${(value.decreased_value)}</span><span style="font-size: 12px;">%</span> - <span style="font-weight: 600;">Tối đa:</span> <span style="font-size: 18px;">${(value.max_value)}</span><span style="font-size: 12px;">₫</span></div>
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Đơn tối thiểu:</span> <span style="font-size: 18px;">${(value.condition).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <span style="font-size: 12px;">Số lượng: ${value.remaini}/${value.quanlity}</span>
                                                     <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span></div>
@@ -341,7 +341,7 @@
                                                     </div>
                                                 </div>
                                                 <div style="width: 100%;" class="content-voucher">
-                                                    <div style="font-size: 16px"><span style="font-weight: 600;">Giảm tối đa:</span> <span style="font-size: 18px;">${(value.max_value).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
+                                                    <div style="font-size: 16px"><span style="font-size: 18px;">${value.name}</span> <span style="font-weight: 600;">Giảm tối đa:</span> <span style="font-size: 18px;">${(value.max_value).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <div style="font-size: 16px"><span style="font-weight: 600;">Đơn tối thiểu:</span> <span style="font-size: 18px;">${(value.condition).toLocaleString('de-DE')}</span><span style="font-size: 12px;">₫</span></div>
                                                     <span style="font-size: 12px;">Số lượng: ${value.remaini}/${value.quanlity}</span>
                                                     <div style="font-size: 12px;"><span style="font-weight: 600;">Giảm giá theo:</span> <span>${value.value}</span> - <span style="font-weight: 600;">Trạng thái:</span> <span>${value.status}</span></div>

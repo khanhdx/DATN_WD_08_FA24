@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\StatusOrderDetail;
 use App\Repositories\OrderRepository;
 use App\Services\Statistical\StatisticalService;
@@ -120,6 +121,12 @@ class OrderService implements IOrderService
             DB::table('status_order_details')
                 ->where('order_id', $id)
                 ->update(['status_order_id' => $data, 'updated_at' => now()]);
+
+            if ($data == 5) {
+                DB::table('payments')
+                    ->where('order_id', $id)
+                    ->update(['status' => 1]);
+            }
         }
     }
 }

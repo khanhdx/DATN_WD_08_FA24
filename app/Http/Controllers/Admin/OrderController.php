@@ -146,7 +146,7 @@ class OrderController extends Controller
                     }
                 }
 
-                if ($newStatusId == 4) { // Status Success
+                if ($newStatusId == 7) { // Status Success
                     CompleteOrderJob::dispatch($order->id)->delay(now()->addDays(7));
                 }
             }, 3);

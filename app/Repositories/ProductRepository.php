@@ -13,7 +13,7 @@ class ProductRepository
 
     public function getOneById($id)
     {
-        return Product::findOrFail($id);
+        return Product::with(['image'])->findOrFail($id);
     }
 
     public function insert($data)

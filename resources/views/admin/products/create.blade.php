@@ -88,6 +88,28 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="title">Ảnh đại diện:</label>
+                                    <table class="table align-middle table-nowarp mb-0">
+                                        <tbody id="image-table-body">
+                                            <tr>
+                                                <td class="d-flex align-item-center">
+                                                    <div>
+                                                        <img id="preview_0"
+                                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrVLGzO55RQXipmjnUPh09YUtP-BW3ZTUeAA&s"
+                                                            alt="Hình ảnh danh mục" class="preview-image mr-3">
+                                                    </div>
+                                                    <input type="file" id="image" name="image"
+                                                        placeholder="Hình ảnh danh mục" class="form-control input-file"
+                                                        onchange="previewImage(this, 0)">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    @error('image')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
                                     <label for="content">Mổ tả ngắn:</label>
                                     {{-- <input class="au-input au-input--full" type="text" name="content" placeholder="Nội dung" > --}}
                                     <textarea class="au-input au-input--full" name="description" placeholder="Mô tả ngắn">{{ old('description') }}</textarea>
@@ -121,6 +143,30 @@
 
 @section('js')
     <script>
+         function showImage(event) {
+            const img = document.getElementById('img');
+            console.log(img);
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                img.src = reader.result;
+                img.style.display = 'block';
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+        function previewImage(input, rowIndex) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(`preview_${rowIndex}`).setAttribute('src', e.target.result)
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
         let variantCount = 0; // Biến đếm số lượng biến thể
         const colors = @json($colors);
         const sizes = @json($sizes);

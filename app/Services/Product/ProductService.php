@@ -3,6 +3,7 @@
 namespace App\Services\Product;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Repositories\ProductRepository;
 use App\Repositories\VariantRepositopy;
 use App\Services\Inventory\InventoryService;
@@ -31,7 +32,6 @@ class ProductService implements IProductService
     public function getAll()
     {
         $products = $this->productRepository->getAll();
-
         return $products;
     }
 
@@ -50,9 +50,19 @@ class ProductService implements IProductService
 
         // Khởi tạo tồn kho tổng = 0
         $productInput['base_stock'] = 0;
-     
+
         //Insert lên DB
         $product = $this->productRepository->insert($productInput);
+
+         // Upload Image
+         if (isset($productInput['image']) && $productInput['image'] instanceof \Illuminate\Http\UploadedFile) {
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_url' => Storage::put('uploads/product_images', $productInput['image']),
+                'type' => 'main',
+            ]);
+
+        }
 
         if (isset($data['variants']) && !empty($data['variants'])) {
             $variants = $data['variants'];
@@ -115,14 +125,14 @@ class ProductService implements IProductService
             //update lên DB
             $productInput = $validator->validated();
 
+            $this->productRepository->updateById($productInput, $id);
+
             if (isset($productInput['image']) && ($productInput['image'] instanceof \Illuminate\Http\UploadedFile)) {
-                $productInput['image'] =  $productInput['image']->store('uploads/products', 'public');
-                Storage::disk('public')->delete($productInput['old_image']);
-            } else {
-                $productInput['image'] = $productInput['old_image'];
+                $imageMain = ProductImage::find($id);
+                $data['image_url'] = Storage::put('uploads/product_images', $productInput['image']);
+                $imageMain->update($data);
             }
 
-            $this->productRepository->updateById($productInput, $id);
             return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error',  $th->getMessage());

@@ -107,7 +107,7 @@ class OrderController extends Controller
             } else {
                 $order->statusOrder()->sync([
                     StatusOrder::where('name_status', 'refunding')->first()->id => [
-                        'name' => 'refunding',
+                        'name' => $reason,
                         'updated_at' => now(),
                     ]
                 ]);

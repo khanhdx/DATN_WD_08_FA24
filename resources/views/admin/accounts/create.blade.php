@@ -42,14 +42,14 @@
                                 <div class="row mb-3">
                                     <div class="col">
                                         <label class="form-label" for="name">Tên người dùng</label>
-                                        <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Họ & tên" name="name" id="name">
+                                        <input class="form-control @error('name') is-invalid @enderror" type="text" placeholder="Họ & tên" name="name" value="{{ old('name') }}" id="name">
                                         @error('name')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="col">
                                         <label class="form-label" for="email">Email</label>
-                                        <input class="form-control @error('email') is-invalid @enderror" type="email" placeholder="Địa chỉ mail" name="email" id="email">
+                                        <input class="form-control @error('email') is-invalid @enderror" type="email" placeholder="Địa chỉ mail" name="email" value="{{ old('email') }}" id="email">
                                         @error('email')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
@@ -59,7 +59,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label" for="phone_number">Số điện thoại</label>
-                                            <input class="form-control @error('phone_number') is-invalid @enderror" type="text" max="20" name="phone_number" placeholder="Điện thoại" id="phone_number">
+                                            <input class="form-control @error('phone_number') is-invalid @enderror" type="text" max="20" name="phone_number" placeholder="Điện thoại" value="{{ old('phone_number') }}" id="phone_number">
                                             @error('phone_number')
                                                 <p class="text-danger">{{ $message }}</p>
                                             @enderror

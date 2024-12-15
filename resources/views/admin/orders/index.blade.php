@@ -109,7 +109,7 @@
                                                 <td>
                                                     @foreach ($order->statusOrder as $c_status)
                                                         <span
-                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}">
+                                                            class="badge badge-{{ $c_status['id_status'] == 1 ? 'warning' : 'success' }}" style="font-size: 15px">
                                                             {{ $c_status['status_label'] }}
                                                         </span>
                                                     @endforeach
@@ -183,6 +183,7 @@
 
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
+                                                        <p><strong>Lý do:</strong> {{  $status->pivot['created_at'] }}
                                                         </p>
                                                         <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
                                                             nhận hủy</button>
@@ -207,7 +208,7 @@
                                                     </div>
                                                     <div class="toast-body">
                                                         <p><strong>Mã đơn hàng:</strong> {{ $order->slug }}</p>
-                                                        {{-- <p><strong>Trạng thái:</strong> {{ $status['status_label'] }} --}}
+                                                        <p><strong>Lý do:</strong> {{  $status->pivot['name'] }}
                                                         </p>
                                                         <button type="submit" class="btn btn-primary btn-sm mt-2">Xác
                                                             nhận hoàn trả</button>

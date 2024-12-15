@@ -25,6 +25,7 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required|exists:categories,id', // Kiểm tra tồn tại trong bảng categories
             'name' => 'required|unique:products,name',
             'SKU' => 'required|unique:products,SKU',
+            'image' => 'required|mimes:jpg,jpeg,png|max:2048',
             'price_regular' => 'required|numeric|min:0',
             'price_sale' => 'numeric|min:0|lt:price_regular',
             'description' => 'max:255',
@@ -41,6 +42,9 @@ class StoreProductRequest extends FormRequest
             'name.unique' => 'Tên đã tồn tại',
             'SKU.required' => 'Mã sản phẩm không để trống',
             'SKU.unique' => 'Mã sản phẩm đã tồn tại',
+            'image.required' => 'Không bỏ trống ảnh',
+            'image.mimes' => 'Không đúng định dạng ảnh jpg,jpeg,png',
+            'image.max' => 'Ảnh không vượt quá 2MB',
             'price_regular.required' => 'Giá gốc không được để trống.',
             'price_regular.numeric' => 'Giá gốc phải là số.',
             'price_regular.min' => 'Giá gốc không được âm.',

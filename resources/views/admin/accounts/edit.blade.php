@@ -4,31 +4,33 @@
 @endsection
 @section('css')
     {{-- CSS --}}
-    <style>
-        #file_I {
-            width: 162px;
-            height: 162px;
-            border-radius: 4px;
-            border: 1px black solid;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            padding: 0px;
-        }
+        <style>
+            #file_I {
+                width: 162px;
+                height: 162px;
+                border-radius: 4px;
+                border: 1px black solid;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: white;
+                padding: 0px;
+            }
 
-        #view_IMG {
-            margin: 0px;
-            padding: 0px;
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .modal-backdrop {
-            z-index: -1;
-        }
-    </style>
+            #view_IMG {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+                border-radius: 4px;
+            }
+            .modal-backdrop {
+                z-index: -1;
+            }
+        </style>
+    {{-- Link --}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 @endsection
 @section('content')
 <section class="p-t-20">
@@ -349,6 +351,31 @@
                 }
             });
         </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>
+        @if (session('success'))
+            <script>
+                toastr["success"]("{{ session('success') }}", "Thông báo")
+    
+                toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "1500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+                }
+            </script>
+        @endif
     {{--  --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script>
