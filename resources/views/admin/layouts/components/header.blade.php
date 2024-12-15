@@ -9,7 +9,7 @@
                 </div>
                 
                 <div class="header-button2">
-                    <div class="header-button-item js-item-menu">
+                    {{-- <div class="header-button-item js-item-menu">
                         <i class="zmdi zmdi-search"></i>
                         <div class="search-dropdown js-dropdown">
                             <form action="">
@@ -19,13 +19,13 @@
                                 </span>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
                     
                     @include('admin.layouts.components.headers.notification')
 
-                    <div class="header-button-item mr-0 js-sidebar-btn">
+                    {{-- <div class="header-button-item mr-0 js-sidebar-btn">
                         <i class="zmdi zmdi-menu"></i>
-                    </div>
+                    </div> --}}
 
                     @include('admin.layouts.components.headers.setting-menu')
                 </div>

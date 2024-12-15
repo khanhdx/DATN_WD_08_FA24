@@ -124,7 +124,7 @@
                                                         <label class="p-0 col-3" for="value">Loại giảm giá:</label>
                                                         <select class="form-control form-control-sm col" name="value" id="">
                                                             <option {{$voucher->value == "Phần trăm"?"selected":""}} value="Phần trăm">Giảm giá theo phần trăm</option>
-                                                            <option {{$voucher->value == "Cố địng"?"selected":""}} value="Cố định">Giảm giá cố địng</option>
+                                                            <option {{$voucher->value == "Cố địng"?"selected":""}} value="Cố định">Giảm giá cố định</option>
                                                         </select>
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">

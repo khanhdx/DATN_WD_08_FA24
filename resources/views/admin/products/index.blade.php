@@ -65,9 +65,9 @@
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
-                            <button type="button" id="openFilterBtn" class="btn btn-primary">
+                            {{-- <button type="button" id="openFilterBtn" class="btn btn-primary">
                                 Mở bộ lọc thêm
-                            </button>
+                            </button> --}}
                             <button type="submit" class="au-btn-filter" id="au-btn-filter">
                                 <i class="zmdi zmdi-filter-list"></i>Lọc</button>
                         </div>

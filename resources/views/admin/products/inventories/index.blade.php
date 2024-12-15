@@ -10,7 +10,7 @@
                         {{ session('success') }}
                     </div>
                 @endif
-                <div class="table-data__tool">
+                {{-- <div class="table-data__tool">
                     <div class="table-data__tool-left">
                         <div class="rs-select2--light rs-select2--md">
                             <select class="js-select2" name="color">
@@ -32,7 +32,7 @@
                             <i class="zmdi zmdi-search"></i>
                         </button>
                     </form>
-                </div>
+                </div> --}}
             </div>
             <div class="table-responsive table-responsive-data2">
                 <table class="table table-data2">

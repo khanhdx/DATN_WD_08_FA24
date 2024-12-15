@@ -25,7 +25,7 @@
                                         <label for="image">Ảnh:</label>
                                         @if ($post->image)
                                             <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
-                                                width="100"><br>
+                                                width="120" height="auto"><br>
                                         @endif
                                         <input class="au-input au-input--full" type="file" name="image"
                                             accept="image/*">

@@ -27,7 +27,7 @@
                     <div class="table-data__tool-right">
                         <a href="{{ route('admin.post.index') }}">
                             <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-2">
-                                Xóa tất cả các bộ lọc
+                                Hiển thị tất cả
                             </button>
                         </a>
                         <a href="{{ route('admin.post.create') }}">
@@ -54,8 +54,8 @@
                                 <th>Nội dung</th>
                                 <th>Tác giả</th>
                                 <th>Ngày đăng</th>
-                                <th>Lượt xem</th>
-                                <th></th>
+                                {{-- <th>Lượt xem</th> --}}
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,14 +64,14 @@
                                     <td>
                                         @if ($post->image)
                                             <img src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}"
-                                                width="150" height="auto">
+                                                width="200" height="auto">
                                         @endif
                                     </td>
-                                    <td class="desc">{{ $post->title }}</td>
+                                    <td>{{ $post->title }}</td>
                                     <td>{{ $post->content }}</td>
                                     <td>{{ $post->author }}</td>
                                     <td>{{ $post->publish_date }}</td>
-                                    <td>{{ $post->views }}</td>
+                                    {{-- <td>{{ $post->views }}</td> --}}
                                     <td>
                                         <a href="{{ route('admin.post.edit', $post->id) }}"
                                             class="zmdi zmdi-edit text-dark">
@@ -91,7 +91,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                                <tr class="spacer"></tr>
+                                {{-- <tr class="spacer"></tr> --}}
                             @endforeach
                         </tbody>
                     </table>
