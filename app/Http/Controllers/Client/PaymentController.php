@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\StatusOrderDetail;
 use App\Models\Voucher;
 use App\Models\vouchersWare;
@@ -234,8 +235,6 @@ class PaymentController extends Controller
                 Product::where('id', $item->productVariant->product_id)->decrement('base_stock', $item->quantity);
             }
 
-           
-            
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
@@ -402,10 +401,12 @@ class PaymentController extends Controller
 
             // Tạo chi tiết đơn hàng
             foreach ($cartItems as $item) {
+                $product_variant_id = $item->product_variant_id;
+                ProductVariant::where('id', $product_variant_id)->decrement('stock', $item->quantity);
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
-                    'product_variant_id' => $item->product_variant_id,
+                    'product_variant_id' => $product_variant_id,
                     'name_product' => $item->name,
                     'color' => $item->color ?? null,
                     'size' => $item->size ?? null,
@@ -413,33 +414,9 @@ class PaymentController extends Controller
                     'quantity' => $item->quantity,
                     'total_price' => $item->sub_total,
                 ]);
+                Product::where('id', $item->product_id)->decrement('base_stock', $item->quantity);
             }
-
-            $totalQuantity = 0;
-            $product_id = null;
-            foreach ($cartItems as $item) {
-                // Xu ly ton tren 1 san pham bien the
-                $productVariant = $item->productVariant;
-                $productVariant->decrement('stock', $item->quantity);
-                $product_id = $item->productVariant->product_id;
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->productVariant->product_id,
-                    'product_variant_id' => $item->productVariant->id,
-                    'name_product' => $item->productVariant->product->name,
-                    'color' => $item->productVariant->color->name ?? null,
-                    'size' => $item->productVariant->size->name ?? null,
-                    'unit_price' => $item->productVariant->price,
-                    'quantity' => $item->quantity,
-                    'total_price' => $item->totalPrice(),
-                ]);
-                $totalQuantity += $item->quantity;
-            }
-
-            // Trừ tổng tồn kho
-            Product::where('id', $product_id)->decrement('base_stock', $totalQuantity);
-
-
+    
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
