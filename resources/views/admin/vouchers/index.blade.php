@@ -59,7 +59,14 @@
                                 <button style="box-shadow: none;" class="btn m-0 p-0"><i class="zmdi zmdi-search"></i></button>
                             </div>
                         </form>
-                        <a href="{{ route('admin.voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
+                        <div>
+                            @if (!$_GET)
+                                <a title="thùng rác" href="?delete_Fillter"><button type="button" class="btn btn-outline-danger"><i class="zmdi zmdi-delete"></i></button></a>
+                            @else
+                                <a href="{{ route('admin.voucher.index') }}" class="btn btn-outline-info">Quay lại</a>
+                            @endif
+                            <a href="{{ route('admin.voucher.create') }}"><button type="button" class="btn btn-outline-success"><strong>Thêm mới</strong></button></a>
+                        </div>
                     </div>
                     
                     <div class="table-responsive table-responsive-data2">
@@ -101,13 +108,21 @@
                                                 @endif
                                         </td>
                                         <td>
-                                            <div class="table-data-feature">
-                                                <a href="{{ route('admin.voucher.edit',$voucher->id) }}">
-                                                    <button class="item" data-toggle="tooltip" data-placement="top">
-                                                        <i class="zmdi zmdi-more"></i>
-                                                    </button>
-                                                </a>
-                                            </div>
+                                            @if ($voucher->deleted_at == null)
+                                                <div class="table-data-feature">
+                                                    <a href="{{ route('admin.voucher.edit',$voucher->id) }}">
+                                                        <button class="item" data-toggle="tooltip" data-placement="top">
+                                                            <i class="zmdi zmdi-more"></i>
+                                                        </button>
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <div class="table-data-feature">
+                                                    <span style="font-size: 12px;" class="p-0 btn btn-danger">
+                                                        Đã xóa
+                                                    </span>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>                          
                                 @endforeach
