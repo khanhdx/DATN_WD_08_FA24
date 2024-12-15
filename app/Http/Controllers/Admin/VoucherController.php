@@ -180,6 +180,9 @@ class VoucherController extends Controller
         $used = 0;
         if($voucher->quanlity > $voucher->remaini) {
             $used = $voucher->quanlity - $voucher->remaini;
+            if($used < 0) {
+                $used = 0;
+            }
         }
         if ($request->input('value') == "Cố định") {
             $request->validate(
@@ -244,7 +247,14 @@ class VoucherController extends Controller
             );
             $data = $request->except('_token','_method');
         }
-        $data['remaini'] = $request->input('quanlity') - $used;
+        $data['status'] = $request->input('status');
+        if($request->input('status') == "Hết hàng") {
+            $data['quanlity'] = $used;
+        }
+        else {
+            $data['quanlity'] = $request->input('quanlity');
+        }
+        $data['remaini'] = $data['quanlity'] - $used;
         $voucher->update($data);
         return redirect()->route('admin.voucher.index')->with('success','Sửa thành công mã giảm giá');
     }
@@ -258,7 +268,7 @@ class VoucherController extends Controller
         if($request->isMethod('DELETE')) {
             $voucher = Voucher::query()->findOrFail($id);
             $voucher->delete();
-            return redirect()->route('admin.voucher.index')->with('success', 'Thêm thành công');
+            return redirect()->route('admin.voucher.index')->with('success', 'Xóa mã thành công');
         }
     }
     public function applyVoucher(Request $request)

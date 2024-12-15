@@ -68,7 +68,7 @@ class UserController extends Controller
                     'user_id'=>$user_new->id,
                 ]);
             }
-            return redirect()->route('admin.user.index')->with('success', 'Thàn công');
+            return redirect()->route('admin.user.index')->with('success', 'Thêm mới thành công');
         }
     }
     /**
@@ -111,7 +111,7 @@ class UserController extends Controller
                 $data['user_image'] = $user->user_image;
             }
             $user->update($data);
-            return redirect()->route('admin.user.index')->with('success', 'Thêm mới thành công');
+            return redirect()->route('admin.user.index')->with('success', 'Sửa thành công');
         }
     }
 

@@ -122,7 +122,7 @@
                                                 <div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="value">Loại giảm giá:</label>
-                                                        <select class="form-control form-control-sm col" name="value" id="">
+                                                        <select class="form-control form-control-sm col" name="value" onchange="typeVoucher()" id="value">
                                                             <option {{$voucher->value == "Phần trăm"?"selected":""}} value="Phần trăm">Giảm giá theo phần trăm</option>
                                                             <option {{$voucher->value == "Cố địng"?"selected":""}} value="Cố định">Giảm giá cố địng</option>
                                                         </select>
@@ -133,11 +133,11 @@
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="date_start">Ngày bắt đầu:</label>
-                                                        <input type="date" class="form-control form-control-sm col" value="{{$voucher->date_start}}" name="date_start" id="date_start"><!-- Kiểu giảm -->
+                                                        <input type="date" onchange="changeDate()" class="form-control form-control-sm col" value="{{$voucher->date_start}}" name="date_start" id="date_start"><!-- Kiểu giảm -->
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="date_end">Ngày kết thúc:</label>
-                                                        <input type="date" class="form-control form-control-sm col" value="{{$voucher->date_end}}" name="date_end" id="date_end"><!-- Kiểu giảm -->
+                                                        <input type="date" onchange="changeDate()" class="form-control form-control-sm col" value="{{$voucher->date_end}}" name="date_end" id="date_end"><!-- Kiểu giảm -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -146,7 +146,7 @@
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="decreased_value">Mức giảm:</label>
                                                         <input type="number" class="form-control form-control-sm col" value="{{$voucher->decreased_value}}" name="decreased_value" id="decreased_value">
-                                                        <input class="form-control form-control-sm col-1 text-center" value="{{$voucher->value == 'Phần trăm'?'%':'VNĐ'}}" type="text" disabled>
+                                                        <input class="form-control form-control-sm col-1 text-center" value="{{$voucher->value == 'Phần trăm'?'%':'VNĐ'}}" type="text" id="iconV" disabled>
                                                     </div>
                                                     <div class="row p-0 alycia mb-3">
                                                         <label class="p-0 col-3" for="max_value">Giảm tối đa:</label>
@@ -178,8 +178,13 @@
                                     </div>
                                     <div class="card-body" style="padding: 8px 20px 20px">
                                         <div class=""><p style="font-size: 14px">
-                                            <span class="label">Trạng thái</span>: <span class="text-success"><strong>{{$voucher->status}}</strong></span>
-                                            <input type="hidden" name="status" value="{{$voucher->status}}">
+                                            <span class="label">Trạng thái</span>:
+                                            <select onchange="loadStatus()" name="status" id="status">
+                                                <option {{ $voucher->status == "Chưa diễn ra" ? "selected" : "disabled"}} id="ChuaDienRa" value="Chưa diễn ra">Chưa diễn ra</option>
+                                                <option {{ $voucher->status == "Đang diễn ra" ? "selected" : ""}} @if($voucher->status != "Chưa diễn ra" && $voucher->status != "Đang diễn ra") disabled @endif id="DangDienRa" value="Đang diễn ra">Đang diễn ra</option>
+                                                <option {{ $voucher->status == "Đã ngừng" ? "selected" : ""}} @if($voucher->status == "Chưa diễn ra") disabled @endif id="DaNgung" value="Đã ngừng">Đã ngừng</option>
+                                                <option {{ $voucher->status == "Hết hàng" ? "selected" : ""}} value="Hết hàng">Hết hàng</option>
+                                            </select>
                                         </p></div>
                                         <div class=""><p style="font-size: 14px">
                                             <span class="label">Hiển thị</span>: <span class="text-success"><strong>{{$voucher->type_code}}</strong></span>
@@ -238,27 +243,88 @@
 @section('js')
     {{-- JAVA SCRIPT --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/2e8884d211.js" crossorigin="anonymous"></script>
     <script>
-        const coDinh = document.querySelector('#coDinh');
-        const labelCoDinh = document.querySelector('#labelCoDinh');
-        const phanTram = document.querySelector('#phanTram');
-        const labelPhanTram = document.querySelector('#labelPhanTram');
-
-        labelCoDinh.addEventListener('click', function () {
-            coDinh.checked = true;
-            labelPhanTram.style.color = "#495577";
-            if (coDinh.checked) {
-                labelCoDinh.style.color = "#FF8C00";
+        typeVoucher();
+        function typeVoucher() {
+            const typeV = document.querySelector('#value');
+            const decreased_value = document.querySelector('#decreased_value');
+            const max_value = document.querySelector('#max_value');
+            const iconV = document.querySelector('#iconV');
+            if (typeV.value == "Phần trăm") {
+                decreased_value.max = 100;
+                if (decreased_value.value > 100) {
+                    decreased_value.value = 100;
+                    iconV.innerText = "%";
+                }
             }
-        });
-        labelPhanTram.addEventListener('click', function () {
-            phanTram.checked = true;
-            labelCoDinh.style.color = "#495577";
-            if(phanTram.checked) {
-                labelPhanTram.style.color = "#FF8C00";
+            else {
+                decreased_value.value = max_value.value;
+                iconV.innerText = "VNĐ";
             }
-        });
+        }
+        function loadStatus() {
+            const status = document.querySelector('#status');
+            const date_start = document.querySelector('#date_start');
+            const date_end = document.querySelector('#date_end');
+            const current_State = "{{ $voucher->status }}";
+            const today = "{{date('Y-m-d')}}";
+            if (status.value == "Chưa diễn ra") {
+                if (status.value == current_State) {
+                    date_start.value = "{{ $voucher->date_start }}";
+                    date_end.value = "{{ $voucher->date_end }}";
+                }
+            }
+            else if(status.value == "Đang diễn ra") {
+                if (status.value == current_State) {
+                    date_start.value = "{{ $voucher->date_start }}";
+                    date_end.value = "{{ $voucher->date_end }}";
+                }
+                else {
+                    date_start.value = today;
+                    if(date_end.value < today) {
+                        date_end.value = today;
+                    }
+                    else {
+                        date_end.value = "{{ $voucher->date_end }}";
+                    }
+                }
+            }
+            else if(status.value == "Đã ngừng") {
+                if (status.value == current_State) {
+                    date_start.value = "{{ $voucher->date_start }}";
+                    date_end.value = "{{ $voucher->date_end }}";
+                }
+                else {
+                    const date_Today = new Date();
+                    date_Today.setDate(date_Today.getDate() - 1);
+                    const mon = date_Today.getMonth() + 1;
+                    const yesterday = date_Today.getFullYear() + "-" + mon + "-" + date_Today.getDate();
+                    date_end.value = yesterday;
+                    if(date_start.value > today) {
+                        date_start.value = yesterday;
+                    }
+                    else {
+                        date_start.value = "{{ $voucher->date_start }}";
+                    }
+                }
+            }
+            else {
+                date_start.value = "{{ $voucher->date_start }}";
+                date_end.value = "{{ $voucher->date_end }}";
+                document.querySelector('#DaNgung').disabled = true;
+            }
+        }
+        function changeDate() {
+            if(date_start.value <= "{{date('Y-m-d')}}" && date_end.value >= "{{date('Y-m-d')}}") {
+                document.querySelector('#DangDienRa').disabled = false;
+                document.querySelector('#DangDienRa').selected = true;
+            }
+            else if(date_end.value < "{{date('Y-m-d')}}") {
+                document.querySelector('#DaNgung').disabled = false;
+                document.querySelector('#DaNgung').selected = true;
+            }
+        }
     </script>
 @endsection

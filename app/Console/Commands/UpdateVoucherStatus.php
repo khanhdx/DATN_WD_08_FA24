@@ -40,6 +40,11 @@ class UpdateVoucherStatus extends Command
                 $data = [
                     'status'=>'Đang diễn ra'
                 ];
+                if($voucher->remaini == 0) {
+                    $data = [
+                        'status'=>'Hết hàng'
+                    ];
+                }
             }
             // date_start>>date_end>>today
             else {

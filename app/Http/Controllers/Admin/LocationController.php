@@ -108,7 +108,7 @@ class LocationController extends Controller
                 $data['status'] = "Phụ";
             }
             $location->update($data);
-            return redirect()->route('admin.user.edit', $location->user_id);
+            return redirect()->route('admin.user.edit', $location->user_id)->with('success','Thêm địa chỉ thành công');
         }
     }
 

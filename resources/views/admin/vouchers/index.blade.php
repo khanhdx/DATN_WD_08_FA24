@@ -4,45 +4,47 @@
 @endsection
 @section('css')
     {{-- CSS --}}
-    <style>
-        .type-t {
-            border: 1px solid #FF00FF;
-            border-radius:100px; 
-            color: #FF00FF;
-            width: 100%;
-            padding: 0px 5px;
-            background-color: #FFF0F5; 
-        }
-        .type-f {
-            border: 1px solid #1E90FF;
-            border-radius:100px; 
-            color: #1E90FF;
-            width: 100%;
-            padding: 0px 5px;
-            background-color: #F0FFFF; 
-        }
-        .type-s {
-            border: 1px solid #28a745;
-            border-radius:100px; 
-            color: #28a745;
-            width: 100%;
-            padding: 0px 5px;
-            background-color: #F0FFF0; 
-        }
-    </style>
-    <style>
-        .search-form {
-            display: flex;
-            position: relative;
-        }
-        .search-form i {
-            font-size: 24px;
-            font-weight: bold;
-            position: absolute;
-            margin-top: -10px; 
-            margin-left: -30px;
-        }
-    </style>
+        <style>
+            .type-t {
+                border: 1px solid #FF00FF;
+                border-radius:100px; 
+                color: #FF00FF;
+                width: 100%;
+                padding: 0px 5px;
+                background-color: #FFF0F5; 
+            }
+            .type-f {
+                border: 1px solid #1E90FF;
+                border-radius:100px; 
+                color: #1E90FF;
+                width: 100%;
+                padding: 0px 5px;
+                background-color: #F0FFFF; 
+            }
+            .type-s {
+                border: 1px solid #28a745;
+                border-radius:100px; 
+                color: #28a745;
+                width: 100%;
+                padding: 0px 5px;
+                background-color: #F0FFF0; 
+            }
+        </style>
+        <style>
+            .search-form {
+                display: flex;
+                position: relative;
+            }
+            .search-form i {
+                font-size: 24px;
+                font-weight: bold;
+                position: absolute;
+                margin-top: -10px; 
+                margin-left: -30px;
+            }
+        </style>
+    {{-- Link --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 @endsection
 @section('content')
     <section class="p-t-20">
@@ -120,5 +122,29 @@
 @endsection
 @section('js')
     {{-- JAVA SCRIPT --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>
+    @if (session('success'))
+        <script>
+            toastr["success"]("{{ session('success') }}", "Thông báo")
 
+            toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "1500",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            }
+        </script>
+    @endif
 @endsection
