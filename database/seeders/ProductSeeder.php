@@ -52,7 +52,7 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($sanPhamNam as $key => $nam) {
-            $price = rand(100, 9000);
+            $price = rand(100, 900);
             $sale = round($price * 0.6) * 1000; // Giảm 40%
 
             Product::create([
@@ -71,7 +71,7 @@ class ProductSeeder extends Seeder
         // $categoryWoman = Category::query()->where('type', "Woman")->pluck('id', 'id')->toArray();
 
         foreach ($sanPhamNu as $key => $nu) {
-            $price = rand(100, 9000);
+            $price = rand(100, 900);
             $sale = round($price * 0.5) * 1000;
 
             Product::create([
