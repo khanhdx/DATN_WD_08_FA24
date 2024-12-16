@@ -124,7 +124,7 @@
                         </div>
                         <div class="recent-report2">
                             <div class="recent-report__chart">
-                                <h3 class="title-3">Top sản phẩm bán chạy nhất</h3>
+                                <h3 class="title-3">Top sản phẩm bán chạy nhất trong tháng</h3>
                                 <div class="recent-report__chart">
                                     <canvas id="mostOrderedProductChart" width="400" height="200"></canvas>
                                 </div>
