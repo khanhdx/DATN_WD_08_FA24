@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\product\variant\StoreVariantRequest;
 use App\Http\Requests\product\variant\UpdateVariantRequest;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\Color\IColorService;
 use App\Services\Product\IProductService;
@@ -36,13 +37,16 @@ class ProductVariantController extends Controller
 
         $color_id = $request->query('color');
         $size_id = $request->query('size');
+    
 
-        if ( $color_id == null && $size_id == null){
+        if ($color_id == null && $size_id == null) {
             $variants =  $this->variantService->getAll();
         } else {
             $variants = $this->filter($color_id, $size_id);
+
         }
 
+        
         $variants = $variants->appends([
             'color' => $color_id,
             'size' => $size_id,
@@ -123,5 +127,22 @@ class ProductVariantController extends Controller
             ->paginate(10);
 
         return $filtedVariants;
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->query('keyword');
+        $products = Product::where('name', 'like', '%' . $keyword . '%');
+        $productIds = $products->pluck('id');
+        $variantsQuery = ProductVariant::query()
+            ->whereIn('product_id', $productIds);
+       
+        $variants = $variantsQuery->paginate(10)->appends(['keyword' => $keyword]);
+        //  dd($variants);
+        $colors = $this->colorService->getAll();
+        $sizes = $this->sizeService->getAll();
+
+        return view('admin.products.variants.index', compact('variants', ['colors', 'sizes']));
+        
     }
 }

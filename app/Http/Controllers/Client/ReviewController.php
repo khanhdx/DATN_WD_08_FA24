@@ -63,7 +63,7 @@ class ReviewController extends Controller
             $order = Order::findOrFail($orderId);
             $statusOrder = $order->statusOrder->first();
 
-            if ($statusOrder && $statusOrder->id !== 5) {
+            if ($statusOrder && $statusOrder->id !== 7) {
                 return response()->json(['error' => 'Chỉ những đơn hàng đã hoàn thành mới có thể đánh giá.'], 403);
             }
 

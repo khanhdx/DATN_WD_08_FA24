@@ -4,7 +4,7 @@ $(document).on('click', '.plus', function() {
     let quantity = parseInt(input.val()) + 1;
     input.val(quantity);
 
-    console.log(quantity);
+    // console.log(quantity);
 
     if (window.location.pathname === '/carts') {
         let id = $(this).data('id');
@@ -23,7 +23,7 @@ $(document).on('click', '.minus', function() {
     } else {
         return
     }
-    console.log(quantity);
+    // console.log(quantity);
 
     if (window.location.pathname === '/carts') {
         let id = $(this).data('id');

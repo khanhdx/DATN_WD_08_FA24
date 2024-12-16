@@ -22,6 +22,9 @@ class VoucherController extends Controller
         $search = $request->input('search');
         $data['vouchers'] = Voucher::query()->orderBy('id','DESC')->when($search, function($query,$search) {return $query->where('name', 'like', "%{$search}%")->orWhere('voucher_code', 'like', "%{$search}%");})->paginate(10);
         $data['today'] = date('Y-m-d');
+        if($_GET) {
+            $data['vouchers'] = Voucher::query()->orderBy('id','DESC')->onlyTrashed()->when($search, function($query,$search) {return $query->where('name', 'like', "%{$search}%")->orWhere('voucher_code', 'like', "%{$search}%");})->paginate(10);
+        }
         return view('admin.vouchers.index',$data);
     }
 

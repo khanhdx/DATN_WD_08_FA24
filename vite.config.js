@@ -2,6 +2,9 @@ import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 
 export default defineConfig({
+    cache: {
+        dir: 'node_modules/.vite',  // Đặt lại đường dẫn cache trong thư mục node_modules
+    },
     plugins: [
         laravel({
             input: [

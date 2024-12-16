@@ -231,7 +231,11 @@
                                     <a href="{{ route('client.post.show', $post->id) }}"><i
                                             class="fa fa-caret-right"></i></a>
                                 </span>
-                                <img loading="lazy" class="img-responsive" src="{{ $post->image }}" alt="Blog">
+                                {{-- <img loading="lazy" class="img-responsive" src="{{ $post->image }}" alt="Blog"> --}}
+                                @if ($post->image)
+                                            <img loading="lazy" class="img-responsive" 
+                                                src="{{ \Storage::url($post->image) }}" alt="{{ $post->title }}">
+                                @endif
                             </div>
                             <h3><a href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a></h3>
                             <p class="post-meta">{{ $post->publish_date }}</p>

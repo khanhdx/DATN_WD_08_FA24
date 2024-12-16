@@ -156,21 +156,38 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- Thanh toan momo chi dang nhap moi dung duoc --}}
+                            {{-- Thanh toan zaloPay chi dang nhap moi dung duoc --}}
                             @if (auth()->check())
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
                                         <label>
-                                            <input type="radio" name="payment_method" value="MOMO" required>
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseMomo">Thanh
-                                                Toán Qua Momo</a>
+                                            <input type="radio" name="payment_method" value="zaloPay" required>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsezaloPay">Thanh
+                                                Toán Qua zaloPay</a>
                                         </label>
                                     </h5>
                                 </div>
-                                <div id="collapseMomo" class="panel-collapse collapse">
+                                <div id="collapsezaloPay" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                        <p>Thanh toán qua Momo. Bạn sẽ được chuyển hướng tới trang Momo để thực hiện giao
+                                        <p>Thanh toán qua zaloPay. Bạn sẽ được chuyển hướng tới trang zaloPay để thực hiện giao
+                                            dịch.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        <label>
+                                            <input type="radio" name="payment_method" value="vnPay" required>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsevnPay">Thanh
+                                                Toán Qua vnPay</a>
+                                        </label>
+                                    </h5>
+                                </div>
+                                <div id="collapsevnPay" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <p>Thanh toán qua vnPay. Bạn sẽ được chuyển hướng tới trang vnPay để thực hiện giao
                                             dịch.</p>
                                     </div>
                                 </div>

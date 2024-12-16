@@ -112,13 +112,15 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
-                    Route::get('/', [ProductVariantController::class, 'index'])->name('index');
+                    Route::get('', [ProductVariantController::class, 'index'])->name('index');
                     Route::get('{id}/detail', [ProductVariantController::class, 'detail'])->name('detail');
                     Route::get('{id}/edit', [ProductVariantController::class, 'edit'])->name('edit');
                     Route::get('{product_id}/create', [ProductVariantController::class, 'create'])->name('create');
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
                     Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
+                    Route::get('/search', [ProductVariantController::class, 'search'])->name('search');
+
                     
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
                 
@@ -239,7 +241,6 @@ Route::name('client.')->group(function () {
                 Route::delete('/{id}', 'destroy')->name('delete');
             }
         );
-    // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
 // Route cho khách hàng (client)
@@ -248,9 +249,9 @@ Route::group(['middleware' => ['role:Khách hàng', 'auth']], function () {
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->middleware('checkOrderStatus')->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
-    Route::get('payment-momo', [PaymentController::class, 'paymentMomo'])->name('payment.momo');
-    Route::post('/momo/ipn', [PaymentController::class, 'handleMoMoIPN'])->name('payment.momo.notify');
-    Route::get('/momo/return', [PaymentController::class, 'handleMoMoReturn'])->name('payment.momo.return');
+    Route::post('payment-zalopay', [PaymentController::class, 'zaloPay'])->name('payment.zaloPay');
+    Route::get('payment-successZaloPay', [PaymentController::class, 'zaloPaySuccess'])->name('payment.successZaloPay'); // Trang thành công
+    Route::get('payment-vnpay', [PaymentController::class, 'VnPay'])->name('payment.VnPay');
 
     Route::get('payment-success', [PaymentController::class, 'paymentSuccessForUser'])->name('payment.success'); // Trang thành công
     // Trang thành công

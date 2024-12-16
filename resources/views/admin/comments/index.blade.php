@@ -9,42 +9,8 @@
         <div class="row">
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35">Bình luận bài đăng</h3>
-                {{-- lọc --}}
-                {{-- <div class="au-breadcrumb-content">
-                    <form action="{{ route('admin.post.index') }}" class="au-form-icon--sm" action="" method="GET">
-
-                        <input class="au-input--w300 au-input--style2" type="date" name="publish_date"
-                            placeholder="Chọn ngày" value="{{ request()->input('publish_date') }}">
-
-                        <input class="au-input--w300 au-input--style2" type="text" name="title"
-                            placeholder="Nhập tiêu đề để tìm kiếm." value="{{ request()->input('title') }}">
-
-                        <div class="table-data__tool-right">
-                            <button class="au-btn--submit2" type="submit">
-                                <i class="zmdi zmdi-search"></i>
-                            </button>
-                        </div>
-                    </form>
-                    <div class="table-data__tool-right">
-                        <a href="{{ route('admin.post.index') }}">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-2">
-                                Xóa tất cả các bộ lọc
-                            </button>
-                        </a>
-                        <a href="{{ route('admin.post.create') }}">
-                            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                Thêm bài
-                            </button>
-                        </a>
-                    </div>
-                </div>
-                <div class="table-data__tool">
-                    <div class="table-data__tool-left">
-                        <div class="rs-select2--light rs-select2--sm"></div>
-                    </div>
-                </div> --}}
                 @if (session('success'))
-                    <div class="alert alert-success">
+                    <div id="customToast" class="custom-toast">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -74,7 +40,7 @@
                                     <td>{{ $comment->user->name ?? 'Ẩn danh' }}</td>
                                     <td>
                                         {{-- <a href="{{ route('show', $comment->post->id ?? '#') }}" target="_blank"> --}}
-                                            {{ $comment->post->title ?? 'Không có tiêu đề' }}
+                                        {{ $comment->post->title ?? 'Không có tiêu đề' }}
                                     </td>
                                     {{-- <td>
                                         <form action="{{ route('admin.comments.update', $comment->id) }}" method="POST">

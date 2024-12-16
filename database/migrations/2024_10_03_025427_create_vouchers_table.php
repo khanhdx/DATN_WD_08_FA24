@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('status',['Chưa diễn ra', 'Đang diễn ra', 'Đã ngừng', 'Hết hàng']);
             $table->string('description')->nullable();
             $table->timestamps();//Ngày tạo
+            $table->softDeletes();
         });
     }
 

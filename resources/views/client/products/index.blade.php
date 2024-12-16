@@ -133,7 +133,7 @@
                                                     <span
                                                         class="price pull-right">{{ number_format($product->price_regular, 0, ',', '.') }}
                                                         đ</span>
-                                                    <h4><a
+                                                    <h4><a style="display: inline-block;max-width: 100%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
                                                             href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                                     </h4>
                                                     <span class="item-cat">
@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="col-xs-7 col-sm-9">
                                             <div class="product-thumb-info-content">
-                                                <h4><a
+                                                <h4><a 
                                                         href="{{ route('client.product.show', $product->id) }}">{{ $product->name }}</a>
                                                 </h4>
                                                 <div class="reviews-counter clearfix">
@@ -170,7 +170,11 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>({{ $product->reviews->count() }}) Reviews</span>
+                                                    <span>({{ $product->reviews->count() }}) Đánh giá</span>
+                                                    {{-- <a href="#">Add Your Review</a> --}}
+                                                </div>
+                                                <div class="reviews-counter clearfix">
+                                                    <span>({{ $product->views }}) lượt xem</span>
                                                     {{-- <a href="#">Add Your Review</a> --}}
                                                 </div>
                                                 <p class="price">

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Client;
 
 use App\Events\OrderEvent;
 use App\Http\Controllers\Controller;
-use App\Models\AtmMomo;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -16,8 +15,10 @@ use App\Models\StatusOrderDetail;
 use App\Models\Voucher;
 use App\Models\vouchersWare;
 use App\Models\VoucherWare;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -179,7 +180,7 @@ class PaymentController extends Controller
                 'to_ward_name' => $request->ward_street,
                 'to_district_name' => $request->district,
                 'to_province_name' => $request->province,
-                'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
+                'cod_amount' => $request->payment_method === 'zaloPay' ? 0 : $totalPrice,
                 'weight' => $quantityCart * $weight,
                 'service_type_id' => 2,
                 'items' => $items
@@ -218,8 +219,9 @@ class PaymentController extends Controller
             foreach ($cartItems as $item) {
                 // Xu ly ton tren 1 san pham bien the
                 $productVariant = $item->productVariant;
+                $product = $item->product;
                 $productVariant->decrement('stock', $item->quantity);
-                $product_id = $item->productVariant->product_id;
+                $product->decrement('base_stock', $item->quantity);
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $item->productVariant->product_id,
@@ -231,14 +233,13 @@ class PaymentController extends Controller
                     'quantity' => $item->quantity,
                     'total_price' => $item->totalPrice(),
                 ]);
-    
-                Product::where('id', $item->productVariant->product_id)->decrement('base_stock', $item->quantity);
-            }
 
+               
+            }
             StatusOrderDetail::create([
                 'status_order_id' => 1,
                 'order_id' => $order->id,
-                'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
+                'name' => $request->payment_method === 'zaloPay' ? 'zaloPay' : 'COD',
             ]);
             // Cập nhật lại trạng thái voucher trong kho sau khi sử dụng (Sử dụng mã)
             if ($voucher_id) {
@@ -257,8 +258,11 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            if ($request->payment_method === 'MOMO') {
-                return $this->processMoMoPayment($order);
+            if ($request->payment_method === 'zaloPay') {
+                return $this->zaloPay($order);
+            }
+            if ($request->payment_method === 'vnPay') {
+                return $this->vnPay($order);
             }
             Payment::create([
                 'order_id' => $order->id,
@@ -348,93 +352,100 @@ class PaymentController extends Controller
         }
 
         try {
-            $response = Http::withHeaders([
-                'Token' => env('TOKEN_GHN'),
-                'ShopId' => env('SHOP_ID')
-            ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', [
-                'payment_type_id' => 2,
-                'note' => $request->note,
-                'required_note' => "KHONGCHOXEMHANG",
-                'to_name' => $request->user_name,
-                'to_phone' => $request->phone_number,
-                'to_address' => $request->address,
-                'to_ward_name' => $request->ward_street,
-                'to_district_name' => $request->district,
-                'to_province_name' => $request->province,
-                'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
-                'weight' => $quantityCart * $weight,
-                'service_type_id' => 2,
-                'items' => $items
-            ]);
-
-            $order_code = [];
-            $data = $response->json();
-          
-
-            if ($response->successful()) {
-                $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
-                Log::info('Tạo đơn thành công cho khách vãng lai: ' . $response->body());
-            } else {
-                // Xử lý lỗi API
-                Log::error('API GHN Error: ' . $response->body());
-
-
-                return redirect()->route('guest.checkout')->with('error', $data['code_message_value']);
-            }
-
-            // Tạo đơn hàng cho khách vãng lai
-            $order = Order::create([
-                'user_id' => null,
-                'order_code' => $order_code,
-                'shipping_fee' => $request->ship_fee,
-                'slug' => $this->generateSlug(),
-                'user_name' => $request->user_name,
-                'email' => $request->email,
-                'total_price' => $totalPrice,
-                'voucher_id' => null,
-                'status_order_id' => 1, // Trạng thái chờ xử lý
-                'phone_number' => $request->phone_number,
-                'date' => now(),
-                'address' => $request->address,
-                'note' => $request->note,
-            ]);
-
-            // Tạo chi tiết đơn hàng
-            foreach ($cartItems as $item) {
-                $product_variant_id = $item->product_variant_id;
-                ProductVariant::where('id', $product_variant_id)->decrement('stock', $item->quantity);
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id,
-                    'product_variant_id' => $product_variant_id,
-                    'name_product' => $item->name,
-                    'color' => $item->color ?? null,
-                    'size' => $item->size ?? null,
-                    'unit_price' => $item->price,
-                    'quantity' => $item->quantity,
-                    'total_price' => $item->sub_total,
+            DB::transaction(function () use ($request, $totalPrice, $weight, $quantityCart, $items, $cartItems) {
+                $response = Http::withHeaders([
+                    'Token' => env('TOKEN_GHN'),
+                    'ShopId' => env('SHOP_ID')
+                ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', [
+                    'payment_type_id' => 2,
+                    'note' => $request->note,
+                    'required_note' => "KHONGCHOXEMHANG",
+                    'to_name' => $request->user_name,
+                    'to_phone' => $request->phone_number,
+                    'to_address' => $request->address,
+                    'to_ward_name' => $request->ward_street,
+                    'to_district_name' => $request->district,
+                    'to_province_name' => $request->province,
+                    'cod_amount' => $request->payment_method === 'MOMO' ? 0 : $totalPrice,
+                    'weight' => $quantityCart * $weight,
+                    'service_type_id' => 2,
+                    'items' => $items
                 ]);
-                Product::where('id', $item->product_id)->decrement('base_stock', $item->quantity);
-            }
-    
-            StatusOrderDetail::create([
-                'status_order_id' => 1,
-                'order_id' => $order->id,
-                'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
-            ]);
 
-            Payment::create([
-                'order_id' => $order->id,
-                'user_id' => null, // Sử dụng UUID cho thanh toán
-                'amount' => $totalPrice,
-                'transaction_type' => 0,
-                'payment_method' => $request->payment_method,
-                'status' => 0, // Chờ thanh toán
-            ]);
+                $order_code = [];
+                $data = $response->json();
 
 
-            // Thông báo admin
-            broadcast(new OrderEvent($order));
+                if ($response->successful()) {
+                    $order_code = data_get($response, 'data.order_code', 'Không có mã đơn hàng');
+                    Log::info('Tạo đơn thành công cho khách vãng lai: ' . $response->body());
+                } else {
+                    // Xử lý lỗi API
+                    Log::error('API GHN Error: ' . $response->body());
+
+
+                    return redirect()->route('guest.checkout')->with('error', $data['code_message_value']);
+                }
+
+                // Tạo đơn hàng cho khách vãng lai
+                $order = Order::create([
+                    'user_id' => null,
+                    'order_code' => $order_code,
+                    'shipping_fee' => $request->ship_fee,
+                    'slug' => $this->generateSlug(),
+                    'user_name' => $request->user_name,
+                    'email' => $request->email,
+                    'total_price' => $totalPrice,
+                    'voucher_id' => null,
+                    'status_order_id' => 1, // Trạng thái chờ xử lý
+                    'phone_number' => $request->phone_number,
+                    'date' => now(),
+                    'address' => $request->address,
+                    'note' => $request->note,
+                ]);
+
+                // Tạo chi tiết đơn hàng
+                foreach ($cartItems as $item) {
+                    $product_variant_id = $item->product_variant_id;
+                    ProductVariant::where('id', $product_variant_id)->decrement('stock', $item->quantity);
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'product_id' => $item->product_id,
+                        'product_variant_id' => $product_variant_id,
+                        'name_product' => $item->name,
+                        'color' => $item->color ?? null,
+                        'size' => $item->size ?? null,
+                        'unit_price' => $item->price,
+                        'quantity' => $item->quantity,
+                        'total_price' => $item->sub_total,
+                    ]);
+                    Product::where('id', $item->product_id)->decrement('base_stock', $item->quantity);
+                }
+
+                StatusOrderDetail::create([
+                    'status_order_id' => 1,
+                    'order_id' => $order->id,
+                    'name' => $request->payment_method === 'MOMO' ? 'MOMO' : 'COD',
+                ]);
+
+                Payment::create([
+                    'order_id' => $order->id,
+                    'user_id' => null, // Sử dụng UUID cho thanh toán
+                    'amount' => $totalPrice,
+                    'transaction_type' => 0,
+                    'payment_method' => $request->payment_method,
+                    'status' => 0, // Chờ thanh toán
+                ]);
+                // Thông báo admin
+                broadcast(new OrderEvent($order));
+
+                // Lưu order_id vào session
+                session()->put('order_id', $order->id);
+                // Xóa giỏ hàng
+                session()->forget('cart');
+                session()->forget('voucher_id');
+                session()->forget('discount');
+            }, 3);
         } catch (\Exception $e) {
             Log::error('Error while creating guest order: ' . $e->getMessage());
             if (isset($order)) {
@@ -452,137 +463,173 @@ class PaymentController extends Controller
         //         $voucher->save();
         //     }
         // }
-
-        // Lưu order_id vào session
-        session()->put('order_id', $order->id);
-        // Xóa giỏ hàng
-        session()->forget('cart');
-        session()->forget('voucher_id');
-        session()->forget('discount');
-
         return redirect()->route('guest.payment.success')->with('success', 'Đặt hàng thành công!');
     }
 
-    function execPostRequest($url, $data)
+    // public function VnPay(Order $order)
+    // {
+    //     // dd($order);
+    //     $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    //     $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
+    //     $vnp_TmnCode = "1N1IL5ZW"; //Mã website tại VNPAY 
+    //     $vnp_HashSecret = "6QN6D6VW0DZI1N7DVGM9YHPD7SBUX1HZ"; //Chuỗi bí mật
+    //     $vnp_TxnRef = $order->order_code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+    //     $vnp_OrderInfo = "thanh toan hoa don";
+    //     $vnp_OrderType = 'Obito Shop';
+    //     $vnp_Amount = $order->total_price;
+    //     $vnp_Locale = 'VN';
+    //     $vnp_BankCode = 'NCB';
+    //     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
+    //     $inputData = array(
+    //         "vnp_Version" => "2.1.0",
+    //         "vnp_TmnCode" => $vnp_TmnCode,
+    //         "vnp_Amount" => $vnp_Amount,
+    //         "vnp_Command" => "pay",
+    //         "vnp_CreateDate" => Carbon::now('UTC')->format('YmdHis'),
+    //         "vnp_CurrCode" => "VND",
+    //         "vnp_IpAddr" => $vnp_IpAddr,
+    //         "vnp_Locale" => $vnp_Locale,
+    //         "vnp_OrderInfo" => $vnp_OrderInfo,
+    //         "vnp_OrderType" => $vnp_OrderType,
+    //         "vnp_ReturnUrl" => $vnp_Returnurl,
+    //         "vnp_TxnRef" => $vnp_TxnRef,
+    //     );
+
+    //     if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+    //         $inputData['vnp_BankCode'] = $vnp_BankCode;
+    //     }
+    //     if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
+    //         $inputData['vnp_Bill_State'] = $vnp_Bill_State;
+    //     }
+
+    //     // var_dump($inputData);
+    //     // dd($inputData);
+    //     ksort($inputData);
+    //     $query = "";
+    //     $i = 0;
+    //     $hashdata = "";
+    //     foreach ($inputData as $key => $value) {
+    //         if ($i == 1) {
+    //             $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+    //         } else {
+    //             $hashdata .= urlencode($key) . "=" . urlencode($value);
+    //             $i = 1;
+    //         }
+    //         $query .= urlencode($key) . "=" . urlencode($value) . '&';
+    //     }
+
+    //     $vnp_Url = $vnp_Url . "?" . $query;
+    //     if (isset($vnp_HashSecret)) {
+    //         $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+    //         $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+    //     }
+    //     // dd($vnp_Url);    
+    //     return redirect()->to($vnp_Url);
+    // }
+
+    public function zaloPay(Order $orders)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data)
-            )
-        );
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $result = curl_exec($ch);
-        //close connection
-        curl_close($ch);
-        return $result;
-    }
+        $totalAll = $orders->total_price + $orders->shipping_fee;
+        $config = [
+            "app_id" => 2553,
+            "key1" => "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL",
+            "key2" => "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz",
+            "endpoint" => "https://sb-openapi.zalopay.vn/v2/create"
+        ];
 
-    public function processMoMoPayment($order)
-    {
-        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-        $partnerCode = 'MOMOBKUN20180529';
-        $accessKey = 'klm05TvNBzhg7h7j';
-        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        $orderInfo = "Thanh toán qua MoMo";
-        $amount = $order->total_price;  // Chuyển giá trị thành tiền đồng
-        $orderId = time();
-        $redirectUrl = route('payment.momo');
-        $ipnUrl = route('payment.momo');
-        $extraData = "";
+        $embeddata = json_encode(['redirecturl' => route('payment.successZaloPay')]); // Merchant's data
+        $items = '[]'; // Merchant's data
+        $transID = rand(0, 1000000); //Random trans id
+        $order = [
+            "app_id" => $config["app_id"],
+            "app_time" => intval(round(microtime(true) * 1000)),// miliseconds
+            "app_trans_id" => date("ymd") . "_" . $transID, // translation missing: vi.docs.shared.sample_code.comments.app_trans_id
+            "app_user" => "user123",
+            "item" => $items,
+            "embed_data" => $embeddata,
+            "amount" => $totalAll,
+            "description" => "Thanh toán hóa đơn #". $orders->slug,
+            "bank_code" => ""
+        ];
 
-        $requestId = time() . "";
-        $requestType = "payWithATM";
-        //before sign HMAC SHA256 signature
-        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-        $signature = hash_hmac("sha256", $rawHash, $secretKey);
-        $data = array(
-            'partnerCode' => $partnerCode,
-            'partnerName' => "Test",
-            "storeId" => "MomoTestStore",
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $orderId,
-            'orderInfo' => $orderInfo,
-            'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
-            'extraData' => $extraData,
-            'requestType' => $requestType,
-            'signature' => $signature
-        );
-        // dd($data);
+        // appid|app_trans_id|appuser|amount|apptime|embeddata|item
+        $data = $order["app_id"] . "|" . $order["app_trans_id"] . "|" . $order["app_user"] . "|" . $order["amount"]
+            . "|" . $order["app_time"] . "|" . $order["embed_data"] . "|" . $order["item"];
+        $order["mac"] = hash_hmac("sha256", $data, $config["key1"]);
 
-        $result = $this->execPostRequest($endpoint, json_encode($data));
-        $jsonResult = json_decode($result, true);
+        $context = stream_context_create([
+            "http" => [
+                "header" => "Content-type: application/x-www-form-urlencoded\r\n",
+                "method" => "POST",
+                "content" => http_build_query($order)
+            ]
+        ]);
 
-
-        if ($jsonResult['resultCode'] == 0) {
-            return redirect($jsonResult['payUrl']);
-        } else {
-            return redirect()->route('checkout')->with('error', 'Lỗi khi xử lý thanh toán MoMo.');
+        $resp = file_get_contents($config["endpoint"], false, $context);
+        $result = json_decode($resp, true);
+        // dd([
+        //     'request' => $order,
+        //     'response' => $result,
+        // ]);
+        if ($result["return_code"] == 1) {
+            return redirect($result["order_url"]);
+        }
+        foreach ($result as $key => $value) {
+            echo "$key: $value<br>";
         }
     }
 
-    public function paymentMomo(Request $request)
+    public function zaloPaySuccess(Request $request)
     {
         try {
-            Log::info('MoMo payload:', $request->all());
-
+            Log::info('zalo payload:', $request->all());
+            $payload = $request->all();
+           
+            // Lấy đơn hàng
             $order = Order::where('user_id', Auth::id())
                 ->whereHas('statusOrderDetails', function ($query) {
-                    $query->where('status_order_id', 1);
+                    $query->where('status_order_id', 1); // 1 = Đơn hàng chờ thanh toán
                 })
                 ->latest()
                 ->first();
-
+    
             if (!$order) {
                 return redirect()->route('checkout')->with('error', 'Không tìm thấy đơn hàng hợp lệ.');
             }
 
-            if ($request->resultCode != 0) { // Giao dịch thất bại
-                // Xóa đơn hàng và các bản ghi liên quan
-                $order->orderDetails()->delete();
-                $order->statusOrderDetails()->delete();
-                $order->delete();
-                $this->deleteOrderGHN($order->order_code);
-                return redirect()->route('checkout')->with('error', 'Thanh toán không thành công. Đơn hàng đã được hủy.');
-            }
-
-            // Lưu thông tin thanh toán nếu thành công
+    
+            // Thanh toán thành công
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => $order->user_id,
                 'amount' => intval($request->amount),
-                'transaction_type' => 1,
-                'payment_method' => 'MoMo',
+                'transaction_type' => 1, // 1 = Thanh toán trực tuyến
+                'payment_method' => 'zaloPay',
                 'status' => 1,
-                'note' => 'Thanh toán thành công qua MoMo.',
+                'note' => 'Thanh toán thành công qua zaloPay.',
             ]);
-
+    
+            // Cập nhật trạng thái đơn hàng
+            $order->statusOrderDetails()->update(['status_order_id' => 2]); // 2 = Đã thanh toán
+    
+            // Xóa giỏ hàng
             $this->clearCart();
-
+    
             return redirect()->route('payment.success')->with('success', 'Thanh toán thành công!');
         } catch (\Exception $e) {
-            Log::error('Error in paymentMomo: ' . $e->getMessage());
-
+            Log::error('Error in paymentzaloPay for user ' . Auth::id() . ': ' . $e->getMessage());
+    
             if (isset($order)) {
                 $order->orderDetails()->delete();
                 $order->statusOrderDetails()->delete();
                 $order->delete();
             }
-
+    
             return redirect()->route('checkout')->with('error', 'Lỗi xảy ra khi xử lý thanh toán. Đơn hàng đã được hủy.');
         }
     }
+     
 
     public function paymentSuccessForUser()
     {

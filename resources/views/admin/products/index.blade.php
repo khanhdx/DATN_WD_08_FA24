@@ -46,7 +46,7 @@
                 @endif
 
                 @if (session('success'))
-                    <div class="alert alert-success">
+                    <div id="customToast" class="custom-toast">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -130,19 +130,19 @@
                                                 {{-- Xem chi tiết  --}}
                                                 <a href="{{ route('admin.products.edit', $item->id) }}">
                                                     <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                        title="Xem chi tiết sản phẩm">
+                                                        title="Xem chi tiết">
                                                         <i class="fas fa-eye"></i>
                                                     </button></a>
 
                                                 {{-- Sửa sản phẩm --}}
                                                 <a href="{{ route('admin.products.edit', $item->id) }}">
                                                     <button class="item mr-2" data-toggle="tooltip" data-placement="top"
-                                                        title="Edit">
+                                                        title="Chỉnh sửa">
                                                         <i class="zmdi zmdi-edit"></i>
                                                     </button></a>
 
                                                 {{-- Xóa sản phẩm  --}}
-                                                <form action="{{ route('admin.products.delete', $item->id) }}"
+                                                {{-- <form action="{{ route('admin.products.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                     @csrf
@@ -151,7 +151,7 @@
                                                         title="Delete">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>

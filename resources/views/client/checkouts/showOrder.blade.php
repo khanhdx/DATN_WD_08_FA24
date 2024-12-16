@@ -78,7 +78,7 @@
                             <td>{{ number_format($order->shipping_fee + $orderDetail->total_price, 0, ',', '.') }} ₫</td>
                             <td>
                                 @if (Auth::check())
-                                    @if ($order->statusOrder->first()->id === 5)
+                                    @if ($order->statusOrder->first()->id === 7)
                                         @php
                                             $existingReview = \App\Models\Review::where('order_id', $order->id)
                                                 ->where('product_id', $orderDetail->product_id)

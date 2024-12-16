@@ -12,13 +12,11 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-            </div>
+            @if (session('success'))
+                <div id="customToast" class="custom-toast">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="col-md-6">
                 <h3 class="title-5 m-b-35">Màu sắc</h3>
                 <div class="table-data__tool">
@@ -112,7 +110,7 @@
                                                 <button class="item mr-2" data-toggle="modal"
                                                     data-target="#editSizeModal{{ $item->id }}">
                                                     <i class="zmdi zmdi-edit" data-toggle="tooltip" data-placement="top"
-                                                        title="Edit"></i>
+                                                        title="Chỉnh sửa"></i>
                                                 </button>
 
                                                 <!-- Modal chỉnh sửa màu sắc -->
@@ -165,7 +163,7 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                <form
+                                                {{-- <form
                                                     action="{{ route('admin.products.variants.colors.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
@@ -175,7 +173,7 @@
                                                         title="Delete">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>
@@ -265,7 +263,7 @@
                                                 <button class="item mr-2" data-toggle="modal"
                                                     data-target="#editSize{{ $item->id }}">
                                                     <i class="zmdi zmdi-edit" data-toggle="tooltip" data-placement="top"
-                                                        title="Edit"></i>
+                                                        title="Chỉnh sửa"></i>
                                                 </button>
 
                                                 <!-- Modal chỉnh Size -->
@@ -305,7 +303,7 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                <form
+                                                {{-- <form
                                                     action="{{ route('admin.products.variants.sizes.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
@@ -315,7 +313,7 @@
                                                         title="Delete">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>

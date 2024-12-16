@@ -20,7 +20,7 @@ class StatisticalService
     // Tổng doanh thu 
     public function totalRevenue($dayStart = null, $dayEnd = null)
     {
-        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+        $completedStatusId = StatusOrder::where('id', 7)->value('id');
 
         if ($dayStart == null && $dayEnd == null) {
             $totalRevenue = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
@@ -69,13 +69,15 @@ class StatisticalService
         return $revenues;
     }
 
+    //
+
 
 
     // Orders
 
  public function countOrder($dayStart = null, $dayEnd = null)
     {
-        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+        $completedStatusId = StatusOrder::where('id', 7)->value('id');
 
         if ($dayStart == null && $dayEnd == null) {
             $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
@@ -149,7 +151,7 @@ class StatisticalService
     // Products
     public function countProductSold($dayStart = null, $dayEnd = null)
     {
-        $completedStatusId = StatusOrder::where('id', 6)->value('id');
+        $completedStatusId = StatusOrder::where('id', 7)->value('id');
 
         if ($dayStart == null && $dayEnd == null) {
             $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {

@@ -189,6 +189,7 @@
                     
                     $('.product_id').val(data.id);
                     $('#product-name').text(data.name);
+                    $('#product-views').text(data.views);
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
                     $('#product-content').text(data.content);
@@ -258,7 +259,7 @@
                     // Hiển thị số lượt đánh giá
                     const reviewCount = data.reviews.length;
                     $('#review-count').text(
-                        `${reviewCount} Review${reviewCount > 1 ? 's' : ''}`);
+                        `${reviewCount} Đánh giá`);
 
                     $('#reviewCount').text(reviewCount);
 
@@ -336,13 +337,14 @@
             product_variant_id: productVariantId,
         };
 
-        $.post(`{{ route('client.home') }}/carts/${id}`, data, function(res) {
+        $.post(`/carts/${id}`, data, function(res) {
             if (res.status_code == 200) {
                 loadingCart();
                 loadingHeader();
-                // console.log(res.message);
             } else {
-                $('.qty').val(res.quantity);
+                // $('#quantity').val(res.quantity);
+                $(`.input-qty[data-id="${id}"]`).val(res.quantity);
+                
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
