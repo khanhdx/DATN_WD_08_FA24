@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('role', ['Khách hàng', 'Quản lý']);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
