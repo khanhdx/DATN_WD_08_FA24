@@ -101,6 +101,9 @@ class ProductController extends Controller
         
         $related_products = Product::with(['category'])->latest('id')->get();
 
+         //Tăng lượt xem
+        $product->increment('views');
+
         return view(self::PATH_VIEW . __FUNCTION__, compact(
             'product',
             'related_products',
@@ -112,6 +115,9 @@ class ProductController extends Controller
     {
         try {
             $product->load(['variants', 'image', 'image_others', 'category', 'sizes', 'colors', 'reviews.user']);
+
+            //Tăng lượt xem
+            $product->increment('views');
 
             return response()->json($product);
         } catch (\Throwable $th) {

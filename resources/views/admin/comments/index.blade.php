@@ -10,7 +10,7 @@
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35">Bình luận bài đăng</h3>
                 @if (session('success'))
-                    <div class="alert alert-success">
+                    <div id="customToast" class="custom-toast">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -40,7 +40,7 @@
                                     <td>{{ $comment->user->name ?? 'Ẩn danh' }}</td>
                                     <td>
                                         {{-- <a href="{{ route('show', $comment->post->id ?? '#') }}" target="_blank"> --}}
-                                            {{ $comment->post->title ?? 'Không có tiêu đề' }}
+                                        {{ $comment->post->title ?? 'Không có tiêu đề' }}
                                     </td>
                                     {{-- <td>
                                         <form action="{{ route('admin.comments.update', $comment->id) }}" method="POST">

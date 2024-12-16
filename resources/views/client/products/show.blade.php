@@ -59,6 +59,10 @@
                         <span>{{ $product->reviews->count() }} Đánh giá</span>
                     </div>
 
+                    <div class="reviews-counter clearfix">
+                        <span>{{ $product->views }} lượt xem</span>
+                    </div>
+
                     <p class="price">
                         <span class="amount price-sale">{{ number_format($product->price_regular, 0, ',', '.') }} ₫</span>
                     </p>

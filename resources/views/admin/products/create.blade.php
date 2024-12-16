@@ -124,7 +124,8 @@
                                 </div>
                                 <div id="variants-container"></div>
                                 <div class="table-data__tool-right">
-                                    <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <button type="submit" class="au-btn au-btn-icon au-btn--green au-btn--small"
+                                        id="submit-button">
                                         Thêm sản phẩm
                                     </button>
 
@@ -143,7 +144,7 @@
 
 @section('js')
     <script>
-         function showImage(event) {
+        function showImage(event) {
             const img = document.getElementById('img');
             console.log(img);
             const file = event.target.files[0];
@@ -156,6 +157,7 @@
                 reader.readAsDataURL(file);
             }
         }
+
         function previewImage(input, rowIndex) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -188,9 +190,14 @@
             });
 
             const variantsHtml = `
-                  <div class="row border border-secondary rounded pt-3 mt-2 mb-3">
-                     <div class="col-lg-12">
-                         <h5>Biến thể ${variantCount}</h5>
+                  <div class="row border border-secondary rounded pt-3 mt-2 mb-3" id="variant-${variantCount}">
+                     <div class="col-lg-12" style="display: flex; justify-content: space-between;">
+                        <div>
+                            <h5>Biến thể ${variantCount}</h5>
+                        </div>
+                         <div>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteVariant(${variantCount})">Xóa</button>
+                        </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -205,7 +212,7 @@
                         <div class="form-group">
                             <label for="title">Giá biến thể:</label>
                             <input class="au-input au-input--full" type="text" name="variants[${variantCount}][price]"
-                                placeholder="Nhập giá góc">
+                                placeholder="Nhập giá biến thể">
                             @error('price')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -232,8 +239,25 @@
                     </div>
                 </div>
             `;
-            variantsContainer.innerHTML += variantsHtml; // Thêm form mới vào container
+            variantsContainer.innerHTML += variantsHtml;
+        }
 
+        document.getElementById('submit-button').addEventListener('click', function(e) {
+            const variantsContainer = document.getElementById('variants-container');
+            const variantRows = variantsContainer.querySelectorAll('.row');
+            const errorMessage = document.getElementById('error-message');
+
+            if (variantRows.length === 0) {
+                e.preventDefault();
+                alert('Vui lòng thêm ít nhất một biến thể trước khi gửi!');
+            }
+        });
+
+        function deleteVariant(variantId) {
+            const variantRow = document.getElementById(`variant-${variantId}`);
+            if (variantRow) {
+                variantRow.remove();
+            }
         }
     </script>
 @endsection

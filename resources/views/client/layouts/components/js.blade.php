@@ -189,6 +189,7 @@
                     
                     $('.product_id').val(data.id);
                     $('#product-name').text(data.name);
+                    $('#product-views').text(data.views);
                     $('#product-sku').text(data.SKU);
                     $('#product-description').text(data.description);
                     $('#product-content').text(data.content);
@@ -258,7 +259,7 @@
                     // Hiển thị số lượt đánh giá
                     const reviewCount = data.reviews.length;
                     $('#review-count').text(
-                        `${reviewCount} Review${reviewCount > 1 ? 's' : ''}`);
+                        `${reviewCount} Đánh giá`);
 
                     $('#reviewCount').text(reviewCount);
 

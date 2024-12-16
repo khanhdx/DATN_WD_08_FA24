@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35 mt-3">Tồn kho sản phẩm</h3>
                 @if (session('success'))
-                    <div class="alert alert-success">
+                    <div id="customToast" class="custom-toast">
                         {{ session('success') }}
                     </div>
                 @endif
