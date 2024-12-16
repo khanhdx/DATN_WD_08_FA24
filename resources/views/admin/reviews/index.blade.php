@@ -58,7 +58,7 @@
                 <div class="table-data__tool-right">
                     <a href="{{ route('admin.reviews.index') }}">
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-2">
-                            Xóa tất cả các bộ lọc
+                           hiển thị tất cả
                         </button>
                     </a>
                 </div>

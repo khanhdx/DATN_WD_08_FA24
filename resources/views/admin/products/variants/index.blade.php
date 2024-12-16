@@ -39,13 +39,13 @@
                         </form>
 
                     </div>
-                    <form class="au-form-icon" action="" method="GET">
+                    {{-- <form class="au-form-icon" action="" method="GET">
                         <input class="au-input--w300 au-input--style2" name="search" value="{{ request('search') }}"
                             type="text" placeholder="Tìm kiếm..." />
                         <button class="au-btn--submit2" type="submit">
                             <i class="zmdi zmdi-search"></i>
                         </button>
-                    </form>
+                    </form> --}}
                     {{-- <div class="table-data__tool-right">
                         <a href="{{ route('admin.products.create') }}">
                             <button class="au-btn au-btn-icon au-btn--green au-btn--small">

@@ -22,7 +22,7 @@
                         </div>
                         <div class="post-image single">
                             @if ($post_show->image)
-                                <img class="img-responsive" src="{{ \Storage::url($post_show->image) }}"
+                                <img class="img-responsive" src="{{ \Storage::url($post_show->image) }}" width="150" height="auto"
                                     alt="{{ $post_show->title }}">
                             @else
                                 <p>Không có ảnh</p>
@@ -43,8 +43,7 @@
                                                 <a href="{{ route('client.post.show', $post->id) }}">
                                                     @if ($post->image)
                                                         <img class="img-responsive" src="{{ \Storage::url($post->image) }}"
-                                                            alt="BLOG {{ $post->title }}"
-                                                            style="width: 50px; height: 70px;">
+                                                            alt="BLOG {{ $post->title }}">
                                                     @else
                                                         <p>Không có ảnh</p>
                                                     @endif
@@ -165,7 +164,7 @@
 
                         @if (Auth::check())
                             <div class="post-block post-leave-comment">
-                                <h3>Để lại bình luận</h3>
+                                <h3>Để lại bình luận của bạn</h3>
                                 <p><small></small></p>
                                 <form action="{{ route('client.comments.store', $post_show->id) }}" method="POST">
                                     @csrf
@@ -261,7 +260,7 @@
                                                 <a
                                                     href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a>
                                                 <div class="post-meta">
-                                                    <i class="fa fa-eye"></i> {{ $post->views }} lượt xem
+                                                    <i class="fa fa-eye"></i> {{ $post->author }} tác giả
                                                 </div>
                                             </div>
                                         </li>
