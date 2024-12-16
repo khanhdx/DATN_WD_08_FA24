@@ -33,11 +33,16 @@
                                     <div class="star-rating"></div>
                                     <div class="star-bg"></div>
                                 </div>
-                                <span id="review-count">0 Review</span>
+                                <span id="review-count">0 Đánh giá</span>
+                            </div>
+
+                            <div class="reviews-counter clearfix">
+                               
+                                <span id="product-views"></span></span><span> lượt xem</span>
                             </div>
 
                             <p class="price">
-                                <span class="amount" id="product-price-regular"></span>
+                                <span class="amount" id="product-price-regular">
                             </p>
 
                             <form method="post" class="cart" id="addToCartQuick">

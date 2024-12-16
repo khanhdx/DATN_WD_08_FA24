@@ -112,13 +112,15 @@ Route::group(['middleware' => ['role:Quản lý', 'auth']], function () {
 
                 // Route cho variants
                 Route::prefix('variants')->as('variants.')->group(function () {
-                    Route::get('/', [ProductVariantController::class, 'index'])->name('index');
+                    Route::get('', [ProductVariantController::class, 'index'])->name('index');
                     Route::get('{id}/detail', [ProductVariantController::class, 'detail'])->name('detail');
                     Route::get('{id}/edit', [ProductVariantController::class, 'edit'])->name('edit');
                     Route::get('{product_id}/create', [ProductVariantController::class, 'create'])->name('create');
                     Route::post('/store', [ProductVariantController::class, 'store'])->name('store');
                     Route::put('{id}/update', [ProductVariantController::class, 'update'])->name('update');
                     Route::delete('{id}/delete', [ProductVariantController::class, 'delete'])->name('delete');
+                    Route::get('/search', [ProductVariantController::class, 'search'])->name('search');
+
                     
                     Route::get('get-all-atributes', [ProductVariantController::class, 'getAllAttribute'])->name('getAllAttribute');
                 

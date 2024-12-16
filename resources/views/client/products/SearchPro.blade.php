@@ -167,8 +167,11 @@
                                                         <div class="star-rating"></div>
                                                         <div class="star-bg"></div>
                                                     </div>
-                                                    <span>({{ $product->reviews->count() }}) Reviews</span>
+                                                    <span>({{ $product->reviews->count() }}) Đánh giá</span>
                                                     {{-- <a href="#">Add Your Review</a> --}}
+                                                </div>
+                                                <div class="reviews-counter clearfix">
+                                                    <span>({{ $product->views }}) lượt xem</span>
                                                 </div>
                                                 <p class="price">
                                                     {{ number_format($product->price_regular, 0, ',', '.') }} đ</p>
