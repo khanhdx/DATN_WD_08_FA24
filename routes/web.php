@@ -250,9 +250,9 @@ Route::group(['middleware' => ['role:Khách hàng', 'auth']], function () {
 
     Route::get('checkout', [PaymentController::class, 'showPaymentForm'])->middleware('checkOrderStatus')->name('checkout'); // Hiển thị form thanh toán
     Route::post('checkout', [PaymentController::class, 'checkout'])->name('checkout.process'); // Xử lý thanh toán
-    Route::get('payment-momo', [PaymentController::class, 'paymentMomo'])->name('payment.momo');
-    Route::post('/momo/ipn', [PaymentController::class, 'handleMoMoIPN'])->name('payment.momo.notify');
-    Route::get('/momo/return', [PaymentController::class, 'handleMoMoReturn'])->name('payment.momo.return');
+    Route::post('payment-zalopay', [PaymentController::class, 'zaloPay'])->name('payment.zaloPay');
+    Route::get('payment-successZaloPay', [PaymentController::class, 'zaloPaySuccess'])->name('payment.successZaloPay'); // Trang thành công
+    Route::get('payment-vnpay', [PaymentController::class, 'VnPay'])->name('payment.VnPay');
 
     Route::get('payment-success', [PaymentController::class, 'paymentSuccessForUser'])->name('payment.success'); // Trang thành công
     // Trang thành công

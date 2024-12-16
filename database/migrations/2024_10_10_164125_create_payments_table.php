@@ -19,7 +19,7 @@
                 $table->foreignIdFor(User::class)->nullable()->constrained();
                 $table->double('amount');                              // Số tiền
                 $table->tinyInteger('transaction_type')->comment(' 0 Loại A, 1 Loại B');
-                $table->enum('payment_method', ['COD', 'VnPAY', 'MOMO']);
+                $table->enum('payment_method', ['COD', 'VnPAY', 'zaloPay']);
                 $table->tinyInteger('status')->comment('0 Chưa thanh toán 1 Đã thanh toán');  
                 $table->string('note')->nullable();
                 $table->timestamps();
