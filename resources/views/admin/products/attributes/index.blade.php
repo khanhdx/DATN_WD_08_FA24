@@ -17,6 +17,12 @@
                     {{ session('success') }}
                 </div>
             @endif
+
+            @if (session('failed'))
+                <div id="failedToast" class="failed-toast">
+                    {{ session('failed') }}
+                </div>
+            @endif
             <div class="col-md-6">
                 <h3 class="title-5 m-b-35">Màu sắc</h3>
                 <div class="table-data__tool">
@@ -142,7 +148,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="color_code">Mã màu:</label>
-                                                                        <input type="text" name="form-control"
+                                                                        <input type="text" 
                                                                             id="update_color_code_text" name="code_color"
                                                                             placeholder="#000000" maxlength="7"
                                                                             style="width: 120px; margin-right: 10px"
@@ -163,7 +169,7 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                {{-- <form
+                                                <form
                                                     action="{{ route('admin.products.variants.colors.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
@@ -173,7 +179,7 @@
                                                         title="Delete">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -303,7 +309,7 @@
                                                 </div>
 
                                                 {{-- Xóa  --}}
-                                                {{-- <form
+                                                <form
                                                     action="{{ route('admin.products.variants.sizes.delete', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
@@ -313,7 +319,7 @@
                                                         title="Delete">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

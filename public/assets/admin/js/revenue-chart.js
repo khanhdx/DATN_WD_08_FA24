@@ -12,21 +12,36 @@ function initChart(labels, data) {
                 {
                     label: "Doanh thu",
                     data: data,
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    backgroundColor: 'rgba(0, 204, 255, 0.2)', // Màu nền mềm mại
+                    borderColor: 'rgba(0, 204, 255, 1)',
                     borderWidth: 2,
-                    fill: true,
+                    fill: true, // Kích hoạt phần nền
+                    tension: 0.4, // Điều chỉnh độ cong của đường
+                    pointRadius: 4, // Kích thước điểm dữ liệu
+                    pointBackgroundColor: 'rgba(0, 204, 255, 1)',
                 },
             ],
         },
         options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
             scales: {
-                x: { title: { display: true, text: 'Thời gian' } },
+                x: {
+                    beginAtZero: true
+                },
                 y: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Doanh thu (VNĐ)' },
-                },
-            },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + ' VND';
+                        }
+                    }
+                }
+            }
         },
     });
 }

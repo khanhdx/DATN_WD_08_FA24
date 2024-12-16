@@ -25,9 +25,11 @@ class StatisticalService
         if ($dayStart == null && $dayEnd == null) {
             $totalRevenue = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
                 $query->where('status_order_id', $completedStatusId);
-            })->sum('total_price');
+            })
+                ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->sum('total_price');
         } else {
-            
+
             $totalRevenue = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
                 $query->where('status_order_id', $completedStatusId);
             })->whereBetween('created_at', [$dayStart, $dayEnd])
@@ -44,8 +46,10 @@ class StatisticalService
         DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
         $revenues = Order::selectRaw('DATE(created_at) as date, SUM(total_price) as total')
-            ->where('created_at', '>=', Carbon::now()->subDays(7))
-            ->groupBy('date')
+            ->whereHas('statusOrderDetails', function ($query) {
+                $query->where('status_order_id', 7);
+            })->where('created_at', '>=', Carbon::now()->subMonths(3))
+            ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
 
@@ -61,7 +65,8 @@ class StatisticalService
 
         $revenues = Order::selectRaw('DATE(created_at) as date, SUM(total_price) as total')
             ->whereBetween('created_at', [$dayStart, $dayEnd])
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
             ->get();
         // Bật only_full_group_by
         DB::statement("SET SESSION sql_mode=CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY')");
@@ -75,21 +80,18 @@ class StatisticalService
 
     // Orders
 
- public function countOrder($dayStart = null, $dayEnd = null)
+    public function countOrder($dayStart = null, $dayEnd = null)
     {
-        $completedStatusId = StatusOrder::where('id', 7)->value('id');
+        // $excludedStatusIds = [8, 9, 10, 11];
 
         if ($dayStart == null && $dayEnd == null) {
-            $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
-                $query->where('status_order_id', $completedStatusId);
-            })->count();
-        } else {
-            
-            $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
-                $query->where('status_order_id', $completedStatusId);
-            })->whereBetween('created_at', [$dayStart, $dayEnd])
-                ->count();
+            // $countOrder = Order::whereHas('statusOrderDetails', function ($query) use ( $excludedStatusIds) {
+            //     $query->whereNotIn('status_order_id', $excludedStatusIds); 
+            // })->count();
 
+            $countOrder = Order::whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+        } else {
+            $countOrder = Order::whereBetween('created_at', [$dayStart, $dayEnd])->count();
         }
 
         return $countOrder;
@@ -101,8 +103,8 @@ class StatisticalService
         DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
         $orders = Order::selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->where('created_at', '>=', Carbon::now()->subDays(7))
-            ->groupBy('date')
+            ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
 
@@ -119,7 +121,8 @@ class StatisticalService
 
         $orders = Order::selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->whereBetween('created_at', [$dayStart, $dayEnd])
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
             ->get();
         // Bật only_full_group_by
         DB::statement("SET SESSION sql_mode=CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY')");
@@ -129,14 +132,29 @@ class StatisticalService
 
 
 
-    public function countOrderGroupByStatus()
+    public function countOrderGroupByStatus($dayStart = null, $dayEnd = null)
     {
-        $query = DB::table('status_order_details')
-            ->select('name_status', 'status_order_id',  DB::raw('count(order_id) as total'))
-            ->join('status_orders', 'status_order_id', '=', 'status_orders.id')
-            ->orderBy('status_order_id')
-            ->groupBy('status_order_id')
-            ->get();
+
+        if ($dayStart == null && $dayEnd == null) {
+            $query = DB::table('status_order_details')
+                ->select('name_status', 'status_order_id',  DB::raw('count(order_id) as total'))
+                ->join('status_orders', 'status_order_id', '=', 'status_orders.id')
+                ->join('orders', 'order_id', '=', 'orders.id')
+                ->whereBetween('orders.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->orderBy('status_order_id')
+                ->groupBy('status_order_id')
+                ->get();
+        } else {
+            $query = DB::table('status_order_details')
+                ->select('name_status', 'status_order_id',  DB::raw('count(order_id) as total'))
+                ->join('status_orders', 'status_order_id', '=', 'status_orders.id')
+                ->join('orders', 'order_id', '=', 'orders.id')
+                ->whereBetween('created_at', [$dayStart, $dayEnd])
+                ->orderBy('status_order_id')
+                ->groupBy('status_order_id')
+                ->get();
+        }
+
 
         return $query;
     }
@@ -151,25 +169,27 @@ class StatisticalService
     // Products
     public function countProductSold($dayStart = null, $dayEnd = null)
     {
-        $completedStatusId = StatusOrder::where('id', 7)->value('id');
+        // $completedStatusId = StatusOrder::where('id', 1)->value('id');
 
         if ($dayStart == null && $dayEnd == null) {
-            $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
-                $query->where('status_order_id', $completedStatusId);
-            })
-            ->withSum('order_details', 'quantity') 
-            ->get()
-            ->sum('order_details_sum_quantity'); 
+            // $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
+            //     $query->where('status_order_id', $completedStatusId);
+            // })
+            //     ->withSum('order_details', 'quantity')
+            //     ->get()
+            //     ->sum('order_details_sum_quantity');
+
+            $totalSoldQuantity = Order::withSum('order_details', 'quantity')
+                ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->get()
+                ->sum('order_details_sum_quantity');
         } else {
-            $totalSoldQuantity = Order::whereHas('statusOrderDetails', function ($query) use ($completedStatusId) {
-                $query->where('status_order_id', $completedStatusId);
-            })
-            ->whereBetween('created_at', [$dayStart, $dayEnd])
-            ->withSum('orderDetails', 'quantity') 
-            ->get()
-            ->sum('order_details_sum_quantity'); 
+            $totalSoldQuantity = Order::whereBetween('created_at', [$dayStart, $dayEnd])
+                ->withSum('orderDetails', 'quantity')
+                ->get()
+                ->sum('order_details_sum_quantity');
         }
-        
+
         return $totalSoldQuantity;
     }
 
@@ -183,6 +203,7 @@ class StatisticalService
         $query = DB::table('order_details as od')
             ->select('pro.name as productName', DB::raw('SUM(od.quantity) as total_quantity'))
             ->join('products as pro', 'pro.id', '=', 'od.product_id')
+            ->whereBetween('od.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->groupBy('od.product_id', 'pro.name')
             ->orderByDesc('total_quantity')
             ->limit(10)

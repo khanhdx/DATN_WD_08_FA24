@@ -16,9 +16,8 @@ function initMostOrderChart(labels, data) {
                 {
                     label: "Top sản phẩm bán chạy nhất",
                     data: data,
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    backgroundColor: "rgba(75, 192, 192, 0.2)",
-                    borderWidth: 2,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
                     fill: true,
                 },
             ],

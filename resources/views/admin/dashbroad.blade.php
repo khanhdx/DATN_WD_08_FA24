@@ -114,7 +114,7 @@
                             </div>
                             <div class="col-lg-4 ">
                                 <div class="recent-report2">
-                                    <h3 class="title-3">Trạng thái đơn hàng</h3>
+                                    <h3 class="title-3" style="font-size: 22px">Trạng thái đơn hàng</h3>
                                     <div class="recent-report__chart">
                                         <canvas id="orderStatusPieChart" width="400" height="400"></canvas>
                                     </div>
