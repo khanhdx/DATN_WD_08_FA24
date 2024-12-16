@@ -241,7 +241,6 @@ Route::name('client.')->group(function () {
                 Route::delete('/{id}', 'destroy')->name('delete');
             }
         );
-    // Route::get('/shipping/address-level4', [ShippingController::class, 'getAddressLevel4']);
 });
 
 // Route cho khách hàng (client)

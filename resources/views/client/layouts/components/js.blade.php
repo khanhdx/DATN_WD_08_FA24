@@ -337,13 +337,14 @@
             product_variant_id: productVariantId,
         };
 
-        $.post(`{{ route('client.home') }}/carts/${id}`, data, function(res) {
+        $.post(`/carts/${id}`, data, function(res) {
             if (res.status_code == 200) {
                 loadingCart();
                 loadingHeader();
-                // console.log(res.message);
             } else {
-                $('.qty').val(res.quantity);
+                // $('#quantity').val(res.quantity);
+                $(`.input-qty[data-id="${id}"]`).val(res.quantity);
+                
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
