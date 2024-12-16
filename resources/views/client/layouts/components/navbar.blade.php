@@ -48,7 +48,7 @@
                         <div class="mega-menu-content">
                             <div class="row">
                                 <div class="col-md-4 hidden-sm hidden-xs menu-column">
-                                    <h3>NEW</h3>
+                                    <h3>Mới nhất</h3>
                                     <ul class="list-unstyled sub-menu list-thumbs-pro">
                                         @foreach ($prs as $pr)
                                             <li class="product">
@@ -56,7 +56,7 @@
                                                     <div class="product-thumb-info-image">
                                                         <a href="{{ route('client.product.show', $pr->id) }}"><img
                                                                 alt="" width="60"
-                                                                src="{{ \Storage::url($pr->image->image_url) }}"></a>
+                                                                src="{{ \Storage::url($pr->image->image_url ?? null) }}"></a>
                                                     </div>
                                                     <div class="product-thumb-info-content">
                                                         <h4><a
@@ -73,7 +73,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-2 menu-column">
-                                    <h3>Man</h3>
+                                    <h3>Nam</h3>
                                     <ul class="list-unstyled sub-menu">
                                             @foreach ($categories as $category)
                                                 @if ($category->type == 'Man')
@@ -86,7 +86,7 @@
                                 </div>
 
                                 <div class="col-md-2 menu-column">
-                                    <h3>Woman</h3>
+                                    <h3>Nữ</h3>
                                     <ul class="list-unstyled sub-menu">
                                         @foreach ($categories as $category)
                                             @if ($category->type == 'Woman')
@@ -98,7 +98,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-4 hidden-sm hidden-xs menu-column">
-                                    <h3>VOUCHER</h3>
+                                    <h3>Mã giảm giá</h3>
                                     <ul class="list-unstyled sub-menu list-md-pro">
                                         @forelse ($vs as $voucher)
                                             <li class="product">

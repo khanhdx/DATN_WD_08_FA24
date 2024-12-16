@@ -179,12 +179,14 @@
             selectedSize = null;
 
             $('.stock').text("0");
+            $('.image-others').empty();
+            $('.image-slides').empty();
 
             $.ajax({
                 url: `/api/product/${productId}`,
                 type: 'GET',
                 success: function(data) {
-                    // console.log(data.image_others);
+                    console.log(data.image_others);
                     const imgURL = `/storage/${data.image.image_url}`;
                     
                     $('.product_id').val(data.id);

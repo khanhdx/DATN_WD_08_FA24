@@ -34,8 +34,8 @@
                 <div class="product-preview">
                     <div class="flexslider">
                         <ul class="slides">
-                            <li data-thumb="{{ \Storage::url($product->image->image_url) }}">
-                                <img src="{{ \Storage::url($product->image->image_url) }}" alt="">
+                            <li data-thumb="{{ \Storage::url($product->image->image_url ?? null) }}">
+                                <img src="{{ \Storage::url($product->image->image_url ?? null) }}" alt="">
                             </li>
                             @foreach ($product->image_others as $item)
                                 <li data-thumb="{{ \Storage::url($item->image_url) }}">
@@ -220,7 +220,7 @@
                                             </span>
                                             <a href="{{ route('client.product.show', $item->id) }}">
                                                 <img alt="" class="img-responsive"
-                                                    src="{{ \Storage::url($item->image->image_url) }}">
+                                                    src="{{ \Storage::url($item->image->image_url ?? null) }}">
                                             </a>
                                         </div>
 
