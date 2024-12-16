@@ -22,7 +22,7 @@ axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/provin
     .then((response) => {
         const dataProvince = response.data.data;
 
-        dataProvince.forEach(item => {
+        dataProvince.reverse().forEach(item => {
             const optionElement = document.createElement('option');
 
             optionElement.dataset.id = item.ProvinceID;
@@ -52,7 +52,7 @@ province.addEventListener('change', function (e) {
                 wardStreet.removeChild(wardStreet.lastElementChild);
             }
 
-            dataDistrict.forEach(item => {
+            dataDistrict.reverse().forEach(item => {
                 const optionElement = document.createElement('option');
 
                 optionElement.dataset.id = item.DistrictID;
@@ -77,7 +77,7 @@ district.addEventListener('change', function (e) {
                 wardStreet.removeChild(wardStreet.lastElementChild);
             }
 
-            dataDistrict.forEach(item => {
+            dataDistrict.reverse().forEach(item => {
                 const optionElement = document.createElement('option');
 
                 optionElement.dataset.id = item.WardCode;

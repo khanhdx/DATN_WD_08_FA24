@@ -96,9 +96,9 @@
                                                 <td>
                                                     <ul>
                                                         <li>Tên: {{ $order->user_name }}</li>
-                                                        <li>Email: {{ $order->email }}</li>
+                                                        {{-- <li>Email: {{ $order->email }}</li> --}}
                                                         <li>SĐT: {{ $order->phone_number ?? 'Chưa thiết lập' }}</li>
-                                                        <li>Địa chỉ: {{ $order->address }}</li>
+                                                        {{-- <li>Địa chỉ: {{ $order->address }}</li> --}}
                                                     </ul>
                                                 </td>
                                                 <td class="desc">{{ number_format($order->total_price, 0, ',', '.') }} đ

@@ -80,7 +80,7 @@ class SizeService implements ISizeService
                 return redirect()->back()->with('success', "Xóa size $size->name thành công");
             }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('failed', 'Xóa size thát bại. Vul lòng thử lại');
+            return redirect()->back()->with('failed', 'Size đang tồn tại ở sản phẩm. Không thể xóa');
         }
     }
 }

@@ -13,7 +13,7 @@ class ColorRepository
     }
     public function getAllPaginate()
     {
-        return Color::paginate(5);
+        return Color::latest()->paginate(5);
     }
 
     public function getOne($id)

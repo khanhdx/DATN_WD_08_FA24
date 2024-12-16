@@ -16,24 +16,44 @@
 
     @yield('css')
     <style>
-    .custom-toast {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background-color: #4caf50;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        font-size: 16px;
-        opacity: 1;
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
+        .custom-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
 
-    .custom-toast.hide {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+        .custom-toast.hide {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .failed-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: #f44336;
+            /* Màu đỏ cho thất bại */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .failed-toast.hide {
+            opacity: 0;
+            transform: translateY(20px);
+        }
     </style>
 </head>
 
@@ -69,6 +89,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var toast = document.getElementById('customToast');
+            if (toast) {
+                setTimeout(function() {
+                    toast.classList.add('hide');
+                }, 3000);
+
+                setTimeout(function() {
+                    toast.remove();
+                }, 3500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var toast = document.getElementById('failedToast');
             if (toast) {
                 setTimeout(function() {
                     toast.classList.add('hide');

@@ -89,7 +89,7 @@
                                                             data-id="{{ $cart->id }}"
                                                             data-variant-id="{{ $cart->productVariant->id }}">
 
-                                                        <input type="text" class="input-text qty text"
+                                                        <input type="text" class="input-text qty text input-qty"
                                                             value="{{ $cart->quantity }}" name="quantity"
                                                             min="1" step="1" data-id="{{ $cart->id }}"
                                                             data-variant-id="{{ $cart->productVariant->id }}">
@@ -154,7 +154,7 @@
                                                             data-id="{{ $key }}"
                                                             data-variant-id="{{ $key }}">
 
-                                                        <input type="text" class="input-text qty text" title="Qty"
+                                                        <input type="text" class="input-text qty text input-qty"
                                                             value="{{ $cart['quantity'] }}" name="qty"
                                                             min="1" step="1" data-id="{{ $key }}"
                                                             data-variant-id="{{ $key }}">

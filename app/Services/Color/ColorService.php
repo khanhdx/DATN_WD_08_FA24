@@ -86,7 +86,7 @@ class ColorService implements IColorService
                 return redirect()->back()->with('success', 'Xóa màu sắc thành công');
             }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('failed', $th->getMessage());
+            return redirect()->back()->with('failed', 'Màu sắc đang tồn tại ở sản phẩm. Không thể xóa');
         }
     }
 }
