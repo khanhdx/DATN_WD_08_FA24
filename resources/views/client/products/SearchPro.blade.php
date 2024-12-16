@@ -19,19 +19,19 @@
                             <div class="form-group">
                                 <label for="price">Chọn giá:</label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="0-5000000"
-                                        {{ in_array('0-5000000', request('prices', [])) ? 'checked' : '' }}>
-                                    Dưới 5,000,000đ
+                                    <input type="checkbox" name="prices[]" value="0-500000"
+                                        {{ in_array('0-500000', request('prices', [])) ? 'checked' : '' }}>
+                                    Dưới 500,000đ
                                 </label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="5000000-10000000"
-                                        {{ in_array('5000000-10000000', request('prices', [])) ? 'checked' : '' }}>
-                                    5,000,000đ - 10,000,000đ
+                                    <input type="checkbox" name="prices[]" value="500000-1000000"
+                                        {{ in_array('500000-1000000', request('prices', [])) ? 'checked' : '' }}>
+                                    500,000đ - 1,000,000đ
                                 </label><br>
                                 <label>
-                                    <input type="checkbox" name="prices[]" value="10000000-500000000"
-                                        {{ in_array('10000000-500000000', request('prices', [])) ? 'checked' : '' }}>
-                                    Trên 10,000,000đ
+                                    <input type="checkbox" name="prices[]" value="1000000-500000000"
+                                        {{ in_array('1000000-500000000', request('prices', [])) ? 'checked' : '' }}>
+                                    Trên 1,000,000đ
                                 </label>
                             </div>
                             <button type="submit" class="btn btn-primary">Lọc</button>
