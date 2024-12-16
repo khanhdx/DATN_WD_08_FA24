@@ -139,7 +139,11 @@
                 @endforeach
             </tbody>
         </table>
+        <div style="margin: 10px 0px">
+            {{ $orders->links() }}
+        </div>
     </div>
+    
 @endsection
 
 @section('js')

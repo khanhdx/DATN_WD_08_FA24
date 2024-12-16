@@ -25,7 +25,7 @@ class CheckOrderStatus
         // Lấy đơn hàng gần nhất của người dùng có trạng thái "Chờ thanh toán"
         $order = Order::where('user_id', Auth::id())
             ->whereHas('statusOrderDetails', function ($query) {
-                $query->where('status_order_id', 1)->where('name','MOMO'); // Trạng thái "Chờ thanh toán"
+                $query->where('status_order_id', 1)->where('name','zaloPay'); // Trạng thái "Chờ thanh toán"
             })
             ->latest()
             ->first();

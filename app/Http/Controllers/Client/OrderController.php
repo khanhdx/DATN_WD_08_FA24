@@ -20,7 +20,7 @@ class OrderController extends Controller
     public function index()
     {
         // Lấy danh sách đơn hàng của người dùng hiện tại, bao gồm trạng thái và phương thức thanh toán
-        $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->get();
+        $orders = Order::with('statusOrder', 'payments')->where('user_id', auth()->id())->latest('id')->paginate(10);
 
         // Trả về view danh sách đơn hàng
         return view('client.checkouts.orders', compact('orders'));
