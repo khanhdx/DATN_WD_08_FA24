@@ -53,7 +53,7 @@
                                                 <a
                                                     href="{{ route('client.post.show', $post->id) }}">{{ $post->title }}</a>
                                             </h4>
-                                            <p>Lượt xem: {{ $post->views }}</p>
+                                            {{-- <p>Lượt xem: {{ $post->views }}</p> --}}
                                             <p>Ngày xuất bản: {{ $post->created_at->format('d/m/Y') }}</p>
                                         </article>
                                     </div>

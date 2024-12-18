@@ -98,11 +98,15 @@ class CategorysController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }
-        return redirect()->route('admin.category.index');
+        try {
+            $category = Category::findOrFail($id);
+            $category->delete();
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            return redirect()->route('admin.category.index');
+          } catch (\Throwable $th) {
+                return redirect()->back()->with('failed', 'Danh mục đã có sản phẩm không thể xóa!');
+          }
     }
 }

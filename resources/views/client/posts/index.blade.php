@@ -42,7 +42,7 @@
                                                     href="{{ route('client.post.show', $post->id) }}">đăng bài</a></span>
                                         </div>
 
-                                        <p>{{ $post->content }}</p>
+                                        {{-- <p>{{ $post->content }}</p> --}}
 
                                         <div class="post-meta post-meta-foot">
                                             <span class="pull-left"><i

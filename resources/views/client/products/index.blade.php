@@ -60,7 +60,7 @@
                                         <div class="product-thumb-info-image">
                                             <a href="{{ route('client.product.show', $product->id) }}">
                                                 <img alt="{{ $product->name }}" width="60"
-                                                    src="{{ \Storage::url($product->image->image_url) }}">
+                                                    src="{{ \Storage::url($product->image->image_url ?? null) }}">
                                             </a>
                                         </div>
 
@@ -126,7 +126,7 @@
                                                     </span>
                                                     <a href="{{ route('client.product.show', $product->id) }}">
                                                         <img alt="" class="img-responsive"
-                                                            src="{{ \Storage::url($product->image->image_url) }}">
+                                                            src="{{ \Storage::url($product->image->image_url ?? null) }}">
                                                     </a>
                                                 </div>
                                                 <div class="product-thumb-info-content">
@@ -156,7 +156,7 @@
                                             <div class="product-thumb-info-image">
                                                 <a href="{{ route('client.product.show', $product->id) }}">
                                                     <img alt="" class="img-responsive"
-                                                        src="{{ \Storage::url($product->image->image_url) }}">
+                                                        src="{{ \Storage::url($product->image->image_url ?? null) }}">
                                                 </a>
                                             </div>
                                         </div>

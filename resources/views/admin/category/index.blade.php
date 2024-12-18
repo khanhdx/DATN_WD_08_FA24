@@ -5,6 +5,11 @@
 @section('content')
     <div class="container">
         <div class="row">
+            @if (session('failed'))
+                <div id="failedToast" class="failed-toast">
+                    {{ session('failed') }}
+                </div>
+            @endif
             <div class="col-md-12">
                 <h3 class="title-5 m-b-35">Danh mục</h3>
                 <div class="table-data__tool">
@@ -36,29 +41,32 @@
                         </thead>
                         <tbody>
                             @foreach ($listcategory as $index => $item)
-                            <tr class="tr-shadow">
-                                <td>{{ $listcategory->firstItem() + $index }}</td>
-                                {{-- <td>
+                                <tr class="tr-shadow">
+                                    <td>{{ $listcategory->firstItem() + $index }}</td>
+                                    {{-- <td>
                                     <img src="{{ asset('storage/' . $item->image) }}" alt="" width="100px">
                                 </td> --}}
-                                <td class="desc">{{ $item->name }}</td>
-                                <td>
-                                    <div class="table-data-feature">
-                                        <a href="{{ route('admin.category.edit', $item->id) }}">
-                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                <i class="zmdi zmdi-edit"></i>
-                                            </button>
-                                        </a>
-                                        <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                <i class="zmdi zmdi-delete"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <td class="desc">{{ $item->name }}</td>
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <a href="{{ route('admin.category.edit', $item->id) }}">
+                                                <button class="item" data-toggle="tooltip" data-placement="top"
+                                                    title="Edit">
+                                                    <i class="zmdi zmdi-edit"></i>
+                                                </button>
+                                            </a>
+                                            <form action="{{ route('admin.category.destroy', $item->id) }}" method="POST"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="item" data-toggle="tooltip" data-placement="top"
+                                                    title="Delete">
+                                                    <i class="zmdi zmdi-delete"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -68,9 +76,9 @@
                             {{ $listcategory->links('pagination::bootstrap-5') }}
                         </nav>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
         </div>
     </div>
