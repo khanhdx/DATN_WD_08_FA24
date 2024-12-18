@@ -164,7 +164,7 @@
                                         <label>
                                             <input type="radio" name="payment_method" value="zaloPay" required>
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapsezaloPay">Thanh
-                                                Toán Qua zaloPay</a>
+                                                Toán Qua ZaloPay</a>
                                         </label>
                                     </h5>
                                 </div>
@@ -175,7 +175,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
+                            {{-- <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
                                         <label>
@@ -191,7 +191,7 @@
                                             dịch.</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             @endif
                         </div>
                         <p>
@@ -442,6 +442,9 @@
                                                             sale = 0;
                                                             new_total = (Number(total) + Number(shipping)) - Number(sale);
                                                         }
+                                                        if(new_total < 0) {
+                                                            new_total = 0;
+                                                        }
                                                         $('#voucher_Chose').html(`
                                                             <div class="voucher_Item" style="border: 2px solid #333333;display: flex;align-items: center;justify-content: space-between;">
                                                                 <div class="banner-Item" style="padding: 5px;">
@@ -515,6 +518,9 @@
                     sale = 0;
                 }
                 new_total = Number(total) + Number(shipping) - Number(sale);
+                if(new_total < 0) {
+                    new_total = 0;
+                }
                 // Set lại dữ liệu
                     $('#discountAmount').text(`${(sale.toLocaleString('de-DE')).replace(/,\d+/, '')} ₫`);
                     const discountAmount = document.getElementById('discountAmount');

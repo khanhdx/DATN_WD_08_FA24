@@ -20,8 +20,8 @@ class Kernel extends ConsoleKernel
         foreach ($orders as $order) {
             $schedule->job(new CompleteOrderJob($order->id))->daily(); // Chạy sự kiện mỗi ngày
         }
-        $schedule->command('check:voucher-status')->everyMinute();
-        $schedule->job(new CompleteVoucherJob())->everyMinute();
+        // $schedule->command('check:voucher-status')->everyFiveSeconds();
+        $schedule->job(new CompleteVoucherJob())->everyFiveSeconds();
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:update-status')->everyFifteenSeconds();
     }

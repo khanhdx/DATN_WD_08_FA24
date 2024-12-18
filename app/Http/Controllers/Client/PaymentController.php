@@ -146,7 +146,9 @@ class PaymentController extends Controller
             $voucher_id = null;
         }
         $totalPrice -= $voucherDiscount;
-
+        if($totalPrice<0) {
+            $totalPrice =0;
+        }
         $totalPrice = max($totalPrice, 0);
 
         if ($totalPrice > 50000000) {

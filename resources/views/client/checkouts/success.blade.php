@@ -8,7 +8,7 @@
     @include('client.layouts.components.pagetop')
     <div class="container mb-6">
         <div class="text-center">
-            <h1 class="text-success">Thanh toán thành công!</h1>
+            <h1 class="text-success">Đặt hàng thành công!</h1>
             <p>Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.</p>
 
             @if (isset($statusOrder))
